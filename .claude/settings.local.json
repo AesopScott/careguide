@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__mcp-obsidian__obsidian_list_files_in_vault",
+      "mcp__mcp-obsidian__obsidian_list_files_in_dir",
+      "Skill(update-config)",
+      "Skill(update-config:*)",
+      "mcp__mcp-obsidian__obsidian_append_content"
+    ],
+    "defaultMode": "bypassPermissions"
+  }
+}
