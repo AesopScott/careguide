@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Parental Care Guide</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #fafaf8;
+      color: #1a1a1a;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      padding: 24px 40px;
+    }
+
+    .logo {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #2d6a4f;
+      letter-spacing: -0.02em;
+    }
+
+    main {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 60px 24px;
+    }
+
+    .hero {
+      max-width: 720px;
+      text-align: center;
+    }
+
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 800;
+      line-height: 1.15;
+      letter-spacing: -0.03em;
+      color: #1a1a1a;
+      margin-bottom: 24px;
+    }
+
+    .hero h1 span {
+      color: #2d6a4f;
+    }
+
+    .hero p {
+      font-size: clamp(1rem, 2.5vw, 1.25rem);
+      line-height: 1.7;
+      color: #444;
+      margin-bottom: 16px;
+    }
+
+    .tagline {
+      font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+      font-weight: 700;
+      color: #2d6a4f;
+      margin-top: 32px;
+      margin-bottom: 48px;
+    }
+
+    .cta-form {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .cta-form input {
+      padding: 14px 20px;
+      font-size: 1rem;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      width: 280px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .cta-form input:focus {
+      border-color: #2d6a4f;
+    }
+
+    .cta-form button {
+      padding: 14px 28px;
+      font-size: 1rem;
+      font-weight: 700;
+      background: #2d6a4f;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .cta-form button:hover {
+      background: #1f4d38;
+    }
+
+    .subtext {
+      margin-top: 16px;
+      font-size: 0.85rem;
+      color: #888;
+    }
+
+    footer {
+      padding: 24px 40px;
+      text-align: center;
+      font-size: 0.85rem;
+      color: #aaa;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="logo">Parental Care Guide</div>
+  </header>
+
+  <main>
+    <div class="hero">
+      <h1>Caring for aging parents is one of the <span>hardest things</span> you'll ever do.</h1>
+      <p>Doctors, insurance, medications, facilities, legal documents, family disagreements &mdash; and no one holding it all together.</p>
+      <p class="tagline">This is that place.</p>
+
+      <form class="cta-form" onsubmit="return false;">
+        <input type="email" placeholder="Enter your email address" />
+        <button type="submit">Get Early Access</button>
+      </form>
+      <p class="subtext">We&rsquo;re building this now. Be the first to know when it&rsquo;s ready.</p>
+    </div>
+  </main>
+
+  <footer>
+    &copy; 2026 Parental Care Guide &mdash; parentalcareguide.com
+  </footer>
+
+</body>
+</html>
