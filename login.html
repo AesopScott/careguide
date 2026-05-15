@@ -237,7 +237,7 @@
 
       try {
         const cred  = await signInWithEmailAndPassword(auth, email, password);
-        const token = await cred.user.getIdTokenResult();
+        const token = await cred.user.getIdTokenResult(true);
         const next  = new URLSearchParams(location.search).get('next');
 
         if (token.claims.admin) {

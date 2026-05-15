@@ -13,53 +13,75 @@ const FIREBASE_CONFIG = {
 const app  = initializeApp(FIREBASE_CONFIG);
 const auth = getAuth(app);
 
-function showAdminUI() {
-  const navLink = document.getElementById('nav-auth-link');
-  if (navLink) navLink.textContent = 'Sign Out';
+const navLink    = document.getElementById('nav-auth-link');
+const hero       = document.querySelector('.hero');
+const adminPanel = document.getElementById('admin-panel');
 
-  const hero       = document.querySelector('.hero');
-  const adminPanel = document.getElementById('admin-panel');
+// Wire the nav link to handle both Sign In (href) and Sign Out (click) dynamically
+if (navLink) {
+  navLink.addEventListener('click', async e => {
+    if (navLink.dataset.mode === 'signout') {
+      e.preventDefault();
+      localStorage.removeItem('pcg_admin');
+      await signOut(auth);
+      window.location.href = '/login.html';
+    }
+    // otherwise it's a regular link to /login.html — let it navigate
+  });
+}
+
+function applySignOut() {
+  if (!navLink) return;
+  navLink.textContent  = 'Sign Out';
+  navLink.href         = '#';
+  navLink.dataset.mode = 'signout';
+}
+
+function applySignIn() {
+  if (!navLink) return;
+  navLink.textContent  = 'Sign In';
+  navLink.href         = '/login.html';
+  delete navLink.dataset.mode;
+}
+
+function showAdminPanel() {
   if (hero)       hero.classList.add('admin-active');
   if (adminPanel) adminPanel.style.display = 'flex';
 }
 
-function wireSignOut(auth) {
-  const navLink = document.getElementById('nav-auth-link');
-  if (navLink) {
-    navLink.href = '#';
-    navLink.addEventListener('click', async e => {
-      e.preventDefault();
-      localStorage.removeItem('pcg_admin');
-      await signOut(auth);
-      window.location.href = '/login.html';
-    });
-  }
-  const signOutBtn = document.getElementById('btn-signout');
-  if (signOutBtn) {
-    signOutBtn.addEventListener('click', async e => {
-      e.preventDefault();
-      localStorage.removeItem('pcg_admin');
-      await signOut(auth);
-      window.location.href = '/login.html';
-    });
-  }
+function hideAdminPanel() {
+  if (hero)       hero.classList.remove('admin-active');
+  if (adminPanel) adminPanel.style.display = 'none';
 }
 
-// Apply admin UI immediately if we know the user is admin (avoids flash)
+// Apply instant state from localStorage to avoid flash
 if (localStorage.getItem('pcg_admin') === '1') {
-  showAdminUI();
+  applySignOut();
+  showAdminPanel();
 }
 
 onAuthStateChanged(auth, async user => {
   if (!user) {
     localStorage.removeItem('pcg_admin');
+    applySignIn();
+    hideAdminPanel();
     return;
   }
+
   try {
-    const token = await user.getIdTokenResult();
-    if (!token.claims.admin) return;
-    localStorage.setItem('pcg_admin', '1');
-    showAdminUI();
-    wireSignOut(auth);
-  } catch { /* not admin */ }
+    // Force refresh = true ensures latest custom claims, not a stale cached token
+    const token = await user.getIdTokenResult(true);
+
+    applySignOut(); // any logged-in user gets Sign Out
+
+    if (token.claims.admin) {
+      localStorage.setItem('pcg_admin', '1');
+      showAdminPanel();
+    } else {
+      localStorage.removeItem('pcg_admin');
+      hideAdminPanel();
+    }
+  } catch {
+    hideAdminPanel();
+  }
 });
