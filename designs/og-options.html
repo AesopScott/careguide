@@ -160,7 +160,7 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      padding: 32px 10px 32px 32px;
+      padding: 32px 20px;
       gap: 14px;
       position: relative;
     }
@@ -201,38 +201,23 @@
 
     .og-7 .service-icons {
       position: absolute;
-      bottom: 10px;
+      bottom: 37px;
       left: 32px;
       right: 10px;
       display: flex;
       justify-content: space-between;
-      align-items: flex-end;
-    }
-
-    .og-7 .sicon {
-      display: flex;
-      flex-direction: column;
       align-items: center;
-      gap: 3px;
     }
 
     .og-7 .sicon-emoji {
-      font-size: 16px;
+      font-size: 24px;
       line-height: 1;
-    }
-
-    .og-7 .sicon-label {
-      font-size: 8px;
-      font-weight: 400;
-      color: rgba(255, 255, 255, 0.45);
-      letter-spacing: 0.02em;
-      white-space: nowrap;
     }
 
     .og-7 .divider-icon {
       position: absolute;
-      left: 0;
-      top: 50%;
+      left: 120px;
+      top: 53px;
       transform: translate(-50%, -50%);
       z-index: 10;
       width: 44px;
@@ -276,6 +261,12 @@
       <div class="og-frame og-7">
         <div class="strip"></div>
         <div class="body">
+          <div class="divider-icon">
+            <svg width="32" height="32" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+              <defs><linearGradient id="hg6" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#F4B8C1"/><stop offset="100%" stop-color="#B8A8D8"/></linearGradient></defs>
+              <path d="M64 96 C64 96 22 70 22 44 C22 30 33 20 48 25 C55 27 60 33 64 38 C68 33 73 27 80 25 C95 20 106 30 106 44 C106 70 64 96 64 96Z" fill="url(#hg6)"/>
+            </svg>
+          </div>
           <div class="body-left">
             <div class="logo-block">
               <div class="logo">Parental Care Guide</div>
@@ -299,12 +290,6 @@
             <h2>Care for your parents.<br><em>Not the paperwork.</em></h2>
           </div>
           <div class="body-right">
-            <div class="divider-icon">
-              <svg width="32" height="32" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
-                <defs><linearGradient id="hg6" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#F4B8C1"/><stop offset="100%" stop-color="#B8A8D8"/></linearGradient></defs>
-                <path d="M64 96 C64 96 22 70 22 44 C22 30 33 20 48 25 C55 27 60 33 64 38 C68 33 73 27 80 25 C95 20 106 30 106 44 C106 70 64 96 64 96Z" fill="url(#hg6)"/>
-              </svg>
-            </div>
             <div class="services-header">
               <div class="pcg-label">Services</div>
               <svg class="services-line" viewBox="0 0 200 12" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
@@ -331,12 +316,12 @@
               <span class="pill">Family sharing</span><span class="pill">Financial planning</span>
             </div>
             <div class="service-icons">
-              <div class="sicon"><span class="sicon-emoji">🏥</span><span class="sicon-label">Care</span></div>
-              <div class="sicon"><span class="sicon-emoji">📋</span><span class="sicon-label">Insurance</span></div>
-              <div class="sicon"><span class="sicon-emoji">💊</span><span class="sicon-label">Medications</span></div>
-              <div class="sicon"><span class="sicon-emoji">📄</span><span class="sicon-label">Legal</span></div>
-              <div class="sicon"><span class="sicon-emoji">👨‍👩‍👧</span><span class="sicon-label">Family</span></div>
-              <div class="sicon"><span class="sicon-emoji">💰</span><span class="sicon-label">Finance</span></div>
+              <span class="sicon-emoji">🏥</span>
+              <span class="sicon-emoji">📋</span>
+              <span class="sicon-emoji">💊</span>
+              <span class="sicon-emoji">📄</span>
+              <span class="sicon-emoji">👨‍👩‍👧</span>
+              <span class="sicon-emoji">💰</span>
             </div>
           </div>
         </div>
