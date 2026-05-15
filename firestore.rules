@@ -1,0 +1,118 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ── Helpers ──────────────────────────────────────────────────────────────
+
+    function isAuth() {
+      return request.auth != null;
+    }
+
+    function userDoc() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
+    }
+
+    function isPractitioner() {
+      return isAuth() && userDoc().role == 'practitioner';
+    }
+
+    function groupData(groupId) {
+      return get(/databases/$(database)/documents/familyGroups/$(groupId)).data;
+    }
+
+    function isGroupPractitioner(groupId) {
+      return isAuth() && groupData(groupId).practitioner_id == request.auth.uid;
+    }
+
+    function isGroupMember(groupId) {
+      return isAuth() && request.auth.uid in groupData(groupId).members;
+    }
+
+    function canAccessGroup(groupId) {
+      return isGroupPractitioner(groupId) || isGroupMember(groupId);
+    }
+
+    // ── Users ─────────────────────────────────────────────────────────────────
+    // Each user can only read and write their own profile.
+
+    match /users/{userId} {
+      allow read, write: if isAuth() && request.auth.uid == userId;
+    }
+
+    // ── Practitioners ─────────────────────────────────────────────────────────
+    // Practitioners own their profile, session notes, and billing records.
+
+    match /practitioners/{practitionerId} {
+      allow read, write: if isAuth() && request.auth.uid == practitionerId;
+
+      match /sessionNotes/{noteId} {
+        allow read, write: if isAuth() && request.auth.uid == practitionerId;
+      }
+
+      match /billingRecords/{recordId} {
+        allow read, write: if isAuth() && request.auth.uid == practitionerId;
+      }
+    }
+
+    // ── Family Groups ─────────────────────────────────────────────────────────
+    // Practitioners create groups. Both practitioners and members can read.
+    // Write access on sub-collections is practitioner-only unless noted.
+
+    match /familyGroups/{groupId} {
+      allow read:   if canAccessGroup(groupId);
+      allow create: if isPractitioner();
+      allow update: if isGroupPractitioner(groupId);
+      allow delete: if isGroupPractitioner(groupId);
+
+      // Parents — practitioner writes, members read
+      match /parents/{parentId} {
+        allow read:  if canAccessGroup(groupId);
+        allow write: if isGroupPractitioner(groupId);
+      }
+
+      // Medications — practitioner writes, members read
+      match /medications/{medId} {
+        allow read:  if canAccessGroup(groupId);
+        allow write: if isGroupPractitioner(groupId);
+      }
+
+      // Documents — respect per-document access_roles list
+      match /documents/{docId} {
+        allow read:  if isGroupPractitioner(groupId) ||
+                        (isGroupMember(groupId) &&
+                         request.auth.uid in resource.data.access_roles);
+        allow write: if isGroupPractitioner(groupId);
+      }
+
+      // Events — practitioner writes, members read
+      match /events/{eventId} {
+        allow read:  if canAccessGroup(groupId);
+        allow write: if isGroupPractitioner(groupId);
+      }
+
+      // Tasks — anyone in the group can create/update; only practitioner deletes
+      match /tasks/{taskId} {
+        allow read:   if canAccessGroup(groupId);
+        allow create: if canAccessGroup(groupId);
+        allow update: if canAccessGroup(groupId);
+        allow delete: if isGroupPractitioner(groupId);
+      }
+
+      // Care plans — practitioner writes, members read
+      match /carePlans/{planId} {
+        allow read:  if canAccessGroup(groupId);
+        allow write: if isGroupPractitioner(groupId);
+      }
+    }
+
+    // ── AI Conversations ──────────────────────────────────────────────────────
+    // Each user owns their own conversation history.
+
+    match /aiConversations/{convId} {
+      allow read, update, delete: if isAuth() &&
+                                     resource.data.user_id == request.auth.uid;
+      allow create: if isAuth() &&
+                       request.resource.data.user_id == request.auth.uid;
+    }
+  }
+}
