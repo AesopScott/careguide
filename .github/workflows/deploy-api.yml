@@ -49,7 +49,7 @@ jobs:
             --region=${{ env.REGION }} \
             --platform=managed \
             --no-allow-unauthenticated \
-            --set-secrets="ANTHROPIC_API_KEY=ANTHROPIC_API_KEY:latest,FIREBASE_CREDENTIALS_PATH=FIREBASE_CREDENTIALS_PATH:latest,BREVO_API_KEY=BREVO_API_KEY:latest" \
+            --set-secrets="ANTHROPIC_API_KEY=ANTHROPIC_API_KEY:latest,FIREBASE_CREDENTIALS_PATH=FIREBASE_CREDENTIALS_PATH:latest,BREVO_API_KEY=BREVO_API_KEY:latest,TWILIO_ACCOUNT_SID=TWILIO_ACCOUNT_SID:latest,TWILIO_AUTH_TOKEN=TWILIO_AUTH_TOKEN:latest,TWILIO_PHONE_NUMBER=TWILIO_PHONE_NUMBER:latest" \
             --memory=512Mi \
             --min-instances=0 \
             --max-instances=10

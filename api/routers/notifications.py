@@ -3,6 +3,7 @@ from pydantic import BaseModel
 from typing import Optional
 from middleware.auth import require_auth
 from services import brevo
+from services import twilio_sms
 
 router = APIRouter()
 
@@ -52,10 +53,10 @@ def send_email(body: EmailRequest, user=Depends(require_auth)):
 @router.post("/sms")
 def send_sms(body: SmsRequest, user=Depends(require_auth)):
     try:
-        result = brevo.send_sms(to_phone=body.to_phone, message=body.message)
-        return {"success": True, "message_id": result.get("messageId")}
+        result = twilio_sms.send_sms(to_phone=body.to_phone, message=body.message)
+        return {"success": True, "message_id": result.get("sid")}
     except httpx.HTTPStatusError as e:
-        raise HTTPException(status_code=502, detail=f"Brevo SMS error: {e.response.text}")
+        raise HTTPException(status_code=502, detail=f"Twilio SMS error: {e.response.text}")
     except Exception as e:
         raise HTTPException(status_code=502, detail=f"SMS delivery failed: {str(e)}")
 
@@ -86,7 +87,7 @@ def send_reminder(body: ReminderRequest, user=Depends(require_auth)):
 
     if body.phone:
         try:
-            brevo.send_sms(
+            twilio_sms.send_sms(
                 to_phone=body.phone,
                 message=f"{body.title}: {body.body}",
             )
