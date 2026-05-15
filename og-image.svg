@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <style><![CDATA[
+      @import url('https://fonts.googleapis.com/css2?family=Gilda+Display&family=Jost:wght@500&display=swap');
+      .pill-text { text-transform: uppercase; letter-spacing: -0.01em; }
+    ]]></style>
+
+    <!-- Top strip gradient -->
+    <linearGradient id="strip" x1="0" y1="0" x2="1200" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0%"   stop-color="#FFD6CC"/>
+      <stop offset="17%"  stop-color="#F4B8C1"/>
+      <stop offset="33%"  stop-color="#E8A0B4"/>
+      <stop offset="50%"  stop-color="#D4A0C8"/>
+      <stop offset="67%"  stop-color="#B8A8D8"/>
+      <stop offset="83%"  stop-color="#98A8E0"/>
+      <stop offset="100%" stop-color="#8ABCE8"/>
+    </linearGradient>
+
+    <!-- Right panel overlay gradient (vertical) -->
+    <linearGradient id="right-bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%"   stop-color="#D4A0C8" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#8ABCE8" stop-opacity="0.12"/>
+    </linearGradient>
+
+    <!-- Heart fill gradient -->
+    <linearGradient id="heart-grad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%"   stop-color="#F4B8C1"/>
+      <stop offset="100%" stop-color="#B8A8D8"/>
+    </linearGradient>
+
+    <!-- Logo gold line: left segment fades in →  -->
+    <linearGradient id="gll-a" x1="40" y1="0" x2="168" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0%"   stop-color="#C9A84C" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#C9A84C"/>
+    </linearGradient>
+    <!-- Logo gold line: right segment fades out → -->
+    <linearGradient id="gll-b" x1="208" y1="0" x2="335" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0%"   stop-color="#C9A84C"/>
+      <stop offset="100%" stop-color="#C9A84C" stop-opacity="0"/>
+    </linearGradient>
+
+    <!-- Services gold line: left segment -->
+    <linearGradient id="gls-a" x1="720" y1="0" x2="826" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0%"   stop-color="#C9A84C" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#C9A84C"/>
+    </linearGradient>
+    <!-- Services gold line: right segment -->
+    <linearGradient id="gls-b" x1="854" y1="0" x2="960" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0%"   stop-color="#C9A84C"/>
+      <stop offset="100%" stop-color="#C9A84C" stop-opacity="0"/>
+    </linearGradient>
+
+    <!-- Drop shadow for heart icon box -->
+    <filter id="box-shadow" x="-35%" y="-35%" width="170%" height="170%">
+      <feDropShadow dx="0" dy="4" stdDeviation="9" flood-color="#000" flood-opacity="0.35"/>
+    </filter>
+
+    <!-- White glow + subtle dark shadow for heading text -->
+    <filter id="text-glow" x="-25%" y="-50%" width="150%" height="200%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="5" result="blur-wide"/>
+      <feColorMatrix in="blur-wide" type="matrix"
+        values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.9 0" result="glow-wide"/>
+      <feGaussianBlur in="SourceGraphic" stdDeviation="2" result="blur-tight"/>
+      <feColorMatrix in="blur-tight" type="matrix"
+        values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.8 0" result="glow-tight"/>
+      <feGaussianBlur in="SourceGraphic" stdDeviation="2" result="shadow-blur"/>
+      <feOffset in="shadow-blur" dy="1" result="shadow-offset"/>
+      <feColorMatrix in="shadow-offset" type="matrix"
+        values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.4 0" result="dark-shadow"/>
+      <feMerge>
+        <feMergeNode in="glow-wide"/>
+        <feMergeNode in="glow-tight"/>
+        <feMergeNode in="dark-shadow"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- ── BACKGROUND ─────────────────────────────────────── -->
+  <rect width="1200" height="630" fill="#2a123c"/>
+
+  <!-- Right panel tinted overlay -->
+  <rect x="480" y="10" width="720" height="620" fill="url(#right-bg)"/>
+
+  <!-- Divider line -->
+  <line x1="480" y1="10" x2="480" y2="630" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+
+  <!-- Top gradient strip -->
+  <rect x="0" y="0" width="1200" height="10" fill="url(#strip)"/>
+
+  <!-- ── HEART ICON BOX  (center: 240, 116) ─────────────── -->
+  <rect x="196" y="72" width="88" height="88" rx="20" fill="white" filter="url(#box-shadow)"/>
+  <svg x="208" y="84" width="64" height="64" viewBox="0 0 128 128">
+    <path d="M64 96 C64 96 22 70 22 44 C22 30 33 20 48 25 C55 27 60 33 64 38 C68 33 73 27 80 25 C95 20 106 30 106 44 C106 70 64 96 64 96Z" fill="url(#heart-grad)"/>
+  </svg>
+
+  <!-- ═══════════════════════════════════════════════════════
+       LEFT COLUMN  (0–480 px)
+       Content padding: top 202 px from page, left/right 40 px
+       ═══════════════════════════════════════════════════════ -->
+
+  <!-- "Parental Care Guide"  42 px Gilda Display -->
+  <!-- top: 202, line-height: 40, baseline ≈ 234 -->
+  <text x="40" y="234"
+    font-family="'Gilda Display', Georgia, serif"
+    font-size="42"
+    letter-spacing="-0.4"
+    fill="rgba(255,210,220,0.95)"
+    filter="url(#text-glow)">Parental Care Guide</text>
+
+  <!-- Gold medallion line (below logo, center y ≈ 262) -->
+  <!-- Logo text ~295 px wide → spans x = 40–335, center x = 187.5 -->
+  <rect x="40"  y="261" width="128" height="2" fill="url(#gll-a)"/>
+  <rect x="208" y="261" width="127" height="2" fill="url(#gll-b)"/>
+  <polygon points="187.5,256 196,262 187.5,268 179,262" fill="#F7E4A0"/>
+  <circle cx="187.5" cy="262" r="3.5" fill="#2a123c"/>
+
+  <!-- h2: "Care for your parents. / Not the paperwork."     -->
+  <!-- top: 300, font-size: 48, line-height: 57.6            -->
+  <text x="40" y="348"
+    font-family="'Gilda Display', Georgia, serif"
+    font-size="48" font-weight="400"
+    fill="rgba(255,245,248,0.95)">Care for your</text>
+
+  <text x="40" y="406"
+    font-family="'Gilda Display', Georgia, serif"
+    font-size="48" font-weight="400"
+    fill="rgba(255,245,248,0.95)">parents.</text>
+
+  <text x="40" y="464"
+    font-family="'Gilda Display', Georgia, serif"
+    font-size="48" font-weight="400" font-style="italic"
+    fill="#F4B8C1">Not the</text>
+
+  <text x="40" y="522"
+    font-family="'Gilda Display', Georgia, serif"
+    font-size="48" font-weight="400" font-style="italic"
+    fill="#F4B8C1">paperwork.</text>
+
+  <!-- ═══════════════════════════════════════════════════════
+       RIGHT COLUMN  (480–1200 px, center x = 840)
+       ═══════════════════════════════════════════════════════ -->
+
+  <!-- "Services" italic heading                              -->
+  <!-- services-header center: (840, 120) from page top      -->
+  <!-- Element h = 72 + 5 + 20 = 97 → top = 71.5            -->
+  <!-- baseline ≈ 71.5 + 72 × 0.88 = 134.9 → 135            -->
+  <text x="840" y="135"
+    font-family="'Gilda Display', Georgia, serif"
+    font-size="72" font-style="italic"
+    text-anchor="middle"
+    fill="rgba(244,184,193,0.95)"
+    filter="url(#text-glow)">Services</text>
+
+  <!-- Gold medallion line (below Services, center y ≈ 159)  -->
+  <!-- "Services" ~240 px wide → spans x = 720–960, center = 840 -->
+  <rect x="720" y="158" width="106" height="2" fill="url(#gls-a)"/>
+  <rect x="854" y="158" width="106" height="2" fill="url(#gls-b)"/>
+  <polygon points="840,152 849,158 840,164 831,158" fill="#F7E4A0"/>
+  <circle cx="840" cy="158" r="3.5" fill="#2a123c"/>
+
+  <!-- ── PILLS ──────────────────────────────────────────── -->
+  <!-- Body-right padding: top/bottom 64 px, left/right 40 px -->
+  <!-- Content left: 520, right: 1160, width: 640 px         -->
+  <!-- 2 cols, gap 14 px → col width = (640−14)/2 = 313 px   -->
+  <!-- Col 1: x=520   Col 2: x=847                           -->
+  <!-- Pill height 62 px (pad 16+16, font 28+lh~10), rx=31   -->
+  <!-- Row 1: y=215  Row 2: y=291  Row 3: y=367              -->
+
+  <!-- Row 1 -->
+  <rect x="520" y="215" width="313" height="62" rx="31"
+    fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+  <text x="676.5" y="246"
+    font-family="'Jost', sans-serif" font-size="34" font-weight="500"
+    text-anchor="middle" dominant-baseline="central"
+    class="pill-text" fill="white">CARE COORDINATION</text>
+
+  <rect x="847" y="215" width="313" height="62" rx="31"
+    fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+  <text x="1003.5" y="246"
+    font-family="'Jost', sans-serif" font-size="34" font-weight="500"
+    text-anchor="middle" dominant-baseline="central"
+    class="pill-text" fill="white">INSURANCE</text>
+
+  <!-- Row 2 -->
+  <rect x="520" y="291" width="313" height="62" rx="31"
+    fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+  <text x="676.5" y="322"
+    font-family="'Jost', sans-serif" font-size="34" font-weight="500"
+    text-anchor="middle" dominant-baseline="central"
+    class="pill-text" fill="white">MEDICATIONS</text>
+
+  <rect x="847" y="291" width="313" height="62" rx="31"
+    fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+  <text x="1003.5" y="322"
+    font-family="'Jost', sans-serif" font-size="34" font-weight="500"
+    text-anchor="middle" dominant-baseline="central"
+    class="pill-text" fill="white">LEGAL DOCS</text>
+
+  <!-- Row 3 -->
+  <rect x="520" y="367" width="313" height="62" rx="31"
+    fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+  <text x="676.5" y="398"
+    font-family="'Jost', sans-serif" font-size="34" font-weight="500"
+    text-anchor="middle" dominant-baseline="central"
+    class="pill-text" fill="white">FAMILY SHARING</text>
+
+  <rect x="847" y="367" width="313" height="62" rx="31"
+    fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+  <text x="1003.5" y="398"
+    font-family="'Jost', sans-serif" font-size="34" font-weight="500"
+    text-anchor="middle" dominant-baseline="central"
+    class="pill-text" fill="white">FINANCIAL PLANNING</text>
+
+  <!-- ── SERVICE ICONS ──────────────────────────────────── -->
+  <!-- bottom: 74 px from page → icon baseline ≈ y = 556    -->
+  <!-- left: 520  right: 1156  space-between 6 icons        -->
+  <!-- centers x: 544, 662, 779, 897, 1014, 1132            -->
+  <text x="544"  y="556" font-size="48" text-anchor="middle">🏥</text>
+  <text x="662"  y="556" font-size="48" text-anchor="middle">📋</text>
+  <text x="779"  y="556" font-size="48" text-anchor="middle">💊</text>
+  <text x="897"  y="556" font-size="48" text-anchor="middle">📄</text>
+  <text x="1014" y="556" font-size="48" text-anchor="middle">👨‍👩‍👧</text>
+  <text x="1132" y="556" font-size="48" text-anchor="middle">💰</text>
+</svg>

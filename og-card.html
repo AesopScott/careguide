@@ -108,6 +108,8 @@
       padding: 64px 40px;
       gap: 28px;
       position: relative;
+      min-width: 0;
+      overflow: hidden;
     }
 
     .services-header {
@@ -145,14 +147,14 @@
 
     .pills {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 14px;
       width: 100%;
       margin-top: -98px;
     }
 
     .pill {
-      font-size: 28px;
+      font-size: 34px;
       font-weight: 500;
       padding: 16px 10px;
       border-radius: 100px;
@@ -161,6 +163,8 @@
       color: rgba(255, 255, 255, 1);
       white-space: nowrap;
       text-align: center;
+      text-transform: uppercase;
+      letter-spacing: -0.01em;
     }
 
     .service-icons {
