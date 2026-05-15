@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Gilda+Display&family=Jost:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html, body {
+      width: 1200px;
+      height: 630px;
+      overflow: hidden;
+      font-family: 'Jost', sans-serif;
+    }
+
+    .card {
+      width: 1200px;
+      height: 630px;
+      background: rgba(42, 18, 60, 1);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .strip {
+      height: 10px;
+      background: linear-gradient(90deg, #FFD6CC, #F4B8C1, #E8A0B4, #D4A0C8, #B8A8D8, #98A8E0, #8ABCE8);
+      flex-shrink: 0;
+    }
+
+    .body {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 2fr 3fr;
+      position: relative;
+    }
+
+    /* ── HEART ── */
+    .divider-icon {
+      position: absolute;
+      left: 240px;
+      top: 106px;
+      transform: translate(-50%, -50%);
+      z-index: 10;
+      width: 88px;
+      height: 88px;
+      border-radius: 20px;
+      background: white;
+      box-shadow: 0 4px 28px rgba(0,0,0,0.35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* ── LEFT ── */
+    .body-left {
+      padding: 192px 40px 64px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      gap: 28px;
+    }
+
+    .logo-block {
+      display: inline-flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .logo-line {
+      display: block;
+      width: 100%;
+      height: 20px;
+    }
+
+    .logo {
+      font-family: 'Gilda Display', Georgia, serif;
+      font-size: 42px;
+      line-height: 40px;
+      height: 40px;
+      color: rgba(255, 210, 220, 0.95);
+      letter-spacing: -0.01em;
+      white-space: nowrap;
+      text-shadow: 0 0 12px rgba(255,255,255,0.9), 0 0 4px rgba(255,255,255,0.8), 0 1px 3px rgba(0,0,0,0.4);
+    }
+
+    .body-left h2 {
+      font-family: 'Gilda Display', Georgia, serif;
+      font-size: 48px;
+      font-weight: 400;
+      line-height: 1.2;
+      color: rgba(255, 245, 248, 0.95);
+    }
+
+    .body-left h2 em { color: #F4B8C1; }
+
+    /* ── RIGHT ── */
+    .body-right {
+      background: linear-gradient(180deg, rgba(212,160,200,0.15) 0%, rgba(138,188,232,0.12) 100%);
+      border-left: 1px solid rgba(255,255,255,0.12);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 64px 40px;
+      gap: 28px;
+      position: relative;
+    }
+
+    .services-header {
+      position: absolute;
+      top: 110px;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .services-header .pcg-label {
+      font-family: 'Gilda Display', Georgia, serif;
+      font-size: 72px;
+      color: rgba(244, 184, 193, 0.95);
+      font-style: italic;
+      line-height: 1;
+      white-space: nowrap;
+      text-shadow: 0 0 12px rgba(255,255,255,0.9), 0 0 4px rgba(255,255,255,0.8), 0 1px 3px rgba(0,0,0,0.4);
+    }
+
+    .services-line {
+      display: block;
+      width: 100%;
+      height: 20px;
+    }
+
+    .logo-spacer {
+      height: 70px;
+      flex-shrink: 0;
+      width: 100%;
+    }
+
+    .pills {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+      width: 100%;
+      margin-top: -98px;
+    }
+
+    .pill {
+      font-size: 28px;
+      font-weight: 500;
+      padding: 16px 10px;
+      border-radius: 100px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.14);
+      color: rgba(255, 255, 255, 1);
+      white-space: nowrap;
+      text-align: center;
+    }
+
+    .service-icons {
+      position: absolute;
+      bottom: 74px;
+      left: 40px;
+      right: 44px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .sicon-emoji {
+      font-size: 48px;
+      line-height: 1;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="strip"></div>
+    <div class="body">
+      <div class="divider-icon">
+        <svg width="64" height="64" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+          <defs><linearGradient id="hg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#F4B8C1"/><stop offset="100%" stop-color="#B8A8D8"/></linearGradient></defs>
+          <path d="M64 96 C64 96 22 70 22 44 C22 30 33 20 48 25 C55 27 60 33 64 38 C68 33 73 27 80 25 C95 20 106 30 106 44 C106 70 64 96 64 96Z" fill="url(#hg)"/>
+        </svg>
+      </div>
+      <div class="body-left">
+        <div class="logo-block">
+          <div class="logo">Parental Care Guide</div>
+          <svg class="logo-line" viewBox="0 0 200 12" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="gl6a" x1="0" y1="0" x2="88" y2="0" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#C9A84C" stop-opacity="0"/>
+                <stop offset="100%" stop-color="#C9A84C"/>
+              </linearGradient>
+              <linearGradient id="gl6b" x1="112" y1="0" x2="200" y2="0" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#C9A84C"/>
+                <stop offset="100%" stop-color="#C9A84C" stop-opacity="0"/>
+              </linearGradient>
+            </defs>
+            <rect x="0" y="5.5" width="88" height="1" fill="url(#gl6a)"/>
+            <rect x="112" y="5.5" width="88" height="1" fill="url(#gl6b)"/>
+            <polygon points="100,1 108,6 100,11 92,6" fill="#F7E4A0"/>
+            <circle cx="100" cy="6" r="2" fill="rgba(42,18,60,1)"/>
+          </svg>
+        </div>
+        <h2>Care for your parents.<br><em>Not the paperwork.</em></h2>
+      </div>
+      <div class="body-right">
+        <div class="services-header">
+          <div class="pcg-label">Services</div>
+          <svg class="services-line" viewBox="0 0 200 12" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="glSa" x1="0" y1="0" x2="88" y2="0" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#C9A84C" stop-opacity="0"/>
+                <stop offset="100%" stop-color="#C9A84C"/>
+              </linearGradient>
+              <linearGradient id="glSb" x1="112" y1="0" x2="200" y2="0" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#C9A84C"/>
+                <stop offset="100%" stop-color="#C9A84C" stop-opacity="0"/>
+              </linearGradient>
+            </defs>
+            <rect x="0" y="5.5" width="88" height="1" fill="url(#glSa)"/>
+            <rect x="112" y="5.5" width="88" height="1" fill="url(#glSb)"/>
+            <polygon points="100,1 108,6 100,11 92,6" fill="#F7E4A0"/>
+            <circle cx="100" cy="6" r="2" fill="rgba(42,18,60,1)"/>
+          </svg>
+        </div>
+        <div class="logo-spacer"></div>
+        <div class="pills">
+          <span class="pill">Care coordination</span><span class="pill">Insurance</span>
+          <span class="pill">Medications</span><span class="pill">Legal docs</span>
+          <span class="pill">Family sharing</span><span class="pill">Financial planning</span>
+        </div>
+        <div class="service-icons">
+          <span class="sicon-emoji">🏥</span>
+          <span class="sicon-emoji">📋</span>
+          <span class="sicon-emoji">💊</span>
+          <span class="sicon-emoji">📄</span>
+          <span class="sicon-emoji">👨‍👩‍👧</span>
+          <span class="sicon-emoji">💰</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
