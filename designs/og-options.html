@@ -101,8 +101,29 @@
 
     .og-7 .strip {
       height: 5px;
-      background: linear-gradient(90deg, #FFD6CC, #F4B8C1, #E8A0B4, #D4A0C8, #B8A8D8, #98A8E0, #8ABCE8);
+      background: transparent;
       flex-shrink: 0;
+      position: relative;
+      z-index: 101;
+    }
+
+    .og-7::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border: 5px solid transparent;
+      background-image:
+        linear-gradient(#2a123c, #2a123c),
+        conic-gradient(from -90deg,
+          #FFD6CC, #F4B8C1, #E8A0B4, #D4A0C8,
+          #B8A8D8, #98A8E0, #8ABCE8,
+          #98A8E0, #B8A8D8, #D4A0C8,
+          #E8A0B4, #F4B8C1, #FFD6CC
+        );
+      background-origin: padding-box, border-box;
+      background-clip: padding-box, border-box;
+      pointer-events: none;
+      z-index: 100;
     }
 
     .og-7 .body {
@@ -110,6 +131,7 @@
       display: grid;
       grid-template-columns: 2fr 3fr;
       position: relative;
+      z-index: 101;
     }
 
     .og-7 .body-left {
