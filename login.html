@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CareGuide — Admin</title>
+  <title>CareGuide — Sign In</title>
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -89,8 +89,8 @@
 <body>
   <div class="card">
     <div class="logo">CareGuide</div>
-    <h1>Admin Login</h1>
-    <p class="sub">Sign in to view internal pages.</p>
+    <h1>Sign In</h1>
+    <p class="sub">Welcome back.</p>
     <label for="email">Email</label>
     <input type="email" id="email" placeholder="you@example.com" />
     <label for="password">Password</label>
@@ -127,18 +127,20 @@
       try {
         const cred  = await signInWithEmailAndPassword(auth, email, password);
         const token = await cred.user.getIdTokenResult();
+        const next  = new URLSearchParams(location.search).get('next');
+
         if (token.claims.admin) {
-          const dest = new URLSearchParams(location.search).get('next') || 'build.html';
-          location.href = dest;
+          location.href = next || '/build.html';
+        } else if (token.claims.practitioner) {
+          location.href = next || '/dashboard.html';
+        } else if (token.claims.family) {
+          location.href = next || '/family.html';
         } else {
-          await auth.signOut();
-          errEl.textContent = 'This account does not have admin access.';
-          errEl.classList.add('show');
+          location.href = next || '/index.html';
         }
       } catch (e) {
         errEl.textContent = 'Incorrect email or password.';
         errEl.classList.add('show');
-      } finally {
         btn.disabled = false;
         btn.textContent = 'Sign In';
       }

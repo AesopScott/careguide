@@ -75,6 +75,6 @@ function injectAdminToolbar(user) {
 
   document.getElementById('btn-signout').addEventListener('click', async () => {
     await signOut(auth);
-    location.reload();
+    location.href = '/login.html';
   });
 }
