@@ -36,7 +36,6 @@ jobs:
             **/.DS_Store
             **/README.md
             cgi-bin/**
-            .htaccess
             api/**
             config/**
             firestore.rules
