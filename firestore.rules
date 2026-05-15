@@ -105,6 +105,16 @@ service cloud.firestore {
       }
     }
 
+    // ── Waitlist ──────────────────────────────────────────────────────────────
+    // Anyone can join; only admins can read the list.
+
+    match /waitlist/{docId} {
+      allow create: if request.resource.data.keys().hasOnly(['email', 'joinedAt'])
+                    && request.resource.data.email is string
+                    && request.resource.data.email.size() > 0;
+      allow read, update, delete: if isAuth() && request.auth.token.admin == true;
+    }
+
     // ── AI Conversations ──────────────────────────────────────────────────────
     // Each user owns their own conversation history.
 
