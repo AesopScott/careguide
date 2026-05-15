@@ -4,18 +4,18 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-  <title>PCG — Trusted Professionals Directory</title>
+  <title>Parental Care Guide — Trusted Professionals Directory</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Gilda+Display&family=Jost:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
     :root {
-      --deep-plum:  rgba(80, 40, 100, 0.82);
+      --deep-plum:  #501464;
       --deep-plum-solid: #4B2464;
-      --text-dark:  rgba(30, 18, 48, 0.88);
-      --text-mid:   rgba(60, 40, 80, 0.65);
-      --text-light: rgba(60, 40, 80, 0.42);
+      --text-dark:  #1e1230;
+      --text-mid:   #4a2d65;
+      --text-light: #6b4d85;
       --glass-bg:   rgba(255, 255, 255, 0.30);
       --glass-bg-strong: rgba(255, 255, 255, 0.52);
       --glass-border: rgba(255, 255, 255, 0.58);
@@ -78,7 +78,7 @@
     nav { display: flex; align-items: center; gap: 28px; }
 
     nav a {
-      font-size: 0.82rem; font-weight: 400;
+      font-size: 1rem; font-weight: 400;
       color: var(--text-mid); text-decoration: none;
       transition: color 0.2s;
     }
@@ -88,13 +88,14 @@
     .btn-nav {
       padding: 10px 22px;
       background: var(--deep-plum);
-      color: rgba(255,255,255,0.92) !important;
+      color: #ffffff !important;
       border-radius: 100px;
       font-weight: 500 !important;
+      font-size: 1rem !important;
       backdrop-filter: blur(10px);
       transition: background 0.2s !important;
     }
-    .btn-nav:hover { background: rgba(60,25,80,0.92) !important; }
+    .btn-nav:hover { background: #3c1950 !important; }
 
     /* Page hero */
     .page-hero {
@@ -113,7 +114,7 @@
       border: 1px solid var(--glass-border);
       border-radius: 100px; padding: 7px 16px;
       margin-bottom: 20px; backdrop-filter: blur(8px);
-      font-size: 0.75rem; font-weight: 500;
+      font-size: 0.875rem; font-weight: 500;
       color: var(--text-dark); letter-spacing: 0.02em;
     }
 
@@ -176,13 +177,13 @@
     .search-btn {
       padding: 13px 24px;
       font-family: 'Jost', sans-serif;
-      font-size: 0.85rem; font-weight: 600;
-      background: var(--deep-plum); color: rgba(255,255,255,0.93);
+      font-size: 1rem; font-weight: 600;
+      background: var(--deep-plum); color: #ffffff;
       border: none; border-radius: 100px;
       cursor: pointer; backdrop-filter: blur(10px);
       transition: background 0.2s;
     }
-    .search-btn:hover { background: rgba(60,25,80,0.92); }
+    .search-btn:hover { background: #3c1950; }
 
     /* Category filters */
     .filters {
@@ -195,7 +196,7 @@
     .filter-btn {
       padding: 8px 20px;
       font-family: 'Jost', sans-serif;
-      font-size: 0.78rem; font-weight: 500;
+      font-size: 0.875rem; font-weight: 500;
       background: rgba(255,255,255,0.32);
       border: 1.5px solid rgba(255,255,255,0.55);
       border-radius: 100px; cursor: pointer;
@@ -211,7 +212,7 @@
     .filter-btn.active {
       background: var(--deep-plum);
       border-color: transparent;
-      color: rgba(255,255,255,0.93);
+      color: #ffffff;
     }
 
     /* Directory grid */
@@ -244,7 +245,7 @@
     }
 
     .category-count {
-      font-size: 0.72rem; font-weight: 400;
+      font-size: 0.875rem; font-weight: 400;
       color: var(--text-light); margin-left: 4px;
     }
 
@@ -295,7 +296,7 @@
     }
 
     .pro-title {
-      font-size: 0.76rem; font-weight: 400;
+      font-size: 0.875rem; font-weight: 400;
       color: var(--text-mid);
     }
 
@@ -305,18 +306,18 @@
       background: rgba(42,122,82,0.12);
       border: 1px solid rgba(42,122,82,0.25);
       border-radius: 100px;
-      font-size: 0.65rem; font-weight: 600;
+      font-size: 0.875rem; font-weight: 600;
       color: var(--verified); white-space: nowrap;
       flex-shrink: 0;
     }
 
     .verified-badge::before {
       content: '✓';
-      font-size: 0.6rem;
+      font-size: 0.875rem;
     }
 
     .pro-location {
-      font-size: 0.75rem; font-weight: 300;
+      font-size: 0.875rem; font-weight: 300;
       color: var(--text-light);
       display: flex; align-items: center; gap: 5px;
     }
@@ -330,7 +331,7 @@
       background: rgba(255,255,255,0.4);
       border: 1px solid rgba(255,255,255,0.65);
       border-radius: 100px;
-      font-size: 0.68rem; font-weight: 400;
+      font-size: 0.875rem; font-weight: 400;
       color: var(--text-mid);
     }
 
@@ -343,22 +344,22 @@
 
     .rating {
       display: flex; align-items: center; gap: 5px;
-      font-size: 0.75rem; color: var(--text-mid);
+      font-size: 0.875rem; color: var(--text-mid);
     }
 
-    .stars { color: #D4A0C8; letter-spacing: 1px; font-size: 0.7rem; }
+    .stars { color: #D4A0C8; letter-spacing: 1px; font-size: 0.875rem; }
 
     .contact-btn {
       padding: 7px 16px;
       font-family: 'Jost', sans-serif;
-      font-size: 0.74rem; font-weight: 600;
+      font-size: 0.875rem; font-weight: 600;
       background: var(--deep-plum);
-      color: rgba(255,255,255,0.92);
+      color: #ffffff;
       border: none; border-radius: 100px;
       cursor: pointer; backdrop-filter: blur(8px);
       transition: background 0.2s;
     }
-    .contact-btn:hover { background: rgba(60,25,80,0.92); }
+    .contact-btn:hover { background: #3c1950; }
 
     /* Feature pros CTA */
     .feature-cta {
@@ -395,35 +396,35 @@
     .btn-white {
       padding: 13px 26px;
       font-family: 'Jost', sans-serif;
-      font-size: 0.88rem; font-weight: 600;
-      background: rgba(255,255,255,0.92);
+      font-size: 1rem; font-weight: 600;
+      background: #ffffff;
       color: var(--deep-plum-solid);
       border: none; border-radius: 100px;
       cursor: pointer; transition: background 0.2s;
       white-space: nowrap;
     }
-    .btn-white:hover { background: white; }
+    .btn-white:hover { background: #f0e8f5; }
 
     .btn-ghost {
       padding: 13px 26px;
       font-family: 'Jost', sans-serif;
-      font-size: 0.88rem; font-weight: 500;
+      font-size: 1rem; font-weight: 500;
       background: transparent;
-      color: rgba(255,255,255,0.7);
-      border: 1.5px solid rgba(255,255,255,0.3);
+      color: #ffffff;
+      border: 1.5px solid rgba(255,255,255,0.5);
       border-radius: 100px; cursor: pointer;
       transition: border-color 0.2s, color 0.2s;
       white-space: nowrap;
     }
     .btn-ghost:hover {
-      border-color: rgba(255,255,255,0.6);
-      color: rgba(255,255,255,0.92);
+      border-color: rgba(255,255,255,0.8);
+      color: #ffffff;
     }
 
     footer {
       position: relative; z-index: 2;
       padding: 20px 60px; text-align: center;
-      font-size: 0.73rem; font-weight: 300;
+      font-size: 0.875rem; font-weight: 300;
       color: var(--text-light);
     }
 

@@ -13,7 +13,19 @@
       "Bash(ls \"C:\\\\Users\\\\scott\" | grep -iE \"\\(secret|key|config|firebase|credential\\)\")",
       "mcp__mcp-obsidian__obsidian_simple_search",
       "mcp__brave-search__brave_web_search",
-      "mcp__you-com__you-search"
+      "mcp__you-com__you-search",
+      "Bash(cat .github/workflows/*.yml)",
+      "Bash(cat firebase.json)",
+      "Bash(gh run *)",
+      "Bash(gcloud --version)",
+      "Bash(gcloud auth *)",
+      "Bash(gcloud config *)",
+      "Bash(gcloud projects *)",
+      "Bash(sed -i 's|<title>CareGuide \\(PCG\\) — System Map</title>|<title>Parental Care Guide — System Map</title>|' \"C:/Users/scott/Code/careguide/build.html\")",
+      "Bash(sed -i 's|<title>CareGuide \\(PCG\\) — Professional Outreach Guides</title>|<title>Parental Care Guide — Professional Outreach Guides</title>|' \"C:/Users/scott/Code/careguide/outreach.html\")",
+      "Bash(sed -i \"s/I'm building CareGuide/I'm building Parental Care Guide/g\" \"C:/Users/scott/Code/careguide/outreach.html\")",
+      "Bash(sed -i \"s/building CareGuide —/building Parental Care Guide —/g\" \"C:/Users/scott/Code/careguide/outreach.html\")",
+      "Bash(sed -i \"s/CareGuide becomes/Parental Care Guide becomes/g\" \"C:/Users/scott/Code/careguide/outreach.html\")"
     ],
     "defaultMode": "bypassPermissions"
   }

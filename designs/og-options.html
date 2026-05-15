@@ -160,7 +160,7 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      padding: 32px 24px;
+      padding: 32px 10px 32px 32px;
       gap: 14px;
       position: relative;
     }
@@ -172,18 +172,61 @@
       width: 100%;
     }
 
-    .og-7 .body-right .pcg-label {
+    .og-7 .services-header {
+      position: absolute;
+      top: 55px;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .og-7 .services-header .pcg-label {
       font-family: 'Gilda Display', Georgia, serif;
       font-size: 36px;
       color: rgba(244, 184, 193, 0.95);
       font-style: italic;
       line-height: 1;
-      position: absolute;
-      top: 59px;
-      left: 50%;
-      transform: translate(-50%, -50%);
       white-space: nowrap;
       text-shadow: 0 0 12px rgba(255,255,255,0.9), 0 0 4px rgba(255,255,255,0.8), 0 1px 3px rgba(0,0,0,0.4);
+    }
+
+    .og-7 .services-line {
+      display: block;
+      width: 100%;
+      height: 10px;
+    }
+
+    .og-7 .service-icons {
+      position: absolute;
+      bottom: 10px;
+      left: 32px;
+      right: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+
+    .og-7 .sicon {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+    }
+
+    .og-7 .sicon-emoji {
+      font-size: 16px;
+      line-height: 1;
+    }
+
+    .og-7 .sicon-label {
+      font-size: 8px;
+      font-weight: 400;
+      color: rgba(255, 255, 255, 0.45);
+      letter-spacing: 0.02em;
+      white-space: nowrap;
     }
 
     .og-7 .divider-icon {
@@ -207,13 +250,13 @@
       grid-template-columns: repeat(2, 1fr);
       gap: 7px;
       width: 100%;
-      margin-top: -25px;
+      margin-top: -49px;
     }
 
     .og-7 .body-right .pill {
       font-size: 14px;
       font-weight: 500;
-      padding: 8px 14px;
+      padding: 8px 5px;
       border-radius: 100px;
       background: rgba(255,255,255,0.08);
       border: 1px solid rgba(255,255,255,0.14);
@@ -262,11 +305,38 @@
                 <path d="M64 96 C64 96 22 70 22 44 C22 30 33 20 48 25 C55 27 60 33 64 38 C68 33 73 27 80 25 C95 20 106 30 106 44 C106 70 64 96 64 96Z" fill="url(#hg6)"/>
               </svg>
             </div>
-            <div class="logo-spacer"><div class="pcg-label">Services</div></div>
+            <div class="services-header">
+              <div class="pcg-label">Services</div>
+              <svg class="services-line" viewBox="0 0 200 12" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <linearGradient id="glSa" x1="0" y1="0" x2="88" y2="0" gradientUnits="userSpaceOnUse">
+                    <stop offset="0%" stop-color="#C9A84C" stop-opacity="0"/>
+                    <stop offset="100%" stop-color="#C9A84C"/>
+                  </linearGradient>
+                  <linearGradient id="glSb" x1="112" y1="0" x2="200" y2="0" gradientUnits="userSpaceOnUse">
+                    <stop offset="0%" stop-color="#C9A84C"/>
+                    <stop offset="100%" stop-color="#C9A84C" stop-opacity="0"/>
+                  </linearGradient>
+                </defs>
+                <rect x="0" y="5.5" width="88" height="1" fill="url(#glSa)"/>
+                <rect x="112" y="5.5" width="88" height="1" fill="url(#glSb)"/>
+                <polygon points="100,1 108,6 100,11 92,6" fill="#F7E4A0"/>
+                <circle cx="100" cy="6" r="2" fill="rgba(42,18,60,1)"/>
+              </svg>
+            </div>
+            <div class="logo-spacer"></div>
             <div class="pills">
               <span class="pill">Care coordination</span><span class="pill">Insurance</span>
               <span class="pill">Medications</span><span class="pill">Legal docs</span>
               <span class="pill">Family sharing</span><span class="pill">Financial planning</span>
+            </div>
+            <div class="service-icons">
+              <div class="sicon"><span class="sicon-emoji">🏥</span><span class="sicon-label">Care</span></div>
+              <div class="sicon"><span class="sicon-emoji">📋</span><span class="sicon-label">Insurance</span></div>
+              <div class="sicon"><span class="sicon-emoji">💊</span><span class="sicon-label">Medications</span></div>
+              <div class="sicon"><span class="sicon-emoji">📄</span><span class="sicon-label">Legal</span></div>
+              <div class="sicon"><span class="sicon-emoji">👨‍👩‍👧</span><span class="sicon-label">Family</span></div>
+              <div class="sicon"><span class="sicon-emoji">💰</span><span class="sicon-label">Finance</span></div>
             </div>
           </div>
         </div>

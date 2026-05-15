@@ -15,7 +15,7 @@
       --border: #30363d;
       --text: #e6edf3;
       --text-muted: #8b949e;
-      --text-dim: #6e7681;
+      --text-dim: #8b949e;
 
       --public-bg: #0d1b2a;
       --public-border: #1f4068;
@@ -42,7 +42,7 @@
       --role-social: #d29922;
       --role-financial: #8b5cf6;
       --role-family: #f78166;
-      --role-public: #6e7681;
+      --role-public: #8b949e;
 
       --svc-firebase: #ffa000;
       --svc-claude: #7c3aed;
@@ -58,7 +58,7 @@
       --ai-border: #4a1a7a;
 
       --status-none-bg: #21262d;
-      --status-none-color: #6e7681;
+      --status-none-color: #8b949e;
       --status-wip-bg: #1a2a40;
       --status-wip-color: #58a6ff;
       --status-done-bg: #0d2a18;
@@ -71,7 +71,7 @@
       background: var(--bg);
       color: var(--text);
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-      font-size: 13px;
+      font-size: 14px;
       line-height: 1.5;
       padding: 32px 24px 80px;
     }
@@ -88,7 +88,7 @@
     }
     .header-title { font-size: 22px; font-weight: 700; letter-spacing: -0.02em; }
     .header-title span { color: #2d6a4f; }
-    .header-meta { color: var(--text-muted); font-size: 12px; text-align: right; }
+    .header-meta { color: var(--text-muted); font-size: 13px; text-align: right; }
 
     /* ── Progress Dashboard ── */
     .dashboard {
@@ -108,7 +108,7 @@
       gap: 12px;
     }
     .dashboard-title {
-      font-size: 13px;
+      font-size: 14px;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.08em;
@@ -133,7 +133,7 @@
       line-height: 1;
     }
     .stat-label {
-      font-size: 10px;
+      font-size: 12px;
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.06em;
@@ -145,7 +145,7 @@
     .stat-total .stat-num { color: var(--text-muted); }
 
     .reset-btn {
-      font-size: 11px;
+      font-size: 12px;
       font-weight: 600;
       color: var(--text-dim);
       background: var(--surface-2);
@@ -167,7 +167,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-size: 11px;
+      font-size: 13px;
       color: var(--text-muted);
     }
     .phase-bar-label strong { color: var(--text); }
@@ -196,9 +196,9 @@
       flex-wrap: wrap;
     }
     .legend-group { display: flex; flex-direction: column; gap: 6px; }
-    .legend-label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); margin-bottom: 4px; }
+    .legend-label { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); margin-bottom: 4px; }
     .legend-items { display: flex; gap: 8px; flex-wrap: wrap; }
-    .legend-item { display: flex; align-items: center; gap: 5px; font-size: 12px; color: var(--text-muted); }
+    .legend-item { display: flex; align-items: center; gap: 5px; font-size: 13px; color: var(--text-muted); }
     .legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
 
     /* ── Role Entry Section ── */
@@ -207,7 +207,7 @@
       margin: 0 auto 48px;
     }
     .section-title {
-      font-size: 11px;
+      font-size: 13px;
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.1em;
@@ -234,8 +234,8 @@
       border: 1px solid;
     }
     .entry-card .role-name { font-weight: 700; font-size: 14px; margin-bottom: 4px; }
-    .entry-card .role-desc { font-size: 12px; color: var(--text-muted); margin-bottom: 10px; }
-    .entry-card .entry-point { font-size: 11px; color: var(--text-dim); }
+    .entry-card .role-desc { font-size: 13px; color: var(--text-muted); margin-bottom: 10px; }
+    .entry-card .entry-point { font-size: 13px; color: var(--text-dim); }
     .entry-card .entry-point strong { color: var(--text); }
 
     .entry-gcm { background: #0d1f12; border-color: #1a3a20; }
@@ -272,9 +272,9 @@
     }
     .card-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
     .card-title { font-size: 15px; font-weight: 700; letter-spacing: -0.01em; }
-    .card-desc { font-size: 12px; color: var(--text-muted); line-height: 1.5; }
+    .card-desc { font-size: 13px; color: var(--text-muted); line-height: 1.5; }
     .section-badge {
-      font-size: 9px;
+      font-size: 11px;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.08em;
@@ -286,7 +286,7 @@
 
     .card-block { display: flex; flex-direction: column; gap: 5px; }
     .block-label {
-      font-size: 9px;
+      font-size: 12px;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.08em;
@@ -294,7 +294,7 @@
     }
     .content-list { list-style: none; }
     .content-list li {
-      font-size: 12px;
+      font-size: 13px;
       color: var(--text-muted);
       padding: 2px 0;
       padding-left: 12px;
@@ -309,7 +309,7 @@
 
     .nav-links { display: flex; flex-wrap: wrap; gap: 6px; }
     .nav-link {
-      font-size: 11px;
+      font-size: 12px;
       padding: 3px 8px;
       border-radius: 4px;
       background: var(--surface-2);
@@ -321,7 +321,7 @@
 
     .roles-row { display: flex; flex-wrap: wrap; gap: 5px; }
     .role-badge {
-      font-size: 10px;
+      font-size: 12px;
       font-weight: 600;
       padding: 2px 7px;
       border-radius: 20px;
@@ -329,7 +329,7 @@
 
     .services-row { display: flex; flex-wrap: wrap; gap: 5px; }
     .svc-badge {
-      font-size: 10px;
+      font-size: 12px;
       font-weight: 600;
       padding: 2px 7px;
       border-radius: 4px;
@@ -352,7 +352,7 @@
       gap: 6px;
     }
     .ai-badge {
-      font-size: 9px;
+      font-size: 11px;
       font-weight: 800;
       text-transform: uppercase;
       letter-spacing: 0.1em;
@@ -364,12 +364,12 @@
       white-space: nowrap;
     }
     .ai-callout-label {
-      font-size: 10px;
+      font-size: 12px;
       font-weight: 700;
       color: var(--ai-accent);
     }
     .ai-callout-text {
-      font-size: 11px;
+      font-size: 13px;
       color: #c4b5fd;
       line-height: 1.5;
     }
@@ -384,7 +384,7 @@
       margin-top: 4px;
     }
     .status-btn {
-      font-size: 10px;
+      font-size: 12px;
       font-weight: 700;
       padding: 4px 10px;
       border-radius: 20px;
@@ -479,14 +479,14 @@
       flex-shrink: 0;
     }
     .svc-card-name { font-weight: 700; font-size: 14px; }
-    .svc-card-vendor { font-size: 11px; color: var(--text-dim); }
-    .svc-card-desc { font-size: 12px; color: var(--text-muted); margin-bottom: 8px; }
-    .svc-used-by { font-size: 11px; color: var(--text-dim); }
+    .svc-card-vendor { font-size: 12px; color: var(--text-dim); }
+    .svc-card-desc { font-size: 13px; color: var(--text-muted); margin-bottom: 8px; }
+    .svc-used-by { font-size: 12px; color: var(--text-dim); }
     .svc-used-by span { color: var(--text-muted); }
 
     /* ── Phase Tags ── */
     .phase-tag {
-      font-size: 9px;
+      font-size: 11px;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.06em;
@@ -507,14 +507,14 @@
   <!-- ── Header ── -->
   <div class="header">
     <div>
-      <div class="header-title"><span>Care</span>Guide (PCG) — System Map</div>
-      <div style="color: var(--text-muted); font-size: 12px; margin-top: 4px;">parentalcareguide.com · All pages, connections, roles, and external services</div>
+      <div class="header-title">Parental <span>Care</span> Guide — System Map</div>
+      <div style="color: var(--text-muted); font-size: 13px; margin-top: 4px;">parentalcareguide.com · All pages, connections, roles, and external services</div>
     </div>
     <div class="header-meta">
       Stack: HTML/JS · FastAPI · Firebase · Claude API · Stripe<br>
       Generated: May 2026
     </div>
-    <a id="btn-signout" href="#" style="font-size:12px;font-weight:600;color:var(--text-muted);text-decoration:none;align-self:center;">Sign Out</a>
+    <a id="btn-signout" href="#" style="font-size:14px;font-weight:600;color:var(--text-muted);text-decoration:none;align-self:center;">Sign Out</a>
   </div>
 
   <!-- ── Progress Dashboard ── -->
