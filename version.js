@@ -1,0 +1,1 @@
+(function(){var v='dev';var el=document.createElement('div');el.style.cssText='position:fixed;bottom:8px;left:12px;font-size:11px;opacity:0.35;font-family:monospace;z-index:9999;pointer-events:none;color:#000;';el.textContent='v'+v;document.addEventListener('DOMContentLoaded',function(){document.body.appendChild(el);});})();
