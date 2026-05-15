@@ -14,7 +14,6 @@ const app  = initializeApp(FIREBASE_CONFIG);
 const auth = getAuth(app);
 
 const navLink    = document.getElementById('nav-auth-link');
-const hero       = document.querySelector('.hero');
 const adminPanel = document.getElementById('admin-panel');
 
 // Wire the nav link to handle both Sign In (href) and Sign Out (click) dynamically
@@ -45,12 +44,10 @@ function applySignIn() {
 }
 
 function showAdminPanel() {
-  if (hero)       hero.classList.add('admin-active');
   if (adminPanel) adminPanel.style.display = 'flex';
 }
 
 function hideAdminPanel() {
-  if (hero)       hero.classList.remove('admin-active');
   if (adminPanel) adminPanel.style.display = 'none';
 }
 

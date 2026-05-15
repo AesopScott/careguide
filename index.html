@@ -383,17 +383,17 @@
       color: var(--text-light);
     }
 
-    /* ── Hero 3-column layout for admin ── */
-    .hero.admin-active {
-      max-width: 1500px;
-      grid-template-columns: 1.15fr 0.85fr 240px;
-    }
-
-    /* ── Admin panel ── */
+    /* ── Admin panel — fixed in right margin, never affects page layout ── */
     #admin-panel {
       display: none;
+      position: fixed;
+      right: 24px;
+      top: 80px;
+      width: 248px;
+      max-height: calc(100vh - 100px);
+      overflow-y: auto;
       flex-direction: column;
-      padding-top: 4px;
+      z-index: 20;
     }
 
     .admin-panel-label {
@@ -620,6 +620,13 @@
 
   <footer>&copy; 2026 Parental Care Guide &mdash; parentalcareguide.com</footer>
 
-  <script type="module" src="js/admin-status.js"></script>
+  <script>
+    // Instant nav state — runs before Firebase module loads
+    if (localStorage.getItem('pcg_admin') === '1') {
+      var _nl = document.getElementById('nav-auth-link');
+      if (_nl) { _nl.textContent = 'Sign Out'; _nl.href = '#'; _nl.dataset.mode = 'signout'; }
+    }
+  </script>
+  <script type="module" src="js/admin-status.js?v=3"></script>
 </body>
 </html>
