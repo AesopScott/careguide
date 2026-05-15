@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CareGuide (PCG) — Professional Outreach Guides</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --surface: #161b22;
+      --surface-2: #1c2128;
+      --border: #30363d;
+      --text: #e6edf3;
+      --text-muted: #8b949e;
+      --text-dim: #6e7681;
+
+      --gcm: #2ea043;
+      --gcm-bg: #0d1f12;
+      --gcm-border: #1a3a20;
+
+      --elder: #1f6feb;
+      --elder-bg: #0d1420;
+      --elder-border: #1a2a40;
+
+      --social: #d29922;
+      --social-bg: #1f1a0a;
+      --social-border: #3a2e10;
+
+      --financial: #8b5cf6;
+      --financial-bg: #160d20;
+      --financial-border: #2a1a40;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      font-size: 14px;
+      line-height: 1.6;
+      padding: 32px 24px 80px;
+    }
+
+    /* ── Header ── */
+    .header {
+      max-width: 960px;
+      margin: 0 auto 16px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border);
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .header-left {}
+    .header-title { font-size: 22px; font-weight: 700; letter-spacing: -0.02em; }
+    .header-title span { color: #2d6a4f; }
+    .header-sub { color: var(--text-muted); font-size: 12px; margin-top: 4px; }
+    .header-note {
+      font-size: 12px;
+      color: var(--text-dim);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 14px;
+      max-width: 340px;
+      line-height: 1.5;
+    }
+
+    /* ── Role Nav ── */
+    .role-nav {
+      max-width: 960px;
+      margin: 0 auto 48px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      padding-top: 20px;
+    }
+    .role-pill {
+      font-size: 12px;
+      font-weight: 600;
+      padding: 6px 14px;
+      border-radius: 20px;
+      border: 1px solid;
+      text-decoration: none;
+      transition: opacity 0.15s;
+    }
+    .role-pill:hover { opacity: 0.8; }
+    .pill-gcm      { background: var(--gcm-bg);      border-color: var(--gcm-border);      color: var(--gcm); }
+    .pill-elder    { background: var(--elder-bg);    border-color: var(--elder-border);    color: var(--elder); }
+    .pill-social   { background: var(--social-bg);   border-color: var(--social-border);   color: var(--social); }
+    .pill-financial{ background: var(--financial-bg); border-color: var(--financial-border); color: var(--financial); }
+
+    /* ── Role Section ── */
+    .role-section {
+      max-width: 960px;
+      margin: 0 auto 64px;
+      scroll-margin-top: 24px;
+    }
+
+    .role-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 28px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid;
+    }
+    .role-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+    .role-name { font-size: 20px; font-weight: 800; letter-spacing: -0.02em; }
+    .role-tier { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+
+    .role-gcm-header    { border-color: var(--gcm-border); }
+    .role-gcm-header    .role-name { color: var(--gcm); }
+    .role-gcm-header    .role-icon { background: var(--gcm-bg); color: var(--gcm); }
+
+    .role-elder-header  { border-color: var(--elder-border); }
+    .role-elder-header  .role-name { color: var(--elder); }
+    .role-elder-header  .role-icon { background: var(--elder-bg); color: var(--elder); }
+
+    .role-social-header { border-color: var(--social-border); }
+    .role-social-header .role-name { color: var(--social); }
+    .role-social-header .role-icon { background: var(--social-bg); color: var(--social); }
+
+    .role-fin-header    { border-color: var(--financial-border); }
+    .role-fin-header    .role-name { color: var(--financial); }
+    .role-fin-header    .role-icon { background: var(--financial-bg); color: var(--financial); }
+
+    /* ── Cards ── */
+    .card-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    @media (max-width: 680px) {
+      .card-grid { grid-template-columns: 1fr; }
+    }
+    .card-full { grid-column: 1 / -1; }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px 22px;
+    }
+    .card-label {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-dim);
+      margin-bottom: 12px;
+    }
+
+    /* Pitch card */
+    .pitch-text {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.75;
+      font-style: italic;
+      border-left: 3px solid var(--border);
+      padding-left: 16px;
+    }
+
+    /* Questions */
+    .question-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .question-list li {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+    .q-num {
+      font-size: 11px;
+      font-weight: 700;
+      min-width: 20px;
+      padding-top: 2px;
+      color: var(--text-dim);
+    }
+    .q-text {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.55;
+    }
+
+    /* Listen for */
+    .listen-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .listen-list li {
+      font-size: 13px;
+      color: var(--text-muted);
+      padding-left: 16px;
+      position: relative;
+      line-height: 1.5;
+    }
+    .listen-list li::before {
+      content: '▸';
+      position: absolute;
+      left: 0;
+      color: var(--text-dim);
+      font-size: 10px;
+      top: 3px;
+    }
+
+    .divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      max-width: 960px;
+      margin: 0 auto 64px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <div class="header-left">
+      <div class="header-title"><span>Care</span>Guide (PCG) — Outreach Guides</div>
+      <div class="header-sub">Professional outreach — talking points and discovery questions for each role</div>
+    </div>
+    <div class="header-note">
+      These are starting points, not scripts. The goal of every conversation is to listen, not to pitch. Let them describe the pain before you name the solution.
+    </div>
+  </div>
+
+  <div class="role-nav">
+    <a class="role-pill pill-gcm" href="#gcm">Geriatric Care Manager</a>
+    <a class="role-pill pill-elder" href="#elder">Elder Law Attorney</a>
+    <a class="role-pill pill-social" href="#social">Social Worker / Discharge Planner</a>
+    <a class="role-pill pill-financial" href="#financial">Financial / Estate Planner</a>
+  </div>
+
+  <!-- ══════════════════════════════════════ -->
+  <!-- GCM -->
+  <!-- ══════════════════════════════════════ -->
+  <div class="role-section" id="gcm">
+    <div class="role-header role-gcm-header">
+      <div class="role-icon">GCM</div>
+      <div>
+        <div class="role-name">Geriatric Care Manager</div>
+        <div class="role-tier">Primary paying customer · $149/month · Phase 1</div>
+      </div>
+    </div>
+
+    <div class="card-grid">
+      <div class="card card-full">
+        <div class="card-label">Value Pitch</div>
+        <div class="pitch-text">"I'm building a platform called CareGuide. The first thing it does is take your intake interview and produce a structured care plan draft in under 60 seconds. You review it, edit it, approve it. You just didn't have to write it from scratch. Beyond that, every family you work with gets a portal — medications, documents, appointments, care updates, all in one place. You post once. Every family member sees it. No more repeating yourself to three siblings in three states. I'm not selling anything yet. I'm looking for 10 care managers who will use an early version with real clients and tell me honestly what's broken."</div>
+      </div>
+
+      <div class="card">
+        <div class="card-label">Discovery Questions</div>
+        <ol class="question-list">
+          <li><span class="q-num">1</span><span class="q-text">Walk me through what happens the first time a new family contacts you. What do you do, in what order?</span></li>
+          <li><span class="q-num">2</span><span class="q-text">How do you capture what you learn in that first intake conversation? What does your output look like?</span></li>
+          <li><span class="q-num">3</span><span class="q-text">How long does it take you to produce a care plan after the initial intake?</span></li>
+          <li><span class="q-num">4</span><span class="q-text">What's the most time-consuming part of your week that isn't directly helping clients?</span></li>
+          <li><span class="q-num">5</span><span class="q-text">How do you currently coordinate with family members who are in different states or cities?</span></li>
+          <li><span class="q-num">6</span><span class="q-text">How do you keep track of what's pending for each family?</span></li>
+          <li><span class="q-num">7</span><span class="q-text">What tools do you use today? What do you wish they did that they don't?</span></li>
+          <li><span class="q-num">8</span><span class="q-text">How many active client families do you manage at once? What's your ceiling — and why?</span></li>
+          <li><span class="q-num">9</span><span class="q-text">If I could give you back 5 hours a week, which part of your work would you want that time taken from?</span></li>
+          <li><span class="q-num">10</span><span class="q-text">If a tool existed that took your intake interview and produced a structured care plan draft in 60 seconds — what would that be worth to you per month?</span></li>
+          <li><span class="q-num">11</span><span class="q-text">Would you be willing to use an early version of this with real clients and give me weekly feedback?</span></li>
+        </ol>
+      </div>
+
+      <div class="card">
+        <div class="card-label">What You're Listening For</div>
+        <ul class="listen-list">
+          <li>Intake + care plan named as a pain point — confirms the anchor feature is real</li>
+          <li>How many families they manage — validates $149 unit economics</li>
+          <li>"I'd pay $X" — let them anchor before you name a price</li>
+          <li>Willingness to co-design — this is your operator partner signal</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════ -->
+  <!-- ELDER LAW -->
+  <!-- ══════════════════════════════════════ -->
+  <div class="role-section" id="elder">
+    <div class="role-header role-elder-header">
+      <div class="role-icon">ELA</div>
+      <div>
+        <div class="role-name">Elder Law Attorney</div>
+        <div class="role-tier">Phase 2 paying customer · $199/month · Heavy document user</div>
+      </div>
+    </div>
+
+    <div class="card-grid">
+      <div class="card card-full">
+        <div class="card-label">Value Pitch</div>
+        <div class="pitch-text">"A significant portion of your new clients probably show up without a current POA, without an advance directive, and without any clear picture of their parent's medical situation. You spend the first meeting doing education that should have happened months ago. I'm building CareGuide — a platform that organizes families before they need you. Documents filed, medications listed, legal gaps flagged, family roles clear. By the time they walk into your office, they know what they have and what they're missing. For your practice, it becomes the resource you hand every new client on day one."</div>
+      </div>
+
+      <div class="card">
+        <div class="card-label">Discovery Questions</div>
+        <ol class="question-list">
+          <li><span class="q-num">1</span><span class="q-text">At what point in a family's journey do they typically come to you? What's the triggering event?</span></li>
+          <li><span class="q-num">2</span><span class="q-text">What do most families not know that they should — before they ever walk in your door?</span></li>
+          <li><span class="q-num">3</span><span class="q-text">What documents does every aging family need, and how often do families come to you without them?</span></li>
+          <li><span class="q-num">4</span><span class="q-text">How do you currently share documents with families? How do they organize them?</span></li>
+          <li><span class="q-num">5</span><span class="q-text">How much of your time is spent on education vs. actual legal work?</span></li>
+          <li><span class="q-num">6</span><span class="q-text">Do you refer families to other professionals — GCMs, financial planners? How do you manage those handoffs?</span></li>
+          <li><span class="q-num">7</span><span class="q-text">What's the biggest gap in how families are supported between their first call with you and the moment the legal work is done?</span></li>
+          <li><span class="q-num">8</span><span class="q-text">If families came to you already organized — documents filed, medications listed, POA drafted — how much time would that save you per client?</span></li>
+          <li><span class="q-num">9</span><span class="q-text">Do you have a resource you currently refer families to for the non-legal pieces? What's missing from it?</span></li>
+          <li><span class="q-num">10</span><span class="q-text">What would you need to see to feel comfortable recommending a platform like this to your clients?</span></li>
+          <li><span class="q-num">11</span><span class="q-text">What would a platform like this be worth to your practice per month?</span></li>
+        </ol>
+      </div>
+
+      <div class="card">
+        <div class="card-label">What You're Listening For</div>
+        <ul class="listen-list">
+          <li>Document disorganization named as a pain — confirms document vault priority</li>
+          <li>Time spent on education they wish families already had</li>
+          <li>Referral patterns — where do they send families today?</li>
+          <li>Willingness to recommend PCG to clients — this is a distribution signal</li>
+          <li>Price anchoring — let them say a number before you say $199</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════ -->
+  <!-- SOCIAL WORKER -->
+  <!-- ══════════════════════════════════════ -->
+  <div class="role-section" id="social">
+    <div class="role-header role-social-header">
+      <div class="role-icon">SW</div>
+      <div>
+        <div class="role-name">Social Worker / Hospital Discharge Planner</div>
+        <div class="role-tier">Phase 3 · Referral channel + potential paying tier</div>
+      </div>
+    </div>
+
+    <div class="card-grid">
+      <div class="card card-full">
+        <div class="card-label">Value Pitch</div>
+        <div class="pitch-text">"You know the scenario. A patient is ready for discharge. You need medications, legal authority, home support situation, and family contacts — and you need it in the next two hours. Half the time that information doesn't exist in one place. I'm building CareGuide — a platform for families managing aging parents. Every family that uses it has a crisis card: one page with medications, conditions, contacts, DNR status — printable and always current. For you, that means the information you need at discharge exists before you ask for it."</div>
+      </div>
+
+      <div class="card">
+        <div class="card-label">Discovery Questions</div>
+        <ol class="question-list">
+          <li><span class="q-num">1</span><span class="q-text">Walk me through a typical discharge. What information do you need that you rarely have?</span></li>
+          <li><span class="q-num">2</span><span class="q-text">How do you find out what support a patient has at home? How long does that take?</span></li>
+          <li><span class="q-num">3</span><span class="q-text">What happens when a family is unprepared for discharge? How often does that happen?</span></li>
+          <li><span class="q-num">4</span><span class="q-text">How do you communicate with family members who aren't physically present?</span></li>
+          <li><span class="q-num">5</span><span class="q-text">What documents do you most often need that families can't produce quickly?</span></li>
+          <li><span class="q-num">6</span><span class="q-text">Do you refer families to GCMs or other ongoing support after discharge? How do you make that handoff?</span></li>
+          <li><span class="q-num">7</span><span class="q-text">What would make your job significantly easier in the first 48 hours of a discharge?</span></li>
+          <li><span class="q-num">8</span><span class="q-text">If a family arrived with a single page that had medications, conditions, contacts, and legal documents all organized — how often would that change an outcome?</span></li>
+          <li><span class="q-num">9</span><span class="q-text">What tools do you currently use to manage discharge coordination? What's broken about them?</span></li>
+          <li><span class="q-num">10</span><span class="q-text">If a platform existed that families could use to stay organized between hospitalizations — would you refer families to it? What would it need to have?</span></li>
+        </ol>
+      </div>
+
+      <div class="card">
+        <div class="card-label">What You're Listening For</div>
+        <ul class="listen-list">
+          <li>Crisis card as a named need — confirms that feature's real-world value</li>
+          <li>Discharge chaos as a systemic problem — not just one hospital</li>
+          <li>Referral willingness — they talk to families at peak crisis moments</li>
+          <li>Whether they'd pay or whether they're a referral channel only — different GTM paths</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════ -->
+  <!-- FINANCIAL PLANNER -->
+  <!-- ══════════════════════════════════════ -->
+  <div class="role-section" id="financial">
+    <div class="role-header role-fin-header">
+      <div class="role-icon">FP</div>
+      <div>
+        <div class="role-name">Financial / Estate Planner</div>
+        <div class="role-tier">Phase 3 · Pricing TBD from discovery · Multi-profession coordination</div>
+      </div>
+    </div>
+
+    <div class="card-grid">
+      <div class="card card-full">
+        <div class="card-label">Value Pitch</div>
+        <div class="pitch-text">"By the time most families come to you with elder care financial concerns, something has already gone wrong. You spend the first meeting doing catch-up on things that should have been settled long ago. I'm building CareGuide — a platform that helps families get organized before a crisis forces them to. Documents filed, legal gaps flagged, care costs understood, family roles clear. It doesn't replace your work — it makes your clients better prepared for it. And because you work with elder law attorneys and care managers on these cases, CareGuide becomes the shared layer all three professions can point families toward."</div>
+      </div>
+
+      <div class="card">
+        <div class="card-label">Discovery Questions</div>
+        <ol class="question-list">
+          <li><span class="q-num">1</span><span class="q-text">At what point do families typically come to you with elder care financial concerns? What triggers it?</span></li>
+          <li><span class="q-num">2</span><span class="q-text">What financial documents do aging families most commonly not have in order?</span></li>
+          <li><span class="q-num">3</span><span class="q-text">How does the absence of a POA or advance directive affect your work when a client becomes incapacitated?</span></li>
+          <li><span class="q-num">4</span><span class="q-text">How do you coordinate with elder law attorneys and GCMs? Is there a standard handoff, or is it ad hoc?</span></li>
+          <li><span class="q-num">5</span><span class="q-text">How do you currently help families understand the cost of care — facilities, in-home care, long-term care insurance?</span></li>
+          <li><span class="q-num">6</span><span class="q-text">What's the conversation you have most often that you wish families already knew before they came to you?</span></li>
+          <li><span class="q-num">7</span><span class="q-text">How do families currently track and share financial documents with you and with each other?</span></li>
+          <li><span class="q-num">8</span><span class="q-text">If families came to you already organized — legal docs filed, care costs understood, family roles clear — how much would that change your first meeting?</span></li>
+          <li><span class="q-num">9</span><span class="q-text">Do you refer families to other resources for the non-financial pieces? What's the best one you've found?</span></li>
+          <li><span class="q-num">10</span><span class="q-text">What would a platform that organized all of this for families be worth to you per month — as a tool you use, or one you recommend to clients?</span></li>
+        </ol>
+      </div>
+
+      <div class="card">
+        <div class="card-label">What You're Listening For</div>
+        <ul class="listen-list">
+          <li>Financial document disorganization as a named pain point</li>
+          <li>Coordination gaps between professions — GCM, attorney, planner all working in silos</li>
+          <li>Whether they'd pay or refer — determines pricing and GTM path for this tier</li>
+          <li>Long-term care cost education as a gap PCG could fill</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>
