@@ -23,7 +23,7 @@ if (navLink) {
       e.preventDefault();
       localStorage.removeItem('pcg_admin');
       await signOut(auth);
-      window.location.href = '/login.html';
+      window.location.href = '/';
     }
     // otherwise it's a regular link to /login.html — let it navigate
   });
