@@ -13,10 +13,19 @@ const FIREBASE_CONFIG = {
 const app  = initializeApp(FIREBASE_CONFIG);
 const auth = getAuth(app);
 
+function showAdminUI() {
+  const navLink = document.getElementById('nav-auth-link');
+  if (navLink) navLink.textContent = 'Sign Out';
+
+  const featureCards = document.getElementById('feature-cards');
+  const adminPanel   = document.getElementById('admin-panel');
+  if (featureCards) featureCards.style.display = 'none';
+  if (adminPanel)   adminPanel.style.display   = 'block';
+}
+
 function wireSignOut(auth) {
   const navLink = document.getElementById('nav-auth-link');
   if (navLink) {
-    navLink.textContent = 'Sign Out';
     navLink.href = '#';
     navLink.addEventListener('click', async e => {
       e.preventDefault();
@@ -36,15 +45,13 @@ function wireSignOut(auth) {
   }
 }
 
-// Apply Sign Out state immediately if we know the user is admin (avoids flash)
+// Apply admin UI immediately if we know the user is admin (avoids flash)
 if (localStorage.getItem('pcg_admin') === '1') {
-  const navLink = document.getElementById('nav-auth-link');
-  if (navLink) navLink.textContent = 'Sign Out';
+  showAdminUI();
 }
 
 onAuthStateChanged(auth, async user => {
   if (!user) {
-    // Firebase says not signed in — clear the hint so next load is clean
     localStorage.removeItem('pcg_admin');
     return;
   }
@@ -52,6 +59,7 @@ onAuthStateChanged(auth, async user => {
     const token = await user.getIdTokenResult();
     if (!token.claims.admin) return;
     localStorage.setItem('pcg_admin', '1');
+    showAdminUI();
     wireSignOut(auth);
   } catch { /* not admin */ }
 });
