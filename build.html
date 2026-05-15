@@ -49,6 +49,17 @@
       --svc-email: #ea4335;
       --svc-run: #34a853;
       --svc-logging: #5f6368;
+
+      --ai-accent: #a855f7;
+      --ai-bg: #1a0d2e;
+      --ai-border: #4a1a7a;
+
+      --status-none-bg: #21262d;
+      --status-none-color: #6e7681;
+      --status-wip-bg: #1a2a40;
+      --status-wip-color: #58a6ff;
+      --status-done-bg: #0d2a18;
+      --status-done-color: #3fb950;
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -65,7 +76,7 @@
     /* ── Header ── */
     .header {
       max-width: 1400px;
-      margin: 0 auto 40px;
+      margin: 0 auto 32px;
       display: flex;
       align-items: flex-end;
       justify-content: space-between;
@@ -75,6 +86,103 @@
     .header-title { font-size: 22px; font-weight: 700; letter-spacing: -0.02em; }
     .header-title span { color: #2d6a4f; }
     .header-meta { color: var(--text-muted); font-size: 12px; text-align: right; }
+
+    /* ── Progress Dashboard ── */
+    .dashboard {
+      max-width: 1400px;
+      margin: 0 auto 40px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px 28px;
+    }
+    .dashboard-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .dashboard-title {
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+    }
+    .dashboard-stats {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .stat {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+    }
+    .stat-num {
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1;
+    }
+    .stat-label {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-muted);
+    }
+    .stat-done .stat-num { color: #3fb950; }
+    .stat-wip .stat-num { color: #58a6ff; }
+    .stat-ai .stat-num { color: var(--ai-accent); }
+    .stat-total .stat-num { color: var(--text-muted); }
+
+    .reset-btn {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-dim);
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 5px 10px;
+      cursor: pointer;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .reset-btn:hover { color: var(--text); border-color: var(--text-muted); }
+
+    .dashboard-phases {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    .phase-bar-group { display: flex; flex-direction: column; gap: 6px; }
+    .phase-bar-label {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+    .phase-bar-label strong { color: var(--text); }
+    .phase-bar-track {
+      height: 6px;
+      background: var(--surface-2);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .phase-bar-fill {
+      height: 100%;
+      border-radius: 3px;
+      transition: width 0.4s ease;
+      width: 0%;
+    }
+    .fill-mvp { background: #3fb950; }
+    .fill-p2  { background: #58a6ff; }
+    .fill-p3  { background: var(--ai-accent); }
 
     /* ── Legend ── */
     .legend {
@@ -157,6 +265,7 @@
       display: flex;
       flex-direction: column;
       gap: 12px;
+      position: relative;
     }
     .card-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
     .card-title { font-size: 15px; font-weight: 700; letter-spacing: -0.01em; }
@@ -223,6 +332,84 @@
       border-radius: 4px;
       color: #0d1117;
     }
+
+    /* ── AI Advantage Callout ── */
+    .ai-callout {
+      background: var(--ai-bg);
+      border: 1px solid var(--ai-border);
+      border-radius: 8px;
+      padding: 10px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+    .ai-callout-header {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .ai-badge {
+      font-size: 9px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--ai-accent);
+      background: #2d0f4a;
+      border: 1px solid var(--ai-border);
+      padding: 2px 7px;
+      border-radius: 20px;
+      white-space: nowrap;
+    }
+    .ai-callout-label {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--ai-accent);
+    }
+    .ai-callout-text {
+      font-size: 11px;
+      color: #c4b5fd;
+      line-height: 1.5;
+    }
+
+    /* ── Status Toggle ── */
+    .card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding-top: 4px;
+      border-top: 1px solid var(--border);
+      margin-top: 4px;
+    }
+    .status-btn {
+      font-size: 10px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 20px;
+      border: 1px solid;
+      cursor: pointer;
+      transition: all 0.15s;
+      letter-spacing: 0.04em;
+      background: var(--status-none-bg);
+      color: var(--status-none-color);
+      border-color: var(--border);
+    }
+    .status-btn:before { content: '○ '; }
+    .status-btn.wip {
+      background: var(--status-wip-bg);
+      color: var(--status-wip-color);
+      border-color: #1f4068;
+    }
+    .status-btn.wip:before { content: '◑ '; }
+    .status-btn.done {
+      background: var(--status-done-bg);
+      color: var(--status-done-color);
+      border-color: #1a3a20;
+    }
+    .status-btn.done:before { content: '● '; }
+
+    /* Card done overlay effect */
+    .card[data-status="done"] { opacity: 0.75; }
+    .card[data-status="done"] .card-title { text-decoration: line-through; text-decoration-color: #3fb95060; }
 
     /* Section-specific card styles */
     .card-public { background: var(--public-bg); border-color: var(--public-border); }
@@ -326,6 +513,64 @@
     </div>
   </div>
 
+  <!-- ── Progress Dashboard ── -->
+  <div class="dashboard">
+    <div class="dashboard-top">
+      <div class="dashboard-title">Build Progress</div>
+      <div class="dashboard-stats">
+        <div class="stat stat-done">
+          <div class="stat-num" id="stat-done">0</div>
+          <div class="stat-label">Complete</div>
+        </div>
+        <div class="stat stat-wip">
+          <div class="stat-num" id="stat-wip">0</div>
+          <div class="stat-label">In Progress</div>
+        </div>
+        <div class="stat stat-ai">
+          <div class="stat-num" id="stat-ai">0</div>
+          <div class="stat-label">AI Shipped</div>
+        </div>
+        <div class="stat stat-total">
+          <div class="stat-num" id="stat-total">0</div>
+          <div class="stat-label">Total Pages</div>
+        </div>
+        <button class="reset-btn" onclick="resetAll()">Reset All</button>
+      </div>
+    </div>
+    <div class="dashboard-phases">
+      <div class="phase-bar-group">
+        <div class="phase-bar-label">
+          <strong>MVP — Phase 1</strong>
+          <span id="pct-mvp">0%</span>
+        </div>
+        <div class="phase-bar-track">
+          <div class="phase-bar-fill fill-mvp" id="bar-mvp"></div>
+        </div>
+        <div style="font-size:10px;color:var(--text-dim)" id="count-mvp">0 of 0</div>
+      </div>
+      <div class="phase-bar-group">
+        <div class="phase-bar-label">
+          <strong>Phase 2</strong>
+          <span id="pct-p2">0%</span>
+        </div>
+        <div class="phase-bar-track">
+          <div class="phase-bar-fill fill-p2" id="bar-p2"></div>
+        </div>
+        <div style="font-size:10px;color:var(--text-dim)" id="count-p2">0 of 0</div>
+      </div>
+      <div class="phase-bar-group">
+        <div class="phase-bar-label">
+          <strong>Phase 3</strong>
+          <span id="pct-p3">0%</span>
+        </div>
+        <div class="phase-bar-track">
+          <div class="phase-bar-fill fill-p3" id="bar-p3"></div>
+        </div>
+        <div style="font-size:10px;color:var(--text-dim)" id="count-p3">0 of 0</div>
+      </div>
+    </div>
+  </div>
+
   <!-- ── Legend ── -->
   <div class="legend">
     <div class="legend-group">
@@ -355,6 +600,15 @@
         <div class="legend-item"><span class="phase-tag">MVP</span> Phase 1 · Weeks 1–8</div>
         <div class="legend-item"><span class="phase-tag phase-2">P2</span> Phase 2 · Weeks 9–20</div>
         <div class="legend-item"><span class="phase-tag phase-3">P3</span> Phase 3 · Weeks 21–40</div>
+      </div>
+    </div>
+    <div class="legend-group">
+      <div class="legend-label">Status</div>
+      <div class="legend-items">
+        <div class="legend-item"><span style="color:var(--text-dim)">○</span> Not Started</div>
+        <div class="legend-item"><span style="color:#58a6ff">◑</span> In Progress</div>
+        <div class="legend-item"><span style="color:#3fb950">●</span> Complete</div>
+        <div class="legend-item"><span style="color:var(--ai-accent)">✦</span> AI Advantage</div>
       </div>
     </div>
   </div>
@@ -404,7 +658,7 @@
     <div class="section-title">Public Layer — No Login Required</div>
     <div class="page-grid">
 
-      <div class="card card-public">
+      <div class="card card-public" id="card-landing" data-phase="mvp" data-ai="false">
         <div class="card-header">
           <div>
             <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
@@ -452,9 +706,10 @@
             <span class="svc-badge s-stripe">Stripe (pricing)</span>
           </div>
         </div>
+        <div class="card-footer"><button class="status-btn" onclick="cycleStatus('card-landing', this)">Not Started</button></div>
       </div>
 
-      <div class="card card-public">
+      <div class="card card-public" id="card-pricing" data-phase="mvp" data-ai="false">
         <div class="card-header">
           <div>
             <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
@@ -496,9 +751,10 @@
             <span class="svc-badge s-stripe">Stripe (pricing data)</span>
           </div>
         </div>
+        <div class="card-footer"><button class="status-btn" onclick="cycleStatus('card-pricing', this)">Not Started</button></div>
       </div>
 
-      <div class="card card-public">
+      <div class="card card-public" id="card-how-it-works" data-phase="mvp" data-ai="false">
         <div class="card-header">
           <div>
             <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
@@ -530,6 +786,7 @@
           <div class="block-label">External Services</div>
           <div class="services-row"><span style="font-size:11px;color:var(--text-dim)">None</span></div>
         </div>
+        <div class="card-footer"><button class="status-btn" onclick="cycleStatus('card-how-it-works', this)">Not Started</button></div>
       </div>
 
     </div>
@@ -542,7 +799,7 @@
     <div class="section-title">Auth Layer — Identity and Access</div>
     <div class="page-grid">
 
-      <div class="card card-auth">
+      <div class="card card-auth" id="card-practitioner-signup" data-phase="mvp" data-ai="false">
         <div class="card-header">
           <div>
             <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
@@ -588,9 +845,10 @@
             <span class="svc-badge s-email">Email (welcome)</span>
           </div>
         </div>
+        <div class="card-footer"><button class="status-btn" onclick="cycleStatus('card-practitioner-signup', this)">Not Started</button></div>
       </div>
 
-      <div class="card card-auth">
+      <div class="card card-auth" id="card-family-invite" data-phase="mvp" data-ai="false">
         <div class="card-header">
           <div>
             <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
@@ -627,9 +885,10 @@
             <span class="svc-badge s-email">Email (invite link)</span>
           </div>
         </div>
+        <div class="card-footer"><button class="status-btn" onclick="cycleStatus('card-family-invite', this)">Not Started</button></div>
       </div>
 
-      <div class="card card-auth">
+      <div class="card card-auth" id="card-family-signup" data-phase="p3" data-ai="false">
         <div class="card-header">
           <div>
             <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
@@ -667,9 +926,10 @@
             <span class="svc-badge s-email">Email (welcome)</span>
           </div>
         </div>
+        <div class="card-footer"><button class="status-btn" onclick="cycleStatus('card-family-signup', this)">Not Started</button></div>
       </div>
 
-      <div class="card card-auth">
+      <div class="card card-auth" id="card-login" data-phase="mvp" data-ai="false">
         <div class="card-header">
           <div>
             <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
@@ -712,6 +972,7 @@
             <span class="svc-badge s-firebase">Firebase Auth</span>
           </div>
         </div>
+        <div class="card-footer"><button class="status-btn" onclick="cycleStatus('card-login', this)">Not Started</button></div>
       </div>
 
     </div>
@@ -724,7 +985,7 @@
     <div class="section-title">Practitioner Dashboard — The Professional's Command Center</div>
     <div class="page-grid">
 
-      <div class="card card-practitioner">
+      <div class="card card-practitioner" id="card-client-roster" data-phase="mvp" data-ai="false">
         <div class="card-header">
           <div>
             <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
@@ -769,9 +1030,10 @@
             <span class="svc-badge s-firebase">Firestore</span>
           </div>
         </div>
+        <div class="card-footer"><button class="status-btn" onclick="cycleStatus('card-client-roster', this)">Not Started</button></div>
       </div>
 
-      <div class="card card-practitioner">
+      <div class="card card-practitioner" id="card-new-client" data-phase="mvp" data-ai="false">
         <div class="card-header">
           <div>
             <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
@@ -805,9 +1067,10 @@
             <span class="svc-badge s-email">Email (family invite)</span>
           </div>
         </div>
+        <div class="card-footer"><button class="status-btn" onclick="cycleStatus('card-new-client', this)">Not Started</button></div>
       </div>
 
-      <div class="card card-practitioner">
+      <div class="card card-practitioner" id="card-client-detail" data-phase="mvp" data-ai="false">
         <div class="card-header">
           <div>
             <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
@@ -848,9 +1111,10 @@
             <span class="svc-badge s-email">Email (invite)</span>
           </div>
         </div>
+        <div class="card-footer"><button class="status-btn" onclick="cycleStatus('card-client-detail', this)">Not Started</button></div>
       </div>
 
-      <div class="card card-practitioner" style="border-color:#5a3a7a;">
+      <div class="card card-practitioner" id="card-intake" data-phase="mvp" data-ai="true" style="border-color:#5a3a7a;">
         <div class="card-header">
           <div>
             <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
@@ -872,6 +1136,13 @@
             <li>Progress indicator while AI processes</li>
           </ul>
         </div>
+        <div class="ai-callout">
+          <div class="ai-callout-header">
+            <span class="ai-badge">✦ AI Advantage</span>
+            <span class="ai-callout-label">Why Claude wins here</span>
+          </div>
+          <div class="ai-callout-text">A 30-minute spoken interview with a family is dense, emotional, and non-linear. Every existing tool requires the practitioner to manually type notes, organize them, and draft the care plan — a process that takes 2–4 hours per client. Claude transforms raw conversational notes into a structured, professional care plan draft in under 60 seconds, cutting post-interview admin by 80% and letting practitioners see more families.</div>
+        </div>
         <div class="card-block">
           <div class="block-label">Navigates To</div>
           <div class="nav-links">
@@ -888,9 +1159,10 @@
             <span class="svc-badge s-claude" style="color:#e9d5ff;">Claude API</span>
           </div>
         </div>
+        <div class="card-footer"><button class="status-btn" onclick="cycleStatus('card-intake', this)">Not Started</button></div>
       </div>
 
-      <div class="card card-practitioner">
+      <div class="card card-practitioner" id="card-care-plan" data-phase="mvp" data-ai="true">
         <div class="card-header">
           <div>
             <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
@@ -912,6 +1184,13 @@
             <li>Export to PDF</li>
           </ul>
         </div>
+        <div class="ai-callout">
+          <div class="ai-callout-header">
+            <span class="ai-badge">✦ AI Advantage</span>
+            <span class="ai-callout-label">Why Claude wins here</span>
+          </div>
+          <div class="ai-callout-text">Standard EHR systems require practitioners to select from rigid templates and fill fields manually. Claude generates narrative, person-centered care plans that reflect each patient's unique situation — then learns from practitioner edits over time. No template software understands context. Claude does.</div>
+        </div>
         <div class="card-block">
           <div class="block-label">Navigates To</div>
           <div class="nav-links">
@@ -927,9 +1206,10 @@
             <span class="svc-badge s-claude" style="color:#e9d5ff;">Claude API (feedback loop)</span>
           </div>
         </div>
+        <div class="card-footer"><button class="status-btn" onclick="cycleStatus('card-care-plan', this)">Not Started</button></div>
       </div>
 
-      <div class="card card-practitioner">
+      <div class="card card-practitioner" id="card-doc-vault" data-phase="p2" data-ai="false">
         <div class="card-header">
           <div>
             <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
@@ -965,9 +1245,10 @@
             <span class="svc-badge s-logging">Cloud Logging (HIPAA)</span>
           </div>
         </div>
+        <div class="card-footer"><button class="status-btn" onclick="cycleStatus('card-doc-vault', this)">Not Started</button></div>
       </div>
 
-      <div class="card card-practitioner">
+      <div class="card card-practitioner" id="card-session-notes" data-phase="p2" data-ai="true">
         <div class="card-header">
           <div>
             <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
@@ -988,6 +1269,13 @@
             <li>Note history per client</li>
           </ul>
         </div>
+        <div class="ai-callout">
+          <div class="ai-callout-header">
+            <span class="ai-badge">✦ AI Advantage</span>
+            <span class="ai-callout-label">Why Claude wins here</span>
+          </div>
+          <div class="ai-callout-text">GCMs currently spend 30–45 minutes writing progress notes after every home visit — often at night, from handwritten scribbles. Claude takes a spoken stream-of-consciousness voice note and formats it into a compliant, billable progress note with correct structure and professional language. What used to be an evening task becomes a 2-minute wrap-up in the parking lot.</div>
+        </div>
         <div class="card-block">
           <div class="block-label">Navigates To</div>
           <div class="nav-links">
@@ -1004,9 +1292,10 @@
             <span class="svc-badge s-firebase">Firestore</span>
           </div>
         </div>
+        <div class="card-footer"><button class="status-btn" onclick="cycleStatus('card-session-notes', this)">Not Started</button></div>
       </div>
 
-      <div class="card card-practitioner">
+      <div class="card card-practitioner" id="card-billing" data-phase="p2" data-ai="false">
         <div class="card-header">
           <div>
             <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
@@ -1041,9 +1330,10 @@
             <span class="svc-badge s-stripe">Stripe (invoicing)</span>
           </div>
         </div>
+        <div class="card-footer"><button class="status-btn" onclick="cycleStatus('card-billing', this)">Not Started</button></div>
       </div>
 
-      <div class="card card-practitioner">
+      <div class="card card-practitioner" id="card-ai-research" data-phase="p2" data-ai="true">
         <div class="card-header">
           <div>
             <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
@@ -1064,6 +1354,13 @@
             <li>Conversation history per session</li>
           </ul>
         </div>
+        <div class="ai-callout">
+          <div class="ai-callout-header">
+            <span class="ai-badge">✦ AI Advantage</span>
+            <span class="ai-callout-label">Why Claude wins here</span>
+          </div>
+          <div class="ai-callout-text">Medicare and Medicaid rules change constantly and vary by state. Practitioners currently spend hours on CMS.gov, calling 1-800-MEDICARE, or paying consultants for answers they need in real time. Claude provides instant, plain-English answers grounded in current CMS documentation — with citations. No search engine, chatbot, or colleague can match the speed, accuracy, and context-awareness at this price point.</div>
+        </div>
         <div class="card-block">
           <div class="block-label">Navigates To</div>
           <div class="nav-links">
@@ -1079,9 +1376,10 @@
             <span class="svc-badge s-firebase">Firestore (history)</span>
           </div>
         </div>
+        <div class="card-footer"><button class="status-btn" onclick="cycleStatus('card-ai-research', this)">Not Started</button></div>
       </div>
 
-      <div class="card card-practitioner">
+      <div class="card card-practitioner" id="card-task-manager" data-phase="p2" data-ai="false">
         <div class="card-header">
           <div>
             <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
@@ -1117,9 +1415,10 @@
             <span class="svc-badge s-email">Email (overdue alerts)</span>
           </div>
         </div>
+        <div class="card-footer"><button class="status-btn" onclick="cycleStatus('card-task-manager', this)">Not Started</button></div>
       </div>
 
-      <div class="card card-practitioner">
+      <div class="card card-practitioner" id="card-provider-dir" data-phase="p3" data-ai="false">
         <div class="card-header">
           <div>
             <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
@@ -1153,9 +1452,10 @@
             <span class="svc-badge s-firebase">Firestore</span>
           </div>
         </div>
+        <div class="card-footer"><button class="status-btn" onclick="cycleStatus('card-provider-dir', this)">Not Started</button></div>
       </div>
 
-      <div class="card card-practitioner">
+      <div class="card card-practitioner" id="card-practitioner-settings" data-phase="mvp" data-ai="false">
         <div class="card-header">
           <div>
             <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
@@ -1191,6 +1491,7 @@
             <span class="svc-badge s-fcm">FCM</span>
           </div>
         </div>
+        <div class="card-footer"><button class="status-btn" onclick="cycleStatus('card-practitioner-settings', this)">Not Started</button></div>
       </div>
 
     </div>
@@ -1203,7 +1504,7 @@
     <div class="section-title">Family Portal — The Family's Single Source of Truth</div>
     <div class="page-grid">
 
-      <div class="card card-family">
+      <div class="card card-family" id="card-family-dashboard" data-phase="mvp" data-ai="false">
         <div class="card-header">
           <div>
             <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
@@ -1246,9 +1547,10 @@
             <span class="svc-badge s-firebase">Firestore (real-time)</span>
           </div>
         </div>
+        <div class="card-footer"><button class="status-btn" onclick="cycleStatus('card-family-dashboard', this)">Not Started</button></div>
       </div>
 
-      <div class="card card-family">
+      <div class="card card-family" id="card-medications" data-phase="mvp" data-ai="false">
         <div class="card-header">
           <div>
             <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
@@ -1283,9 +1585,10 @@
             <span class="svc-badge s-fcm">FCM (reminders)</span>
           </div>
         </div>
+        <div class="card-footer"><button class="status-btn" onclick="cycleStatus('card-medications', this)">Not Started</button></div>
       </div>
 
-      <div class="card card-family" style="border-color:#1a4a4a;">
+      <div class="card card-family" id="card-crisis-card" data-phase="mvp" data-ai="false" style="border-color:#1a4a4a;">
         <div class="card-header">
           <div>
             <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
@@ -1324,9 +1627,10 @@
             <span class="svc-badge s-logging">Cloud Logging (HIPAA share events)</span>
           </div>
         </div>
+        <div class="card-footer"><button class="status-btn" onclick="cycleStatus('card-crisis-card', this)">Not Started</button></div>
       </div>
 
-      <div class="card card-family">
+      <div class="card card-family" id="card-care-updates" data-phase="p2" data-ai="true">
         <div class="card-header">
           <div>
             <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
@@ -1347,6 +1651,13 @@
             <li>Push notification on new update</li>
           </ul>
         </div>
+        <div class="ai-callout">
+          <div class="ai-callout-header">
+            <span class="ai-badge">✦ AI Advantage</span>
+            <span class="ai-callout-label">Why Claude wins here</span>
+          </div>
+          <div class="ai-callout-text">Practitioners rarely post family updates because writing them takes time and requires careful tone management — families are anxious and misread clinical language. Claude drafts empathetic, clear family communications from a practitioner's brief notes, in the right tone for non-clinical readers. Updates that used to take 20 minutes per family take 2. More updates means less anxious calls to the practitioner.</div>
+        </div>
         <div class="card-block">
           <div class="block-label">Navigates To</div>
           <div class="nav-links">
@@ -1358,11 +1669,13 @@
           <div class="services-row">
             <span class="svc-badge s-firebase">Firestore (real-time)</span>
             <span class="svc-badge s-fcm">FCM (push)</span>
+            <span class="svc-badge s-claude" style="color:#e9d5ff;">Claude API (draft assist)</span>
           </div>
         </div>
+        <div class="card-footer"><button class="status-btn" onclick="cycleStatus('card-care-updates', this)">Not Started</button></div>
       </div>
 
-      <div class="card card-family">
+      <div class="card card-family" id="card-documents" data-phase="p2" data-ai="false">
         <div class="card-header">
           <div>
             <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
@@ -1397,9 +1710,10 @@
             <span class="svc-badge s-logging">Cloud Logging (HIPAA)</span>
           </div>
         </div>
+        <div class="card-footer"><button class="status-btn" onclick="cycleStatus('card-documents', this)">Not Started</button></div>
       </div>
 
-      <div class="card card-family">
+      <div class="card card-family" id="card-task-list" data-phase="p2" data-ai="false">
         <div class="card-header">
           <div>
             <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
@@ -1433,9 +1747,10 @@
             <span class="svc-badge s-fcm">FCM (due date reminders)</span>
           </div>
         </div>
+        <div class="card-footer"><button class="status-btn" onclick="cycleStatus('card-task-list', this)">Not Started</button></div>
       </div>
 
-      <div class="card card-family">
+      <div class="card card-family" id="card-appointments" data-phase="p2" data-ai="true">
         <div class="card-header">
           <div>
             <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
@@ -1456,6 +1771,13 @@
             <li>Reminder notifications</li>
           </ul>
         </div>
+        <div class="ai-callout">
+          <div class="ai-callout-header">
+            <span class="ai-badge">✦ AI Advantage</span>
+            <span class="ai-callout-label">Why Claude wins here</span>
+          </div>
+          <div class="ai-callout-text">After a doctor's appointment, families struggle to remember what was said. Practitioners can dictate a post-visit voice note and Claude turns it into a clear, family-readable summary that's attached to the appointment. No app on the market does this in the elder care context. It turns the calendar from a scheduler into a longitudinal medical history that the family actually owns.</div>
+        </div>
         <div class="card-block">
           <div class="block-label">Navigates To</div>
           <div class="nav-links">
@@ -1470,9 +1792,10 @@
             <span class="svc-badge s-claude" style="color:#e9d5ff;">Claude API (visit summaries)</span>
           </div>
         </div>
+        <div class="card-footer"><button class="status-btn" onclick="cycleStatus('card-appointments', this)">Not Started</button></div>
       </div>
 
-      <div class="card card-family">
+      <div class="card card-family" id="card-ai-assistant" data-phase="p2" data-ai="true">
         <div class="card-header">
           <div>
             <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
@@ -1494,6 +1817,13 @@
             <li>Conversation history</li>
           </ul>
         </div>
+        <div class="ai-callout">
+          <div class="ai-callout-header">
+            <span class="ai-badge">✦ AI Advantage</span>
+            <span class="ai-callout-label">Why Claude wins here</span>
+          </div>
+          <div class="ai-callout-text">Families face a constant stream of questions they're embarrassed to ask their practitioner every time — "What does 'moderate cognitive impairment' actually mean?" "What's the difference between assisted living and memory care?" Google returns medical sites that terrify them. Claude answers in plain, warm language tuned to what this family is specifically going through, with clear scope-of-practice guardrails and a path to real help when the question crosses that line.</div>
+        </div>
         <div class="card-block">
           <div class="block-label">Navigates To</div>
           <div class="nav-links">
@@ -1509,9 +1839,10 @@
             <span class="svc-badge s-firebase">Firestore (history)</span>
           </div>
         </div>
+        <div class="card-footer"><button class="status-btn" onclick="cycleStatus('card-ai-assistant', this)">Not Started</button></div>
       </div>
 
-      <div class="card card-family">
+      <div class="card card-family" id="card-professional-dir" data-phase="p3" data-ai="false">
         <div class="card-header">
           <div>
             <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
@@ -1543,9 +1874,10 @@
             <span class="svc-badge s-firebase">Firestore</span>
           </div>
         </div>
+        <div class="card-footer"><button class="status-btn" onclick="cycleStatus('card-professional-dir', this)">Not Started</button></div>
       </div>
 
-      <div class="card card-family">
+      <div class="card card-family" id="card-family-settings" data-phase="mvp" data-ai="false">
         <div class="card-header">
           <div>
             <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
@@ -1581,6 +1913,7 @@
             <span class="svc-badge s-stripe">Stripe (self-serve only)</span>
           </div>
         </div>
+        <div class="card-footer"><button class="status-btn" onclick="cycleStatus('card-family-settings', this)">Not Started</button></div>
       </div>
 
     </div>
@@ -1593,7 +1926,7 @@
     <div class="section-title">Admin Layer — Internal Operations</div>
     <div class="page-grid">
 
-      <div class="card card-admin">
+      <div class="card card-admin" id="card-admin" data-phase="mvp" data-ai="false">
         <div class="card-header">
           <div>
             <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
@@ -1624,6 +1957,7 @@
             <span class="svc-badge s-firebase">Firebase Auth</span>
           </div>
         </div>
+        <div class="card-footer"><button class="status-btn" onclick="cycleStatus('card-admin', this)">Not Started</button></div>
       </div>
 
     </div>
@@ -1669,7 +2003,7 @@
           <div><div class="svc-card-name">Claude API</div><div class="svc-card-vendor">Anthropic</div></div>
         </div>
         <div class="svc-card-desc">Powers all AI features. Intake → care plan summarization (anchor feature), session note drafting, Medicare Q&A, family communication drafting, facility matching, AI assistant. BAA required before PHI enters prompts.</div>
-        <div class="svc-used-by">Used by: <span>Intake, Care Plan, Session Notes, AI Research, AI Assistant, Appointments</span></div>
+        <div class="svc-used-by">Used by: <span>Intake, Care Plan, Session Notes, AI Research, Care Updates, AI Assistant, Appointments</span></div>
       </div>
 
       <div class="svc-card">
@@ -1728,6 +2062,97 @@
 
     </div>
   </div>
+
+  <script>
+    const STORAGE_KEY = 'pcg-build-status';
+    const STATUS_CYCLE = ['none', 'wip', 'done'];
+    const STATUS_LABELS = { none: 'Not Started', wip: 'In Progress', done: 'Complete' };
+
+    function loadStatus() {
+      try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); }
+      catch { return {}; }
+    }
+
+    function saveStatus(data) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    }
+
+    function cycleStatus(cardId, btn) {
+      const data = loadStatus();
+      const current = data[cardId] || 'none';
+      const nextIndex = (STATUS_CYCLE.indexOf(current) + 1) % STATUS_CYCLE.length;
+      const next = STATUS_CYCLE[nextIndex];
+      data[cardId] = next;
+      saveStatus(data);
+      applyStatus(cardId, next, btn);
+      updateDashboard();
+    }
+
+    function applyStatus(cardId, status, btn) {
+      const card = document.getElementById(cardId);
+      if (!card) return;
+      if (!btn) btn = card.querySelector('.status-btn');
+      if (!btn) return;
+      btn.className = 'status-btn' + (status !== 'none' ? ' ' + status : '');
+      btn.textContent = STATUS_LABELS[status];
+      card.dataset.status = status;
+    }
+
+    function updateDashboard() {
+      const cards = document.querySelectorAll('.card[id]');
+      const data = loadStatus();
+      let done = 0, wip = 0, aiDone = 0;
+      const phaseCounts = { mvp: { total: 0, done: 0 }, p2: { total: 0, done: 0 }, p3: { total: 0, done: 0 } };
+
+      cards.forEach(card => {
+        const id = card.id;
+        const phase = card.dataset.phase;
+        const isAi = card.dataset.ai === 'true';
+        const status = data[id] || 'none';
+        if (phase && phaseCounts[phase]) phaseCounts[phase].total++;
+        if (status === 'done') {
+          done++;
+          if (phase && phaseCounts[phase]) phaseCounts[phase].done++;
+          if (isAi) aiDone++;
+        } else if (status === 'wip') {
+          wip++;
+        }
+      });
+
+      document.getElementById('stat-done').textContent = done;
+      document.getElementById('stat-wip').textContent = wip;
+      document.getElementById('stat-ai').textContent = aiDone;
+      document.getElementById('stat-total').textContent = cards.length;
+
+      ['mvp', 'p2', 'p3'].forEach(phase => {
+        const { total, done: d } = phaseCounts[phase];
+        const pct = total > 0 ? Math.round((d / total) * 100) : 0;
+        document.getElementById('bar-' + phase).style.width = pct + '%';
+        document.getElementById('pct-' + phase).textContent = pct + '%';
+        document.getElementById('count-' + phase).textContent = d + ' of ' + total;
+      });
+    }
+
+    function resetAll() {
+      if (!confirm('Reset all build progress to Not Started?')) return;
+      localStorage.removeItem(STORAGE_KEY);
+      document.querySelectorAll('.card[id]').forEach(card => {
+        applyStatus(card.id, 'none');
+      });
+      updateDashboard();
+    }
+
+    function init() {
+      const data = loadStatus();
+      document.querySelectorAll('.card[id]').forEach(card => {
+        const status = data[card.id] || 'none';
+        applyStatus(card.id, status);
+      });
+      updateDashboard();
+    }
+
+    init();
+  </script>
 
 </body>
 </html>
