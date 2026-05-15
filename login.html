@@ -241,7 +241,8 @@
         const next  = new URLSearchParams(location.search).get('next');
 
         if (token.claims.admin) {
-          location.href = next || '/build.html';
+          localStorage.setItem('pcg_admin', '1');
+          location.href = next || '/index.html';
         } else if (token.claims.practitioner) {
           location.href = next || '/dashboard.html';
         } else if (token.claims.family) {

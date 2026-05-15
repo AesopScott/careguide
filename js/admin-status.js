@@ -13,32 +13,45 @@ const FIREBASE_CONFIG = {
 const app  = initializeApp(FIREBASE_CONFIG);
 const auth = getAuth(app);
 
+function wireSignOut(auth) {
+  const navLink = document.getElementById('nav-auth-link');
+  if (navLink) {
+    navLink.textContent = 'Sign Out';
+    navLink.href = '#';
+    navLink.addEventListener('click', async e => {
+      e.preventDefault();
+      localStorage.removeItem('pcg_admin');
+      await signOut(auth);
+      window.location.href = '/login.html';
+    });
+  }
+  const signOutBtn = document.getElementById('btn-signout');
+  if (signOutBtn) {
+    signOutBtn.addEventListener('click', async e => {
+      e.preventDefault();
+      localStorage.removeItem('pcg_admin');
+      await signOut(auth);
+      window.location.href = '/login.html';
+    });
+  }
+}
+
+// Apply Sign Out state immediately if we know the user is admin (avoids flash)
+if (localStorage.getItem('pcg_admin') === '1') {
+  const navLink = document.getElementById('nav-auth-link');
+  if (navLink) navLink.textContent = 'Sign Out';
+}
+
 onAuthStateChanged(auth, async user => {
-  if (!user) return;
+  if (!user) {
+    // Firebase says not signed in — clear the hint so next load is clean
+    localStorage.removeItem('pcg_admin');
+    return;
+  }
   try {
     const token = await user.getIdTokenResult();
     if (!token.claims.admin) return;
-
-    // Public pages — swap "Sign In" link to "Sign Out"
-    const navLink = document.getElementById('nav-auth-link');
-    if (navLink) {
-      navLink.textContent = 'Sign Out';
-      navLink.href = '#';
-      navLink.addEventListener('click', async e => {
-        e.preventDefault();
-        await signOut(auth);
-        window.location.href = '/login.html';
-      });
-    }
-
-    // Protected pages — wire up the Sign Out link in the header
-    const signOutBtn = document.getElementById('btn-signout');
-    if (signOutBtn) {
-      signOutBtn.addEventListener('click', async e => {
-        e.preventDefault();
-        await signOut(auth);
-        window.location.href = '/login.html';
-      });
-    }
+    localStorage.setItem('pcg_admin', '1');
+    wireSignOut(auth);
   } catch { /* not admin */ }
 });
