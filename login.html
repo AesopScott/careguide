@@ -5,98 +5,207 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Parental Care Guide — Sign In</title>
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Gilda+Display&family=Jost:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet">
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --rose:      #FFD6CC;
+      --blush:     #F4B8C1;
+      --mauve:     #E8A0B4;
+      --lavender:  #D4A0C8;
+      --periwinkle:#B8A8D8;
+      --slate-blue:#98A8E0;
+      --sky:       #8ABCE8;
+      --deep-plum: rgba(80, 40, 100, 0.82);
+      --deep-plum-hover: rgba(60, 25, 80, 0.92);
+      --text-dark:  rgba(30, 18, 48, 0.88);
+      --text-mid:   rgba(60, 40, 80, 0.65);
+      --text-light: rgba(60, 40, 80, 0.42);
+      --glass-bg:   rgba(255, 255, 255, 0.38);
+      --glass-border: rgba(255, 255, 255, 0.55);
+    }
+
     body {
-      background: #0d1117;
-      color: #e6edf3;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      font-family: 'Jost', 'Segoe UI', sans-serif;
       min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(
+        148deg,
+        #FFF5F0 0%,
+        #FFD6CC 12%,
+        #F4B8C1 26%,
+        #E8A0B4 40%,
+        #D4A0C8 55%,
+        #B8A8D8 70%,
+        #98A8E0 84%,
+        #8ABCE8 100%
+      );
+      z-index: 0;
+    }
+
+    .blob {
+      position: fixed;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .blob-1 {
+      width: 560px; height: 560px;
+      background: radial-gradient(circle, rgba(255, 210, 220, 0.45) 0%, transparent 70%);
+      top: -140px; left: -120px;
+      animation: drift 10s ease-in-out infinite;
+    }
+    .blob-2 {
+      width: 700px; height: 700px;
+      background: radial-gradient(circle, rgba(170, 148, 210, 0.3) 0%, transparent 70%);
+      bottom: -200px; right: -160px;
+      animation: drift 13s ease-in-out infinite reverse;
+    }
+    @keyframes drift {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      50%       { transform: translate(16px, -22px) scale(1.04); }
+    }
+
+    .top-bar {
+      position: relative;
+      z-index: 2;
+      height: 4px;
+      background: linear-gradient(90deg,
+        #FFD6CC, #F4B8C1, #E8A0B4,
+        #D4A0C8, #B8A8D8, #98A8E0, #8ABCE8
+      );
+    }
+
+    .page {
+      position: relative;
+      z-index: 2;
+      flex: 1;
       display: flex;
       align-items: center;
       justify-content: center;
+      padding: 40px 20px;
     }
+
     .card {
-      background: #161b22;
-      border: 1px solid #30363d;
-      border-radius: 12px;
-      padding: 40px;
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
+      padding: 48px 44px;
       width: 100%;
-      max-width: 380px;
+      max-width: 400px;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
     }
+
     .logo {
+      font-family: 'Gilda Display', Georgia, serif;
       font-size: 1.1rem;
-      font-weight: 700;
-      color: #2d6a4f;
-      margin-bottom: 28px;
-      letter-spacing: -0.02em;
+      color: var(--text-dark);
+      letter-spacing: 0.02em;
+      margin-bottom: 32px;
     }
+
     h1 {
-      font-size: 18px;
-      font-weight: 700;
-      margin-bottom: 8px;
+      font-family: 'Gilda Display', Georgia, serif;
+      font-size: 1.6rem;
+      font-weight: 400;
+      color: var(--text-dark);
+      margin-bottom: 6px;
       letter-spacing: -0.01em;
     }
+
     .sub {
-      font-size: 13px;
-      color: #8b949e;
-      margin-bottom: 28px;
+      font-size: 0.88rem;
+      color: var(--text-mid);
+      font-weight: 300;
+      margin-bottom: 32px;
     }
+
     label {
       display: block;
-      font-size: 12px;
-      font-weight: 600;
-      color: #8b949e;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--text-mid);
       margin-bottom: 6px;
-      letter-spacing: 0.02em;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
     }
+
     input {
       width: 100%;
-      padding: 10px 14px;
-      background: #0d1117;
-      border: 1px solid #30363d;
-      border-radius: 8px;
-      color: #e6edf3;
-      font-size: 14px;
+      padding: 12px 16px;
+      background: rgba(255, 255, 255, 0.5);
+      border: 1px solid var(--glass-border);
+      border-radius: 10px;
+      color: var(--text-dark);
+      font-family: 'Jost', sans-serif;
+      font-size: 0.95rem;
       outline: none;
-      margin-bottom: 16px;
-      transition: border-color 0.2s;
+      margin-bottom: 20px;
+      transition: border-color 0.2s, background 0.2s;
     }
-    input:focus { border-color: #2d6a4f; }
+
+    input::placeholder { color: var(--text-light); }
+    input:focus {
+      border-color: var(--lavender);
+      background: rgba(255, 255, 255, 0.65);
+    }
+
     button {
       width: 100%;
-      padding: 11px;
-      background: #2d6a4f;
-      color: white;
+      padding: 13px;
+      background: var(--deep-plum);
+      color: rgba(255, 255, 255, 0.92);
       border: none;
-      border-radius: 8px;
-      font-size: 14px;
-      font-weight: 700;
+      border-radius: 100px;
+      font-family: 'Jost', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 500;
       cursor: pointer;
+      backdrop-filter: blur(10px);
       transition: background 0.2s;
     }
-    button:hover { background: #1f4d38; }
-    button:disabled { background: #21262d; color: #6e7681; cursor: not-allowed; }
+
+    button:hover { background: var(--deep-plum-hover); }
+    button:disabled { opacity: 0.5; cursor: not-allowed; }
+
     .error {
-      font-size: 12px;
-      color: #f85149;
-      margin-top: 12px;
+      font-size: 0.82rem;
+      color: rgba(160, 40, 60, 0.85);
+      margin-top: 14px;
       display: none;
     }
     .error.show { display: block; }
   </style>
 </head>
 <body>
-  <div class="card">
-    <div class="logo">Parental Care Guide</div>
-    <h1>Sign In</h1>
-    <p class="sub">Welcome back.</p>
-    <label for="email">Email</label>
-    <input type="email" id="email" placeholder="you@example.com" />
-    <label for="password">Password</label>
-    <input type="password" id="password" placeholder="••••••••" />
-    <button id="btn" onclick="signIn()">Sign In</button>
-    <div class="error" id="error-msg"></div>
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="top-bar"></div>
+
+  <div class="page">
+    <div class="card">
+      <div class="logo">Parental Care Guide</div>
+      <h1>Welcome back.</h1>
+      <p class="sub">Sign in to continue.</p>
+      <label for="email">Email</label>
+      <input type="email" id="email" placeholder="you@example.com" autocomplete="email" />
+      <label for="password">Password</label>
+      <input type="password" id="password" placeholder="••••••••" autocomplete="current-password" />
+      <button id="btn" onclick="signIn()">Sign In</button>
+      <div class="error" id="error-msg"></div>
+    </div>
   </div>
 
   <script type="module">
