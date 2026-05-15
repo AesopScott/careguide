@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PCG — OG Gold Line Options</title>
+  <title>PCG — OG Option 6</title>
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Gilda+Display&family=Jost:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&display=swap" rel="stylesheet">
@@ -52,12 +52,6 @@
       font-weight: 300;
       color: rgba(60, 40, 80, 0.6);
       margin-bottom: 56px;
-    }
-
-    .grid {
-      display: flex;
-      flex-direction: column;
-      gap: 48px;
     }
 
     .option {
@@ -171,9 +165,9 @@
       position: relative;
     }
 
+    /* spacer reserves space for PCG in flex flow; PCG is absolutely positioned in body-right */
     .og-7 .logo-spacer {
       height: 35px;
-      position: relative;
       flex-shrink: 0;
       width: 100%;
     }
@@ -185,7 +179,7 @@
       font-style: italic;
       line-height: 1;
       position: absolute;
-      top: 50%;
+      top: 59px;
       left: 50%;
       transform: translate(-50%, -50%);
       white-space: nowrap;
@@ -210,18 +204,20 @@
 
     .og-7 .body-right .pills {
       display: grid;
-      grid-template-columns: repeat(2, max-content);
+      grid-template-columns: repeat(2, 1fr);
       gap: 7px;
+      width: 100%;
+      margin-top: -25px;
     }
 
     .og-7 .body-right .pill {
-      font-size: 11px;
+      font-size: 14px;
       font-weight: 500;
       padding: 8px 14px;
       border-radius: 100px;
       background: rgba(255,255,255,0.08);
       border: 1px solid rgba(255,255,255,0.14);
-      color: rgba(255,230,240,0.65);
+      color: rgba(255, 255, 255, 1);
       white-space: nowrap;
       text-align: center;
     }
@@ -230,469 +226,54 @@
 <body>
   <div class="top-bar"></div>
   <div class="page">
-    <h1 class="page-title">Gold Line — 10 Options</h1>
-    <p class="page-sub">All variations of OG #7. Pick a number.</p>
+    <h1 class="page-title">OG Image — Option 6</h1>
+    <p class="page-sub">Center medallion gold line. White pill text.</p>
 
-    <div class="grid">
-
-      <!-- SHARED MACRO for body-right (same in every option) -->
-
-      <!-- 1: Tapered lens -->
-      <div class="option">
-        <div class="og-frame og-7">
-          <div class="strip"></div>
-          <div class="body">
-            <div class="body-left">
-              <div class="logo-block">
-                <div class="logo">Parental Care Guide</div>
-                <svg class="logo-line" viewBox="0 0 200 12" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-                  <defs>
-                    <linearGradient id="gl1" x1="0" y1="0" x2="200" y2="0" gradientUnits="userSpaceOnUse">
-                      <stop offset="0%" stop-color="#8B6B14" stop-opacity="0"/>
-                      <stop offset="25%" stop-color="#C9A84C"/>
-                      <stop offset="50%" stop-color="#F7E4A0"/>
-                      <stop offset="75%" stop-color="#C9A84C"/>
-                      <stop offset="100%" stop-color="#8B6B14" stop-opacity="0"/>
-                    </linearGradient>
-                  </defs>
-                  <path d="M0,6 C50,0 150,0 200,6 C150,12 50,12 0,6Z" fill="url(#gl1)"/>
-                </svg>
-              </div>
-              <h2>Care for your parents.<br><em>Not the paperwork.</em></h2>
+    <div class="option">
+      <div class="og-frame og-7">
+        <div class="strip"></div>
+        <div class="body">
+          <div class="body-left">
+            <div class="logo-block">
+              <div class="logo">Parental Care Guide</div>
+              <svg class="logo-line" viewBox="0 0 200 12" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <linearGradient id="gl6a" x1="0" y1="0" x2="88" y2="0" gradientUnits="userSpaceOnUse">
+                    <stop offset="0%" stop-color="#C9A84C" stop-opacity="0"/>
+                    <stop offset="100%" stop-color="#C9A84C"/>
+                  </linearGradient>
+                  <linearGradient id="gl6b" x1="112" y1="0" x2="200" y2="0" gradientUnits="userSpaceOnUse">
+                    <stop offset="0%" stop-color="#C9A84C"/>
+                    <stop offset="100%" stop-color="#C9A84C" stop-opacity="0"/>
+                  </linearGradient>
+                </defs>
+                <rect x="0" y="5.5" width="88" height="1" fill="url(#gl6a)"/>
+                <rect x="112" y="5.5" width="88" height="1" fill="url(#gl6b)"/>
+                <polygon points="100,1 108,6 100,11 92,6" fill="#F7E4A0"/>
+                <circle cx="100" cy="6" r="2" fill="rgba(42,18,60,1)"/>
+              </svg>
             </div>
-            <div class="body-right">
-              <div class="divider-icon">
-                <svg width="32" height="32" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
-                  <defs><linearGradient id="hg1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#F4B8C1"/><stop offset="100%" stop-color="#B8A8D8"/></linearGradient></defs>
-                  <path d="M64 96 C64 96 22 70 22 44 C22 30 33 20 48 25 C55 27 60 33 64 38 C68 33 73 27 80 25 C95 20 106 30 106 44 C106 70 64 96 64 96Z" fill="url(#hg1)"/>
-                </svg>
-              </div>
-              <div class="logo-spacer"><div class="pcg-label">PCG</div></div>
-              <div class="pills">
-                <span class="pill">Care coordination</span><span class="pill">Insurance</span>
-                <span class="pill">Medications</span><span class="pill">Legal docs</span>
-                <span class="pill">Family sharing</span><span class="pill">Financial planning</span>
-              </div>
+            <h2>Care for your parents.<br><em>Not the paperwork.</em></h2>
+          </div>
+          <div class="body-right">
+            <div class="divider-icon">
+              <svg width="32" height="32" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+                <defs><linearGradient id="hg6" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#F4B8C1"/><stop offset="100%" stop-color="#B8A8D8"/></linearGradient></defs>
+                <path d="M64 96 C64 96 22 70 22 44 C22 30 33 20 48 25 C55 27 60 33 64 38 C68 33 73 27 80 25 C95 20 106 30 106 44 C106 70 64 96 64 96Z" fill="url(#hg6)"/>
+              </svg>
+            </div>
+            <div class="logo-spacer"><div class="pcg-label">Services</div></div>
+            <div class="pills">
+              <span class="pill">Care coordination</span><span class="pill">Insurance</span>
+              <span class="pill">Medications</span><span class="pill">Legal docs</span>
+              <span class="pill">Family sharing</span><span class="pill">Financial planning</span>
             </div>
           </div>
         </div>
-        <div class="option-meta"><span class="option-num">1</span><span class="option-label">Tapered lens — fills to a point at each end, thick gold center</span></div>
       </div>
-
-      <!-- 2: Three diamonds on a line -->
-      <div class="option">
-        <div class="og-frame og-7">
-          <div class="strip"></div>
-          <div class="body">
-            <div class="body-left">
-              <div class="logo-block">
-                <div class="logo">Parental Care Guide</div>
-                <svg class="logo-line" viewBox="0 0 200 12" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-                  <defs>
-                    <linearGradient id="gl2" x1="0" y1="0" x2="200" y2="0" gradientUnits="userSpaceOnUse">
-                      <stop offset="0%" stop-color="#C9A84C" stop-opacity="0"/>
-                      <stop offset="14%" stop-color="#C9A84C"/>
-                      <stop offset="86%" stop-color="#C9A84C"/>
-                      <stop offset="100%" stop-color="#C9A84C" stop-opacity="0"/>
-                    </linearGradient>
-                  </defs>
-                  <rect x="0" y="5.5" width="200" height="1" fill="url(#gl2)"/>
-                  <polygon points="62,6 67,1 72,6 67,11" fill="#F7E4A0"/>
-                  <polygon points="96,6 100,2 104,6 100,10" fill="#F2D06B"/>
-                  <polygon points="128,6 133,1 138,6 133,11" fill="#F7E4A0"/>
-                </svg>
-              </div>
-              <h2>Care for your parents.<br><em>Not the paperwork.</em></h2>
-            </div>
-            <div class="body-right">
-              <div class="divider-icon">
-                <svg width="32" height="32" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
-                  <defs><linearGradient id="hg2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#F4B8C1"/><stop offset="100%" stop-color="#B8A8D8"/></linearGradient></defs>
-                  <path d="M64 96 C64 96 22 70 22 44 C22 30 33 20 48 25 C55 27 60 33 64 38 C68 33 73 27 80 25 C95 20 106 30 106 44 C106 70 64 96 64 96Z" fill="url(#hg2)"/>
-                </svg>
-              </div>
-              <div class="logo-spacer"><div class="pcg-label">PCG</div></div>
-              <div class="pills">
-                <span class="pill">Care coordination</span><span class="pill">Insurance</span>
-                <span class="pill">Medications</span><span class="pill">Legal docs</span>
-                <span class="pill">Family sharing</span><span class="pill">Financial planning</span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="option-meta"><span class="option-num">2</span><span class="option-label">Three diamonds — thin line with three spaced diamond markers</span></div>
-      </div>
-
-      <!-- 3: Gradient bar -->
-      <div class="option">
-        <div class="og-frame og-7">
-          <div class="strip"></div>
-          <div class="body">
-            <div class="body-left">
-              <div class="logo-block">
-                <div class="logo">Parental Care Guide</div>
-                <svg class="logo-line" viewBox="0 0 200 12" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-                  <defs>
-                    <linearGradient id="gl3" x1="0" y1="0" x2="200" y2="0" gradientUnits="userSpaceOnUse">
-                      <stop offset="0%" stop-color="#C9A84C" stop-opacity="0"/>
-                      <stop offset="20%" stop-color="#F2D06B"/>
-                      <stop offset="50%" stop-color="#F7E4A0"/>
-                      <stop offset="80%" stop-color="#F2D06B"/>
-                      <stop offset="100%" stop-color="#C9A84C" stop-opacity="0"/>
-                    </linearGradient>
-                  </defs>
-                  <rect x="0" y="3.5" width="200" height="5" rx="2.5" fill="url(#gl3)"/>
-                </svg>
-              </div>
-              <h2>Care for your parents.<br><em>Not the paperwork.</em></h2>
-            </div>
-            <div class="body-right">
-              <div class="divider-icon">
-                <svg width="32" height="32" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
-                  <defs><linearGradient id="hg3" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#F4B8C1"/><stop offset="100%" stop-color="#B8A8D8"/></linearGradient></defs>
-                  <path d="M64 96 C64 96 22 70 22 44 C22 30 33 20 48 25 C55 27 60 33 64 38 C68 33 73 27 80 25 C95 20 106 30 106 44 C106 70 64 96 64 96Z" fill="url(#hg3)"/>
-                </svg>
-              </div>
-              <div class="logo-spacer"><div class="pcg-label">PCG</div></div>
-              <div class="pills">
-                <span class="pill">Care coordination</span><span class="pill">Insurance</span>
-                <span class="pill">Medications</span><span class="pill">Legal docs</span>
-                <span class="pill">Family sharing</span><span class="pill">Financial planning</span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="option-meta"><span class="option-num">3</span><span class="option-label">Gradient bar — solid pill shape, bright center fading to transparent</span></div>
-      </div>
-
-      <!-- 4: Double hairline -->
-      <div class="option">
-        <div class="og-frame og-7">
-          <div class="strip"></div>
-          <div class="body">
-            <div class="body-left">
-              <div class="logo-block">
-                <div class="logo">Parental Care Guide</div>
-                <svg class="logo-line" viewBox="0 0 200 12" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-                  <defs>
-                    <linearGradient id="gl4" x1="0" y1="0" x2="200" y2="0" gradientUnits="userSpaceOnUse">
-                      <stop offset="0%" stop-color="#C9A84C" stop-opacity="0"/>
-                      <stop offset="18%" stop-color="#F2D06B"/>
-                      <stop offset="50%" stop-color="#F7E4A0"/>
-                      <stop offset="82%" stop-color="#F2D06B"/>
-                      <stop offset="100%" stop-color="#C9A84C" stop-opacity="0"/>
-                    </linearGradient>
-                  </defs>
-                  <rect x="0" y="2" width="200" height="1.5" rx="0.75" fill="url(#gl4)"/>
-                  <rect x="0" y="8.5" width="200" height="1.5" rx="0.75" fill="url(#gl4)"/>
-                </svg>
-              </div>
-              <h2>Care for your parents.<br><em>Not the paperwork.</em></h2>
-            </div>
-            <div class="body-right">
-              <div class="divider-icon">
-                <svg width="32" height="32" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
-                  <defs><linearGradient id="hg4" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#F4B8C1"/><stop offset="100%" stop-color="#B8A8D8"/></linearGradient></defs>
-                  <path d="M64 96 C64 96 22 70 22 44 C22 30 33 20 48 25 C55 27 60 33 64 38 C68 33 73 27 80 25 C95 20 106 30 106 44 C106 70 64 96 64 96Z" fill="url(#hg4)"/>
-                </svg>
-              </div>
-              <div class="logo-spacer"><div class="pcg-label">PCG</div></div>
-              <div class="pills">
-                <span class="pill">Care coordination</span><span class="pill">Insurance</span>
-                <span class="pill">Medications</span><span class="pill">Legal docs</span>
-                <span class="pill">Family sharing</span><span class="pill">Financial planning</span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="option-meta"><span class="option-num">4</span><span class="option-label">Double hairline — two parallel lines, editorial and refined</span></div>
-      </div>
-
-      <!-- 5: Wave -->
-      <div class="option">
-        <div class="og-frame og-7">
-          <div class="strip"></div>
-          <div class="body">
-            <div class="body-left">
-              <div class="logo-block">
-                <div class="logo">Parental Care Guide</div>
-                <svg class="logo-line" viewBox="0 0 200 12" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-                  <defs>
-                    <linearGradient id="gl5" x1="0" y1="0" x2="200" y2="0" gradientUnits="userSpaceOnUse">
-                      <stop offset="0%" stop-color="#C9A84C" stop-opacity="0"/>
-                      <stop offset="14%" stop-color="#F2D06B"/>
-                      <stop offset="86%" stop-color="#F2D06B"/>
-                      <stop offset="100%" stop-color="#C9A84C" stop-opacity="0"/>
-                    </linearGradient>
-                  </defs>
-                  <path d="M0,6 Q25,2 50,6 Q75,10 100,6 Q125,2 150,6 Q175,10 200,6" stroke="url(#gl5)" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-                </svg>
-              </div>
-              <h2>Care for your parents.<br><em>Not the paperwork.</em></h2>
-            </div>
-            <div class="body-right">
-              <div class="divider-icon">
-                <svg width="32" height="32" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
-                  <defs><linearGradient id="hg5" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#F4B8C1"/><stop offset="100%" stop-color="#B8A8D8"/></linearGradient></defs>
-                  <path d="M64 96 C64 96 22 70 22 44 C22 30 33 20 48 25 C55 27 60 33 64 38 C68 33 73 27 80 25 C95 20 106 30 106 44 C106 70 64 96 64 96Z" fill="url(#hg5)"/>
-                </svg>
-              </div>
-              <div class="logo-spacer"><div class="pcg-label">PCG</div></div>
-              <div class="pills">
-                <span class="pill">Care coordination</span><span class="pill">Insurance</span>
-                <span class="pill">Medications</span><span class="pill">Legal docs</span>
-                <span class="pill">Family sharing</span><span class="pill">Financial planning</span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="option-meta"><span class="option-num">5</span><span class="option-label">Wave — flowing sine stroke, organic and warm</span></div>
-      </div>
-
-      <!-- 6: Center medallion -->
-      <div class="option">
-        <div class="og-frame og-7">
-          <div class="strip"></div>
-          <div class="body">
-            <div class="body-left">
-              <div class="logo-block">
-                <div class="logo">Parental Care Guide</div>
-                <svg class="logo-line" viewBox="0 0 200 12" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-                  <defs>
-                    <linearGradient id="gl6a" x1="0" y1="0" x2="88" y2="0" gradientUnits="userSpaceOnUse">
-                      <stop offset="0%" stop-color="#C9A84C" stop-opacity="0"/>
-                      <stop offset="100%" stop-color="#C9A84C"/>
-                    </linearGradient>
-                    <linearGradient id="gl6b" x1="112" y1="0" x2="200" y2="0" gradientUnits="userSpaceOnUse">
-                      <stop offset="0%" stop-color="#C9A84C"/>
-                      <stop offset="100%" stop-color="#C9A84C" stop-opacity="0"/>
-                    </linearGradient>
-                  </defs>
-                  <rect x="0" y="5.5" width="88" height="1" fill="url(#gl6a)"/>
-                  <rect x="112" y="5.5" width="88" height="1" fill="url(#gl6b)"/>
-                  <polygon points="100,1 108,6 100,11 92,6" fill="#F7E4A0"/>
-                  <circle cx="100" cy="6" r="2" fill="rgba(42,18,60,1)"/>
-                </svg>
-              </div>
-              <h2>Care for your parents.<br><em>Not the paperwork.</em></h2>
-            </div>
-            <div class="body-right">
-              <div class="divider-icon">
-                <svg width="32" height="32" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
-                  <defs><linearGradient id="hg6" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#F4B8C1"/><stop offset="100%" stop-color="#B8A8D8"/></linearGradient></defs>
-                  <path d="M64 96 C64 96 22 70 22 44 C22 30 33 20 48 25 C55 27 60 33 64 38 C68 33 73 27 80 25 C95 20 106 30 106 44 C106 70 64 96 64 96Z" fill="url(#hg6)"/>
-                </svg>
-              </div>
-              <div class="logo-spacer"><div class="pcg-label">PCG</div></div>
-              <div class="pills">
-                <span class="pill">Care coordination</span><span class="pill">Insurance</span>
-                <span class="pill">Medications</span><span class="pill">Legal docs</span>
-                <span class="pill">Family sharing</span><span class="pill">Financial planning</span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="option-meta"><span class="option-num">6</span><span class="option-label">Center medallion — lines flanking a hollow diamond</span></div>
-      </div>
-
-      <!-- 7: Calligraphic -->
-      <div class="option">
-        <div class="og-frame og-7">
-          <div class="strip"></div>
-          <div class="body">
-            <div class="body-left">
-              <div class="logo-block">
-                <div class="logo">Parental Care Guide</div>
-                <svg class="logo-line" viewBox="0 0 200 12" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-                  <defs>
-                    <linearGradient id="gl7" x1="0" y1="0" x2="200" y2="0" gradientUnits="userSpaceOnUse">
-                      <stop offset="0%" stop-color="#8B6B14" stop-opacity="0"/>
-                      <stop offset="20%" stop-color="#C9A84C"/>
-                      <stop offset="50%" stop-color="#F7E4A0"/>
-                      <stop offset="80%" stop-color="#C9A84C"/>
-                      <stop offset="100%" stop-color="#8B6B14" stop-opacity="0"/>
-                    </linearGradient>
-                  </defs>
-                  <path d="M0,7 Q50,3 100,5 Q150,7 200,5 Q155,9 100,7 Q45,5 0,9Z" fill="url(#gl7)"/>
-                </svg>
-              </div>
-              <h2>Care for your parents.<br><em>Not the paperwork.</em></h2>
-            </div>
-            <div class="body-right">
-              <div class="divider-icon">
-                <svg width="32" height="32" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
-                  <defs><linearGradient id="hg7" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#F4B8C1"/><stop offset="100%" stop-color="#B8A8D8"/></linearGradient></defs>
-                  <path d="M64 96 C64 96 22 70 22 44 C22 30 33 20 48 25 C55 27 60 33 64 38 C68 33 73 27 80 25 C95 20 106 30 106 44 C106 70 64 96 64 96Z" fill="url(#hg7)"/>
-                </svg>
-              </div>
-              <div class="logo-spacer"><div class="pcg-label">PCG</div></div>
-              <div class="pills">
-                <span class="pill">Care coordination</span><span class="pill">Insurance</span>
-                <span class="pill">Medications</span><span class="pill">Legal docs</span>
-                <span class="pill">Family sharing</span><span class="pill">Financial planning</span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="option-meta"><span class="option-num">7</span><span class="option-label">Calligraphic — broad-nib brush stroke, asymmetric and fluid</span></div>
-      </div>
-
-      <!-- 8: Ascending dots -->
-      <div class="option">
-        <div class="og-frame og-7">
-          <div class="strip"></div>
-          <div class="body">
-            <div class="body-left">
-              <div class="logo-block">
-                <div class="logo">Parental Care Guide</div>
-                <svg class="logo-line" viewBox="0 0 200 12" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-                  <defs>
-                    <linearGradient id="gl8line" x1="0" y1="0" x2="200" y2="0" gradientUnits="userSpaceOnUse">
-                      <stop offset="0%" stop-color="#C9A84C" stop-opacity="0"/>
-                      <stop offset="30%" stop-color="#C9A84C" stop-opacity="0.3"/>
-                      <stop offset="70%" stop-color="#C9A84C" stop-opacity="0.3"/>
-                      <stop offset="100%" stop-color="#C9A84C" stop-opacity="0"/>
-                    </linearGradient>
-                  </defs>
-                  <rect x="0" y="5.5" width="200" height="1" fill="url(#gl8line)"/>
-                  <circle cx="20" cy="6" r="0.8" fill="#C9A84C" opacity="0.35"/>
-                  <circle cx="180" cy="6" r="0.8" fill="#C9A84C" opacity="0.35"/>
-                  <circle cx="38" cy="6" r="1.2" fill="#C9A84C" opacity="0.55"/>
-                  <circle cx="162" cy="6" r="1.2" fill="#C9A84C" opacity="0.55"/>
-                  <circle cx="58" cy="6" r="1.8" fill="#C9A84C" opacity="0.75"/>
-                  <circle cx="142" cy="6" r="1.8" fill="#C9A84C" opacity="0.75"/>
-                  <circle cx="80" cy="6" r="2.4" fill="#F2D06B"/>
-                  <circle cx="120" cy="6" r="2.4" fill="#F2D06B"/>
-                  <circle cx="100" cy="6" r="3.2" fill="#F7E4A0"/>
-                </svg>
-              </div>
-              <h2>Care for your parents.<br><em>Not the paperwork.</em></h2>
-            </div>
-            <div class="body-right">
-              <div class="divider-icon">
-                <svg width="32" height="32" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
-                  <defs><linearGradient id="hg8" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#F4B8C1"/><stop offset="100%" stop-color="#B8A8D8"/></linearGradient></defs>
-                  <path d="M64 96 C64 96 22 70 22 44 C22 30 33 20 48 25 C55 27 60 33 64 38 C68 33 73 27 80 25 C95 20 106 30 106 44 C106 70 64 96 64 96Z" fill="url(#hg8)"/>
-                </svg>
-              </div>
-              <div class="logo-spacer"><div class="pcg-label">PCG</div></div>
-              <div class="pills">
-                <span class="pill">Care coordination</span><span class="pill">Insurance</span>
-                <span class="pill">Medications</span><span class="pill">Legal docs</span>
-                <span class="pill">Family sharing</span><span class="pill">Financial planning</span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="option-meta"><span class="option-num">8</span><span class="option-label">Ascending dots — radiating from center, growing toward the middle</span></div>
-      </div>
-
-      <!-- 9: Bracket ends -->
-      <div class="option">
-        <div class="og-frame og-7">
-          <div class="strip"></div>
-          <div class="body">
-            <div class="body-left">
-              <div class="logo-block">
-                <div class="logo">Parental Care Guide</div>
-                <svg class="logo-line" viewBox="0 0 200 12" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-                  <defs>
-                    <linearGradient id="gl9" x1="0" y1="0" x2="200" y2="0" gradientUnits="userSpaceOnUse">
-                      <stop offset="0%" stop-color="#C9A84C"/>
-                      <stop offset="50%" stop-color="#F7E4A0"/>
-                      <stop offset="100%" stop-color="#C9A84C"/>
-                    </linearGradient>
-                  </defs>
-                  <rect x="13" y="5.5" width="174" height="1" fill="url(#gl9)"/>
-                  <rect x="0" y="1" width="1.5" height="10" fill="#C9A84C"/>
-                  <rect x="0" y="1" width="10" height="1.5" fill="#C9A84C"/>
-                  <rect x="0" y="9.5" width="10" height="1.5" fill="#C9A84C"/>
-                  <rect x="198.5" y="1" width="1.5" height="10" fill="#C9A84C"/>
-                  <rect x="190" y="1" width="10" height="1.5" fill="#C9A84C"/>
-                  <rect x="190" y="9.5" width="10" height="1.5" fill="#C9A84C"/>
-                </svg>
-              </div>
-              <h2>Care for your parents.<br><em>Not the paperwork.</em></h2>
-            </div>
-            <div class="body-right">
-              <div class="divider-icon">
-                <svg width="32" height="32" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
-                  <defs><linearGradient id="hg9" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#F4B8C1"/><stop offset="100%" stop-color="#B8A8D8"/></linearGradient></defs>
-                  <path d="M64 96 C64 96 22 70 22 44 C22 30 33 20 48 25 C55 27 60 33 64 38 C68 33 73 27 80 25 C95 20 106 30 106 44 C106 70 64 96 64 96Z" fill="url(#hg9)"/>
-                </svg>
-              </div>
-              <div class="logo-spacer"><div class="pcg-label">PCG</div></div>
-              <div class="pills">
-                <span class="pill">Care coordination</span><span class="pill">Insurance</span>
-                <span class="pill">Medications</span><span class="pill">Legal docs</span>
-                <span class="pill">Family sharing</span><span class="pill">Financial planning</span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="option-meta"><span class="option-num">9</span><span class="option-label">Bracket ends — serif-style corner caps, structured and editorial</span></div>
-      </div>
-
-      <!-- 10: Tripartite with star ornaments -->
-      <div class="option">
-        <div class="og-frame og-7">
-          <div class="strip"></div>
-          <div class="body">
-            <div class="body-left">
-              <div class="logo-block">
-                <div class="logo">Parental Care Guide</div>
-                <svg class="logo-line" viewBox="0 0 200 12" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-                  <defs>
-                    <linearGradient id="gl10a" x1="0" y1="0" x2="68" y2="0" gradientUnits="userSpaceOnUse">
-                      <stop offset="0%" stop-color="#C9A84C" stop-opacity="0"/>
-                      <stop offset="100%" stop-color="#F2D06B"/>
-                    </linearGradient>
-                    <linearGradient id="gl10b" x1="132" y1="0" x2="200" y2="0" gradientUnits="userSpaceOnUse">
-                      <stop offset="0%" stop-color="#F2D06B"/>
-                      <stop offset="100%" stop-color="#C9A84C" stop-opacity="0"/>
-                    </linearGradient>
-                  </defs>
-                  <rect x="0" y="5.5" width="68" height="1" fill="url(#gl10a)"/>
-                  <rect x="84" y="5.5" width="32" height="1" fill="#F2D06B" opacity="0.6"/>
-                  <rect x="132" y="5.5" width="68" height="1" fill="url(#gl10b)"/>
-                  <!-- Left star -->
-                  <g transform="translate(76,6)" fill="#F7E4A0">
-                    <rect x="-1" y="-4" width="2" height="8"/>
-                    <rect x="-4" y="-1" width="8" height="2"/>
-                    <rect x="-2.8" y="-2.8" width="1.4" height="5.6" transform="rotate(45)"/>
-                    <rect x="-2.8" y="-2.8" width="1.4" height="5.6" transform="rotate(-45)"/>
-                  </g>
-                  <!-- Right star -->
-                  <g transform="translate(124,6)" fill="#F7E4A0">
-                    <rect x="-1" y="-4" width="2" height="8"/>
-                    <rect x="-4" y="-1" width="8" height="2"/>
-                    <rect x="-2.8" y="-2.8" width="1.4" height="5.6" transform="rotate(45)"/>
-                    <rect x="-2.8" y="-2.8" width="1.4" height="5.6" transform="rotate(-45)"/>
-                  </g>
-                </svg>
-              </div>
-              <h2>Care for your parents.<br><em>Not the paperwork.</em></h2>
-            </div>
-            <div class="body-right">
-              <div class="divider-icon">
-                <svg width="32" height="32" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
-                  <defs><linearGradient id="hg10" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#F4B8C1"/><stop offset="100%" stop-color="#B8A8D8"/></linearGradient></defs>
-                  <path d="M64 96 C64 96 22 70 22 44 C22 30 33 20 48 25 C55 27 60 33 64 38 C68 33 73 27 80 25 C95 20 106 30 106 44 C106 70 64 96 64 96Z" fill="url(#hg10)"/>
-                </svg>
-              </div>
-              <div class="logo-spacer"><div class="pcg-label">PCG</div></div>
-              <div class="pills">
-                <span class="pill">Care coordination</span><span class="pill">Insurance</span>
-                <span class="pill">Medications</span><span class="pill">Legal docs</span>
-                <span class="pill">Family sharing</span><span class="pill">Financial planning</span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="option-meta"><span class="option-num">10</span><span class="option-label">Tripartite stars — three segments with eight-pointed star ornaments</span></div>
-      </div>
-
+      <div class="option-meta"><span class="option-num">6</span><span class="option-label">Center medallion — lines flanking a hollow diamond</span></div>
     </div>
+
   </div>
 </body>
 </html>
