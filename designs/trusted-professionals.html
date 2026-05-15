@@ -280,12 +280,17 @@
     }
 
     .pro-avatar {
-      width: 48px; height: 48px; border-radius: 50%;
-      background: linear-gradient(135deg, var(--glass-bg-strong), rgba(200,180,220,0.4));
+      width: 56px; height: 56px; border-radius: 50%;
       border: 2px solid rgba(255,255,255,0.7);
-      display: flex; align-items: center;
-      justify-content: center; font-size: 1.2rem;
       flex-shrink: 0;
+      overflow: hidden;
+      background: rgba(200,180,220,0.4);
+      box-shadow: 0 2px 8px rgba(80,40,100,0.15);
+    }
+
+    .pro-avatar img {
+      width: 100%; height: 100%;
+      object-fit: cover; display: block;
     }
 
     .pro-info { flex: 1; }
@@ -498,7 +503,7 @@
 
         <div class="pro-card">
           <div class="pro-card-top">
-            <div class="pro-avatar">👩‍⚖️</div>
+            <div class="pro-avatar"><img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Margaret Holloway"></div>
             <div class="pro-info">
               <div class="pro-name">Margaret Holloway, Esq.</div>
               <div class="pro-title">Elder Law &amp; Estate Planning</div>
@@ -522,7 +527,7 @@
 
         <div class="pro-card">
           <div class="pro-card-top">
-            <div class="pro-avatar">👨‍⚖️</div>
+            <div class="pro-avatar"><img src="https://randomuser.me/api/portraits/men/54.jpg" alt="David Reyes"></div>
             <div class="pro-info">
               <div class="pro-name">David Reyes, Esq.</div>
               <div class="pro-title">Elder Law &amp; Special Needs</div>
@@ -546,7 +551,7 @@
 
         <div class="pro-card">
           <div class="pro-card-top">
-            <div class="pro-avatar">👩‍⚖️</div>
+            <div class="pro-avatar"><img src="https://randomuser.me/api/portraits/women/79.jpg" alt="Patricia Chen"></div>
             <div class="pro-info">
               <div class="pro-name">Patricia Chen, Esq.</div>
               <div class="pro-title">Estate &amp; Long-Term Care Law</div>
@@ -581,7 +586,7 @@
 
         <div class="pro-card">
           <div class="pro-card-top">
-            <div class="pro-avatar">👨‍💼</div>
+            <div class="pro-avatar"><img src="https://randomuser.me/api/portraits/men/33.jpg" alt="Robert Langston"></div>
             <div class="pro-info">
               <div class="pro-name">Robert Langston, CFP®</div>
               <div class="pro-title">Senior Care Financial Planning</div>
@@ -605,7 +610,7 @@
 
         <div class="pro-card">
           <div class="pro-card-top">
-            <div class="pro-avatar">👩‍💼</div>
+            <div class="pro-avatar"><img src="https://randomuser.me/api/portraits/women/91.jpg" alt="Susan Park"></div>
             <div class="pro-info">
               <div class="pro-name">Susan Park, ChFC®</div>
               <div class="pro-title">Elder Care &amp; Retirement Finance</div>
@@ -629,7 +634,7 @@
 
         <div class="pro-card">
           <div class="pro-card-top">
-            <div class="pro-avatar">👨‍💼</div>
+            <div class="pro-avatar"><img src="https://randomuser.me/api/portraits/men/36.jpg" alt="James Okafor"></div>
             <div class="pro-info">
               <div class="pro-name">James Okafor, CPA/PFS</div>
               <div class="pro-title">Aging &amp; Estate Tax Planning</div>
@@ -664,7 +669,7 @@
 
         <div class="pro-card">
           <div class="pro-card-top">
-            <div class="pro-avatar">👩‍⚕️</div>
+            <div class="pro-avatar"><img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Dr. Linda Torres"></div>
             <div class="pro-info">
               <div class="pro-name">Dr. Linda Torres, RN-BC</div>
               <div class="pro-title">Certified Geriatric Care Manager</div>
@@ -688,7 +693,7 @@
 
         <div class="pro-card">
           <div class="pro-card-top">
-            <div class="pro-avatar">👨‍⚕️</div>
+            <div class="pro-avatar"><img src="https://randomuser.me/api/portraits/men/77.jpg" alt="Marcus Webb"></div>
             <div class="pro-info">
               <div class="pro-name">Marcus Webb, MSW, CMC</div>
               <div class="pro-title">Social Work &amp; Care Management</div>
