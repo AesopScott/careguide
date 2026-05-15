@@ -17,10 +17,10 @@ function showAdminUI() {
   const navLink = document.getElementById('nav-auth-link');
   if (navLink) navLink.textContent = 'Sign Out';
 
-  const featureCards = document.getElementById('feature-cards');
-  const adminPanel   = document.getElementById('admin-panel');
-  if (featureCards) featureCards.style.display = 'none';
-  if (adminPanel)   adminPanel.style.display   = 'block';
+  const hero       = document.querySelector('.hero');
+  const adminPanel = document.getElementById('admin-panel');
+  if (hero)       hero.classList.add('admin-active');
+  if (adminPanel) adminPanel.style.display = 'flex';
 }
 
 function wireSignOut(auth) {

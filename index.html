@@ -366,7 +366,19 @@
       color: var(--text-light);
     }
 
+    /* ── Hero 3-column layout for admin ── */
+    .hero.admin-active {
+      max-width: 1500px;
+      grid-template-columns: 1.15fr 0.85fr 240px;
+    }
+
     /* ── Admin panel ── */
+    #admin-panel {
+      display: none;
+      flex-direction: column;
+      padding-top: 4px;
+    }
+
     .admin-panel-label {
       font-size: 0.75rem;
       font-weight: 700;
@@ -522,52 +534,52 @@
         </div>
       </div>
 
-      <div id="admin-panel" style="display:none">
-        <div class="admin-panel-label">Admin Pages</div>
-        <a class="admin-link" href="/build.html">
-          <div class="admin-link-icon">🗺️</div>
-          <div class="admin-link-info">
-            <strong>System Map</strong>
-            <span>Build progress tracker — all pages, roles &amp; services</span>
-          </div>
-        </a>
-        <a class="admin-link" href="/outreach.html">
-          <div class="admin-link-icon">🤝</div>
-          <div class="admin-link-info">
-            <strong>Outreach Guides</strong>
-            <span>Talking points &amp; discovery questions for each professional role</span>
-          </div>
-        </a>
-        <a class="admin-link" href="/designs/ecosystem-diagram.html">
-          <div class="admin-link-icon">🔗</div>
-          <div class="admin-link-info">
-            <strong>Ecosystem Diagram</strong>
-            <span>How all the pieces fit together</span>
-          </div>
-        </a>
-        <a class="admin-link" href="/designs/trusted-professionals.html">
-          <div class="admin-link-icon">👩‍⚕️</div>
-          <div class="admin-link-info">
-            <strong>Trusted Professionals</strong>
-            <span>Professional directory &amp; role definitions</span>
-          </div>
-        </a>
-        <a class="admin-link" href="/designs/social-media-plan.html">
-          <div class="admin-link-icon">📣</div>
-          <div class="admin-link-info">
-            <strong>Social Media Plan</strong>
-            <span>Content strategy &amp; posting cadence</span>
-          </div>
-        </a>
-        <a class="admin-link" href="/designs/professional-outreach-plan.html">
-          <div class="admin-link-icon">📬</div>
-          <div class="admin-link-info">
-            <strong>Professional Outreach Plan</strong>
-            <span>Partner recruitment strategy</span>
-          </div>
-        </a>
-      </div>
+    </div>
 
+    <div id="admin-panel" style="display:none">
+      <div class="admin-panel-label">Admin Pages</div>
+      <a class="admin-link" href="/build.html">
+        <div class="admin-link-icon">🗺️</div>
+        <div class="admin-link-info">
+          <strong>System Map</strong>
+          <span>Build progress tracker — all pages, roles &amp; services</span>
+        </div>
+      </a>
+      <a class="admin-link" href="/outreach.html">
+        <div class="admin-link-icon">🤝</div>
+        <div class="admin-link-info">
+          <strong>Outreach Guides</strong>
+          <span>Talking points &amp; discovery questions for each role</span>
+        </div>
+      </a>
+      <a class="admin-link" href="/designs/ecosystem-diagram.html">
+        <div class="admin-link-icon">🔗</div>
+        <div class="admin-link-info">
+          <strong>Ecosystem Diagram</strong>
+          <span>How all the pieces fit together</span>
+        </div>
+      </a>
+      <a class="admin-link" href="/designs/trusted-professionals.html">
+        <div class="admin-link-icon">👩‍⚕️</div>
+        <div class="admin-link-info">
+          <strong>Trusted Professionals</strong>
+          <span>Professional directory &amp; role definitions</span>
+        </div>
+      </a>
+      <a class="admin-link" href="/designs/social-media-plan.html">
+        <div class="admin-link-icon">📣</div>
+        <div class="admin-link-info">
+          <strong>Social Media Plan</strong>
+          <span>Content strategy &amp; posting cadence</span>
+        </div>
+      </a>
+      <a class="admin-link" href="/designs/professional-outreach-plan.html">
+        <div class="admin-link-icon">📬</div>
+        <div class="admin-link-info">
+          <strong>Professional Outreach Plan</strong>
+          <span>Partner recruitment strategy</span>
+        </div>
+      </a>
     </div>
 
   </div>
