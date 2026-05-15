@@ -56,7 +56,7 @@ if (!CONFIG_READY) {
 
 function redirect() {
   document.documentElement.style.visibility = '';
-  location.href = 'admin-login.html?next=' + encodeURIComponent(location.pathname + location.search);
+  location.href = '/admin-login.html?next=' + encodeURIComponent(location.pathname + location.search);
 }
 
 function injectAdminToolbar(user, auth) {
@@ -112,7 +112,7 @@ function injectAdminToolbar(user, auth) {
 
   document.getElementById('btn-signout').addEventListener('click', async () => {
     await signOut(auth);
-    location.href = 'admin-login.html';
+    location.href = '/admin-login.html';
   });
 }
 
