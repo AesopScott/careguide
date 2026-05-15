@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PCG — Professional Outreach Plan</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Gilda+Display&family=Jost:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --deep-plum-solid: #4B2464;
+      --deep-plum: rgba(80, 40, 100, 0.82);
+      --text-dark:  rgba(30, 18, 48, 0.88);
+      --text-mid:   rgba(60, 40, 80, 0.65);
+      --text-light: rgba(60, 40, 80, 0.42);
+      --glass-bg:   rgba(255, 255, 255, 0.28);
+      --glass-border: rgba(255, 255, 255, 0.55);
+      --green: #2A7A52;
+      --amber: #C9882C;
+    }
+
+    body {
+      font-family: 'Jost', 'Segoe UI', sans-serif;
+      min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background: linear-gradient(
+        148deg,
+        #FFF5F0 0%, #FFD6CC 12%, #F4B8C1 26%,
+        #E8A0B4 40%, #D4A0C8 55%,
+        #B8A8D8 70%, #98A8E0 84%, #8ABCE8 100%
+      );
+      z-index: 0;
+    }
+
+    .blob { position: fixed; border-radius: 50%; pointer-events: none; z-index: 0; }
+    .blob-1 {
+      width: 560px; height: 560px;
+      background: radial-gradient(circle, rgba(255,210,220,0.4) 0%, transparent 70%);
+      top: -140px; left: -120px;
+    }
+    .blob-2 {
+      width: 700px; height: 700px;
+      background: radial-gradient(circle, rgba(170,148,210,0.25) 0%, transparent 70%);
+      bottom: -200px; right: -160px;
+    }
+
+    .top-bar {
+      position: relative; z-index: 2; height: 4px;
+      background: linear-gradient(90deg, #FFD6CC, #F4B8C1, #E8A0B4, #D4A0C8, #B8A8D8, #98A8E0, #8ABCE8);
+    }
+
+    header {
+      position: relative; z-index: 2;
+      padding: 24px 60px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+
+    .logo {
+      font-family: 'Gilda Display', Georgia, serif;
+      font-size: 1.1rem; color: var(--text-dark);
+    }
+    .logo span { color: var(--deep-plum-solid); }
+    nav { display: flex; align-items: center; gap: 28px; }
+    nav a { font-size: 0.82rem; font-weight: 400; color: var(--text-mid); text-decoration: none; transition: color 0.2s; }
+    nav a:hover { color: var(--text-dark); }
+    nav a.active { color: var(--text-dark); font-weight: 500; }
+    .btn-nav { padding: 10px 22px; background: var(--deep-plum); color: rgba(255,255,255,0.92) !important; border-radius: 100px; font-weight: 500 !important; backdrop-filter: blur(10px); transition: background 0.2s !important; }
+    .btn-nav:hover { background: rgba(60,25,80,0.92) !important; }
+
+    /* Page layout */
+    .page {
+      position: relative; z-index: 2;
+      max-width: 980px; margin: 0 auto;
+      padding: 52px 60px 100px;
+    }
+
+    /* Document header */
+    .doc-header {
+      margin-bottom: 52px;
+      padding-bottom: 36px;
+      border-bottom: 1px solid rgba(255,255,255,0.45);
+    }
+
+    .doc-eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(255,255,255,0.38);
+      border: 1px solid var(--glass-border);
+      border-radius: 100px; padding: 7px 16px;
+      margin-bottom: 20px; backdrop-filter: blur(8px);
+      font-size: 0.74rem; font-weight: 500;
+      color: var(--text-dark);
+    }
+    .doc-eyebrow::before {
+      content: '';
+      width: 6px; height: 6px;
+      background: linear-gradient(135deg, #E8A0B4, #B8A8D8);
+      border-radius: 50%;
+    }
+
+    .doc-header h1 {
+      font-family: 'Gilda Display', Georgia, serif;
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 400; line-height: 1.15;
+      color: var(--text-dark); margin-bottom: 16px;
+    }
+
+    .doc-header h1 em { font-style: italic; color: var(--deep-plum-solid); }
+
+    .doc-header p {
+      font-size: 1rem; font-weight: 300;
+      line-height: 1.75; color: var(--text-mid);
+      max-width: 580px;
+    }
+
+    .doc-meta {
+      display: flex; gap: 32px; margin-top: 24px; flex-wrap: wrap;
+    }
+
+    .meta-chip {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 0.76rem; color: var(--text-mid);
+    }
+
+    .meta-chip strong { color: var(--text-dark); font-weight: 500; }
+
+    /* Section */
+    section { margin-bottom: 52px; }
+
+    .section-label {
+      display: flex; align-items: center; gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .section-num {
+      width: 30px; height: 30px;
+      background: var(--deep-plum);
+      border-radius: 50%;
+      display: flex; align-items: center;
+      justify-content: center;
+      font-size: 0.72rem; font-weight: 600;
+      color: rgba(255,255,255,0.9);
+      flex-shrink: 0; backdrop-filter: blur(8px);
+    }
+
+    .section-label h2 {
+      font-family: 'Gilda Display', Georgia, serif;
+      font-size: 1.3rem; font-weight: 400;
+      color: var(--text-dark);
+    }
+
+    /* Target segments */
+    .segment-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+
+    .segment-card {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 16px; padding: 22px;
+      backdrop-filter: blur(14px);
+      box-shadow: 0 4px 16px rgba(160,100,180,0.06),
+                  inset 0 1px 0 rgba(255,255,255,0.65);
+    }
+
+    .segment-icon { font-size: 1.4rem; margin-bottom: 12px; }
+
+    .segment-card h3 {
+      font-size: 0.9rem; font-weight: 600;
+      color: var(--text-dark); margin-bottom: 6px;
+    }
+
+    .segment-card p {
+      font-size: 0.78rem; font-weight: 300;
+      line-height: 1.6; color: var(--text-mid);
+      margin-bottom: 12px;
+    }
+
+    .priority-tag {
+      display: inline-block;
+      padding: 3px 10px; border-radius: 100px;
+      font-size: 0.65rem; font-weight: 600;
+      letter-spacing: 0.06em; text-transform: uppercase;
+    }
+    .priority-high { background: rgba(42,122,82,0.12); color: var(--green); border: 1px solid rgba(42,122,82,0.25); }
+    .priority-med  { background: rgba(201,136,44,0.12); color: var(--amber); border: 1px solid rgba(201,136,44,0.25); }
+
+    /* Value proposition */
+    .value-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 14px;
+    }
+
+    .value-card {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 16px; padding: 24px;
+      backdrop-filter: blur(14px);
+      box-shadow: 0 4px 16px rgba(160,100,180,0.06),
+                  inset 0 1px 0 rgba(255,255,255,0.65);
+      display: flex; gap: 16px;
+    }
+
+    .value-icon {
+      font-size: 1.3rem; flex-shrink: 0; margin-top: 2px;
+    }
+
+    .value-card h3 {
+      font-size: 0.88rem; font-weight: 600;
+      color: var(--text-dark); margin-bottom: 6px;
+    }
+
+    .value-card p {
+      font-size: 0.78rem; font-weight: 300;
+      line-height: 1.65; color: var(--text-mid);
+    }
+
+    /* Outreach phases — timeline */
+    .timeline { display: flex; flex-direction: column; gap: 0; }
+
+    .phase {
+      display: grid;
+      grid-template-columns: 140px 1fr;
+      gap: 28px;
+      position: relative;
+    }
+
+    .phase:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      left: 68px; top: 44px; bottom: -1px;
+      width: 1px;
+      background: rgba(255,255,255,0.45);
+    }
+
+    .phase-left { padding-top: 12px; text-align: right; }
+
+    .phase-tag {
+      display: inline-block;
+      padding: 5px 12px; border-radius: 100px;
+      font-size: 0.68rem; font-weight: 600;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      background: rgba(255,255,255,0.4);
+      border: 1px solid var(--glass-border);
+      color: var(--text-mid);
+      backdrop-filter: blur(6px);
+    }
+
+    .phase-right {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 16px; padding: 24px 28px;
+      backdrop-filter: blur(14px);
+      box-shadow: 0 4px 16px rgba(160,100,180,0.06),
+                  inset 0 1px 0 rgba(255,255,255,0.65);
+      margin-bottom: 14px;
+    }
+
+    .phase-right h3 {
+      font-family: 'Gilda Display', Georgia, serif;
+      font-size: 1.05rem; font-weight: 400;
+      color: var(--text-dark); margin-bottom: 10px;
+    }
+
+    .phase-right p {
+      font-size: 0.82rem; font-weight: 300;
+      line-height: 1.7; color: var(--text-mid);
+      margin-bottom: 14px;
+    }
+
+    .task-list { list-style: none; display: flex; flex-direction: column; gap: 7px; }
+
+    .task-list li {
+      display: flex; align-items: flex-start; gap: 10px;
+      font-size: 0.8rem; color: var(--text-mid);
+    }
+
+    .task-list li::before {
+      content: '→';
+      color: var(--deep-plum-solid);
+      font-weight: 600; flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    /* Email template */
+    .email-template {
+      background: rgba(255,255,255,0.55);
+      border: 1.5px solid var(--glass-border);
+      border-radius: 16px; overflow: hidden;
+      backdrop-filter: blur(14px);
+    }
+
+    .email-header {
+      background: rgba(255,255,255,0.4);
+      padding: 16px 24px;
+      border-bottom: 1px solid rgba(255,255,255,0.5);
+    }
+
+    .email-field {
+      display: flex; gap: 12px; align-items: baseline;
+      font-size: 0.78rem; color: var(--text-mid);
+      margin-bottom: 4px;
+    }
+
+    .email-field:last-child { margin-bottom: 0; }
+
+    .email-field strong {
+      color: var(--text-dark); font-weight: 500;
+      min-width: 48px;
+    }
+
+    .email-body {
+      padding: 24px;
+    }
+
+    .email-body p {
+      font-size: 0.85rem; font-weight: 300;
+      line-height: 1.8; color: var(--text-dark);
+      margin-bottom: 14px;
+    }
+
+    .email-body p:last-child { margin-bottom: 0; }
+
+    .email-body .highlight {
+      font-weight: 500; color: var(--deep-plum-solid);
+    }
+
+    /* Tiers */
+    .tier-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px;
+    }
+
+    .tier-card {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 16px; padding: 28px 22px;
+      backdrop-filter: blur(14px);
+      box-shadow: 0 4px 16px rgba(160,100,180,0.06),
+                  inset 0 1px 0 rgba(255,255,255,0.65);
+      text-align: center;
+    }
+
+    .tier-card.featured {
+      background: rgba(80,40,100,0.72);
+      border-color: rgba(255,255,255,0.25);
+    }
+
+    .tier-name {
+      font-size: 0.68rem; font-weight: 600;
+      letter-spacing: 0.16em; text-transform: uppercase;
+      color: var(--text-light); margin-bottom: 10px;
+    }
+
+    .tier-card.featured .tier-name { color: rgba(255,255,255,0.55); }
+
+    .tier-price {
+      font-family: 'Gilda Display', Georgia, serif;
+      font-size: 2rem; color: var(--text-dark);
+      margin-bottom: 4px;
+    }
+
+    .tier-card.featured .tier-price { color: rgba(255,255,255,0.95); }
+
+    .tier-period {
+      font-size: 0.75rem; color: var(--text-light);
+      margin-bottom: 20px;
+    }
+
+    .tier-card.featured .tier-period { color: rgba(255,255,255,0.45); }
+
+    .tier-features {
+      list-style: none;
+      display: flex; flex-direction: column; gap: 8px;
+      margin-bottom: 24px; text-align: left;
+    }
+
+    .tier-features li {
+      display: flex; align-items: flex-start; gap: 8px;
+      font-size: 0.78rem; color: var(--text-mid);
+    }
+
+    .tier-card.featured .tier-features li { color: rgba(255,255,255,0.65); }
+
+    .tier-features li::before {
+      content: '✓'; color: var(--green);
+      font-weight: 700; font-size: 0.72rem;
+      flex-shrink: 0; margin-top: 1px;
+    }
+
+    .tier-card.featured .tier-features li::before { color: rgba(200,240,200,0.8); }
+
+    .tier-btn {
+      width: 100%;
+      padding: 11px 20px;
+      font-family: 'Jost', sans-serif;
+      font-size: 0.82rem; font-weight: 600;
+      border-radius: 100px; cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .tier-btn-outline {
+      background: transparent;
+      border: 1.5px solid rgba(80,40,100,0.35);
+      color: var(--deep-plum-solid);
+    }
+    .tier-btn-outline:hover { background: rgba(80,40,100,0.08); }
+
+    .tier-btn-filled {
+      background: rgba(255,255,255,0.9);
+      border: none;
+      color: var(--deep-plum-solid);
+    }
+    .tier-btn-filled:hover { background: white; }
+
+    /* KPIs */
+    .kpi-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px;
+    }
+
+    .kpi-card {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 16px; padding: 22px;
+      backdrop-filter: blur(14px);
+      box-shadow: 0 4px 16px rgba(160,100,180,0.06),
+                  inset 0 1px 0 rgba(255,255,255,0.65);
+      text-align: center;
+    }
+
+    .kpi-target {
+      font-family: 'Gilda Display', Georgia, serif;
+      font-size: 1.8rem; color: var(--text-dark);
+      margin-bottom: 4px;
+    }
+
+    .kpi-label {
+      font-size: 0.75rem; font-weight: 400;
+      color: var(--text-mid); line-height: 1.4;
+    }
+
+    .kpi-timeline {
+      font-size: 0.68rem; color: var(--text-light);
+      margin-top: 4px; font-style: italic;
+    }
+
+    footer {
+      position: relative; z-index: 2;
+      padding: 20px 60px; text-align: center;
+      font-size: 0.73rem; font-weight: 300;
+      color: var(--text-light);
+    }
+
+    @media (max-width: 820px) {
+      .page { padding: 40px 24px 80px; }
+      header { padding: 24px; }
+      .segment-grid, .tier-grid { grid-template-columns: 1fr; }
+      .value-grid { grid-template-columns: 1fr; }
+      .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+      .phase { grid-template-columns: 1fr; }
+      .phase:not(:last-child)::after { display: none; }
+      .phase-left { text-align: left; padding-top: 0; }
+      footer { padding: 20px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="top-bar"></div>
+
+  <header>
+    <div class="logo">Parental <span>Care</span> Guide</div>
+    <nav>
+      <a href="design-combined.html">Home</a>
+      <a href="ecosystem-diagram.html">How it works</a>
+      <a href="trusted-professionals.html">Professionals</a>
+      <a href="social-media-plan.html">Social strategy</a>
+      <a href="#" class="active">Partner plan</a>
+      <a href="design-combined.html" class="btn-nav">Join the waitlist</a>
+    </nav>
+  </header>
+
+  <div class="page">
+
+    <!-- Document header -->
+    <div class="doc-header">
+      <div class="doc-eyebrow">Professional Partnership Program</div>
+      <h1>Financial Advisor Outreach<br>&amp; <em>Partnership Plan</em></h1>
+      <p>A strategy for recruiting, onboarding, and retaining financial professionals in the PCG Trusted Directory — and building a co-marketing relationship that benefits both parties.</p>
+      <div class="doc-meta">
+        <div class="meta-chip">📅 <strong>Launch target:</strong> Q3 2026</div>
+        <div class="meta-chip">🎯 <strong>Goal:</strong> 50 verified listings at launch</div>
+        <div class="meta-chip">💰 <strong>Revenue model:</strong> Tiered listing fees</div>
+      </div>
+    </div>
+
+    <!-- 1. Target Segments -->
+    <section>
+      <div class="section-label">
+        <div class="section-num">1</div>
+        <h2>Who we're targeting</h2>
+      </div>
+      <div class="segment-grid">
+
+        <div class="segment-card">
+          <div class="segment-icon">📊</div>
+          <h3>Certified Financial Planners (CFP®)</h3>
+          <p>Specialize in retirement and estate planning. Frequently work with clients navigating parent care costs, asset protection, and Medicaid planning.</p>
+          <span class="priority-tag priority-high">High priority</span>
+        </div>
+
+        <div class="segment-card">
+          <div class="segment-icon">⚖️</div>
+          <h3>Elder Law Attorneys</h3>
+          <p>Handle POA, trusts, Medicaid spend-down, and advance directives. Often the first professional a family calls — and an ideal referral partner.</p>
+          <span class="priority-tag priority-high">High priority</span>
+        </div>
+
+        <div class="segment-card">
+          <div class="segment-icon">🏦</div>
+          <h3>Wealth Managers &amp; RIAs</h3>
+          <p>Managing family assets across generations. Increasingly being asked questions about care costs by clients whose parents are aging.</p>
+          <span class="priority-tag priority-high">High priority</span>
+        </div>
+
+        <div class="segment-card">
+          <div class="segment-icon">🛡️</div>
+          <h3>Long-Term Care Insurance Specialists</h3>
+          <p>Sell and service LTC policies. Their clients are exactly who we serve — and they need a trusted platform to point families toward.</p>
+          <span class="priority-tag priority-med">Medium priority</span>
+        </div>
+
+        <div class="segment-card">
+          <div class="segment-icon">🧾</div>
+          <h3>CPAs &amp; Tax Advisors</h3>
+          <p>Help families understand the tax implications of caregiving costs, medical deductions, and estate transfers. Natural referral source.</p>
+          <span class="priority-tag priority-med">Medium priority</span>
+        </div>
+
+        <div class="segment-card">
+          <div class="segment-icon">🏡</div>
+          <h3>Senior Living Consultants</h3>
+          <p>Help families choose and transition into assisted living or memory care. Work at the intersection of care, finance, and family dynamics.</p>
+          <span class="priority-tag priority-med">Medium priority</span>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 2. Value proposition -->
+    <section>
+      <div class="section-label">
+        <div class="section-num">2</div>
+        <h2>What we offer them</h2>
+      </div>
+      <div class="value-grid">
+
+        <div class="value-card">
+          <div class="value-icon">🎯</div>
+          <div>
+            <h3>Qualified inbound referrals</h3>
+            <p>Families using PCG are already in the middle of the exact situation these professionals specialize in. No cold leads — just warm, motivated clients.</p>
+          </div>
+        </div>
+
+        <div class="value-card">
+          <div class="value-icon">🏅</div>
+          <div>
+            <h3>Credibility by association</h3>
+            <p>A PCG Verified badge signals that the professional has been reviewed and trusted by a platform families rely on. That's earned positioning, not paid advertising.</p>
+          </div>
+        </div>
+
+        <div class="value-card">
+          <div class="value-icon">📣</div>
+          <div>
+            <h3>Co-marketing opportunities</h3>
+            <p>Featured professionals can co-author content, appear in our newsletter, and be highlighted in region-specific guides — all under their name and brand.</p>
+          </div>
+        </div>
+
+        <div class="value-card">
+          <div class="value-icon">📊</div>
+          <div>
+            <h3>Analytics &amp; visibility data</h3>
+            <p>Premium listings include a dashboard showing profile views, contact requests, and referral activity — so professionals can see real ROI from their listing.</p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 3. Outreach phases -->
+    <section>
+      <div class="section-label">
+        <div class="section-num">3</div>
+        <h2>Outreach phases &amp; timeline</h2>
+      </div>
+      <div class="timeline">
+
+        <div class="phase">
+          <div class="phase-left">
+            <span class="phase-tag">Month 1–2</span>
+          </div>
+          <div class="phase-right">
+            <h3>Foundation — build the list</h3>
+            <p>Identify and vet prospective professionals before any outreach begins. Quality over quantity at this stage sets the tone for the entire directory.</p>
+            <ul class="task-list">
+              <li>Compile lists of CFPs, elder law attorneys, and RIAs from NAPFA, NAELA, and state bar directories</li>
+              <li>Filter for elder care specialization, geography, and client reviews</li>
+              <li>Build a CRM with contact details, specialty, and region</li>
+              <li>Draft outreach email templates (see below) and LinkedIn messaging scripts</li>
+              <li>Create a professional-facing landing page explaining the program</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="phase">
+          <div class="phase-left">
+            <span class="phase-tag">Month 3–4</span>
+          </div>
+          <div class="phase-right">
+            <h3>First wave — warm outreach</h3>
+            <p>Lead with a free listing offer to build the directory. The goal is density — families won't use a directory with three names in it.</p>
+            <ul class="task-list">
+              <li>Send personalized emails to the top 100 prospects — no mass blasts</li>
+              <li>Connect with targets on LinkedIn before emailing when possible</li>
+              <li>Offer founding member free listings in exchange for a testimonial and social share</li>
+              <li>Follow up at 7 and 14 days with a different angle (not just "checking in")</li>
+              <li>Target: 30 confirmed free listings</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="phase">
+          <div class="phase-left">
+            <span class="phase-tag">Month 5–6</span>
+          </div>
+          <div class="phase-right">
+            <h3>Second wave — association outreach</h3>
+            <p>Stop reaching professionals one at a time and start reaching the groups they belong to. One partnership with a professional association can yield dozens of listings.</p>
+            <ul class="task-list">
+              <li>Pitch NAPFA, NAELA, and AARP to distribute PCG as a recommended tool</li>
+              <li>Offer to speak at chapter meetings or contribute to member newsletters</li>
+              <li>Target eldercare-focused CPE webinars for CFP and CPA audiences</li>
+              <li>Partner with hospital social work departments for resource distribution</li>
+              <li>Target: 50 total listings, first premium upgrades</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="phase">
+          <div class="phase-left">
+            <span class="phase-tag">Month 7+</span>
+          </div>
+          <div class="phase-right">
+            <h3>Sustained growth — referral flywheel</h3>
+            <p>At this point the directory should begin growing itself. Families refer professionals. Professionals refer colleagues. The directory becomes self-sustaining.</p>
+            <ul class="task-list">
+              <li>Launch a "Refer a colleague" program for listed professionals</li>
+              <li>Begin paid promotion of the directory to families via Google and Facebook ads</li>
+              <li>Introduce tiered pricing for enhanced listings</li>
+              <li>Quarterly outreach to new graduates from CFP and eldercare certification programs</li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 4. The outreach email -->
+    <section>
+      <div class="section-label">
+        <div class="section-num">4</div>
+        <h2>Outreach email template</h2>
+      </div>
+      <div class="email-template">
+        <div class="email-header">
+          <div class="email-field"><strong>To:</strong> [Professional name], CFP® / Esq. / ChFC®</div>
+          <div class="email-field"><strong>From:</strong> [PCG team member], Parental Care Guide</div>
+          <div class="email-field"><strong>Subject:</strong> A free listing for professionals who serve families like yours</div>
+        </div>
+        <div class="email-body">
+          <p>Hi [First name],</p>
+          <p>I came across your work through [NAPFA / NAELA / LinkedIn / referral] and wanted to reach out because what you do aligns closely with something we're building.</p>
+          <p><span class="highlight">Parental Care Guide</span> is a platform for adult children navigating the care of aging parents — the medical decisions, the legal documents, the insurance maze, and the financial planning that most families have never had to think about before.</p>
+          <p>We're building a directory of professionals who specialize in exactly this. Not a referral marketplace — a curated, vetted list of people we'd send our own families to. <span class="highlight">We'd like to include you, at no cost, as a founding member.</span></p>
+          <p>In exchange, we'd love a short quote about your work with families for our launch materials — and we'll feature you in our newsletter when the platform goes live.</p>
+          <p>Would it make sense to connect for a 15-minute call this week or next?</p>
+          <p>Warmly,<br>[Name]<br>Parental Care Guide<br>parentalcareguide.com</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. Listing tiers -->
+    <section>
+      <div class="section-label">
+        <div class="section-num">5</div>
+        <h2>Listing tiers &amp; pricing</h2>
+      </div>
+      <div class="tier-grid">
+
+        <div class="tier-card">
+          <div class="tier-name">Basic</div>
+          <div class="tier-price">Free</div>
+          <div class="tier-period">Founding members &amp; ongoing</div>
+          <ul class="tier-features">
+            <li>Name, title &amp; specialty listed</li>
+            <li>Location &amp; contact info</li>
+            <li>PCG Verified badge</li>
+            <li>3 specialty tags</li>
+            <li>Searchable in directory</li>
+          </ul>
+          <button class="tier-btn tier-btn-outline">Apply to list</button>
+        </div>
+
+        <div class="tier-card featured">
+          <div class="tier-name">Featured</div>
+          <div class="tier-price">$149</div>
+          <div class="tier-period">per month</div>
+          <ul class="tier-features">
+            <li>Everything in Basic</li>
+            <li>Priority placement in search</li>
+            <li>Extended bio &amp; headshot</li>
+            <li>Client reviews &amp; ratings</li>
+            <li>Monthly analytics dashboard</li>
+            <li>Newsletter feature (quarterly)</li>
+          </ul>
+          <button class="tier-btn tier-btn-filled">Get featured</button>
+        </div>
+
+        <div class="tier-card">
+          <div class="tier-name">Partner</div>
+          <div class="tier-price">$399</div>
+          <div class="tier-period">per month</div>
+          <ul class="tier-features">
+            <li>Everything in Featured</li>
+            <li>Co-branded content &amp; guides</li>
+            <li>Dedicated profile page</li>
+            <li>Video introduction embed</li>
+            <li>Lead notifications in real time</li>
+            <li>Category exclusivity (by region)</li>
+          </ul>
+          <button class="tier-btn tier-btn-outline">Become a partner</button>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 6. Success metrics -->
+    <section>
+      <div class="section-label">
+        <div class="section-num">6</div>
+        <h2>Success metrics — Year 1</h2>
+      </div>
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-target">50</div>
+          <div class="kpi-label">Verified listings at launch</div>
+          <div class="kpi-timeline">By Q3 2026</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-target">200</div>
+          <div class="kpi-label">Total listings by end of year</div>
+          <div class="kpi-timeline">By Q4 2026</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-target">20%</div>
+          <div class="kpi-label">Conversion to paid tier</div>
+          <div class="kpi-timeline">Within 90 days of listing</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-target">$15K</div>
+          <div class="kpi-label">Monthly recurring revenue</div>
+          <div class="kpi-timeline">From directory by Q4 2026</div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <footer>&copy; 2026 Parental Care Guide &mdash; Internal use only</footer>
+
+</body>
+</html>

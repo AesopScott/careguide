@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PCG — Type First</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,700;0,900;1,700&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --white: #FFFFFF;
+      --off-white: #F8F8F5;
+      --black: #0A0A0A;
+      --green: #2A7A52;
+      --green-light: #E8F5EE;
+      --gray: #888888;
+    }
+
+    body {
+      font-family: 'Barlow', 'Helvetica Neue', sans-serif;
+      background: var(--off-white);
+      color: var(--black);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      padding: 28px 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      font-family: 'Barlow Condensed', 'Arial Narrow', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--black);
+    }
+
+    .logo-dot {
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      background: var(--green);
+      border-radius: 50%;
+      margin-left: 4px;
+      vertical-align: middle;
+      margin-bottom: 3px;
+    }
+
+    .header-right {
+      font-size: 0.78rem;
+      font-weight: 400;
+      color: var(--gray);
+    }
+
+    /* Main layout */
+    main {
+      flex: 1;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      padding: 0 60px;
+      max-width: 1200px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    /* Huge headline section */
+    .headline-area {
+      padding: 48px 0 32px;
+      border-bottom: 1px solid rgba(10,10,10,0.1);
+    }
+
+    h1 {
+      font-family: 'Barlow Condensed', 'Arial Narrow', sans-serif;
+      font-size: clamp(5rem, 14vw, 12rem);
+      font-weight: 900;
+      line-height: 0.88;
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+      color: var(--black);
+    }
+
+    h1 .green { color: var(--green); }
+    h1 .outline {
+      -webkit-text-stroke: 2px var(--black);
+      color: transparent;
+    }
+
+    /* Middle content row */
+    .content-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 0;
+      padding: 48px 0;
+    }
+
+    .content-col {
+      padding-right: 48px;
+    }
+
+    .content-col:not(:first-child) {
+      padding-left: 48px;
+      border-left: 1px solid rgba(10,10,10,0.1);
+    }
+
+    .col-label {
+      font-size: 0.65rem;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gray);
+      margin-bottom: 16px;
+    }
+
+    .col-body {
+      font-size: 0.95rem;
+      font-weight: 300;
+      line-height: 1.75;
+      color: rgba(10,10,10,0.65);
+    }
+
+    /* CTA col */
+    .cta-col {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .cta-col .col-label { margin-bottom: 20px; }
+
+    .email-row {
+      display: flex;
+      gap: 0;
+      border: 1.5px solid var(--black);
+    }
+
+    .email-row input {
+      flex: 1;
+      padding: 14px 18px;
+      font-family: 'Barlow', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 300;
+      border: none;
+      outline: none;
+      background: white;
+      color: var(--black);
+    }
+
+    .email-row input::placeholder { color: #BBB; }
+
+    .email-row button {
+      padding: 14px 22px;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      background: var(--green);
+      color: white;
+      border: none;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background 0.15s;
+    }
+
+    .email-row button:hover { background: #1F5E3E; }
+
+    .cta-note {
+      margin-top: 10px;
+      font-size: 0.72rem;
+      color: var(--gray);
+    }
+
+    /* Bottom bar */
+    .bottom-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 0;
+      border-top: 1px solid rgba(10,10,10,0.1);
+    }
+
+    .bottom-bar-left {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+    }
+
+    .stat-block {
+      text-align: left;
+    }
+
+    .stat-block .num {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--black);
+      letter-spacing: -0.02em;
+    }
+
+    .stat-block .label {
+      font-size: 0.68rem;
+      font-weight: 400;
+      color: var(--gray);
+      letter-spacing: 0.04em;
+    }
+
+    .divider-v {
+      width: 1px;
+      height: 32px;
+      background: rgba(10,10,10,0.1);
+    }
+
+    .bottom-bar-right {
+      font-size: 0.72rem;
+      color: var(--gray);
+    }
+
+    footer {
+      padding: 16px 60px;
+      border-top: 1px solid rgba(10,10,10,0.06);
+      font-size: 0.7rem;
+      color: var(--gray);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    @media (max-width: 900px) {
+      main { padding: 0 24px; }
+      h1 { font-size: clamp(4rem, 15vw, 8rem); }
+      .content-row { grid-template-columns: 1fr; gap: 32px; }
+      .content-col:not(:first-child) { border-left: none; padding-left: 0; border-top: 1px solid rgba(10,10,10,0.1); padding-top: 32px; }
+      header { padding: 24px; }
+      footer { padding: 16px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="logo">Parental Care Guide<span class="logo-dot"></span></div>
+    <span class="header-right">Early access — 2026</span>
+  </header>
+
+  <main>
+    <div class="headline-area">
+      <h1>
+        <span class="green">Care</span><br>
+        <span class="outline">For</span><br>
+        Them.
+      </h1>
+    </div>
+
+    <div class="content-row">
+      <div class="content-col">
+        <p class="col-label">The problem</p>
+        <p class="col-body">Caring for aging parents is one of the most complex, emotionally taxing things an adult can do. Doctors, insurance, medications, legal documents, and a family that can't always agree — with no guide to hold it together.</p>
+      </div>
+
+      <div class="content-col">
+        <p class="col-label">What we built</p>
+        <p class="col-body">A single place for medical coordination, insurance navigation, legal documents, care facility research, medication tracking, and family communication. Everything you need, nothing you don't.</p>
+      </div>
+
+      <div class="content-col cta-col">
+        <p class="col-label">Get early access</p>
+        <div class="email-row">
+          <input type="email" placeholder="your@email.com" />
+          <button>Join →</button>
+        </div>
+        <p class="cta-note">Free during beta &middot; No spam</p>
+      </div>
+    </div>
+
+    <div class="bottom-bar">
+      <div class="bottom-bar-left">
+        <div class="stat-block">
+          <div class="num">12,000+</div>
+          <div class="label">Families waiting</div>
+        </div>
+        <div class="divider-v"></div>
+        <div class="stat-block">
+          <div class="num">Free</div>
+          <div class="label">To get started</div>
+        </div>
+        <div class="divider-v"></div>
+        <div class="stat-block">
+          <div class="num">2026</div>
+          <div class="label">Launch year</div>
+        </div>
+      </div>
+      <div class="bottom-bar-right">parentalcareguide.com</div>
+    </div>
+  </main>
+
+  <footer>
+    <span>&copy; 2026 Parental Care Guide</span>
+    <span>Privacy &middot; Contact</span>
+  </footer>
+
+</body>
+</html>

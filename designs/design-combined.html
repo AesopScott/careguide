@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PCG — Combined</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Gilda+Display&family=Jost:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --rose:      #FFD6CC;
+      --blush:     #F4B8C1;
+      --mauve:     #E8A0B4;
+      --lavender:  #D4A0C8;
+      --periwinkle:#B8A8D8;
+      --slate-blue:#98A8E0;
+      --sky:       #8ABCE8;
+      --deep-plum: rgba(80, 40, 100, 0.82);
+      --deep-plum-hover: rgba(60, 25, 80, 0.92);
+      --text-dark:  rgba(30, 18, 48, 0.88);
+      --text-mid:   rgba(60, 40, 80, 0.65);
+      --text-light: rgba(60, 40, 80, 0.42);
+      --glass-bg:   rgba(255, 255, 255, 0.28);
+      --glass-border: rgba(255, 255, 255, 0.55);
+    }
+
+    body {
+      font-family: 'Jost', 'Segoe UI', sans-serif;
+      min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* — Dawn gradient background — */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(
+        148deg,
+        #FFF5F0 0%,
+        #FFD6CC 12%,
+        #F4B8C1 26%,
+        #E8A0B4 40%,
+        #D4A0C8 55%,
+        #B8A8D8 70%,
+        #98A8E0 84%,
+        #8ABCE8 100%
+      );
+      z-index: 0;
+    }
+
+    /* Soft ambient blobs */
+    .blob {
+      position: fixed;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .blob-1 {
+      width: 560px; height: 560px;
+      background: radial-gradient(circle, rgba(255, 210, 220, 0.45) 0%, transparent 70%);
+      top: -140px; left: -120px;
+      animation: drift 10s ease-in-out infinite;
+    }
+    .blob-2 {
+      width: 700px; height: 700px;
+      background: radial-gradient(circle, rgba(170, 148, 210, 0.3) 0%, transparent 70%);
+      bottom: -200px; right: -160px;
+      animation: drift 13s ease-in-out infinite reverse;
+    }
+    @keyframes drift {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      50%       { transform: translate(16px, -22px) scale(1.04); }
+    }
+
+    /* — Top accent bar — */
+    .top-bar {
+      position: relative;
+      z-index: 2;
+      height: 4px;
+      background: linear-gradient(90deg,
+        #FFD6CC, #F4B8C1, #E8A0B4,
+        #D4A0C8, #B8A8D8, #98A8E0, #8ABCE8
+      );
+    }
+
+    /* — Header — */
+    header {
+      position: relative;
+      z-index: 2;
+      padding: 28px 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      font-family: 'Gilda Display', Georgia, serif;
+      font-size: 1.1rem;
+      color: var(--text-dark);
+      letter-spacing: 0.02em;
+    }
+
+    .logo span { color: var(--deep-plum); }
+
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+    }
+
+    nav a {
+      font-size: 0.82rem;
+      font-weight: 400;
+      color: var(--text-mid);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    nav a:hover { color: var(--text-dark); }
+
+    .btn-nav {
+      padding: 10px 22px;
+      background: var(--deep-plum);
+      color: rgba(255,255,255,0.92) !important;
+      border-radius: 100px;
+      font-weight: 500 !important;
+      font-size: 0.82rem !important;
+      backdrop-filter: blur(10px);
+      transition: background 0.2s !important;
+    }
+
+    .btn-nav:hover { background: var(--deep-plum-hover) !important; }
+
+    /* — Hero grid — */
+    .hero {
+      position: relative;
+      z-index: 2;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 52px 60px 0;
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 56px;
+      align-items: center;
+    }
+
+    /* Left column */
+    .hero-left { }
+
+    /* Eyebrow pill */
+    .eyebrow-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.38);
+      border: 1px solid var(--glass-border);
+      border-radius: 100px;
+      padding: 8px 18px;
+      margin-bottom: 32px;
+      backdrop-filter: blur(8px);
+    }
+
+    .pill-dot {
+      width: 7px; height: 7px;
+      background: linear-gradient(135deg, #E8A0B4, #B8A8D8);
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .eyebrow-pill span {
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: var(--text-dark);
+      letter-spacing: 0.02em;
+    }
+
+    /* Main headline */
+    h1 {
+      font-family: 'Gilda Display', Georgia, serif;
+      font-size: clamp(2.5rem, 4.2vw, 3.6rem);
+      font-weight: 400;
+      line-height: 1.12;
+      color: var(--text-dark);
+      margin-bottom: 24px;
+    }
+
+    h1 .italic {
+      font-style: italic;
+      color: rgba(100, 50, 130, 0.82);
+    }
+
+    /* Body copy */
+    .sub {
+      font-size: 1rem;
+      font-weight: 300;
+      line-height: 1.8;
+      color: var(--text-mid);
+      margin-bottom: 18px;
+      max-width: 430px;
+    }
+
+    /* Tagline */
+    .tagline {
+      font-family: 'Gilda Display', Georgia, serif;
+      font-style: italic;
+      font-size: 1.05rem;
+      color: rgba(100, 60, 130, 0.65);
+      margin-bottom: 38px;
+    }
+
+    /* Form row */
+    .form-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .form-row input {
+      padding: 14px 22px;
+      font-family: 'Jost', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 300;
+      background: rgba(255, 255, 255, 0.52);
+      border: 1.5px solid rgba(255, 255, 255, 0.75);
+      border-radius: 100px;
+      outline: none;
+      color: var(--text-dark);
+      width: 250px;
+      backdrop-filter: blur(10px);
+      transition: background 0.2s, box-shadow 0.2s;
+    }
+
+    .form-row input::placeholder { color: rgba(80, 50, 100, 0.35); }
+    .form-row input:focus {
+      background: rgba(255, 255, 255, 0.68);
+      box-shadow: 0 0 0 3px rgba(180, 130, 210, 0.18);
+    }
+
+    .form-row button {
+      padding: 14px 28px;
+      font-family: 'Jost', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      background: var(--deep-plum);
+      color: rgba(255, 255, 255, 0.93);
+      border: none;
+      border-radius: 100px;
+      cursor: pointer;
+      backdrop-filter: blur(10px);
+      transition: background 0.2s, transform 0.15s;
+    }
+
+    .form-row button:hover {
+      background: var(--deep-plum-hover);
+      transform: translateY(-1px);
+    }
+
+    .subtext {
+      margin-top: 14px;
+      font-size: 0.78rem;
+      font-weight: 300;
+      color: var(--text-light);
+    }
+
+    /* Right column — glass feature cards */
+    .hero-right {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .feature-card {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 18px;
+      padding: 18px 22px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      box-shadow:
+        0 4px 16px rgba(160, 100, 180, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.7);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-2px);
+      box-shadow:
+        0 10px 28px rgba(160, 100, 180, 0.14),
+        inset 0 1px 0 rgba(255, 255, 255, 0.7);
+    }
+
+    .feature-card:nth-child(2) { margin-left: 20px; }
+    .feature-card:nth-child(4) { margin-left: 14px; }
+    .feature-card:nth-child(6) { margin-left: 20px; }
+
+    .card-icon {
+      width: 46px; height: 46px;
+      border-radius: 13px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      flex-shrink: 0;
+      background: rgba(255, 255, 255, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.7);
+    }
+
+    .card-info strong {
+      display: block;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--text-dark);
+      margin-bottom: 2px;
+    }
+
+    .card-info span {
+      font-size: 0.76rem;
+      font-weight: 300;
+      color: var(--text-mid);
+    }
+
+    /* — Trust bar — */
+    .trust-bar {
+      position: relative;
+      z-index: 2;
+      margin-top: 72px;
+      padding: 28px 60px;
+      background: rgba(255, 255, 255, 0.22);
+      border-top: 1px solid rgba(255, 255, 255, 0.45);
+      backdrop-filter: blur(14px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 72px;
+      flex-wrap: wrap;
+    }
+
+    .trust-item {
+      text-align: center;
+    }
+
+    .trust-item strong {
+      display: block;
+      font-family: 'Gilda Display', Georgia, serif;
+      font-size: 1.7rem;
+      font-weight: 400;
+      color: var(--text-dark);
+      margin-bottom: 3px;
+    }
+
+    .trust-item span {
+      font-size: 0.75rem;
+      font-weight: 400;
+      color: var(--text-mid);
+      letter-spacing: 0.04em;
+    }
+
+    .trust-divider {
+      width: 1px;
+      height: 36px;
+      background: rgba(180, 140, 200, 0.25);
+    }
+
+    /* Footer */
+    footer {
+      position: relative;
+      z-index: 2;
+      padding: 18px 60px;
+      text-align: center;
+      font-size: 0.73rem;
+      font-weight: 300;
+      color: var(--text-light);
+    }
+
+    /* Responsive */
+    @media (max-width: 820px) {
+      .hero {
+        grid-template-columns: 1fr;
+        padding: 40px 28px 0;
+        gap: 40px;
+      }
+      .hero-right { display: none; }
+      header { padding: 24px 28px; }
+      .trust-bar { padding: 28px 24px; gap: 32px; }
+      .trust-divider { display: none; }
+      footer { padding: 18px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+
+  <div class="top-bar"></div>
+
+  <header>
+    <div class="logo">Parental <span>Care</span> Guide</div>
+    <nav>
+      <a href="ecosystem-diagram.html">How it works</a>
+      <a href="trusted-professionals.html">Professionals</a>
+      <a href="social-media-plan.html">Social strategy</a>
+      <a href="professional-outreach-plan.html">Partner plan</a>
+      <a href="#" class="btn-nav">Join the waitlist</a>
+    </nav>
+  </header>
+
+  <div class="hero">
+
+    <div class="hero-left">
+      <div class="eyebrow-pill">
+        <div class="pill-dot"></div>
+        <span>For adult children everywhere</span>
+      </div>
+
+      <h1>You're doing your best<br>for them. Let us <span class="italic">help you.</span></h1>
+
+      <p class="sub">Navigating aging parents &mdash; the appointments, the paperwork, the hard conversations &mdash; shouldn't have to be done alone.</p>
+
+      <p class="tagline">&ldquo;A trusted guide through the hardest years.&rdquo;</p>
+
+      <div class="form-row">
+        <input type="email" placeholder="Enter your email address" />
+        <button type="submit">Join the waitlist</button>
+      </div>
+      <p class="subtext">Building now &mdash; be the first to know when we&rsquo;re ready.</p>
+    </div>
+
+    <div class="hero-right">
+      <div class="feature-card">
+        <div class="card-icon">🏥</div>
+        <div class="card-info">
+          <strong>Care coordination &amp; medical records</strong>
+          <span>Appointments, providers &amp; notes in one place</span>
+        </div>
+      </div>
+      <div class="feature-card">
+        <div class="card-icon">📋</div>
+        <div class="card-info">
+          <strong>Insurance &amp; benefits navigation</strong>
+          <span>Decode coverage, claims &amp; appeals</span>
+        </div>
+      </div>
+      <div class="feature-card">
+        <div class="card-icon">💊</div>
+        <div class="card-info">
+          <strong>Medication tracking &amp; reminders</strong>
+          <span>Schedules, interactions &amp; refill alerts</span>
+        </div>
+      </div>
+      <div class="feature-card">
+        <div class="card-icon">👨‍👩‍👧</div>
+        <div class="card-info">
+          <strong>Family sharing &amp; communication</strong>
+          <span>Everyone on the same page, finally</span>
+        </div>
+      </div>
+      <div class="feature-card">
+        <div class="card-icon">📄</div>
+        <div class="card-info">
+          <strong>Legal documents &amp; directives</strong>
+          <span>POA, DNR, advance directives &amp; more</span>
+        </div>
+      </div>
+      <div class="feature-card">
+        <div class="card-icon">💰</div>
+        <div class="card-info">
+          <strong>Financial planning &amp; tracking</strong>
+          <span>Care costs, budgets &amp; long-term financing</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="trust-bar">
+    <div class="trust-item">
+      <strong>12,000+</strong>
+      <span>Families on the waitlist</span>
+    </div>
+    <div class="trust-divider"></div>
+    <div class="trust-item">
+      <strong>Free</strong>
+      <span>To get started</span>
+    </div>
+    <div class="trust-divider"></div>
+    <div class="trust-item">
+      <strong>One place</strong>
+      <span>For everything that matters</span>
+    </div>
+  </div>
+
+  <footer>&copy; 2026 Parental Care Guide &mdash; parentalcareguide.com</footer>
+
+</body>
+</html>

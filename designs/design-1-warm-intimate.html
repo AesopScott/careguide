@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PCG — Warm & Intimate</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Nunito:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --cream: #FAF7F2;
+      --terra: #C4714B;
+      --sage: #6B8F71;
+      --brown: #5C3D2E;
+      --muted: #8C7B73;
+    }
+
+    body {
+      font-family: 'Nunito', 'Segoe UI', sans-serif;
+      background: var(--cream);
+      color: var(--brown);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Subtle organic texture overlay */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23C4714B' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    header {
+      position: relative;
+      z-index: 1;
+      padding: 32px 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 1.1rem;
+      font-weight: 400;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--terra);
+    }
+
+    .logo span {
+      color: var(--sage);
+    }
+
+    .nav-link {
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .nav-link:hover { color: var(--terra); }
+
+    main {
+      position: relative;
+      z-index: 1;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 24px 80px;
+    }
+
+    .hero {
+      max-width: 680px;
+      text-align: center;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--terra);
+      margin-bottom: 28px;
+      position: relative;
+    }
+
+    .eyebrow::before,
+    .eyebrow::after {
+      content: '—';
+      margin: 0 10px;
+      color: var(--muted);
+      opacity: 0.5;
+    }
+
+    h1 {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: clamp(2.6rem, 6vw, 4rem);
+      font-weight: 300;
+      line-height: 1.2;
+      color: var(--brown);
+      margin-bottom: 28px;
+    }
+
+    h1 em {
+      font-style: italic;
+      color: var(--terra);
+    }
+
+    .body-copy {
+      font-size: 1.05rem;
+      line-height: 1.8;
+      color: var(--muted);
+      font-weight: 300;
+      margin-bottom: 16px;
+      max-width: 520px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .tagline {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 1.35rem;
+      font-style: italic;
+      font-weight: 400;
+      color: var(--sage);
+      margin: 36px 0;
+    }
+
+    .divider {
+      width: 48px;
+      height: 1px;
+      background: var(--terra);
+      margin: 0 auto 36px;
+      opacity: 0.4;
+    }
+
+    .form-wrap {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .form-wrap input {
+      padding: 14px 22px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 0.95rem;
+      background: white;
+      border: 1.5px solid #E0D6CE;
+      border-radius: 100px;
+      width: 280px;
+      outline: none;
+      color: var(--brown);
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .form-wrap input::placeholder { color: #BBA99E; }
+    .form-wrap input:focus {
+      border-color: var(--terra);
+      box-shadow: 0 0 0 3px rgba(196, 113, 75, 0.1);
+    }
+
+    .form-wrap button {
+      padding: 14px 30px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      background: var(--terra);
+      color: white;
+      border: none;
+      border-radius: 100px;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+    }
+
+    .form-wrap button:hover {
+      background: var(--brown);
+      transform: translateY(-1px);
+    }
+
+    .subtext {
+      margin-top: 18px;
+      font-size: 0.8rem;
+      color: var(--muted);
+      opacity: 0.7;
+    }
+
+    /* Decorative leaf shapes */
+    .leaf-accent {
+      position: absolute;
+      opacity: 0.08;
+      pointer-events: none;
+    }
+
+    .leaf-1 {
+      top: 80px;
+      left: -40px;
+      width: 200px;
+      height: 200px;
+      background: var(--sage);
+      border-radius: 60% 40% 70% 30% / 50% 60% 40% 50%;
+    }
+
+    .leaf-2 {
+      bottom: 60px;
+      right: -60px;
+      width: 300px;
+      height: 300px;
+      background: var(--terra);
+      border-radius: 40% 60% 30% 70% / 60% 40% 70% 30%;
+    }
+
+    footer {
+      position: relative;
+      z-index: 1;
+      padding: 24px 48px;
+      text-align: center;
+      font-size: 0.78rem;
+      color: var(--muted);
+      opacity: 0.6;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="leaf-accent leaf-1"></div>
+  <div class="leaf-accent leaf-2"></div>
+
+  <header>
+    <div class="logo">Parental <span>Care</span> Guide</div>
+    <a href="#" class="nav-link">Early Access</a>
+  </header>
+
+  <main>
+    <div class="hero">
+      <p class="eyebrow">For adult children everywhere</p>
+      <h1>You're doing<br>your <em>best</em> for them.<br>Let us help you.</h1>
+      <p class="body-copy">Navigating aging parents — the appointments, the paperwork, the hard conversations — shouldn't have to be done alone.</p>
+      <p class="tagline">"A trusted guide through the hardest years."</p>
+      <div class="divider"></div>
+      <div class="form-wrap">
+        <input type="email" placeholder="Your email address" />
+        <button type="submit">Join the waitlist</button>
+      </div>
+      <p class="subtext">Building now &mdash; be the first to know when we're ready.</p>
+    </div>
+  </main>
+
+  <footer>&copy; 2026 Parental Care Guide</footer>
+
+</body>
+</html>

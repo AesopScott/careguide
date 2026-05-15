@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PCG — Midnight Premium</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --navy: #0D1B2A;
+      --navy-mid: #162436;
+      --gold: #C9A84C;
+      --gold-light: #E8C878;
+      --cream: #F0EBE3;
+      --muted: rgba(240,235,227,0.45);
+    }
+
+    body {
+      font-family: 'Lato', 'Helvetica Neue', sans-serif;
+      background: var(--navy);
+      color: var(--cream);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Star-field effect */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        radial-gradient(1px 1px at 10% 15%, rgba(255,255,255,0.3) 0%, transparent 100%),
+        radial-gradient(1px 1px at 30% 40%, rgba(255,255,255,0.2) 0%, transparent 100%),
+        radial-gradient(1px 1px at 55% 20%, rgba(255,255,255,0.25) 0%, transparent 100%),
+        radial-gradient(1px 1px at 70% 60%, rgba(255,255,255,0.2) 0%, transparent 100%),
+        radial-gradient(1px 1px at 85% 35%, rgba(255,255,255,0.3) 0%, transparent 100%),
+        radial-gradient(1px 1px at 20% 75%, rgba(255,255,255,0.15) 0%, transparent 100%),
+        radial-gradient(1px 1px at 90% 80%, rgba(255,255,255,0.2) 0%, transparent 100%),
+        radial-gradient(1px 1px at 45% 85%, rgba(255,255,255,0.1) 0%, transparent 100%);
+      pointer-events: none;
+    }
+
+    header {
+      position: relative;
+      z-index: 1;
+      padding: 36px 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      font-family: 'Libre Baskerville', Georgia, serif;
+      font-size: 1rem;
+      font-weight: 400;
+      letter-spacing: 0.06em;
+      color: var(--cream);
+    }
+
+    .logo-accent {
+      color: var(--gold);
+    }
+
+    .header-line {
+      width: 1px;
+      height: 40px;
+      background: rgba(240,235,227,0.15);
+      margin: 0 auto;
+    }
+
+    main {
+      position: relative;
+      z-index: 1;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 60px 24px;
+      text-align: center;
+    }
+
+    .gold-rule {
+      width: 64px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      margin: 0 auto 36px;
+    }
+
+    .eyebrow {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 28px;
+    }
+
+    h1 {
+      font-family: 'Libre Baskerville', Georgia, serif;
+      font-size: clamp(2.4rem, 5vw, 3.8rem);
+      font-weight: 400;
+      line-height: 1.2;
+      color: var(--cream);
+      max-width: 700px;
+      margin-bottom: 28px;
+    }
+
+    h1 em {
+      font-style: italic;
+      color: var(--gold-light);
+    }
+
+    .gold-rule-thin {
+      width: 32px;
+      height: 1px;
+      background: var(--gold);
+      margin: 0 auto 28px;
+      opacity: 0.4;
+    }
+
+    .body-copy {
+      font-size: 1.05rem;
+      font-weight: 300;
+      line-height: 1.8;
+      color: var(--muted);
+      max-width: 500px;
+      margin: 0 auto 52px;
+    }
+
+    /* Card */
+    .card {
+      background: var(--navy-mid);
+      border: 1px solid rgba(201,168,76,0.2);
+      padding: 44px 48px;
+      max-width: 440px;
+      width: 100%;
+      position: relative;
+    }
+
+    .card::before,
+    .card::after {
+      content: '';
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      border-color: var(--gold);
+      border-style: solid;
+      opacity: 0.4;
+    }
+
+    .card::before {
+      top: -1px;
+      left: -1px;
+      border-width: 1px 0 0 1px;
+    }
+
+    .card::after {
+      bottom: -1px;
+      right: -1px;
+      border-width: 0 1px 1px 0;
+    }
+
+    .card-label {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 20px;
+    }
+
+    .card h3 {
+      font-family: 'Libre Baskerville', Georgia, serif;
+      font-size: 1.4rem;
+      font-weight: 400;
+      color: var(--cream);
+      margin-bottom: 8px;
+    }
+
+    .card p {
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-bottom: 28px;
+      line-height: 1.6;
+    }
+
+    .card input {
+      width: 100%;
+      padding: 14px 18px;
+      font-family: 'Lato', sans-serif;
+      font-size: 0.9rem;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(240,235,227,0.15);
+      color: var(--cream);
+      outline: none;
+      margin-bottom: 12px;
+      transition: border-color 0.2s;
+    }
+
+    .card input::placeholder { color: rgba(240,235,227,0.25); }
+    .card input:focus { border-color: var(--gold); }
+
+    .card button {
+      width: 100%;
+      padding: 15px 24px;
+      font-family: 'Lato', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      background: linear-gradient(135deg, var(--gold), var(--gold-light));
+      color: var(--navy);
+      border: none;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+
+    .card button:hover { opacity: 0.9; }
+
+    .card .fine {
+      margin-top: 14px;
+      font-size: 0.68rem;
+      color: rgba(240,235,227,0.25);
+      letter-spacing: 0.04em;
+    }
+
+    footer {
+      position: relative;
+      z-index: 1;
+      padding: 24px 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .footer-text {
+      font-size: 0.72rem;
+      color: rgba(240,235,227,0.2);
+      letter-spacing: 0.06em;
+    }
+
+    @media (max-width: 640px) {
+      header { padding: 24px; }
+      .card { padding: 32px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="logo">Parental <span class="logo-accent">Care</span> Guide</div>
+    <div class="header-line"></div>
+    <div class="logo" style="opacity:0.3; font-size:0.72rem; letter-spacing:0.12em;">EST. 2026</div>
+  </header>
+
+  <main>
+    <div class="gold-rule"></div>
+    <p class="eyebrow">For families who refuse to navigate this alone</p>
+    <h1>When the most important<br>person needs care — <em>you need<br>someone in your corner.</em></h1>
+    <div class="gold-rule-thin"></div>
+    <p class="body-copy">The medical system is complicated. Insurance is a maze. Facilities are overwhelming. We built the guide we wish had existed — comprehensive, compassionate, and clear.</p>
+
+    <div class="card">
+      <p class="card-label">Private early access</p>
+      <h3>Reserve your place.</h3>
+      <p>We're opening access to a select group of families before our public launch.</p>
+      <input type="email" placeholder="Email address" />
+      <button type="submit">Request invitation</button>
+      <p class="fine">Confidential &middot; No obligation &middot; Unsubscribe anytime</p>
+    </div>
+  </main>
+
+  <footer>
+    <span class="footer-text">&copy; 2026 Parental Care Guide</span>
+    <span class="footer-text">parentalcareguide.com</span>
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PCG — Gradient Dawn</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Gilda+Display&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Jost', 'Segoe UI', sans-serif;
+      min-height: 100vh;
+      background: #FDE8E8;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Multi-layer sunrise gradient */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        linear-gradient(
+          160deg,
+          #FFF5F0 0%,
+          #FFD6CC 15%,
+          #F4B8C1 30%,
+          #E8A0B4 45%,
+          #D4A0C8 60%,
+          #B8A8D8 75%,
+          #98A8E0 90%,
+          #8ABCE8 100%
+        );
+      z-index: 0;
+    }
+
+    /* Soft vignette */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(ellipse at center, transparent 40%, rgba(255,255,255,0.15) 100%);
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    header {
+      position: relative;
+      z-index: 2;
+      padding: 36px 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      font-family: 'Gilda Display', Georgia, serif;
+      font-size: 1.1rem;
+      color: rgba(40, 30, 50, 0.7);
+      letter-spacing: 0.04em;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .nav-text {
+      font-size: 0.78rem;
+      font-weight: 400;
+      color: rgba(40, 30, 50, 0.5);
+    }
+
+    .nav-btn {
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: rgba(40, 30, 50, 0.7);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(40, 30, 50, 0.25);
+      padding-bottom: 1px;
+    }
+
+    main {
+      position: relative;
+      z-index: 2;
+      min-height: calc(100vh - 120px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 24px 80px;
+      text-align: center;
+    }
+
+    /* Floating card */
+    .glass-card {
+      background: rgba(255, 255, 255, 0.35);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      border-radius: 28px;
+      padding: 72px 64px;
+      max-width: 640px;
+      width: 100%;
+      box-shadow:
+        0 8px 32px rgba(160, 100, 160, 0.12),
+        0 2px 8px rgba(160, 100, 160, 0.08),
+        inset 0 1px 0 rgba(255,255,255,0.8);
+    }
+
+    .season-label {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: rgba(80, 50, 100, 0.5);
+      margin-bottom: 28px;
+    }
+
+    h1 {
+      font-family: 'Gilda Display', Georgia, serif;
+      font-size: clamp(2.4rem, 5.5vw, 3.8rem);
+      font-weight: 400;
+      line-height: 1.2;
+      color: rgba(30, 20, 50, 0.85);
+      margin-bottom: 24px;
+    }
+
+    h1 .light-italic {
+      font-style: italic;
+      color: rgba(120, 70, 140, 0.8);
+    }
+
+    .ornament {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin: 24px auto;
+    }
+
+    .ornament-line {
+      height: 1px;
+      width: 40px;
+      background: rgba(120, 80, 140, 0.25);
+    }
+
+    .ornament-dot {
+      width: 5px;
+      height: 5px;
+      background: rgba(120, 80, 140, 0.35);
+      border-radius: 50%;
+    }
+
+    .body-text {
+      font-size: 1rem;
+      font-weight: 300;
+      line-height: 1.85;
+      color: rgba(40, 30, 60, 0.6);
+      max-width: 440px;
+      margin: 0 auto 40px;
+    }
+
+    .form-inline {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .form-inline input {
+      padding: 15px 22px;
+      font-family: 'Jost', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 300;
+      background: rgba(255, 255, 255, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      border-radius: 100px;
+      outline: none;
+      color: rgba(30, 20, 50, 0.8);
+      width: 240px;
+      transition: background 0.2s, box-shadow 0.2s;
+    }
+
+    .form-inline input::placeholder { color: rgba(80, 60, 100, 0.35); }
+    .form-inline input:focus {
+      background: rgba(255, 255, 255, 0.75);
+      box-shadow: 0 0 0 3px rgba(140, 100, 160, 0.15);
+    }
+
+    .form-inline button {
+      padding: 15px 28px;
+      font-family: 'Jost', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      background: rgba(80, 40, 100, 0.75);
+      color: rgba(255, 255, 255, 0.92);
+      border: none;
+      border-radius: 100px;
+      cursor: pointer;
+      backdrop-filter: blur(10px);
+      transition: background 0.2s;
+    }
+
+    .form-inline button:hover { background: rgba(80, 40, 100, 0.88); }
+
+    .fine {
+      margin-top: 18px;
+      font-size: 0.75rem;
+      color: rgba(80, 60, 100, 0.4);
+    }
+
+    /* Bottom ambient shapes */
+    .blob-1 {
+      position: fixed;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(255,200,220,0.4) 0%, transparent 70%);
+      top: -100px;
+      left: -100px;
+      z-index: 0;
+      animation: float 8s ease-in-out infinite;
+    }
+
+    .blob-2 {
+      position: fixed;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(180,160,220,0.3) 0%, transparent 70%);
+      bottom: -150px;
+      right: -100px;
+      z-index: 0;
+      animation: float 10s ease-in-out infinite reverse;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(-20px) scale(1.03); }
+    }
+
+    footer {
+      position: relative;
+      z-index: 2;
+      padding: 20px;
+      text-align: center;
+      font-size: 0.72rem;
+      color: rgba(80, 60, 100, 0.35);
+    }
+
+    @media (max-width: 640px) {
+      header { padding: 24px; }
+      .glass-card { padding: 48px 28px; border-radius: 20px; }
+      .form-inline input { width: 100%; }
+      .form-inline button { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="blob-1"></div>
+  <div class="blob-2"></div>
+
+  <header>
+    <div class="logo">Parental Care Guide</div>
+    <div class="header-right">
+      <span class="nav-text">Launching 2026</span>
+      <a href="#" class="nav-btn">Early access</a>
+    </div>
+  </header>
+
+  <main>
+    <div class="glass-card">
+      <p class="season-label">For every season of family</p>
+
+      <h1>The guide for<br>life's <span class="light-italic">hardest</span><br>chapter.</h1>
+
+      <div class="ornament">
+        <div class="ornament-line"></div>
+        <div class="ornament-dot"></div>
+        <div class="ornament-line"></div>
+      </div>
+
+      <p class="body-text">Caring for aging parents touches every part of your life. Medical decisions, insurance mazes, legal paperwork, family dynamics. We hold it together so you can focus on what matters.</p>
+
+      <div class="form-inline">
+        <input type="email" placeholder="Your email address" />
+        <button>Notify me →</button>
+      </div>
+      <p class="fine">We're building this now &middot; No spam, ever</p>
+    </div>
+  </main>
+
+  <footer>&copy; 2026 Parental Care Guide</footer>
+
+</body>
+</html>

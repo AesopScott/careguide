@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PCG — Social Media Strategy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Gilda+Display&family=Jost:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --deep-plum-solid: #4B2464;
+      --deep-plum: rgba(80, 40, 100, 0.82);
+      --text-dark:  rgba(30, 18, 48, 0.90);
+      --text-mid:   rgba(60, 40, 80, 0.65);
+      --text-light: rgba(60, 40, 80, 0.40);
+      --glass-bg:   rgba(255, 255, 255, 0.28);
+      --glass-border: rgba(255, 255, 255, 0.58);
+      --yt:   #FF4444;
+      --ig:   #C84B9C;
+      --li:   #2A6AB5;
+      --fb:   #3A6BC9;
+      --pin:  #B4294B;
+      --tt:   #111111;
+      --green: #2A7A52;
+      --amber: #C9882C;
+    }
+
+    body {
+      font-family: 'Jost', 'Segoe UI', sans-serif;
+      min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background: linear-gradient(148deg,
+        #FFF5F0 0%, #FFD6CC 12%, #F4B8C1 26%,
+        #E8A0B4 40%, #D4A0C8 55%,
+        #B8A8D8 70%, #98A8E0 84%, #8ABCE8 100%
+      );
+      z-index: 0;
+    }
+
+    .blob { position: fixed; border-radius: 50%; pointer-events: none; z-index: 0; }
+    .blob-1 { width: 560px; height: 560px; background: radial-gradient(circle, rgba(255,210,220,0.45) 0%, transparent 70%); top: -140px; left: -120px; }
+    .blob-2 { width: 700px; height: 700px; background: radial-gradient(circle, rgba(170,148,210,0.28) 0%, transparent 70%); bottom: -200px; right: -160px; }
+
+    .top-bar { position: relative; z-index: 2; height: 4px; background: linear-gradient(90deg, #FFD6CC, #F4B8C1, #E8A0B4, #D4A0C8, #B8A8D8, #98A8E0, #8ABCE8); }
+
+    /* ── Header ── */
+    header {
+      position: relative; z-index: 2;
+      padding: 24px 60px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .logo { font-family: 'Gilda Display', Georgia, serif; font-size: 1.1rem; color: var(--text-dark); }
+    .logo span { color: var(--deep-plum-solid); }
+    nav { display: flex; align-items: center; gap: 28px; }
+    nav a { font-size: 0.82rem; font-weight: 400; color: var(--text-mid); text-decoration: none; transition: color 0.2s; }
+    nav a:hover { color: var(--text-dark); }
+    nav a.active { color: var(--text-dark); font-weight: 500; }
+    .btn-nav { padding: 10px 22px; background: var(--deep-plum); color: rgba(255,255,255,0.92) !important; border-radius: 100px; font-weight: 500 !important; backdrop-filter: blur(10px); transition: background 0.2s !important; }
+    .btn-nav:hover { background: rgba(60,25,80,0.92) !important; }
+
+    /* ── Hero ── */
+    .hero {
+      position: relative; z-index: 2;
+      max-width: 1100px; margin: 0 auto;
+      padding: 52px 60px 64px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(255,255,255,0.38); border: 1px solid var(--glass-border);
+      border-radius: 100px; padding: 7px 16px; margin-bottom: 20px;
+      backdrop-filter: blur(8px); font-size: 0.74rem; font-weight: 500; color: var(--text-dark);
+    }
+    .hero-eyebrow::before { content: ''; width: 6px; height: 6px; background: linear-gradient(135deg, #E8A0B4, #B8A8D8); border-radius: 50%; }
+
+    .hero h1 {
+      font-family: 'Gilda Display', Georgia, serif;
+      font-size: clamp(2.2rem, 4vw, 3.2rem);
+      font-weight: 400; line-height: 1.12;
+      color: var(--text-dark); margin-bottom: 18px;
+    }
+    .hero h1 em { font-style: italic; color: var(--deep-plum-solid); }
+
+    .hero p {
+      font-size: 0.95rem; font-weight: 300;
+      line-height: 1.8; color: var(--text-mid);
+    }
+
+    /* Hero right — big stat cluster */
+    .stat-cluster {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .stat-card {
+      background: rgba(255,255,255,0.32);
+      border: 1px solid var(--glass-border);
+      border-radius: 18px; padding: 22px;
+      backdrop-filter: blur(14px);
+      box-shadow: 0 4px 16px rgba(160,100,180,0.07), inset 0 1px 0 rgba(255,255,255,0.7);
+      text-align: center;
+    }
+
+    .stat-card.wide { grid-column: span 2; }
+
+    .stat-num {
+      font-family: 'Gilda Display', Georgia, serif;
+      font-size: 2.2rem; color: var(--text-dark);
+      line-height: 1; margin-bottom: 6px;
+    }
+
+    .stat-label {
+      font-size: 0.75rem; font-weight: 400;
+      color: var(--text-mid); line-height: 1.4;
+    }
+
+    .stat-sub {
+      font-size: 0.66rem; color: var(--text-light);
+      font-style: italic; margin-top: 3px;
+    }
+
+    /* ── Section wrapper ── */
+    .section {
+      position: relative; z-index: 2;
+      max-width: 1100px; margin: 0 auto;
+      padding: 0 60px 72px;
+    }
+
+    .section-header {
+      display: flex; align-items: baseline;
+      gap: 16px; margin-bottom: 28px;
+    }
+
+    .section-num {
+      font-family: 'Gilda Display', Georgia, serif;
+      font-size: 3rem; font-weight: 400;
+      color: var(--deep-plum-solid); opacity: 0.18;
+      line-height: 1;
+    }
+
+    .section-title {
+      font-family: 'Gilda Display', Georgia, serif;
+      font-size: 1.5rem; font-weight: 400;
+      color: var(--text-dark);
+    }
+
+    /* ── Channel cards ── */
+    .channels-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+
+    .channel-card {
+      background: rgba(255,255,255,0.28);
+      border: 1px solid var(--glass-border);
+      border-radius: 18px; overflow: hidden;
+      backdrop-filter: blur(14px);
+      box-shadow: 0 4px 16px rgba(160,100,180,0.06), inset 0 1px 0 rgba(255,255,255,0.7);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .channel-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 28px rgba(160,100,180,0.12), inset 0 1px 0 rgba(255,255,255,0.7);
+    }
+
+    /* Colored accent bar at top */
+    .channel-bar { height: 4px; }
+    .bar-yt  { background: var(--yt); }
+    .bar-ig  { background: linear-gradient(90deg, #F58529, #DD2A7B, #8134AF); }
+    .bar-li  { background: var(--li); }
+    .bar-fb  { background: var(--fb); }
+    .bar-pin { background: var(--pin); }
+    .bar-tt  { background: linear-gradient(90deg, #69C9D0, #EE1D52); }
+
+    .channel-body { padding: 20px; }
+
+    .channel-top {
+      display: flex; align-items: center;
+      gap: 12px; margin-bottom: 14px;
+    }
+
+    .channel-logo {
+      width: 40px; height: 40px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem; flex-shrink: 0;
+      background: rgba(255,255,255,0.5);
+      border: 1px solid rgba(255,255,255,0.7);
+    }
+
+    .channel-meta { flex: 1; }
+
+    .channel-name { font-size: 0.92rem; font-weight: 600; color: var(--text-dark); }
+    .channel-handle { font-size: 0.72rem; color: var(--text-light); margin-top: 1px; }
+
+    .priority-pill {
+      padding: 4px 10px; border-radius: 100px;
+      font-size: 0.62rem; font-weight: 700;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      flex-shrink: 0;
+    }
+    .pill-1 { background: rgba(42,122,82,0.12); color: var(--green); border: 1px solid rgba(42,122,82,0.25); }
+    .pill-2 { background: rgba(42,106,181,0.10); color: var(--li); border: 1px solid rgba(42,106,181,0.22); }
+    .pill-3 { background: rgba(201,136,44,0.12); color: var(--amber); border: 1px solid rgba(201,136,44,0.25); }
+
+    .channel-why {
+      font-size: 0.78rem; font-weight: 300;
+      line-height: 1.65; color: var(--text-mid); margin-bottom: 14px;
+    }
+
+    .channel-footer {
+      border-top: 1px solid rgba(255,255,255,0.45);
+      padding-top: 12px;
+      display: flex; align-items: center;
+      justify-content: space-between; gap: 8px;
+    }
+
+    .cadence-label { font-size: 0.68rem; color: var(--text-light); }
+    .cadence-val { font-size: 0.76rem; font-weight: 600; color: var(--text-dark); }
+
+    /* ── Content Pillars — visual wheel-style ── */
+    .pillars-wrap {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+
+    .pillar-card {
+      background: rgba(255,255,255,0.28);
+      border: 1px solid var(--glass-border);
+      border-radius: 18px; padding: 24px;
+      backdrop-filter: blur(14px);
+      box-shadow: 0 4px 16px rgba(160,100,180,0.06), inset 0 1px 0 rgba(255,255,255,0.7);
+      position: relative; overflow: hidden;
+    }
+
+    .pillar-bg-num {
+      position: absolute; top: -10px; right: 10px;
+      font-family: 'Gilda Display', Georgia, serif;
+      font-size: 5rem; font-weight: 400;
+      color: var(--deep-plum-solid); opacity: 0.06;
+      line-height: 1; pointer-events: none;
+      user-select: none;
+    }
+
+    .pillar-icon-wrap {
+      width: 44px; height: 44px; border-radius: 12px;
+      background: rgba(255,255,255,0.5);
+      border: 1px solid rgba(255,255,255,0.7);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem; margin-bottom: 14px;
+    }
+
+    .pillar-title { font-size: 0.92rem; font-weight: 600; color: var(--text-dark); margin-bottom: 8px; }
+    .pillar-desc { font-size: 0.78rem; font-weight: 300; line-height: 1.65; color: var(--text-mid); margin-bottom: 14px; }
+
+    .pillar-examples { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+    .pillar-examples li {
+      font-size: 0.72rem; color: var(--text-mid);
+      display: flex; align-items: flex-start; gap: 7px;
+      line-height: 1.45;
+    }
+    .pillar-examples li::before {
+      content: '';
+      width: 4px; height: 4px;
+      background: var(--deep-plum-solid);
+      border-radius: 50%; flex-shrink: 0;
+      margin-top: 5px; opacity: 0.5;
+    }
+
+    /* ── Hook formula — visual cards ── */
+    .hooks-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .hook-card {
+      background: rgba(255,255,255,0.28);
+      border: 1px solid var(--glass-border);
+      border-radius: 18px; overflow: hidden;
+      backdrop-filter: blur(14px);
+      box-shadow: 0 4px 16px rgba(160,100,180,0.06), inset 0 1px 0 rgba(255,255,255,0.7);
+    }
+
+    .hook-type-bar {
+      padding: 10px 20px;
+      background: rgba(80,40,100,0.08);
+      border-bottom: 1px solid rgba(255,255,255,0.4);
+      font-size: 0.65rem; font-weight: 700;
+      letter-spacing: 0.16em; text-transform: uppercase;
+      color: var(--deep-plum-solid);
+    }
+
+    .hook-body { padding: 20px; }
+
+    .hook-quote {
+      font-family: 'Gilda Display', Georgia, serif;
+      font-style: italic; font-size: 1rem;
+      color: var(--text-dark); line-height: 1.55;
+      margin-bottom: 12px;
+    }
+
+    .hook-why {
+      font-size: 0.76rem; font-weight: 300;
+      line-height: 1.65; color: var(--text-mid);
+    }
+
+    /* ── Phase roadmap — visual horizontal timeline ── */
+    .roadmap {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+      position: relative;
+    }
+
+    /* Connecting line */
+    .roadmap::before {
+      content: '';
+      position: absolute;
+      top: 28px; left: calc(100% / 8);
+      right: calc(100% / 8);
+      height: 2px;
+      background: linear-gradient(90deg,
+        rgba(180,140,210,0.3),
+        rgba(180,140,210,0.6) 30%,
+        rgba(180,140,210,0.6) 70%,
+        rgba(180,140,210,0.3)
+      );
+    }
+
+    .phase-col { padding: 0 8px; position: relative; }
+
+    .phase-dot-wrap {
+      display: flex; justify-content: center;
+      margin-bottom: 16px; position: relative; z-index: 1;
+    }
+
+    .phase-dot {
+      width: 56px; height: 56px;
+      background: rgba(255,255,255,0.45);
+      border: 2px solid rgba(255,255,255,0.75);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem;
+      box-shadow: 0 4px 16px rgba(160,100,180,0.1);
+      backdrop-filter: blur(10px);
+    }
+
+    .phase-card {
+      background: rgba(255,255,255,0.28);
+      border: 1px solid var(--glass-border);
+      border-radius: 16px; padding: 18px;
+      backdrop-filter: blur(14px);
+      box-shadow: 0 4px 16px rgba(160,100,180,0.06), inset 0 1px 0 rgba(255,255,255,0.7);
+    }
+
+    .phase-period {
+      font-size: 0.62rem; font-weight: 600;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--deep-plum-solid); opacity: 0.7;
+      margin-bottom: 6px;
+    }
+
+    .phase-name {
+      font-family: 'Gilda Display', Georgia, serif;
+      font-size: 0.95rem; font-weight: 400;
+      color: var(--text-dark); margin-bottom: 10px;
+      line-height: 1.3;
+    }
+
+    .phase-tasks { list-style: none; display: flex; flex-direction: column; gap: 5px; }
+    .phase-tasks li {
+      font-size: 0.72rem; font-weight: 300;
+      color: var(--text-mid); display: flex;
+      align-items: flex-start; gap: 6px; line-height: 1.4;
+    }
+    .phase-tasks li::before {
+      content: '→';
+      color: var(--deep-plum-solid); font-size: 0.65rem;
+      flex-shrink: 0; margin-top: 1px;
+    }
+
+    /* ── KPI strip ── */
+    .kpi-strip {
+      position: relative; z-index: 2;
+      background: rgba(80,40,100,0.72);
+      border-top: 1px solid rgba(255,255,255,0.15);
+      border-bottom: 1px solid rgba(255,255,255,0.15);
+      backdrop-filter: blur(16px);
+      padding: 36px 60px;
+      display: flex;
+      justify-content: center;
+      gap: 0;
+      flex-wrap: wrap;
+      margin-bottom: 72px;
+    }
+
+    .kpi-item {
+      flex: 1; min-width: 180px;
+      text-align: center;
+      padding: 0 32px;
+    }
+
+    .kpi-item:not(:last-child) {
+      border-right: 1px solid rgba(255,255,255,0.12);
+    }
+
+    .kpi-num {
+      font-family: 'Gilda Display', Georgia, serif;
+      font-size: 2.4rem; font-weight: 400;
+      color: rgba(255,255,255,0.95);
+      line-height: 1; margin-bottom: 6px;
+    }
+
+    .kpi-label { font-size: 0.78rem; font-weight: 300; color: rgba(255,255,255,0.55); line-height: 1.4; }
+    .kpi-when { font-size: 0.66rem; font-style: italic; color: rgba(255,255,255,0.32); margin-top: 3px; }
+
+    /* ── Cadence table visual ── */
+    .cadence-visual {
+      display: flex; flex-direction: column; gap: 10px;
+    }
+
+    .cad-row {
+      background: rgba(255,255,255,0.28);
+      border: 1px solid var(--glass-border);
+      border-radius: 14px; padding: 16px 20px;
+      backdrop-filter: blur(14px);
+      display: grid;
+      grid-template-columns: 160px 1fr auto;
+      gap: 20px;
+      align-items: center;
+    }
+
+    .cad-channel {
+      display: flex; align-items: center; gap: 10px;
+    }
+
+    .cad-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+
+    .cad-name { font-size: 0.86rem; font-weight: 600; color: var(--text-dark); }
+
+    .cad-bar-wrap { flex: 1; }
+
+    .cad-bar-label { font-size: 0.7rem; color: var(--text-mid); margin-bottom: 5px; }
+
+    .cad-bar-track {
+      height: 6px; background: rgba(255,255,255,0.35);
+      border-radius: 100px; overflow: hidden;
+    }
+
+    .cad-bar-fill { height: 100%; border-radius: 100px; }
+
+    .cad-count { font-size: 0.82rem; font-weight: 600; color: var(--text-dark); white-space: nowrap; text-align: right; }
+    .cad-unit { font-size: 0.66rem; color: var(--text-light); }
+
+    footer { position: relative; z-index: 2; padding: 28px 60px; text-align: center; font-size: 0.73rem; font-weight: 300; color: var(--text-light); }
+
+    @media (max-width: 900px) {
+      .hero { grid-template-columns: 1fr; padding: 40px 24px 48px; gap: 36px; }
+      .section { padding: 0 24px 56px; }
+      .channels-grid, .pillars-wrap { grid-template-columns: 1fr; }
+      .hooks-grid { grid-template-columns: 1fr; }
+      .roadmap { grid-template-columns: 1fr 1fr; }
+      .roadmap::before { display: none; }
+      .kpi-strip { padding: 32px 24px; gap: 24px; }
+      .kpi-item { border-right: none !important; border-bottom: 1px solid rgba(255,255,255,0.1); padding: 16px 0; }
+      .cad-row { grid-template-columns: 1fr; }
+      header { padding: 24px; }
+      footer { padding: 20px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="top-bar"></div>
+
+  <header>
+    <div class="logo">Parental <span>Care</span> Guide</div>
+    <nav>
+      <a href="design-combined.html">Home</a>
+      <a href="ecosystem-diagram.html">How it works</a>
+      <a href="trusted-professionals.html">Professionals</a>
+      <a href="#" class="active">Social strategy</a>
+      <a href="professional-outreach-plan.html">Partner plan</a>
+      <a href="design-combined.html" class="btn-nav">Join the waitlist</a>
+    </nav>
+  </header>
+
+  <!-- ── Hero ── -->
+  <div class="hero">
+    <div>
+      <div class="hero-eyebrow">Social Media Strategy</div>
+      <h1>Build the audience<br>before the doors<br><em>ever open.</em></h1>
+      <p>A channel-by-channel plan for establishing PCG across social media, growing the waitlist organically, and earning the trust of families navigating elder care — before a single dollar is spent on advertising.</p>
+    </div>
+    <div class="stat-cluster">
+      <div class="stat-card">
+        <div class="stat-num">6</div>
+        <div class="stat-label">Social channels to launch</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">$0</div>
+        <div class="stat-label">Phase 1 budget</div>
+        <div class="stat-sub">Pure organic</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">10K</div>
+        <div class="stat-label">Follower goal at launch</div>
+        <div class="stat-sub">Across all channels</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">5K</div>
+        <div class="stat-label">Waitlist signups by launch day</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── KPI strip ── -->
+  <div class="kpi-strip">
+    <div class="kpi-item">
+      <div class="kpi-num">1M+</div>
+      <div class="kpi-label">Organic video views target</div>
+      <div class="kpi-when">YouTube &amp; Reels combined</div>
+    </div>
+    <div class="kpi-item">
+      <div class="kpi-num">$2</div>
+      <div class="kpi-label">Target cost per waitlist signup</div>
+      <div class="kpi-when">Via paid ads in Phase 3</div>
+    </div>
+    <div class="kpi-item">
+      <div class="kpi-num">2×</div>
+      <div class="kpi-label">YouTube content &amp; ad platform in one</div>
+      <div class="kpi-when">Organic channel + pre-roll ads</div>
+    </div>
+    <div class="kpi-item">
+      <div class="kpi-num">4–5×</div>
+      <div class="kpi-label">Instagram Reels per week</div>
+      <div class="kpi-when">Primary reach driver</div>
+    </div>
+  </div>
+
+  <!-- ── 1. Channels ── -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">01</div>
+      <h2 class="section-title">Channel priorities</h2>
+    </div>
+    <div class="channels-grid">
+
+      <div class="channel-card">
+        <div class="channel-bar bar-yt"></div>
+        <div class="channel-body">
+          <div class="channel-top">
+            <div class="channel-logo">▶️</div>
+            <div class="channel-meta">
+              <div class="channel-name">YouTube</div>
+              <div class="channel-handle">@parentalcareguide</div>
+            </div>
+            <span class="priority-pill pill-1">Priority 1</span>
+          </div>
+          <p class="channel-why">Long-form content ranks in search for years. A family Googling "how to navigate Medicare for my mom" finds us before we've spent a dollar. YouTube is also the ad platform — organic content and paid campaigns live in the same place. Build the channel first, run ads from it.</p>
+          <div class="channel-footer">
+            <span class="cadence-label">Cadence</span>
+            <span class="cadence-val">2 videos / month</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="channel-card">
+        <div class="channel-bar bar-ig"></div>
+        <div class="channel-body">
+          <div class="channel-top">
+            <div class="channel-logo">📸</div>
+            <div class="channel-meta">
+              <div class="channel-name">Instagram</div>
+              <div class="channel-handle">@parentalcareguide</div>
+            </div>
+            <span class="priority-pill pill-1">Priority 2</span>
+          </div>
+          <p class="channel-why">Reels reach new audiences organically. The 45–60 demographic is active here and caregiver content performs extremely well. One viral Reel can add thousands of followers overnight. Runs directly into Facebook's ad system — one setup, two platforms.</p>
+          <div class="channel-footer">
+            <span class="cadence-label">Cadence</span>
+            <span class="cadence-val">4–5 Reels / week</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="channel-card">
+        <div class="channel-bar bar-li"></div>
+        <div class="channel-body">
+          <div class="channel-top">
+            <div class="channel-logo">💼</div>
+            <div class="channel-meta">
+              <div class="channel-name">LinkedIn</div>
+              <div class="channel-handle">Parental Care Guide</div>
+            </div>
+            <span class="priority-pill pill-1">Priority 3</span>
+          </div>
+          <p class="channel-why">Two audiences in one: the 45–55 professional who is also a caregiver, and the healthcare professionals we want in our directory. Thought leadership from the founder positions PCG as the credible platform and drives professional partnership outreach.</p>
+          <div class="channel-footer">
+            <span class="cadence-label">Cadence</span>
+            <span class="cadence-val">3 posts / week</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="channel-card">
+        <div class="channel-bar bar-fb"></div>
+        <div class="channel-body">
+          <div class="channel-top">
+            <div class="channel-logo">📘</div>
+            <div class="channel-meta">
+              <div class="channel-name">Facebook</div>
+              <div class="channel-handle">Parental Care Guide</div>
+            </div>
+            <span class="priority-pill pill-2">Required</span>
+          </div>
+          <p class="channel-why">Required to run Facebook and Instagram ads. Also reaches the 55+ caregiver demographic that still lives on Facebook. Mirror Instagram content with slightly longer captions. The real value is ad targeting access — the most precise audience tools available.</p>
+          <div class="channel-footer">
+            <span class="cadence-label">Cadence</span>
+            <span class="cadence-val">Mirror Instagram</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="channel-card">
+        <div class="channel-bar bar-pin"></div>
+        <div class="channel-body">
+          <div class="channel-top">
+            <div class="channel-logo">📌</div>
+            <div class="channel-meta">
+              <div class="channel-name">Pinterest</div>
+              <div class="channel-handle">@parentalcareguide</div>
+            </div>
+            <span class="priority-pill pill-3">Priority 4</span>
+          </div>
+          <p class="channel-why">Underrated for this niche. Pinterest's core user — women 45–60 — is exactly who PCG serves. "Elder care checklist" and "Medicare explained" are high-search terms with low content competition. Pins drive steady referral traffic for years with no ongoing effort.</p>
+          <div class="channel-footer">
+            <span class="cadence-label">Cadence</span>
+            <span class="cadence-val">8–10 pins / week</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="channel-card">
+        <div class="channel-bar bar-tt"></div>
+        <div class="channel-body">
+          <div class="channel-top">
+            <div class="channel-logo">🎵</div>
+            <div class="channel-meta">
+              <div class="channel-name">TikTok</div>
+              <div class="channel-handle">@parentalcareguide</div>
+            </div>
+            <span class="priority-pill pill-3">Priority 5</span>
+          </div>
+          <p class="channel-why">The caregiver community on TikTok is larger and more engaged than most people expect. Honest, emotional content about caring for aging parents goes viral here. No extra production — reuse every Instagram Reel. Zero additional cost for meaningful organic reach.</p>
+          <div class="channel-footer">
+            <span class="cadence-label">Cadence</span>
+            <span class="cadence-val">Repost all Reels</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── 2. Posting cadence visual ── -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">02</div>
+      <h2 class="section-title">Weekly posting volume</h2>
+    </div>
+    <div class="cadence-visual">
+
+      <div class="cad-row">
+        <div class="cad-channel"><div class="cad-dot" style="background:var(--yt)"></div><div class="cad-name">YouTube</div></div>
+        <div class="cad-bar-wrap">
+          <div class="cad-bar-label">2 videos per month · Long-form educational</div>
+          <div class="cad-bar-track"><div class="cad-bar-fill" style="width:20%; background:var(--yt);"></div></div>
+        </div>
+        <div class="cad-count">2<span class="cad-unit">/mo</span></div>
+      </div>
+
+      <div class="cad-row">
+        <div class="cad-channel"><div class="cad-dot" style="background:var(--ig)"></div><div class="cad-name">Instagram</div></div>
+        <div class="cad-bar-wrap">
+          <div class="cad-bar-label">4–5 Reels + 3 feed posts per week · Primary growth driver</div>
+          <div class="cad-bar-track"><div class="cad-bar-fill" style="width:90%; background:linear-gradient(90deg,#F58529,#DD2A7B);"></div></div>
+        </div>
+        <div class="cad-count">~32<span class="cad-unit">/mo</span></div>
+      </div>
+
+      <div class="cad-row">
+        <div class="cad-channel"><div class="cad-dot" style="background:var(--li)"></div><div class="cad-name">LinkedIn</div></div>
+        <div class="cad-bar-wrap">
+          <div class="cad-bar-label">3 per week · Founder voice, thought leadership</div>
+          <div class="cad-bar-track"><div class="cad-bar-fill" style="width:30%; background:var(--li);"></div></div>
+        </div>
+        <div class="cad-count">12<span class="cad-unit">/mo</span></div>
+      </div>
+
+      <div class="cad-row">
+        <div class="cad-channel"><div class="cad-dot" style="background:var(--fb)"></div><div class="cad-name">Facebook</div></div>
+        <div class="cad-bar-wrap">
+          <div class="cad-bar-label">Mirror Instagram · Auto-scheduled, no extra effort</div>
+          <div class="cad-bar-track"><div class="cad-bar-fill" style="width:90%; background:var(--fb);"></div></div>
+        </div>
+        <div class="cad-count">~32<span class="cad-unit">/mo</span></div>
+      </div>
+
+      <div class="cad-row">
+        <div class="cad-channel"><div class="cad-dot" style="background:var(--pin)"></div><div class="cad-name">Pinterest</div></div>
+        <div class="cad-bar-wrap">
+          <div class="cad-bar-label">8–10 pins per week · Repurposed carousels &amp; infographics</div>
+          <div class="cad-bar-track"><div class="cad-bar-fill" style="width:75%; background:var(--pin);"></div></div>
+        </div>
+        <div class="cad-count">~36<span class="cad-unit">/mo</span></div>
+      </div>
+
+      <div class="cad-row">
+        <div class="cad-channel"><div class="cad-dot" style="background:#555"></div><div class="cad-name">TikTok</div></div>
+        <div class="cad-bar-wrap">
+          <div class="cad-bar-label">All Reels reposted · Zero additional production</div>
+          <div class="cad-bar-track"><div class="cad-bar-fill" style="width:90%; background:linear-gradient(90deg,#69C9D0,#EE1D52);"></div></div>
+        </div>
+        <div class="cad-count">~20<span class="cad-unit">/mo</span></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── 3. Content pillars ── -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">03</div>
+      <h2 class="section-title">6 content pillars</h2>
+    </div>
+    <div class="pillars-wrap">
+
+      <div class="pillar-card">
+        <div class="pillar-bg-num">1</div>
+        <div class="pillar-icon-wrap">😔</div>
+        <div class="pillar-title">The Reality of Caregiving</div>
+        <p class="pillar-desc">Raw, honest content about what it actually feels like. Earns trust faster than any polished brand message.</p>
+        <ul class="pillar-examples">
+          <li>Nobody tells you how long a Medicare appeal takes</li>
+          <li>The night I realized my dad couldn't manage his own finances</li>
+          <li>5 things I wish someone had told me in the first 30 days</li>
+        </ul>
+      </div>
+
+      <div class="pillar-card">
+        <div class="pillar-bg-num">2</div>
+        <div class="pillar-icon-wrap">📚</div>
+        <div class="pillar-title">Practical Education</div>
+        <p class="pillar-desc">The how-tos, checklists, and explainers families are Googling at midnight. Drives search traffic and saves real time.</p>
+        <ul class="pillar-examples">
+          <li>How to get Power of Attorney before it's an emergency</li>
+          <li>Medicare vs. Medicaid — what's actually the difference</li>
+          <li>7 documents every aging parent needs to have ready</li>
+        </ul>
+      </div>
+
+      <div class="pillar-card">
+        <div class="pillar-bg-num">3</div>
+        <div class="pillar-icon-wrap">🎙️</div>
+        <div class="pillar-title">Expert Voices</div>
+        <p class="pillar-desc">Short interviews with directory professionals. Builds credibility for PCG and gives the professionals visibility.</p>
+        <ul class="pillar-examples">
+          <li>An elder law attorney answers your top 5 questions</li>
+          <li>What a geriatric care manager does — and when to call one</li>
+          <li>How to talk to your parents about finances, with a CFP®</li>
+        </ul>
+      </div>
+
+      <div class="pillar-card">
+        <div class="pillar-bg-num">4</div>
+        <div class="pillar-icon-wrap">💰</div>
+        <div class="pillar-title">Financial Reality</div>
+        <p class="pillar-desc">The cost of care is one of the biggest shocks families face. Honest financial content is underserved and high-search.</p>
+        <ul class="pillar-examples">
+          <li>What assisted living actually costs across the US</li>
+          <li>How families pay for care when savings run out</li>
+          <li>Long-term care insurance — who needs it and when</li>
+        </ul>
+      </div>
+
+      <div class="pillar-card">
+        <div class="pillar-bg-num">5</div>
+        <div class="pillar-icon-wrap">👨‍👩‍👧</div>
+        <div class="pillar-title">Family Dynamics</div>
+        <p class="pillar-desc">The sibling arguments, the guilt, the disagreements. The most emotionally charged content — and the most shared.</p>
+        <ul class="pillar-examples">
+          <li>How to talk to siblings who aren't helping</li>
+          <li>The guilt of putting a parent in memory care</li>
+          <li>When your parent refuses help — what actually works</li>
+        </ul>
+      </div>
+
+      <div class="pillar-card">
+        <div class="pillar-bg-num">6</div>
+        <div class="pillar-icon-wrap">🔨</div>
+        <div class="pillar-title">Behind the Build</div>
+        <p class="pillar-desc">Document building PCG publicly. Founders who build in public grow audiences before they launch — and drive waitlist signups directly.</p>
+        <ul class="pillar-examples">
+          <li>Why we're building this — the personal story behind PCG</li>
+          <li>We just hit 5,000 waitlist signups — here's what we learned</li>
+          <li>What goes into verifying a professional for our directory</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── 4. Hook formula ── -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">04</div>
+      <h2 class="section-title">The hook formula — first 5 seconds</h2>
+    </div>
+    <div class="hooks-grid">
+
+      <div class="hook-card">
+        <div class="hook-type-bar">Pain first</div>
+        <div class="hook-body">
+          <p class="hook-quote">"My mom was diagnosed last year and I had absolutely no idea what I was supposed to do next."</p>
+          <p class="hook-why">Opens with the exact feeling the audience is living. No preamble, no brand name. The person watching knows immediately this is for them — and they won't skip.</p>
+        </div>
+      </div>
+
+      <div class="hook-card">
+        <div class="hook-type-bar">Provocative stat</div>
+        <div class="hook-body">
+          <p class="hook-quote">"53 million Americans are currently caring for an aging parent. Almost none of them had any training for it."</p>
+          <p class="hook-why">Validates the problem at scale. Makes the viewer feel seen and less alone. Stops the scroll because the number is surprising — and the implication hits close to home.</p>
+        </div>
+      </div>
+
+      <div class="hook-card">
+        <div class="hook-type-bar">Mistake reveal</div>
+        <div class="hook-body">
+          <p class="hook-quote">"The most expensive mistake families make when a parent is hospitalized — and almost everyone makes it."</p>
+          <p class="hook-why">Fear of making the wrong decision is a core emotional driver for caregivers. This hook promises to protect them from a real, costly consequence they didn't know to avoid.</p>
+        </div>
+      </div>
+
+      <div class="hook-card">
+        <div class="hook-type-bar">Counterintuitive</div>
+        <div class="hook-body">
+          <p class="hook-quote">"The worst time to set up a Power of Attorney is after your parent gets diagnosed with dementia. Here's why."</p>
+          <p class="hook-why">Breaks an assumption the audience didn't know they had. They have to keep watching to understand why their instinct was wrong — and what to do instead.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── 5. Roadmap ── -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">05</div>
+      <h2 class="section-title">Launch roadmap</h2>
+    </div>
+    <div class="roadmap">
+
+      <div class="phase-col">
+        <div class="phase-dot-wrap"><div class="phase-dot">🔧</div></div>
+        <div class="phase-card">
+          <div class="phase-period">Month 1–2</div>
+          <div class="phase-name">Foundation</div>
+          <ul class="phase-tasks">
+            <li>Claim all handles</li>
+            <li>Set up profiles consistently</li>
+            <li>Build 30-day content backlog</li>
+            <li>Film the founder story</li>
+            <li>Set up scheduling tool</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="phase-col">
+        <div class="phase-dot-wrap"><div class="phase-dot">📣</div></div>
+        <div class="phase-card">
+          <div class="phase-period">Month 3–4</div>
+          <div class="phase-name">Organic Launch</div>
+          <ul class="phase-tasks">
+            <li>Post founder story first</li>
+            <li>Daily Reels across channels</li>
+            <li>LinkedIn 3× per week</li>
+            <li>Every post CTA to waitlist</li>
+            <li>Reply to every comment</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="phase-col">
+        <div class="phase-dot-wrap"><div class="phase-dot">🚀</div></div>
+        <div class="phase-card">
+          <div class="phase-period">Month 5–6</div>
+          <div class="phase-name">Amplification</div>
+          <ul class="phase-tasks">
+            <li>$500–1K/mo YouTube ads</li>
+            <li>Boost top Reels as paid ads</li>
+            <li>Film expert segments</li>
+            <li>Pitch 2 podcasts per month</li>
+            <li>Target: 5K followers</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="phase-col">
+        <div class="phase-dot-wrap"><div class="phase-dot">🎯</div></div>
+        <div class="phase-card">
+          <div class="phase-period">Month 7+</div>
+          <div class="phase-name">Pre-Launch Surge</div>
+          <ul class="phase-tasks">
+            <li>Announce launch date</li>
+            <li>Founding member campaign</li>
+            <li>Product walkthrough teaser</li>
+            <li>Ask waitlist to share</li>
+            <li>Full paid media push</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <footer>&copy; 2026 Parental Care Guide &mdash; Social Media Strategy</footer>
+
+</body>
+</html>

@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PCG — Emotional Full-Bleed</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --rose: #E8D5D0;
+      --mauve: #9B7B7B;
+      --mauve-dark: #6B4F4F;
+      --cream: #FBF9F7;
+      --text: #2A1F1F;
+      --muted: #A08080;
+    }
+
+    body {
+      font-family: 'Source Sans 3', 'Segoe UI', sans-serif;
+      background: var(--cream);
+      min-height: 100vh;
+    }
+
+    /* Full-bleed top section */
+    .hero-section {
+      min-height: 92vh;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Painterly gradient background */
+    .hero-section::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 70% at 20% 30%, rgba(232,213,208,0.9) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 80% at 80% 70%, rgba(155,123,123,0.25) 0%, transparent 55%),
+        radial-gradient(ellipse 90% 90% at 50% 50%, rgba(251,249,247,1) 0%, rgba(232,213,208,0.4) 100%);
+      z-index: 0;
+    }
+
+    /* Subtle circular decorations */
+    .circle-1 {
+      position: absolute;
+      width: 600px;
+      height: 600px;
+      border: 1px solid rgba(155,123,123,0.12);
+      border-radius: 50%;
+      top: -200px;
+      right: -200px;
+      z-index: 0;
+    }
+
+    .circle-2 {
+      position: absolute;
+      width: 400px;
+      height: 400px;
+      border: 1px solid rgba(155,123,123,0.08);
+      border-radius: 50%;
+      bottom: -100px;
+      left: -100px;
+      z-index: 0;
+    }
+
+    header {
+      position: relative;
+      z-index: 2;
+      padding: 36px 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      font-family: 'Libre Caslon Text', Georgia, serif;
+      font-size: 1rem;
+      font-weight: 400;
+      color: var(--mauve-dark);
+      letter-spacing: 0.04em;
+    }
+
+    .header-tagline {
+      font-size: 0.75rem;
+      color: var(--muted);
+      font-style: italic;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 24px 80px;
+      text-align: center;
+    }
+
+    .petal {
+      width: 4px;
+      height: 40px;
+      background: linear-gradient(to bottom, transparent, var(--mauve), transparent);
+      margin: 0 auto 36px;
+      border-radius: 4px;
+      opacity: 0.5;
+    }
+
+    h1 {
+      font-family: 'Libre Caslon Text', Georgia, serif;
+      font-size: clamp(2.4rem, 6vw, 4.2rem);
+      font-weight: 400;
+      line-height: 1.2;
+      color: var(--text);
+      max-width: 640px;
+      margin-bottom: 32px;
+    }
+
+    h1 em {
+      font-style: italic;
+      color: var(--mauve-dark);
+    }
+
+    .body-para {
+      font-size: 1.1rem;
+      font-weight: 300;
+      line-height: 1.85;
+      color: var(--muted);
+      max-width: 480px;
+      margin: 0 auto 16px;
+    }
+
+    .quote-line {
+      font-family: 'Libre Caslon Text', Georgia, serif;
+      font-style: italic;
+      font-size: 1.2rem;
+      color: var(--mauve);
+      margin: 28px auto 48px;
+      max-width: 400px;
+    }
+
+    .form-center {
+      max-width: 380px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    .form-center input {
+      width: 100%;
+      padding: 16px 22px;
+      font-family: 'Source Sans 3', sans-serif;
+      font-size: 0.95rem;
+      background: white;
+      border: 1.5px solid rgba(155,123,123,0.25);
+      border-radius: 100px;
+      outline: none;
+      color: var(--text);
+      margin-bottom: 12px;
+      text-align: center;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .form-center input::placeholder { color: var(--muted); opacity: 0.6; }
+    .form-center input:focus {
+      border-color: var(--mauve);
+      box-shadow: 0 0 0 4px rgba(155,123,123,0.08);
+    }
+
+    .form-center button {
+      width: 100%;
+      padding: 16px 22px;
+      font-family: 'Source Sans 3', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      background: var(--mauve-dark);
+      color: white;
+      border: none;
+      border-radius: 100px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .form-center button:hover { background: #5A3E3E; }
+
+    .fine-print {
+      margin-top: 16px;
+      font-size: 0.78rem;
+      color: var(--muted);
+      opacity: 0.6;
+    }
+
+    /* Bottom message */
+    .bottom-section {
+      background: var(--mauve-dark);
+      padding: 60px;
+      text-align: center;
+    }
+
+    .bottom-section blockquote {
+      font-family: 'Libre Caslon Text', Georgia, serif;
+      font-style: italic;
+      font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+      color: var(--rose);
+      max-width: 600px;
+      margin: 0 auto 20px;
+      line-height: 1.6;
+    }
+
+    .bottom-section cite {
+      font-size: 0.78rem;
+      font-style: normal;
+      color: rgba(232,213,208,0.45);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    footer {
+      padding: 20px 60px;
+      text-align: center;
+      font-size: 0.75rem;
+      color: var(--muted);
+      opacity: 0.5;
+    }
+
+    @media (max-width: 640px) {
+      header { padding: 24px; }
+      .bottom-section { padding: 40px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="hero-section">
+    <div class="circle-1"></div>
+    <div class="circle-2"></div>
+
+    <header>
+      <div class="logo">Parental Care Guide</div>
+      <span class="header-tagline">For the families in the middle of it</span>
+    </header>
+
+    <div class="hero-content">
+      <div class="petal"></div>
+      <h1>You love them.<br>And it's <em>incredibly</em><br>hard right now.</h1>
+      <p class="body-para">The appointments that multiply. The insurance calls that go nowhere. The late-night Googling. The family group chat that never quite agrees.</p>
+      <p class="quote-line">"We built the place we needed when we were going through it."</p>
+      <div class="form-center">
+        <input type="email" placeholder="Your email address" />
+        <button>Be the first to know when we open</button>
+        <p class="fine-print">No spam. Just a note when the doors open.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom-section">
+    <blockquote>"Caring for a parent is the most invisible hard thing most people will ever do."</blockquote>
+    <cite>— The Parental Care Guide team</cite>
+  </div>
+
+  <footer>&copy; 2026 Parental Care Guide &mdash; parentalcareguide.com</footer>
+
+</body>
+</html>

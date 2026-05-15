@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PCG — Split Screen</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,600;0,900;1,300;1,600&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --forest: #1B4332;
+      --forest-mid: #2D6A4F;
+      --forest-light: #40916C;
+      --cream: #FAF7F2;
+      --stone: #EDE8E0;
+      --text: #1A1A1A;
+      --muted: #7A8C84;
+    }
+
+    body {
+      font-family: 'Outfit', 'Segoe UI', sans-serif;
+      min-height: 100vh;
+      display: grid;
+      grid-template-rows: 1fr;
+    }
+
+    .split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 100vh;
+    }
+
+    /* LEFT — forest green panel */
+    .panel-left {
+      background: var(--forest);
+      padding: 56px 64px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Abstract organic shape */
+    .panel-left::after {
+      content: '';
+      position: absolute;
+      bottom: -100px;
+      right: -100px;
+      width: 400px;
+      height: 400px;
+      background: rgba(255,255,255,0.03);
+      border-radius: 60% 40% 30% 70% / 50% 60% 40% 50%;
+    }
+
+    .panel-logo {
+      font-family: 'Fraunces', Georgia, serif;
+      font-size: 1.05rem;
+      font-weight: 300;
+      color: rgba(255,255,255,0.6);
+      letter-spacing: 0.04em;
+    }
+
+    .panel-logo strong {
+      font-weight: 600;
+      color: white;
+    }
+
+    .panel-hero {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 60px 0;
+    }
+
+    .left-kicker {
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.4);
+      margin-bottom: 24px;
+    }
+
+    h1 {
+      font-family: 'Fraunces', Georgia, serif;
+      font-size: clamp(2.8rem, 4.5vw, 4rem);
+      font-weight: 300;
+      line-height: 1.1;
+      color: white;
+      margin-bottom: 32px;
+    }
+
+    h1 em {
+      font-style: italic;
+      font-weight: 600;
+      color: rgba(255,255,255,0.85);
+    }
+
+    .left-body {
+      font-size: 0.95rem;
+      font-weight: 300;
+      line-height: 1.8;
+      color: rgba(255,255,255,0.55);
+      max-width: 340px;
+    }
+
+    .panel-footer-left {
+      display: flex;
+      gap: 24px;
+    }
+
+    .left-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 14px;
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 100px;
+      font-size: 0.72rem;
+      font-weight: 400;
+      color: rgba(255,255,255,0.45);
+    }
+
+    .left-pill::before {
+      content: '';
+      width: 5px;
+      height: 5px;
+      background: var(--forest-light);
+      border-radius: 50%;
+    }
+
+    /* RIGHT — cream panel */
+    .panel-right {
+      background: var(--cream);
+      padding: 56px 64px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .right-eyebrow {
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 20px;
+    }
+
+    .right-headline {
+      font-family: 'Fraunces', Georgia, serif;
+      font-size: clamp(1.6rem, 3vw, 2.2rem);
+      font-weight: 600;
+      line-height: 1.2;
+      color: var(--text);
+      margin-bottom: 12px;
+    }
+
+    .right-sub {
+      font-size: 0.9rem;
+      font-weight: 300;
+      line-height: 1.7;
+      color: var(--muted);
+      margin-bottom: 40px;
+      max-width: 320px;
+    }
+
+    /* Feature checklist */
+    .check-list {
+      list-style: none;
+      margin-bottom: 44px;
+    }
+
+    .check-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 12px 0;
+      font-size: 0.88rem;
+      color: var(--text);
+      border-bottom: 1px solid var(--stone);
+    }
+
+    .check-list li:first-child { border-top: 1px solid var(--stone); }
+
+    .check-icon {
+      width: 20px;
+      height: 20px;
+      background: var(--forest-mid);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .check-icon::after {
+      content: '✓';
+      color: white;
+      font-size: 0.65rem;
+      font-weight: 700;
+    }
+
+    .form-stacked {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .form-stacked input {
+      padding: 15px 20px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.9rem;
+      background: white;
+      border: 1.5px solid var(--stone);
+      border-radius: 10px;
+      outline: none;
+      color: var(--text);
+      transition: border-color 0.2s;
+    }
+
+    .form-stacked input::placeholder { color: #C0B8AF; }
+    .form-stacked input:focus { border-color: var(--forest-mid); }
+
+    .form-stacked button {
+      padding: 15px 20px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 600;
+      background: var(--forest);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .form-stacked button:hover { background: var(--forest-mid); }
+
+    .fine {
+      margin-top: 12px;
+      font-size: 0.75rem;
+      color: var(--muted);
+      opacity: 0.6;
+    }
+
+    @media (max-width: 768px) {
+      .split { grid-template-columns: 1fr; }
+      .panel-left { padding: 48px 28px; min-height: 60vh; }
+      .panel-right { padding: 48px 28px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="split">
+    <div class="panel-left">
+      <div class="panel-logo"><strong>Parental</strong> Care Guide</div>
+
+      <div class="panel-hero">
+        <p class="left-kicker">For the sandwich generation</p>
+        <h1>The hardest<br>role you'll<br>ever <em>love.</em></h1>
+        <p class="left-body">Caring for aging parents is one of the most demanding, invisible things adults face. We built the guide that should have existed all along.</p>
+      </div>
+
+      <div class="panel-footer-left">
+        <span class="left-pill">Launching 2026</span>
+        <span class="left-pill">Free early access</span>
+      </div>
+    </div>
+
+    <div class="panel-right">
+      <p class="right-eyebrow">Early access</p>
+      <h2 class="right-headline">One place for<br>everything that matters.</h2>
+      <p class="right-sub">Medical coordination, insurance navigation, legal documents, family communication — finally organized.</p>
+
+      <ul class="check-list">
+        <li><span class="check-icon"></span> Care coordination & medical records</li>
+        <li><span class="check-icon"></span> Insurance & benefits navigation</li>
+        <li><span class="check-icon"></span> Medication tracking & reminders</li>
+        <li><span class="check-icon"></span> Family sharing & communication</li>
+        <li><span class="check-icon"></span> Legal documents & directives</li>
+      </ul>
+
+      <div class="form-stacked">
+        <input type="email" placeholder="Enter your email address" />
+        <button>Get early access →</button>
+        <p class="fine">We're building this now. Be first in the door.</p>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

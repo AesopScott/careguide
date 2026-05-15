@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PCG — Trusted Professionals Directory</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Gilda+Display&family=Jost:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --deep-plum:  rgba(80, 40, 100, 0.82);
+      --deep-plum-solid: #4B2464;
+      --text-dark:  rgba(30, 18, 48, 0.88);
+      --text-mid:   rgba(60, 40, 80, 0.65);
+      --text-light: rgba(60, 40, 80, 0.42);
+      --glass-bg:   rgba(255, 255, 255, 0.30);
+      --glass-bg-strong: rgba(255, 255, 255, 0.52);
+      --glass-border: rgba(255, 255, 255, 0.58);
+      --verified:   #2A7A52;
+    }
+
+    body {
+      font-family: 'Jost', 'Segoe UI', sans-serif;
+      min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(
+        148deg,
+        #FFF5F0 0%, #FFD6CC 12%, #F4B8C1 26%,
+        #E8A0B4 40%, #D4A0C8 55%,
+        #B8A8D8 70%, #98A8E0 84%, #8ABCE8 100%
+      );
+      z-index: 0;
+    }
+
+    .blob { position: fixed; border-radius: 50%; pointer-events: none; z-index: 0; }
+    .blob-1 {
+      width: 560px; height: 560px;
+      background: radial-gradient(circle, rgba(255,210,220,0.4) 0%, transparent 70%);
+      top: -140px; left: -120px;
+    }
+    .blob-2 {
+      width: 700px; height: 700px;
+      background: radial-gradient(circle, rgba(170,148,210,0.25) 0%, transparent 70%);
+      bottom: -200px; right: -160px;
+    }
+
+    .top-bar {
+      position: relative; z-index: 2;
+      height: 4px;
+      background: linear-gradient(90deg, #FFD6CC, #F4B8C1, #E8A0B4, #D4A0C8, #B8A8D8, #98A8E0, #8ABCE8);
+    }
+
+    /* Header */
+    header {
+      position: relative; z-index: 2;
+      padding: 24px 60px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+
+    .logo {
+      font-family: 'Gilda Display', Georgia, serif;
+      font-size: 1.1rem;
+      color: var(--text-dark);
+    }
+
+    .logo span { color: var(--deep-plum-solid); }
+
+    nav { display: flex; align-items: center; gap: 28px; }
+
+    nav a {
+      font-size: 0.82rem; font-weight: 400;
+      color: var(--text-mid); text-decoration: none;
+      transition: color 0.2s;
+    }
+    nav a:hover { color: var(--text-dark); }
+    nav a.active { color: var(--text-dark); font-weight: 500; }
+
+    .btn-nav {
+      padding: 10px 22px;
+      background: var(--deep-plum);
+      color: rgba(255,255,255,0.92) !important;
+      border-radius: 100px;
+      font-weight: 500 !important;
+      backdrop-filter: blur(10px);
+      transition: background 0.2s !important;
+    }
+    .btn-nav:hover { background: rgba(60,25,80,0.92) !important; }
+
+    /* Page hero */
+    .page-hero {
+      position: relative; z-index: 2;
+      max-width: 1100px; margin: 0 auto;
+      padding: 52px 60px 40px;
+      display: flex; align-items: flex-end; justify-content: space-between;
+      gap: 40px; flex-wrap: wrap;
+    }
+
+    .page-hero-left { max-width: 560px; }
+
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(255,255,255,0.38);
+      border: 1px solid var(--glass-border);
+      border-radius: 100px; padding: 7px 16px;
+      margin-bottom: 20px; backdrop-filter: blur(8px);
+      font-size: 0.75rem; font-weight: 500;
+      color: var(--text-dark); letter-spacing: 0.02em;
+    }
+
+    .hero-eyebrow::before {
+      content: '';
+      width: 6px; height: 6px;
+      background: linear-gradient(135deg, #E8A0B4, #B8A8D8);
+      border-radius: 50%;
+    }
+
+    .page-hero h1 {
+      font-family: 'Gilda Display', Georgia, serif;
+      font-size: clamp(2rem, 3.5vw, 2.8rem);
+      font-weight: 400; line-height: 1.15;
+      color: var(--text-dark); margin-bottom: 16px;
+    }
+
+    .page-hero h1 em { font-style: italic; color: var(--deep-plum-solid); }
+
+    .page-hero p {
+      font-size: 0.95rem; font-weight: 300;
+      line-height: 1.75; color: var(--text-mid);
+    }
+
+    /* Search bar */
+    .search-bar {
+      display: flex; gap: 10px; flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .search-wrap {
+      position: relative;
+    }
+
+    .search-wrap input {
+      padding: 13px 20px 13px 44px;
+      font-family: 'Jost', sans-serif;
+      font-size: 0.88rem; font-weight: 300;
+      background: rgba(255,255,255,0.55);
+      border: 1.5px solid var(--glass-border);
+      border-radius: 100px; outline: none;
+      color: var(--text-dark); width: 260px;
+      backdrop-filter: blur(10px);
+      transition: background 0.2s, box-shadow 0.2s;
+    }
+
+    .search-wrap input::placeholder { color: rgba(80,50,100,0.35); }
+    .search-wrap input:focus {
+      background: rgba(255,255,255,0.72);
+      box-shadow: 0 0 0 3px rgba(180,130,210,0.18);
+    }
+
+    .search-icon {
+      position: absolute; left: 16px; top: 50%;
+      transform: translateY(-50%);
+      font-size: 0.9rem; opacity: 0.4;
+      pointer-events: none;
+    }
+
+    .search-btn {
+      padding: 13px 24px;
+      font-family: 'Jost', sans-serif;
+      font-size: 0.85rem; font-weight: 600;
+      background: var(--deep-plum); color: rgba(255,255,255,0.93);
+      border: none; border-radius: 100px;
+      cursor: pointer; backdrop-filter: blur(10px);
+      transition: background 0.2s;
+    }
+    .search-btn:hover { background: rgba(60,25,80,0.92); }
+
+    /* Category filters */
+    .filters {
+      position: relative; z-index: 2;
+      max-width: 1100px; margin: 0 auto;
+      padding: 0 60px 32px;
+      display: flex; gap: 10px; flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      padding: 8px 20px;
+      font-family: 'Jost', sans-serif;
+      font-size: 0.78rem; font-weight: 500;
+      background: rgba(255,255,255,0.32);
+      border: 1.5px solid rgba(255,255,255,0.55);
+      border-radius: 100px; cursor: pointer;
+      color: var(--text-mid); backdrop-filter: blur(8px);
+      transition: all 0.2s;
+    }
+
+    .filter-btn:hover {
+      background: rgba(255,255,255,0.52);
+      color: var(--text-dark);
+    }
+
+    .filter-btn.active {
+      background: var(--deep-plum);
+      border-color: transparent;
+      color: rgba(255,255,255,0.93);
+    }
+
+    /* Directory grid */
+    .directory {
+      position: relative; z-index: 2;
+      max-width: 1100px; margin: 0 auto;
+      padding: 0 60px 80px;
+    }
+
+    .category-section { margin-bottom: 52px; }
+
+    .category-header {
+      display: flex; align-items: center; gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .category-icon {
+      width: 36px; height: 36px;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.45);
+      border: 1px solid var(--glass-border);
+      display: flex; align-items: center;
+      justify-content: center; font-size: 1rem;
+      backdrop-filter: blur(8px);
+    }
+
+    .category-title {
+      font-family: 'Gilda Display', Georgia, serif;
+      font-size: 1.2rem; color: var(--text-dark);
+    }
+
+    .category-count {
+      font-size: 0.72rem; font-weight: 400;
+      color: var(--text-light); margin-left: 4px;
+    }
+
+    /* Professional cards grid */
+    .pro-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .pro-card {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 18px; padding: 24px;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      box-shadow: 0 4px 16px rgba(160,100,180,0.07),
+                  inset 0 1px 0 rgba(255,255,255,0.7);
+      transition: transform 0.2s, box-shadow 0.2s;
+      display: flex; flex-direction: column; gap: 14px;
+    }
+
+    .pro-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 28px rgba(160,100,180,0.13),
+                  inset 0 1px 0 rgba(255,255,255,0.7);
+    }
+
+    .pro-card-top {
+      display: flex; align-items: flex-start;
+      justify-content: space-between; gap: 12px;
+    }
+
+    .pro-avatar {
+      width: 48px; height: 48px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--glass-bg-strong), rgba(200,180,220,0.4));
+      border: 2px solid rgba(255,255,255,0.7);
+      display: flex; align-items: center;
+      justify-content: center; font-size: 1.2rem;
+      flex-shrink: 0;
+    }
+
+    .pro-info { flex: 1; }
+
+    .pro-name {
+      font-size: 0.92rem; font-weight: 600;
+      color: var(--text-dark); margin-bottom: 2px;
+    }
+
+    .pro-title {
+      font-size: 0.76rem; font-weight: 400;
+      color: var(--text-mid);
+    }
+
+    .verified-badge {
+      display: inline-flex; align-items: center; gap: 4px;
+      padding: 4px 10px;
+      background: rgba(42,122,82,0.12);
+      border: 1px solid rgba(42,122,82,0.25);
+      border-radius: 100px;
+      font-size: 0.65rem; font-weight: 600;
+      color: var(--verified); white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .verified-badge::before {
+      content: '✓';
+      font-size: 0.6rem;
+    }
+
+    .pro-location {
+      font-size: 0.75rem; font-weight: 300;
+      color: var(--text-light);
+      display: flex; align-items: center; gap: 5px;
+    }
+
+    .pro-specialties {
+      display: flex; gap: 6px; flex-wrap: wrap;
+    }
+
+    .specialty-tag {
+      padding: 4px 10px;
+      background: rgba(255,255,255,0.4);
+      border: 1px solid rgba(255,255,255,0.65);
+      border-radius: 100px;
+      font-size: 0.68rem; font-weight: 400;
+      color: var(--text-mid);
+    }
+
+    .pro-card-footer {
+      display: flex; align-items: center;
+      justify-content: space-between;
+      padding-top: 12px;
+      border-top: 1px solid rgba(255,255,255,0.4);
+    }
+
+    .rating {
+      display: flex; align-items: center; gap: 5px;
+      font-size: 0.75rem; color: var(--text-mid);
+    }
+
+    .stars { color: #D4A0C8; letter-spacing: 1px; font-size: 0.7rem; }
+
+    .contact-btn {
+      padding: 7px 16px;
+      font-family: 'Jost', sans-serif;
+      font-size: 0.74rem; font-weight: 600;
+      background: var(--deep-plum);
+      color: rgba(255,255,255,0.92);
+      border: none; border-radius: 100px;
+      cursor: pointer; backdrop-filter: blur(8px);
+      transition: background 0.2s;
+    }
+    .contact-btn:hover { background: rgba(60,25,80,0.92); }
+
+    /* Feature pros CTA */
+    .feature-cta {
+      position: relative; z-index: 2;
+      max-width: 1100px; margin: 0 auto 80px;
+      padding: 0 60px;
+    }
+
+    .feature-cta-card {
+      background: rgba(80,40,100,0.75);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 24px; padding: 44px 52px;
+      backdrop-filter: blur(16px);
+      display: flex; align-items: center;
+      justify-content: space-between; gap: 40px;
+      flex-wrap: wrap;
+      box-shadow: 0 8px 32px rgba(80,40,100,0.2);
+    }
+
+    .cta-text h2 {
+      font-family: 'Gilda Display', Georgia, serif;
+      font-size: 1.6rem; font-weight: 400;
+      color: rgba(255,255,255,0.95); margin-bottom: 10px;
+    }
+
+    .cta-text p {
+      font-size: 0.9rem; font-weight: 300;
+      color: rgba(255,255,255,0.6); line-height: 1.6;
+      max-width: 440px;
+    }
+
+    .cta-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+
+    .btn-white {
+      padding: 13px 26px;
+      font-family: 'Jost', sans-serif;
+      font-size: 0.88rem; font-weight: 600;
+      background: rgba(255,255,255,0.92);
+      color: var(--deep-plum-solid);
+      border: none; border-radius: 100px;
+      cursor: pointer; transition: background 0.2s;
+      white-space: nowrap;
+    }
+    .btn-white:hover { background: white; }
+
+    .btn-ghost {
+      padding: 13px 26px;
+      font-family: 'Jost', sans-serif;
+      font-size: 0.88rem; font-weight: 500;
+      background: transparent;
+      color: rgba(255,255,255,0.7);
+      border: 1.5px solid rgba(255,255,255,0.3);
+      border-radius: 100px; cursor: pointer;
+      transition: border-color 0.2s, color 0.2s;
+      white-space: nowrap;
+    }
+    .btn-ghost:hover {
+      border-color: rgba(255,255,255,0.6);
+      color: rgba(255,255,255,0.92);
+    }
+
+    footer {
+      position: relative; z-index: 2;
+      padding: 20px 60px; text-align: center;
+      font-size: 0.73rem; font-weight: 300;
+      color: var(--text-light);
+    }
+
+    @media (max-width: 900px) {
+      .pro-grid { grid-template-columns: repeat(2, 1fr); }
+      header, .page-hero, .filters, .directory, .feature-cta { padding-left: 24px; padding-right: 24px; }
+    }
+
+    @media (max-width: 600px) {
+      .pro-grid { grid-template-columns: 1fr; }
+      .feature-cta-card { padding: 32px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="top-bar"></div>
+
+  <header>
+    <div class="logo">Parental <span>Care</span> Guide</div>
+    <nav>
+      <a href="design-combined.html">Home</a>
+      <a href="ecosystem-diagram.html">How it works</a>
+      <a href="#" class="active">Professionals</a>
+      <a href="social-media-plan.html">Social strategy</a>
+      <a href="professional-outreach-plan.html">Partner plan</a>
+      <a href="design-combined.html" class="btn-nav">Join the waitlist</a>
+    </nav>
+  </header>
+
+  <!-- Page hero -->
+  <div class="page-hero">
+    <div class="page-hero-left">
+      <div class="hero-eyebrow">Vetted &amp; trusted by PCG</div>
+      <h1>Find the right <em>professional</em><br>for your family's needs.</h1>
+      <p>Every professional in our directory has been reviewed by our team. These are the people we'd send our own parents to.</p>
+    </div>
+    <div class="search-bar">
+      <div class="search-wrap">
+        <span class="search-icon">🔍</span>
+        <input type="text" placeholder="Search by name or specialty&hellip;" />
+      </div>
+      <button class="search-btn">Search</button>
+    </div>
+  </div>
+
+  <!-- Filters -->
+  <div class="filters">
+    <button class="filter-btn active">All professionals</button>
+    <button class="filter-btn">Elder law</button>
+    <button class="filter-btn">Financial planning</button>
+    <button class="filter-btn">Care management</button>
+    <button class="filter-btn">Home care</button>
+    <button class="filter-btn">Mental health</button>
+    <button class="filter-btn">Senior living</button>
+    <button class="filter-btn">Medical</button>
+  </div>
+
+  <!-- Directory -->
+  <div class="directory">
+
+    <!-- Elder Law Attorneys -->
+    <div class="category-section">
+      <div class="category-header">
+        <div class="category-icon">⚖️</div>
+        <span class="category-title">Elder Law Attorneys <span class="category-count">(3 listed)</span></span>
+      </div>
+      <div class="pro-grid">
+
+        <div class="pro-card">
+          <div class="pro-card-top">
+            <div class="pro-avatar">👩‍⚖️</div>
+            <div class="pro-info">
+              <div class="pro-name">Margaret Holloway, Esq.</div>
+              <div class="pro-title">Elder Law &amp; Estate Planning</div>
+            </div>
+            <span class="verified-badge">PCG Verified</span>
+          </div>
+          <div class="pro-location">📍 Boston, MA &middot; Serves New England</div>
+          <div class="pro-specialties">
+            <span class="specialty-tag">Power of Attorney</span>
+            <span class="specialty-tag">Medicaid planning</span>
+            <span class="specialty-tag">Trusts</span>
+          </div>
+          <div class="pro-card-footer">
+            <div class="rating">
+              <span class="stars">★★★★★</span>
+              <span>4.9 (38 reviews)</span>
+            </div>
+            <button class="contact-btn">Contact</button>
+          </div>
+        </div>
+
+        <div class="pro-card">
+          <div class="pro-card-top">
+            <div class="pro-avatar">👨‍⚖️</div>
+            <div class="pro-info">
+              <div class="pro-name">David Reyes, Esq.</div>
+              <div class="pro-title">Elder Law &amp; Special Needs</div>
+            </div>
+            <span class="verified-badge">PCG Verified</span>
+          </div>
+          <div class="pro-location">📍 Chicago, IL &middot; Nationwide remote</div>
+          <div class="pro-specialties">
+            <span class="specialty-tag">Advance directives</span>
+            <span class="specialty-tag">Guardianship</span>
+            <span class="specialty-tag">DNR</span>
+          </div>
+          <div class="pro-card-footer">
+            <div class="rating">
+              <span class="stars">★★★★★</span>
+              <span>4.8 (52 reviews)</span>
+            </div>
+            <button class="contact-btn">Contact</button>
+          </div>
+        </div>
+
+        <div class="pro-card">
+          <div class="pro-card-top">
+            <div class="pro-avatar">👩‍⚖️</div>
+            <div class="pro-info">
+              <div class="pro-name">Patricia Chen, Esq.</div>
+              <div class="pro-title">Estate &amp; Long-Term Care Law</div>
+            </div>
+            <span class="verified-badge">PCG Verified</span>
+          </div>
+          <div class="pro-location">📍 San Francisco, CA &middot; West Coast</div>
+          <div class="pro-specialties">
+            <span class="specialty-tag">Wills &amp; estates</span>
+            <span class="specialty-tag">LTC planning</span>
+            <span class="specialty-tag">VA benefits</span>
+          </div>
+          <div class="pro-card-footer">
+            <div class="rating">
+              <span class="stars">★★★★★</span>
+              <span>5.0 (21 reviews)</span>
+            </div>
+            <button class="contact-btn">Contact</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Financial Advisors -->
+    <div class="category-section">
+      <div class="category-header">
+        <div class="category-icon">💰</div>
+        <span class="category-title">Financial Advisors &amp; Planners <span class="category-count">(3 listed)</span></span>
+      </div>
+      <div class="pro-grid">
+
+        <div class="pro-card">
+          <div class="pro-card-top">
+            <div class="pro-avatar">👨‍💼</div>
+            <div class="pro-info">
+              <div class="pro-name">Robert Langston, CFP®</div>
+              <div class="pro-title">Senior Care Financial Planning</div>
+            </div>
+            <span class="verified-badge">PCG Verified</span>
+          </div>
+          <div class="pro-location">📍 Austin, TX &middot; Nationwide</div>
+          <div class="pro-specialties">
+            <span class="specialty-tag">Care cost planning</span>
+            <span class="specialty-tag">Medicare</span>
+            <span class="specialty-tag">Asset protection</span>
+          </div>
+          <div class="pro-card-footer">
+            <div class="rating">
+              <span class="stars">★★★★★</span>
+              <span>4.9 (44 reviews)</span>
+            </div>
+            <button class="contact-btn">Contact</button>
+          </div>
+        </div>
+
+        <div class="pro-card">
+          <div class="pro-card-top">
+            <div class="pro-avatar">👩‍💼</div>
+            <div class="pro-info">
+              <div class="pro-name">Susan Park, ChFC®</div>
+              <div class="pro-title">Elder Care &amp; Retirement Finance</div>
+            </div>
+            <span class="verified-badge">PCG Verified</span>
+          </div>
+          <div class="pro-location">📍 New York, NY &middot; Tri-state area</div>
+          <div class="pro-specialties">
+            <span class="specialty-tag">LTC insurance</span>
+            <span class="specialty-tag">Medicaid spend-down</span>
+            <span class="specialty-tag">Benefits</span>
+          </div>
+          <div class="pro-card-footer">
+            <div class="rating">
+              <span class="stars">★★★★★</span>
+              <span>4.7 (31 reviews)</span>
+            </div>
+            <button class="contact-btn">Contact</button>
+          </div>
+        </div>
+
+        <div class="pro-card">
+          <div class="pro-card-top">
+            <div class="pro-avatar">👨‍💼</div>
+            <div class="pro-info">
+              <div class="pro-name">James Okafor, CPA/PFS</div>
+              <div class="pro-title">Aging &amp; Estate Tax Planning</div>
+            </div>
+            <span class="verified-badge">PCG Verified</span>
+          </div>
+          <div class="pro-location">📍 Atlanta, GA &middot; Southeast</div>
+          <div class="pro-specialties">
+            <span class="specialty-tag">Tax strategy</span>
+            <span class="specialty-tag">Estate planning</span>
+            <span class="specialty-tag">Trusts</span>
+          </div>
+          <div class="pro-card-footer">
+            <div class="rating">
+              <span class="stars">★★★★★</span>
+              <span>4.8 (27 reviews)</span>
+            </div>
+            <button class="contact-btn">Contact</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Geriatric Care Managers -->
+    <div class="category-section">
+      <div class="category-header">
+        <div class="category-icon">🏥</div>
+        <span class="category-title">Geriatric Care Managers <span class="category-count">(2 listed)</span></span>
+      </div>
+      <div class="pro-grid">
+
+        <div class="pro-card">
+          <div class="pro-card-top">
+            <div class="pro-avatar">👩‍⚕️</div>
+            <div class="pro-info">
+              <div class="pro-name">Dr. Linda Torres, RN-BC</div>
+              <div class="pro-title">Certified Geriatric Care Manager</div>
+            </div>
+            <span class="verified-badge">PCG Verified</span>
+          </div>
+          <div class="pro-location">📍 Denver, CO &middot; Mountain West</div>
+          <div class="pro-specialties">
+            <span class="specialty-tag">Care coordination</span>
+            <span class="specialty-tag">Dementia care</span>
+            <span class="specialty-tag">Transitions</span>
+          </div>
+          <div class="pro-card-footer">
+            <div class="rating">
+              <span class="stars">★★★★★</span>
+              <span>5.0 (19 reviews)</span>
+            </div>
+            <button class="contact-btn">Contact</button>
+          </div>
+        </div>
+
+        <div class="pro-card">
+          <div class="pro-card-top">
+            <div class="pro-avatar">👨‍⚕️</div>
+            <div class="pro-info">
+              <div class="pro-name">Marcus Webb, MSW, CMC</div>
+              <div class="pro-title">Social Work &amp; Care Management</div>
+            </div>
+            <span class="verified-badge">PCG Verified</span>
+          </div>
+          <div class="pro-location">📍 Seattle, WA &middot; Pacific Northwest</div>
+          <div class="pro-specialties">
+            <span class="specialty-tag">Crisis intervention</span>
+            <span class="specialty-tag">Placement</span>
+            <span class="specialty-tag">Family mediation</span>
+          </div>
+          <div class="pro-card-footer">
+            <div class="rating">
+              <span class="stars">★★★★★</span>
+              <span>4.9 (33 reviews)</span>
+            </div>
+            <button class="contact-btn">Contact</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Are you a professional CTA -->
+  <div class="feature-cta">
+    <div class="feature-cta-card">
+      <div class="cta-text">
+        <h2>Are you a professional who serves families like these?</h2>
+        <p>Join our directory and connect with families actively navigating elder care. We verify every listing to keep the quality high and the trust real.</p>
+      </div>
+      <div class="cta-actions">
+        <button class="btn-white">Apply to be listed</button>
+        <button class="btn-ghost">Learn about partnership</button>
+      </div>
+    </div>
+  </div>
+
+  <footer>&copy; 2026 Parental Care Guide &mdash; parentalcareguide.com</footer>
+
+</body>
+</html>

@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PCG — Swiss Grid</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:ital@0;1&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --white: #FFFFFF;
+      --black: #111111;
+      --amber: #E9A84C;
+      --amber-light: #FFF3D9;
+      --gray-light: #F4F4F4;
+      --gray-mid: #CCCCCC;
+      --gray-text: #666666;
+    }
+
+    body {
+      font-family: 'Space Grotesk', 'Helvetica Neue', sans-serif;
+      background: var(--white);
+      color: var(--black);
+      min-height: 100vh;
+    }
+
+    /* Grid overlay lines */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: var(--amber);
+      z-index: 10;
+    }
+
+    header {
+      padding: 0 60px;
+      height: 72px;
+      display: flex;
+      align-items: stretch;
+      border-bottom: 1px solid var(--black);
+    }
+
+    .logo-block {
+      display: flex;
+      align-items: center;
+      padding-right: 40px;
+      border-right: 1px solid var(--black);
+      margin-right: 40px;
+    }
+
+    .logo {
+      font-size: 0.95rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      color: var(--black);
+    }
+
+    .logo-abbr {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--amber);
+      display: block;
+      margin-top: 2px;
+    }
+
+    .header-meta {
+      display: flex;
+      align-items: center;
+      gap: 40px;
+      flex: 1;
+    }
+
+    .meta-item {
+      font-size: 0.68rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gray-text);
+    }
+
+    .header-cta {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+    }
+
+    .btn-outline {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--black);
+      text-decoration: none;
+      border: 1.5px solid var(--black);
+      padding: 8px 20px;
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .btn-outline:hover {
+      background: var(--black);
+      color: white;
+    }
+
+    /* Main grid layout */
+    main {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: calc(100vh - 72px - 64px);
+    }
+
+    .col-left {
+      padding: 80px 60px;
+      border-right: 1px solid var(--black);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .col-right {
+      padding: 80px 60px;
+      background: var(--amber-light);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .number-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--gray-text);
+      letter-spacing: 0.12em;
+      margin-bottom: 48px;
+    }
+
+    h1 {
+      font-size: clamp(3rem, 5vw, 4.8rem);
+      font-weight: 700;
+      line-height: 0.95;
+      letter-spacing: -0.04em;
+      color: var(--black);
+      margin-bottom: 48px;
+    }
+
+    h1 .amber { color: var(--amber); }
+
+    .descriptor-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .descriptor-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      padding: 16px 0;
+      border-top: 1px solid var(--gray-mid);
+      font-size: 0.88rem;
+      color: var(--gray-text);
+      line-height: 1.5;
+    }
+
+    .descriptor-list li .num {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--amber);
+      min-width: 20px;
+      margin-top: 2px;
+    }
+
+    /* Right col */
+    .right-label {
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gray-text);
+      margin-bottom: 32px;
+    }
+
+    .right-headline {
+      font-size: clamp(1.6rem, 3vw, 2.2rem);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+      color: var(--black);
+      margin-bottom: 40px;
+    }
+
+    .form-block input {
+      display: block;
+      width: 100%;
+      padding: 16px 18px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.9rem;
+      background: white;
+      border: 1.5px solid var(--black);
+      color: var(--black);
+      outline: none;
+      margin-bottom: 10px;
+      transition: border-color 0.15s;
+    }
+
+    .form-block input::placeholder { color: var(--gray-mid); }
+    .form-block input:focus { border-color: var(--amber); }
+
+    .form-block button {
+      display: block;
+      width: 100%;
+      padding: 16px 18px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      background: var(--black);
+      color: white;
+      border: none;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .form-block button:hover { background: #333; }
+
+    .form-block .note {
+      margin-top: 12px;
+      font-size: 0.68rem;
+      color: var(--gray-text);
+      font-family: 'Space Mono', monospace;
+    }
+
+    /* Stats row */
+    .stats-row {
+      display: flex;
+      gap: 0;
+      margin-top: 52px;
+      border-top: 1px solid var(--black);
+    }
+
+    .stat {
+      flex: 1;
+      padding: 20px 0 0;
+    }
+
+    .stat:not(:last-child) {
+      border-right: 1px solid var(--black);
+      margin-right: 24px;
+      padding-right: 24px;
+    }
+
+    .stat .val {
+      font-size: 1.6rem;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      color: var(--black);
+    }
+
+    .stat .key {
+      font-size: 0.68rem;
+      color: var(--gray-text);
+      font-family: 'Space Mono', monospace;
+      margin-top: 4px;
+    }
+
+    footer {
+      height: 64px;
+      display: flex;
+      align-items: center;
+      padding: 0 60px;
+      border-top: 1px solid var(--black);
+    }
+
+    .footer-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      font-size: 0.68rem;
+      font-family: 'Space Mono', monospace;
+      color: var(--gray-text);
+    }
+
+    @media (max-width: 768px) {
+      main { grid-template-columns: 1fr; }
+      .col-left { border-right: none; border-bottom: 1px solid var(--black); padding: 48px 24px; }
+      .col-right { padding: 48px 24px; }
+      header { padding: 0 24px; }
+      footer { padding: 0 24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="logo-block">
+      <div class="logo">
+        Parental Care Guide
+        <span class="logo-abbr">PCG / EST. 2026</span>
+      </div>
+    </div>
+    <div class="header-meta">
+      <span class="meta-item">Care navigation</span>
+      <span class="meta-item">Family support</span>
+      <span class="meta-item">Coming soon</span>
+    </div>
+    <div class="header-cta">
+      <a href="#" class="btn-outline">Join waitlist</a>
+    </div>
+  </header>
+
+  <main>
+    <div class="col-left">
+      <div>
+        <p class="number-label">01 / THE PROBLEM</p>
+        <h1>Caring for<br>aging parents<br>is <span class="amber">hard.</span><br>We make it<br>manageable.</h1>
+      </div>
+
+      <ul class="descriptor-list">
+        <li><span class="num">01</span> Medical appointments, records & providers — all tracked in one place.</li>
+        <li><span class="num">02</span> Insurance complexity decoded — claims, coverage, appeals.</li>
+        <li><span class="num">03</span> Legal documents organized — POA, directives, estate basics.</li>
+        <li><span class="num">04</span> Family coordination — get everyone aligned without the chaos.</li>
+        <li><span class="num">05</span> Medication management — schedules, interactions, refills.</li>
+      </ul>
+    </div>
+
+    <div class="col-right">
+      <p class="right-label">02 / Early access</p>
+      <h2 class="right-headline">Get in before<br>we open to<br>the public.</h2>
+      <div class="form-block">
+        <input type="email" placeholder="Email address" />
+        <button>Request early access →</button>
+        <p class="note">// No spam. Unsubscribe at any time.</p>
+      </div>
+
+      <div class="stats-row">
+        <div class="stat">
+          <div class="val">12K</div>
+          <div class="key">On waitlist</div>
+        </div>
+        <div class="stat">
+          <div class="val">Free</div>
+          <div class="key">To start</div>
+        </div>
+        <div class="stat">
+          <div class="val">2026</div>
+          <div class="key">Launch year</div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <span>&copy; 2026 Parental Care Guide</span>
+      <span>parentalcareguide.com</span>
+    </div>
+  </footer>
+
+</body>
+</html>
