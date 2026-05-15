@@ -50,6 +50,7 @@
       --svc-speech: #4285f4;
       --svc-fcm: #ff6d00;
       --svc-email: #ea4335;
+      --svc-sms: #0d9373;
       --svc-run: #34a853;
       --svc-logging: #5f6368;
 
@@ -450,6 +451,7 @@
     .s-speech { background: var(--svc-speech); color: #bfdbfe; }
     .s-fcm { background: var(--svc-fcm); }
     .s-email { background: var(--svc-email); }
+    .s-sms   { background: var(--svc-sms); }
     .s-run { background: var(--svc-run); }
     .s-logging { background: var(--svc-logging); color: #e2e8f0; }
 
@@ -974,6 +976,7 @@
           <div class="block-label">External Services</div>
           <div class="services-row">
             <span class="svc-badge s-firebase">Firebase Auth</span>
+            <span class="svc-badge s-email">Email (password reset)</span>
           </div>
         </div>
         <div class="card-footer"><button class="status-btn" onclick="cycleStatus('card-login', this)">Not Started</button></div>
@@ -1208,6 +1211,7 @@
           <div class="services-row">
             <span class="svc-badge s-firebase">Firestore</span>
             <span class="svc-badge s-claude" style="color:#e9d5ff;">Claude API (feedback loop)</span>
+            <span class="svc-badge s-email">Email (published to family)</span>
           </div>
         </div>
         <div class="card-footer"><button class="status-btn" onclick="cycleStatus('card-care-plan', this)">Not Started</button></div>
@@ -1247,6 +1251,7 @@
             <span class="svc-badge s-firebase">Firebase Storage</span>
             <span class="svc-badge s-firebase">Firestore (metadata)</span>
             <span class="svc-badge s-logging">Cloud Logging (HIPAA)</span>
+            <span class="svc-badge s-email">Email (shared with family)</span>
           </div>
         </div>
         <div class="card-footer"><button class="status-btn" onclick="cycleStatus('card-doc-vault', this)">Not Started</button></div>
@@ -1294,6 +1299,7 @@
             <span class="svc-badge s-run">Cloud Run / FastAPI</span>
             <span class="svc-badge s-claude" style="color:#e9d5ff;">Claude API</span>
             <span class="svc-badge s-firebase">Firestore</span>
+            <span class="svc-badge s-email">Email (optional summary to family)</span>
           </div>
         </div>
         <div class="card-footer"><button class="status-btn" onclick="cycleStatus('card-session-notes', this)">Not Started</button></div>
@@ -1332,6 +1338,7 @@
           <div class="services-row">
             <span class="svc-badge s-firebase">Firestore</span>
             <span class="svc-badge s-stripe">Stripe (invoicing)</span>
+            <span class="svc-badge s-email">Email (invoice delivery)</span>
           </div>
         </div>
         <div class="card-footer"><button class="status-btn" onclick="cycleStatus('card-billing', this)">Not Started</button></div>
@@ -1417,6 +1424,7 @@
             <span class="svc-badge s-firebase">Firestore</span>
             <span class="svc-badge s-fcm">FCM (reminders)</span>
             <span class="svc-badge s-email">Email (overdue alerts)</span>
+            <span class="svc-badge s-sms">SMS (task assigned to family)</span>
           </div>
         </div>
         <div class="card-footer"><button class="status-btn" onclick="cycleStatus('card-task-manager', this)">Not Started</button></div>
@@ -1587,6 +1595,8 @@
           <div class="services-row">
             <span class="svc-badge s-firebase">Firestore</span>
             <span class="svc-badge s-fcm">FCM (reminders)</span>
+            <span class="svc-badge s-email">Email (reminder)</span>
+            <span class="svc-badge s-sms">SMS (reminder)</span>
           </div>
         </div>
         <div class="card-footer"><button class="status-btn" onclick="cycleStatus('card-medications', this)">Not Started</button></div>
@@ -1629,6 +1639,7 @@
           <div class="services-row">
             <span class="svc-badge s-firebase">Firestore</span>
             <span class="svc-badge s-logging">Cloud Logging (HIPAA share events)</span>
+            <span class="svc-badge s-sms">SMS (emergency contacts)</span>
           </div>
         </div>
         <div class="card-footer"><button class="status-btn" onclick="cycleStatus('card-crisis-card', this)">Not Started</button></div>
@@ -1674,6 +1685,8 @@
             <span class="svc-badge s-firebase">Firestore (real-time)</span>
             <span class="svc-badge s-fcm">FCM (push)</span>
             <span class="svc-badge s-claude" style="color:#e9d5ff;">Claude API (draft assist)</span>
+            <span class="svc-badge s-email">Email (digest)</span>
+            <span class="svc-badge s-sms">SMS (high-priority update)</span>
           </div>
         </div>
         <div class="card-footer"><button class="status-btn" onclick="cycleStatus('card-care-updates', this)">Not Started</button></div>
@@ -1712,6 +1725,7 @@
             <span class="svc-badge s-firebase">Firebase Storage</span>
             <span class="svc-badge s-firebase">Firestore</span>
             <span class="svc-badge s-logging">Cloud Logging (HIPAA)</span>
+            <span class="svc-badge s-email">Email (new doc available)</span>
           </div>
         </div>
         <div class="card-footer"><button class="status-btn" onclick="cycleStatus('card-documents', this)">Not Started</button></div>
@@ -1749,6 +1763,8 @@
           <div class="services-row">
             <span class="svc-badge s-firebase">Firestore</span>
             <span class="svc-badge s-fcm">FCM (due date reminders)</span>
+            <span class="svc-badge s-email">Email (task assigned)</span>
+            <span class="svc-badge s-sms">SMS (overdue)</span>
           </div>
         </div>
         <div class="card-footer"><button class="status-btn" onclick="cycleStatus('card-task-list', this)">Not Started</button></div>
@@ -1794,6 +1810,8 @@
             <span class="svc-badge s-firebase">Firestore</span>
             <span class="svc-badge s-fcm">FCM (reminders)</span>
             <span class="svc-badge s-claude" style="color:#e9d5ff;">Claude API (visit summaries)</span>
+            <span class="svc-badge s-email">Email (24hr reminder)</span>
+            <span class="svc-badge s-sms">SMS (24hr + 1hr reminder)</span>
           </div>
         </div>
         <div class="card-footer"><button class="status-btn" onclick="cycleStatus('card-appointments', this)">Not Started</button></div>
@@ -1959,6 +1977,7 @@
             <span class="svc-badge s-stripe">Stripe</span>
             <span class="svc-badge s-logging">Cloud Logging</span>
             <span class="svc-badge s-firebase">Firebase Auth</span>
+            <span class="svc-badge s-email">Email (system alerts)</span>
           </div>
         </div>
         <div class="card-footer"><button class="status-btn" onclick="cycleStatus('card-admin', this)">Not Started</button></div>
@@ -2049,10 +2068,19 @@
       <div class="svc-card">
         <div class="svc-card-header">
           <div class="svc-icon" style="background:#ea4335;color:#fecaca;">EM</div>
-          <div><div class="svc-card-name">Email (Transactional)</div><div class="svc-card-vendor">SendGrid or Resend</div></div>
+          <div><div class="svc-card-name">Email (Transactional)</div><div class="svc-card-vendor">Brevo</div></div>
         </div>
-        <div class="svc-card-desc">Transactional emails: welcome, family invite links, password reset, overdue task alerts, invoice delivery. Sent from FastAPI backend.</div>
-        <div class="svc-used-by">Used by: <span>Sign Up, Family Invite, Task Manager, Billing Tracker</span></div>
+        <div class="svc-card-desc">Transactional emails via Brevo REST API: welcome, family invite links, password reset, care plan published, invoice delivery, document shares, appointment reminders, overdue task alerts, session summaries, system alerts. Sent from FastAPI /notifications/email.</div>
+        <div class="svc-used-by">Used by: <span>Login, Sign Up, Care Plan, Document Vault, Session Notes, Billing Tracker, Task Manager, Medication Tracker, Care Updates Feed, Documents, Task List, Appointment Calendar, Admin Dashboard</span></div>
+      </div>
+
+      <div class="svc-card">
+        <div class="svc-card-header">
+          <div class="svc-icon" style="background:#0d9373;color:#d1fae5;">SMS</div>
+          <div><div class="svc-card-name">SMS (Transactional)</div><div class="svc-card-vendor">Twilio</div></div>
+        </div>
+        <div class="svc-card-desc">Time-sensitive SMS alerts via Twilio REST API: medication reminders, crisis card emergency contact alerts, appointment reminders (24hr + 1hr), high-priority care updates, overdue task nudges, task assignments to family. Sent from FastAPI /notifications/sms.</div>
+        <div class="svc-used-by">Used by: <span>Medication Tracker, Crisis Card, Appointment Calendar, Care Updates Feed, Task Manager, Task List</span></div>
       </div>
 
       <div class="svc-card">
