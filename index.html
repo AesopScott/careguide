@@ -18,6 +18,9 @@
 
     header {
       padding: 24px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
     }
 
     .logo {
@@ -25,6 +28,37 @@
       font-weight: 700;
       color: #2d6a4f;
       letter-spacing: -0.02em;
+    }
+
+    nav {
+      display: flex;
+      gap: 24px;
+      align-items: center;
+    }
+
+    nav a {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #555;
+      text-decoration: none;
+      letter-spacing: -0.01em;
+      transition: color 0.2s;
+    }
+
+    nav a:hover {
+      color: #2d6a4f;
+    }
+
+    nav a.nav-cta {
+      background: #2d6a4f;
+      color: white;
+      padding: 8px 16px;
+      border-radius: 6px;
+    }
+
+    nav a.nav-cta:hover {
+      background: #1f4d38;
+      color: white;
     }
 
     main {
@@ -123,6 +157,10 @@
 
   <header>
     <div class="logo">Parental Care Guide</div>
+    <nav>
+      <a href="build.html">System Map</a>
+      <a href="#" class="nav-cta">Get Early Access</a>
+    </nav>
   </header>
 
   <main>

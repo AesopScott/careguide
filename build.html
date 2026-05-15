@@ -1,0 +1,1733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CareGuide (PCG) — System Map</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --surface: #161b22;
+      --surface-2: #1c2128;
+      --border: #30363d;
+      --text: #e6edf3;
+      --text-muted: #8b949e;
+      --text-dim: #6e7681;
+
+      --public-bg: #0d1b2a;
+      --public-border: #1f4068;
+      --public-accent: #58a6ff;
+
+      --auth-bg: #0d1f1a;
+      --auth-border: #1a3a2a;
+      --auth-accent: #3fb950;
+
+      --practitioner-bg: #1a1428;
+      --practitioner-border: #3a2a5a;
+      --practitioner-accent: #bc8cff;
+
+      --family-bg: #0d1f1f;
+      --family-border: #1a3a3a;
+      --family-accent: #39d0d8;
+
+      --admin-bg: #1f1a0d;
+      --admin-border: #3a3010;
+      --admin-accent: #e3b341;
+
+      --role-gcm: #2ea043;
+      --role-elder: #1f6feb;
+      --role-social: #d29922;
+      --role-financial: #8b5cf6;
+      --role-family: #f78166;
+      --role-public: #6e7681;
+
+      --svc-firebase: #ffa000;
+      --svc-claude: #7c3aed;
+      --svc-stripe: #635bff;
+      --svc-speech: #4285f4;
+      --svc-fcm: #ff6d00;
+      --svc-email: #ea4335;
+      --svc-run: #34a853;
+      --svc-logging: #5f6368;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      font-size: 13px;
+      line-height: 1.5;
+      padding: 32px 24px 80px;
+    }
+
+    /* ── Header ── */
+    .header {
+      max-width: 1400px;
+      margin: 0 auto 40px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border);
+    }
+    .header-title { font-size: 22px; font-weight: 700; letter-spacing: -0.02em; }
+    .header-title span { color: #2d6a4f; }
+    .header-meta { color: var(--text-muted); font-size: 12px; text-align: right; }
+
+    /* ── Legend ── */
+    .legend {
+      max-width: 1400px;
+      margin: 0 auto 40px;
+      display: flex;
+      gap: 32px;
+      flex-wrap: wrap;
+    }
+    .legend-group { display: flex; flex-direction: column; gap: 6px; }
+    .legend-label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); margin-bottom: 4px; }
+    .legend-items { display: flex; gap: 8px; flex-wrap: wrap; }
+    .legend-item { display: flex; align-items: center; gap: 5px; font-size: 12px; color: var(--text-muted); }
+    .legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+
+    /* ── Role Entry Section ── */
+    .entry-section {
+      max-width: 1400px;
+      margin: 0 auto 48px;
+    }
+    .section-title {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .section-title::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+    .entry-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+    }
+    .entry-card {
+      border-radius: 10px;
+      padding: 16px;
+      border: 1px solid;
+    }
+    .entry-card .role-name { font-weight: 700; font-size: 14px; margin-bottom: 4px; }
+    .entry-card .role-desc { font-size: 12px; color: var(--text-muted); margin-bottom: 10px; }
+    .entry-card .entry-point { font-size: 11px; color: var(--text-dim); }
+    .entry-card .entry-point strong { color: var(--text); }
+
+    .entry-gcm { background: #0d1f12; border-color: #1a3a20; }
+    .entry-gcm .role-name { color: var(--role-gcm); }
+    .entry-elder { background: #0d1420; border-color: #1a2a40; }
+    .entry-elder .role-name { color: var(--role-elder); }
+    .entry-social { background: #1f1a0a; border-color: #3a2e10; }
+    .entry-social .role-name { color: var(--role-social); }
+    .entry-financial { background: #160d20; border-color: #2a1a40; }
+    .entry-financial .role-name { color: var(--role-financial); }
+    .entry-family { background: #1f120d; border-color: #3a2010; }
+    .entry-family .role-name { color: var(--role-family); }
+
+    /* ── Page Grid ── */
+    .page-section {
+      max-width: 1400px;
+      margin: 0 auto 48px;
+    }
+    .page-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 12px;
+    }
+
+    /* ── Page Card ── */
+    .card {
+      border-radius: 10px;
+      border: 1px solid;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .card-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
+    .card-title { font-size: 15px; font-weight: 700; letter-spacing: -0.01em; }
+    .card-desc { font-size: 12px; color: var(--text-muted); line-height: 1.5; }
+    .section-badge {
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 3px 7px;
+      border-radius: 20px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .card-block { display: flex; flex-direction: column; gap: 5px; }
+    .block-label {
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-dim);
+    }
+    .content-list { list-style: none; }
+    .content-list li {
+      font-size: 12px;
+      color: var(--text-muted);
+      padding: 2px 0;
+      padding-left: 12px;
+      position: relative;
+    }
+    .content-list li::before {
+      content: '·';
+      position: absolute;
+      left: 0;
+      color: var(--text-dim);
+    }
+
+    .nav-links { display: flex; flex-wrap: wrap; gap: 6px; }
+    .nav-link {
+      font-size: 11px;
+      padding: 3px 8px;
+      border-radius: 4px;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+    .nav-link::before { content: '→ '; color: var(--text-dim); }
+
+    .roles-row { display: flex; flex-wrap: wrap; gap: 5px; }
+    .role-badge {
+      font-size: 10px;
+      font-weight: 600;
+      padding: 2px 7px;
+      border-radius: 20px;
+    }
+
+    .services-row { display: flex; flex-wrap: wrap; gap: 5px; }
+    .svc-badge {
+      font-size: 10px;
+      font-weight: 600;
+      padding: 2px 7px;
+      border-radius: 4px;
+      color: #0d1117;
+    }
+
+    /* Section-specific card styles */
+    .card-public { background: var(--public-bg); border-color: var(--public-border); }
+    .card-public .card-title { color: var(--public-accent); }
+    .badge-public { background: var(--public-border); color: var(--public-accent); }
+
+    .card-auth { background: var(--auth-bg); border-color: var(--auth-border); }
+    .card-auth .card-title { color: var(--auth-accent); }
+    .badge-auth { background: var(--auth-border); color: var(--auth-accent); }
+
+    .card-practitioner { background: var(--practitioner-bg); border-color: var(--practitioner-border); }
+    .card-practitioner .card-title { color: var(--practitioner-accent); }
+    .badge-practitioner { background: var(--practitioner-border); color: var(--practitioner-accent); }
+
+    .card-family { background: var(--family-bg); border-color: var(--family-border); }
+    .card-family .card-title { color: var(--family-accent); }
+    .badge-family { background: var(--family-border); color: var(--family-accent); }
+
+    .card-admin { background: var(--admin-bg); border-color: var(--admin-border); }
+    .card-admin .card-title { color: var(--admin-accent); }
+    .badge-admin { background: var(--admin-border); color: var(--admin-accent); }
+
+    /* Role badge colors */
+    .r-gcm { background: #1a3a20; color: var(--role-gcm); }
+    .r-elder { background: #1a2a40; color: var(--role-elder); }
+    .r-social { background: #3a2e10; color: var(--role-social); }
+    .r-financial { background: #2a1a40; color: var(--role-financial); }
+    .r-family { background: #3a2010; color: var(--role-family); }
+    .r-public { background: #1a1f26; color: var(--role-public); }
+
+    /* Service badge colors */
+    .s-firebase { background: var(--svc-firebase); }
+    .s-claude { background: var(--svc-claude); color: #e9d5ff; }
+    .s-stripe { background: var(--svc-stripe); color: #c4c2ff; }
+    .s-speech { background: var(--svc-speech); color: #bfdbfe; }
+    .s-fcm { background: var(--svc-fcm); }
+    .s-email { background: var(--svc-email); }
+    .s-run { background: var(--svc-run); }
+    .s-logging { background: var(--svc-logging); color: #e2e8f0; }
+
+    /* ── Services Section ── */
+    .services-section {
+      max-width: 1400px;
+      margin: 0 auto 48px;
+    }
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 12px;
+    }
+    .svc-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px;
+    }
+    .svc-card-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+    .svc-icon {
+      width: 32px; height: 32px;
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+    .svc-card-name { font-weight: 700; font-size: 14px; }
+    .svc-card-vendor { font-size: 11px; color: var(--text-dim); }
+    .svc-card-desc { font-size: 12px; color: var(--text-muted); margin-bottom: 8px; }
+    .svc-used-by { font-size: 11px; color: var(--text-dim); }
+    .svc-used-by span { color: var(--text-muted); }
+
+    /* ── Phase Tags ── */
+    .phase-tag {
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      padding: 2px 6px;
+      border-radius: 3px;
+      background: #21262d;
+      color: var(--text-dim);
+      border: 1px solid var(--border);
+    }
+    .phase-2 { background: #161b22; color: #58a6ff; border-color: #1f4068; }
+    .phase-3 { background: #161b22; color: #3fb950; border-color: #1a3a20; }
+
+    .divider { border: none; border-top: 1px solid var(--border); margin: 48px 0; max-width: 1400px; margin-left: auto; margin-right: auto; }
+  </style>
+</head>
+<body>
+
+  <!-- ── Header ── -->
+  <div class="header">
+    <div>
+      <div class="header-title"><span>Care</span>Guide (PCG) — System Map</div>
+      <div style="color: var(--text-muted); font-size: 12px; margin-top: 4px;">parentalcareguide.com · All pages, connections, roles, and external services</div>
+    </div>
+    <div class="header-meta">
+      Stack: HTML/JS · FastAPI · Firebase · Claude API · Stripe<br>
+      Generated: May 2026
+    </div>
+  </div>
+
+  <!-- ── Legend ── -->
+  <div class="legend">
+    <div class="legend-group">
+      <div class="legend-label">Roles (who enters here)</div>
+      <div class="legend-items">
+        <div class="legend-item"><div class="legend-dot" style="background:var(--role-gcm)"></div> Geriatric Care Manager</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--role-elder)"></div> Elder Law Attorney</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--role-social)"></div> Social Worker</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--role-financial)"></div> Financial Planner</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--role-family)"></div> Family Member</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--role-public)"></div> Public</div>
+      </div>
+    </div>
+    <div class="legend-group">
+      <div class="legend-label">Layers</div>
+      <div class="legend-items">
+        <div class="legend-item"><div class="legend-dot" style="background:var(--public-accent)"></div> Public</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--auth-accent)"></div> Auth</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--practitioner-accent)"></div> Practitioner Dashboard</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--family-accent)"></div> Family Portal</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--admin-accent)"></div> Admin</div>
+      </div>
+    </div>
+    <div class="legend-group">
+      <div class="legend-label">Phase tags</div>
+      <div class="legend-items">
+        <div class="legend-item"><span class="phase-tag">MVP</span> Phase 1 · Weeks 1–8</div>
+        <div class="legend-item"><span class="phase-tag phase-2">P2</span> Phase 2 · Weeks 9–20</div>
+        <div class="legend-item"><span class="phase-tag phase-3">P3</span> Phase 3 · Weeks 21–40</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Role Entry Points ── -->
+  <div class="entry-section">
+    <div class="section-title">Role Entry Points — Where Each User Type First Lands</div>
+    <div class="entry-grid">
+
+      <div class="entry-card entry-gcm">
+        <div class="role-name">Geriatric Care Manager</div>
+        <div class="role-desc">Primary paying customer. Manages families, runs intake interviews, produces care plans.</div>
+        <div class="entry-point">Enters at → <strong>Practitioner Sign Up</strong> or <strong>Login</strong><br>Home screen → <strong>Client Roster</strong></div>
+      </div>
+
+      <div class="entry-card entry-elder">
+        <div class="role-name">Elder Law Attorney</div>
+        <div class="role-desc">Heavy document user. Manages POAs, advance directives, and family legal coordination.</div>
+        <div class="entry-point">Enters at → <strong>Practitioner Sign Up</strong> or <strong>Login</strong><br>Home screen → <strong>Client Roster</strong> (document-heavy view)</div>
+      </div>
+
+      <div class="entry-card entry-social">
+        <div class="role-name">Social Worker / Discharge Planner</div>
+        <div class="role-desc">Refers families at crisis moments. Needs crisis card and quick family handoff. Phase 3.</div>
+        <div class="entry-point">Enters at → <strong>Practitioner Sign Up</strong> or <strong>Login</strong><br>Home screen → <strong>Client Roster</strong></div>
+      </div>
+
+      <div class="entry-card entry-financial">
+        <div class="role-name">Financial / Estate Planner</div>
+        <div class="role-desc">Coordinates financial documents, care costs, and estate planning alongside other professionals. Phase 3.</div>
+        <div class="entry-point">Enters at → <strong>Practitioner Sign Up</strong> or <strong>Login</strong><br>Home screen → <strong>Client Roster</strong></div>
+      </div>
+
+      <div class="entry-card entry-family">
+        <div class="role-name">Family Member / Caregiver</div>
+        <div class="role-desc">Given access by a practitioner (invite link) or signs up self-serve. Views and coordinates parent care.</div>
+        <div class="entry-point">Enters at → <strong>Invite Accept</strong> or <strong>Family Sign Up</strong><br>Home screen → <strong>Family Dashboard</strong></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════ -->
+  <!-- PUBLIC LAYER -->
+  <!-- ══════════════════════════════════════ -->
+  <div class="page-section">
+    <div class="section-title">Public Layer — No Login Required</div>
+    <div class="page-grid">
+
+      <div class="card card-public">
+        <div class="card-header">
+          <div>
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+              <div class="card-title">Landing Page</div>
+              <span class="phase-tag">MVP</span>
+            </div>
+            <div class="card-desc">Primary entry point. Communicates mission, establishes trust, drives sign-up.</div>
+          </div>
+          <span class="section-badge badge-public">Public</span>
+        </div>
+        <div class="card-block">
+          <div class="block-label">Content</div>
+          <ul class="content-list">
+            <li>Hero — "We've loved our parents all our lives"</li>
+            <li>Problem statement for families and practitioners</li>
+            <li>Two-path CTA: practitioners vs. families</li>
+            <li>Product overview / how it works</li>
+            <li>Pricing tier preview</li>
+            <li>Trust signals (HIPAA badge, testimonials)</li>
+          </ul>
+        </div>
+        <div class="card-block">
+          <div class="block-label">Who Lands Here</div>
+          <div class="roles-row">
+            <span class="role-badge r-public">Public</span>
+            <span class="role-badge r-gcm">GCM</span>
+            <span class="role-badge r-elder">Elder Law</span>
+            <span class="role-badge r-family">Family</span>
+          </div>
+        </div>
+        <div class="card-block">
+          <div class="block-label">Navigates To</div>
+          <div class="nav-links">
+            <span class="nav-link">Pricing</span>
+            <span class="nav-link">How It Works</span>
+            <span class="nav-link">Practitioner Sign Up</span>
+            <span class="nav-link">Family Sign Up</span>
+            <span class="nav-link">Login</span>
+          </div>
+        </div>
+        <div class="card-block">
+          <div class="block-label">External Services</div>
+          <div class="services-row">
+            <span class="svc-badge s-email">Email (waitlist)</span>
+            <span class="svc-badge s-stripe">Stripe (pricing)</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card card-public">
+        <div class="card-header">
+          <div>
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+              <div class="card-title">Pricing Page</div>
+              <span class="phase-tag">MVP</span>
+            </div>
+            <div class="card-desc">Three tiers clearly explained. Drives practitioner conversion.</div>
+          </div>
+          <span class="section-badge badge-public">Public</span>
+        </div>
+        <div class="card-block">
+          <div class="block-label">Content</div>
+          <ul class="content-list">
+            <li>GCM tier — $149/month — features list</li>
+            <li>Elder Law tier — $199/month — features list</li>
+            <li>Family self-serve — $39/month — features list</li>
+            <li>FAQ (HIPAA compliance, BAA, cancellation)</li>
+            <li>Comparison table</li>
+          </ul>
+        </div>
+        <div class="card-block">
+          <div class="block-label">Who Lands Here</div>
+          <div class="roles-row">
+            <span class="role-badge r-public">Public</span>
+            <span class="role-badge r-gcm">GCM</span>
+            <span class="role-badge r-elder">Elder Law</span>
+          </div>
+        </div>
+        <div class="card-block">
+          <div class="block-label">Navigates To</div>
+          <div class="nav-links">
+            <span class="nav-link">Practitioner Sign Up</span>
+            <span class="nav-link">Family Sign Up</span>
+          </div>
+        </div>
+        <div class="card-block">
+          <div class="block-label">External Services</div>
+          <div class="services-row">
+            <span class="svc-badge s-stripe">Stripe (pricing data)</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card card-public">
+        <div class="card-header">
+          <div>
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+              <div class="card-title">How It Works</div>
+              <span class="phase-tag">MVP</span>
+            </div>
+            <div class="card-desc">Visual walkthrough for each role. Builds confidence before sign-up.</div>
+          </div>
+          <span class="section-badge badge-public">Public</span>
+        </div>
+        <div class="card-block">
+          <div class="block-label">Content</div>
+          <ul class="content-list">
+            <li>Practitioner flow: intake → care plan → family portal</li>
+            <li>Family flow: invite → dashboard → collaborate</li>
+            <li>AI feature highlights (no jargon)</li>
+            <li>HIPAA + security explainer</li>
+          </ul>
+        </div>
+        <div class="card-block">
+          <div class="block-label">Navigates To</div>
+          <div class="nav-links">
+            <span class="nav-link">Practitioner Sign Up</span>
+            <span class="nav-link">Family Sign Up</span>
+            <span class="nav-link">Pricing</span>
+          </div>
+        </div>
+        <div class="card-block">
+          <div class="block-label">External Services</div>
+          <div class="services-row"><span style="font-size:11px;color:var(--text-dim)">None</span></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════ -->
+  <!-- AUTH LAYER -->
+  <!-- ══════════════════════════════════════ -->
+  <div class="page-section">
+    <div class="section-title">Auth Layer — Identity and Access</div>
+    <div class="page-grid">
+
+      <div class="card card-auth">
+        <div class="card-header">
+          <div>
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+              <div class="card-title">Practitioner Sign Up</div>
+              <span class="phase-tag">MVP</span>
+            </div>
+            <div class="card-desc">Registration for all practitioner types. Sets role, tier, and billing.</div>
+          </div>
+          <span class="section-badge badge-auth">Auth</span>
+        </div>
+        <div class="card-block">
+          <div class="block-label">Content</div>
+          <ul class="content-list">
+            <li>Name, email, password (or Google SSO)</li>
+            <li>Profession type selector (GCM / Elder Law / Social Work / Financial)</li>
+            <li>License state(s)</li>
+            <li>Stripe subscription setup ($149 or $199)</li>
+            <li>BAA acknowledgment checkbox</li>
+            <li>HIPAA terms acceptance</li>
+          </ul>
+        </div>
+        <div class="card-block">
+          <div class="block-label">Who Lands Here</div>
+          <div class="roles-row">
+            <span class="role-badge r-gcm">GCM</span>
+            <span class="role-badge r-elder">Elder Law</span>
+            <span class="role-badge r-social">Social Worker</span>
+            <span class="role-badge r-financial">Financial</span>
+          </div>
+        </div>
+        <div class="card-block">
+          <div class="block-label">Navigates To</div>
+          <div class="nav-links">
+            <span class="nav-link">Client Roster (after signup)</span>
+            <span class="nav-link">Login</span>
+          </div>
+        </div>
+        <div class="card-block">
+          <div class="block-label">External Services</div>
+          <div class="services-row">
+            <span class="svc-badge s-firebase">Firebase Auth</span>
+            <span class="svc-badge s-stripe">Stripe</span>
+            <span class="svc-badge s-email">Email (welcome)</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card card-auth">
+        <div class="card-header">
+          <div>
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+              <div class="card-title">Family Invite Accept</div>
+              <span class="phase-tag">MVP</span>
+            </div>
+            <div class="card-desc">Family member clicks invite link from practitioner. Creates account linked to family group.</div>
+          </div>
+          <span class="section-badge badge-auth">Auth</span>
+        </div>
+        <div class="card-block">
+          <div class="block-label">Content</div>
+          <ul class="content-list">
+            <li>Invite context (who sent it, which family)</li>
+            <li>Name, email, password or Google SSO</li>
+            <li>Relationship to parent (son / daughter / spouse / etc.)</li>
+            <li>HIPAA consent</li>
+          </ul>
+        </div>
+        <div class="card-block">
+          <div class="block-label">Who Lands Here</div>
+          <div class="roles-row"><span class="role-badge r-family">Family Member</span></div>
+        </div>
+        <div class="card-block">
+          <div class="block-label">Navigates To</div>
+          <div class="nav-links">
+            <span class="nav-link">Family Dashboard</span>
+          </div>
+        </div>
+        <div class="card-block">
+          <div class="block-label">External Services</div>
+          <div class="services-row">
+            <span class="svc-badge s-firebase">Firebase Auth</span>
+            <span class="svc-badge s-email">Email (invite link)</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card card-auth">
+        <div class="card-header">
+          <div>
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+              <div class="card-title">Family Self-Serve Sign Up</div>
+              <span class="phase-tag phase-3">P3</span>
+            </div>
+            <div class="card-desc">Families who find PCG without a practitioner. $39/month self-serve tier.</div>
+          </div>
+          <span class="section-badge badge-auth">Auth</span>
+        </div>
+        <div class="card-block">
+          <div class="block-label">Content</div>
+          <ul class="content-list">
+            <li>Name, email, password or Google SSO</li>
+            <li>Brief intake: parent name, state, care situation</li>
+            <li>Stripe subscription ($39/month)</li>
+            <li>HIPAA consent</li>
+          </ul>
+        </div>
+        <div class="card-block">
+          <div class="block-label">Who Lands Here</div>
+          <div class="roles-row"><span class="role-badge r-family">Family Member</span></div>
+        </div>
+        <div class="card-block">
+          <div class="block-label">Navigates To</div>
+          <div class="nav-links">
+            <span class="nav-link">Family Dashboard</span>
+          </div>
+        </div>
+        <div class="card-block">
+          <div class="block-label">External Services</div>
+          <div class="services-row">
+            <span class="svc-badge s-firebase">Firebase Auth</span>
+            <span class="svc-badge s-stripe">Stripe</span>
+            <span class="svc-badge s-email">Email (welcome)</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card card-auth">
+        <div class="card-header">
+          <div>
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+              <div class="card-title">Login</div>
+              <span class="phase-tag">MVP</span>
+            </div>
+            <div class="card-desc">Shared login for all roles. Firebase Auth detects role and routes accordingly.</div>
+          </div>
+          <span class="section-badge badge-auth">Auth</span>
+        </div>
+        <div class="card-block">
+          <div class="block-label">Content</div>
+          <ul class="content-list">
+            <li>Email + password or Google SSO</li>
+            <li>Forgot password link</li>
+            <li>Role-based redirect on success</li>
+          </ul>
+        </div>
+        <div class="card-block">
+          <div class="block-label">Who Lands Here</div>
+          <div class="roles-row">
+            <span class="role-badge r-gcm">GCM</span>
+            <span class="role-badge r-elder">Elder Law</span>
+            <span class="role-badge r-social">Social Worker</span>
+            <span class="role-badge r-financial">Financial</span>
+            <span class="role-badge r-family">Family</span>
+          </div>
+        </div>
+        <div class="card-block">
+          <div class="block-label">Navigates To</div>
+          <div class="nav-links">
+            <span class="nav-link">Client Roster (practitioners)</span>
+            <span class="nav-link">Family Dashboard (families)</span>
+            <span class="nav-link">Password Reset</span>
+          </div>
+        </div>
+        <div class="card-block">
+          <div class="block-label">External Services</div>
+          <div class="services-row">
+            <span class="svc-badge s-firebase">Firebase Auth</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════ -->
+  <!-- PRACTITIONER DASHBOARD -->
+  <!-- ══════════════════════════════════════ -->
+  <div class="page-section">
+    <div class="section-title">Practitioner Dashboard — The Professional's Command Center</div>
+    <div class="page-grid">
+
+      <div class="card card-practitioner">
+        <div class="card-header">
+          <div>
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+              <div class="card-title">Client Roster</div>
+              <span class="phase-tag">MVP</span>
+            </div>
+            <div class="card-desc">Home screen for all practitioners. Every family at a glance with status and urgency flags.</div>
+          </div>
+          <span class="section-badge badge-practitioner">Practitioner</span>
+        </div>
+        <div class="card-block">
+          <div class="block-label">Content</div>
+          <ul class="content-list">
+            <li>Family list with parent name, status, last activity</li>
+            <li>Urgency flags (overdue tasks, medication gaps)</li>
+            <li>Quick-add new client button</li>
+            <li>Search and filter by status / state</li>
+            <li>Summary stats (active clients, pending tasks)</li>
+          </ul>
+        </div>
+        <div class="card-block">
+          <div class="block-label">Who Lands Here</div>
+          <div class="roles-row">
+            <span class="role-badge r-gcm">GCM</span>
+            <span class="role-badge r-elder">Elder Law</span>
+            <span class="role-badge r-social">Social Worker</span>
+            <span class="role-badge r-financial">Financial</span>
+          </div>
+        </div>
+        <div class="card-block">
+          <div class="block-label">Navigates To</div>
+          <div class="nav-links">
+            <span class="nav-link">Client Detail</span>
+            <span class="nav-link">New Client Setup</span>
+            <span class="nav-link">AI Research</span>
+            <span class="nav-link">Settings</span>
+          </div>
+        </div>
+        <div class="card-block">
+          <div class="block-label">External Services</div>
+          <div class="services-row">
+            <span class="svc-badge s-firebase">Firestore</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card card-practitioner">
+        <div class="card-header">
+          <div>
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+              <div class="card-title">New Client Setup</div>
+              <span class="phase-tag">MVP</span>
+            </div>
+            <div class="card-desc">Creates a new family group and parent profile. Gateway to the intake interview.</div>
+          </div>
+          <span class="section-badge badge-practitioner">Practitioner</span>
+        </div>
+        <div class="card-block">
+          <div class="block-label">Content</div>
+          <ul class="content-list">
+            <li>Family group name</li>
+            <li>Parent name, DOB, state, care level</li>
+            <li>Primary contact / family lead</li>
+            <li>Option to send family portal invite immediately</li>
+          </ul>
+        </div>
+        <div class="card-block">
+          <div class="block-label">Navigates To</div>
+          <div class="nav-links">
+            <span class="nav-link">Intake Interview</span>
+            <span class="nav-link">Client Detail</span>
+          </div>
+        </div>
+        <div class="card-block">
+          <div class="block-label">External Services</div>
+          <div class="services-row">
+            <span class="svc-badge s-firebase">Firestore</span>
+            <span class="svc-badge s-email">Email (family invite)</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card card-practitioner">
+        <div class="card-header">
+          <div>
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+              <div class="card-title">Client Detail</div>
+              <span class="phase-tag">MVP</span>
+            </div>
+            <div class="card-desc">Hub for a single family. All sections for that client accessible from here.</div>
+          </div>
+          <span class="section-badge badge-practitioner">Practitioner</span>
+        </div>
+        <div class="card-block">
+          <div class="block-label">Content</div>
+          <ul class="content-list">
+            <li>Parent overview card (name, DOB, care level, state)</li>
+            <li>Quick-access: care plan, medications, documents, tasks</li>
+            <li>Recent activity feed</li>
+            <li>Family member list (who has portal access)</li>
+            <li>Invite family member button</li>
+          </ul>
+        </div>
+        <div class="card-block">
+          <div class="block-label">Navigates To</div>
+          <div class="nav-links">
+            <span class="nav-link">Intake Interview</span>
+            <span class="nav-link">Care Plan</span>
+            <span class="nav-link">Document Vault</span>
+            <span class="nav-link">Medications</span>
+            <span class="nav-link">Task Manager</span>
+            <span class="nav-link">Session Notes</span>
+            <span class="nav-link">Crisis Card</span>
+            <span class="nav-link">Appointments</span>
+          </div>
+        </div>
+        <div class="card-block">
+          <div class="block-label">External Services</div>
+          <div class="services-row">
+            <span class="svc-badge s-firebase">Firestore</span>
+            <span class="svc-badge s-email">Email (invite)</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card card-practitioner" style="border-color:#5a3a7a;">
+        <div class="card-header">
+          <div>
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+              <div class="card-title">Intake Interview</div>
+              <span class="phase-tag">MVP</span>
+            </div>
+            <div class="card-desc">★ Anchor feature. The 30-minute interview that produces a care plan draft in 60 seconds.</div>
+          </div>
+          <span class="section-badge badge-practitioner">Practitioner</span>
+        </div>
+        <div class="card-block">
+          <div class="block-label">Content</div>
+          <ul class="content-list">
+            <li>Guided structured prompts (what to cover)</li>
+            <li>Text input + voice-to-text toggle (Web Speech API)</li>
+            <li>Auto-save every 30 seconds</li>
+            <li>Draft recovery if session interrupted</li>
+            <li>"Generate Care Plan" CTA → FastAPI → Claude</li>
+            <li>Progress indicator while AI processes</li>
+          </ul>
+        </div>
+        <div class="card-block">
+          <div class="block-label">Navigates To</div>
+          <div class="nav-links">
+            <span class="nav-link">Care Plan (output)</span>
+            <span class="nav-link">Client Detail</span>
+          </div>
+        </div>
+        <div class="card-block">
+          <div class="block-label">External Services</div>
+          <div class="services-row">
+            <span class="svc-badge s-speech">Web Speech API</span>
+            <span class="svc-badge s-firebase">Firestore (auto-save)</span>
+            <span class="svc-badge s-run">Cloud Run / FastAPI</span>
+            <span class="svc-badge s-claude" style="color:#e9d5ff;">Claude API</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card card-practitioner">
+        <div class="card-header">
+          <div>
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+              <div class="card-title">Care Plan</div>
+              <span class="phase-tag">MVP</span>
+            </div>
+            <div class="card-desc">AI-generated draft displayed for review, editing, and approval. Publishes to family portal.</div>
+          </div>
+          <span class="section-badge badge-practitioner">Practitioner</span>
+        </div>
+        <div class="card-block">
+          <div class="block-label">Content</div>
+          <ul class="content-list">
+            <li>Structured care plan sections (editable)</li>
+            <li>AI disclaimer banner ("Review before approving")</li>
+            <li>Thumbs down + comment feedback on AI output</li>
+            <li>Version history</li>
+            <li>Approve + publish to family portal</li>
+            <li>Export to PDF</li>
+          </ul>
+        </div>
+        <div class="card-block">
+          <div class="block-label">Navigates To</div>
+          <div class="nav-links">
+            <span class="nav-link">Family Portal (published)</span>
+            <span class="nav-link">Client Detail</span>
+            <span class="nav-link">Intake Interview (redo)</span>
+          </div>
+        </div>
+        <div class="card-block">
+          <div class="block-label">External Services</div>
+          <div class="services-row">
+            <span class="svc-badge s-firebase">Firestore</span>
+            <span class="svc-badge s-claude" style="color:#e9d5ff;">Claude API (feedback loop)</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card card-practitioner">
+        <div class="card-header">
+          <div>
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+              <div class="card-title">Document Vault</div>
+              <span class="phase-tag phase-2">P2</span>
+            </div>
+            <div class="card-desc">Per-client document storage. POAs, advance directives, insurance, medical records.</div>
+          </div>
+          <span class="section-badge badge-practitioner">Practitioner</span>
+        </div>
+        <div class="card-block">
+          <div class="block-label">Content</div>
+          <ul class="content-list">
+            <li>Upload with type tagging (POA / AD / Will / Insurance / Other)</li>
+            <li>Per-document access control (who can see it)</li>
+            <li>Document list with upload date and uploader</li>
+            <li>Download and share links</li>
+            <li>Notes per document</li>
+          </ul>
+        </div>
+        <div class="card-block">
+          <div class="block-label">Navigates To</div>
+          <div class="nav-links">
+            <span class="nav-link">Client Detail</span>
+            <span class="nav-link">Family Portal Documents</span>
+          </div>
+        </div>
+        <div class="card-block">
+          <div class="block-label">External Services</div>
+          <div class="services-row">
+            <span class="svc-badge s-firebase">Firebase Storage</span>
+            <span class="svc-badge s-firebase">Firestore (metadata)</span>
+            <span class="svc-badge s-logging">Cloud Logging (HIPAA)</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card card-practitioner">
+        <div class="card-header">
+          <div>
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+              <div class="card-title">Session Notes</div>
+              <span class="phase-tag phase-2">P2</span>
+            </div>
+            <div class="card-desc">Voice-to-text post-visit notes that AI converts into billable progress notes.</div>
+          </div>
+          <span class="section-badge badge-practitioner">Practitioner</span>
+        </div>
+        <div class="card-block">
+          <div class="block-label">Content</div>
+          <ul class="content-list">
+            <li>Record or type visit notes</li>
+            <li>AI summary → structured progress note</li>
+            <li>Billable time entry (auto-populated from duration)</li>
+            <li>Attach to billing record</li>
+            <li>Note history per client</li>
+          </ul>
+        </div>
+        <div class="card-block">
+          <div class="block-label">Navigates To</div>
+          <div class="nav-links">
+            <span class="nav-link">Billing Tracker</span>
+            <span class="nav-link">Client Detail</span>
+          </div>
+        </div>
+        <div class="card-block">
+          <div class="block-label">External Services</div>
+          <div class="services-row">
+            <span class="svc-badge s-speech">Web Speech API</span>
+            <span class="svc-badge s-run">Cloud Run / FastAPI</span>
+            <span class="svc-badge s-claude" style="color:#e9d5ff;">Claude API</span>
+            <span class="svc-badge s-firebase">Firestore</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card card-practitioner">
+        <div class="card-header">
+          <div>
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+              <div class="card-title">Billing Tracker</div>
+              <span class="phase-tag phase-2">P2</span>
+            </div>
+            <div class="card-desc">Time logging, rate setting, and invoice generation for hourly practitioners.</div>
+          </div>
+          <span class="section-badge badge-practitioner">Practitioner</span>
+        </div>
+        <div class="card-block">
+          <div class="block-label">Content</div>
+          <ul class="content-list">
+            <li>Time log per client (manual + auto from session notes)</li>
+            <li>Rate per client (customizable)</li>
+            <li>Invoice generation</li>
+            <li>Invoiced vs. outstanding view</li>
+            <li>Monthly summary</li>
+          </ul>
+        </div>
+        <div class="card-block">
+          <div class="block-label">Navigates To</div>
+          <div class="nav-links">
+            <span class="nav-link">Session Notes</span>
+            <span class="nav-link">Client Detail</span>
+          </div>
+        </div>
+        <div class="card-block">
+          <div class="block-label">External Services</div>
+          <div class="services-row">
+            <span class="svc-badge s-firebase">Firestore</span>
+            <span class="svc-badge s-stripe">Stripe (invoicing)</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card card-practitioner">
+        <div class="card-header">
+          <div>
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+              <div class="card-title">AI Research Assistant</div>
+              <span class="phase-tag phase-2">P2</span>
+            </div>
+            <div class="card-desc">Medicare, Medicaid, CMS Q&A in plain English with citations. Always on, always neutral.</div>
+          </div>
+          <span class="section-badge badge-practitioner">Practitioner</span>
+        </div>
+        <div class="card-block">
+          <div class="block-label">Content</div>
+          <ul class="content-list">
+            <li>Free-form question input</li>
+            <li>Claude answers with CMS/Medicare context</li>
+            <li>Citations shown alongside answer</li>
+            <li>Disclaimer: informational only, not legal advice</li>
+            <li>Conversation history per session</li>
+          </ul>
+        </div>
+        <div class="card-block">
+          <div class="block-label">Navigates To</div>
+          <div class="nav-links">
+            <span class="nav-link">Client Detail</span>
+            <span class="nav-link">Client Roster</span>
+          </div>
+        </div>
+        <div class="card-block">
+          <div class="block-label">External Services</div>
+          <div class="services-row">
+            <span class="svc-badge s-run">Cloud Run / FastAPI</span>
+            <span class="svc-badge s-claude" style="color:#e9d5ff;">Claude API</span>
+            <span class="svc-badge s-firebase">Firestore (history)</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card card-practitioner">
+        <div class="card-header">
+          <div>
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+              <div class="card-title">Task Manager</div>
+              <span class="phase-tag phase-2">P2</span>
+            </div>
+            <div class="card-desc">Per-family task tracking. What's pending, what's overdue, who owns what.</div>
+          </div>
+          <span class="section-badge badge-practitioner">Practitioner</span>
+        </div>
+        <div class="card-block">
+          <div class="block-label">Content</div>
+          <ul class="content-list">
+            <li>Task list per family with due dates</li>
+            <li>Assign to practitioner or family member</li>
+            <li>Overdue flags + urgent highlighting</li>
+            <li>Cross-client view (all pending tasks)</li>
+            <li>Task notes</li>
+          </ul>
+        </div>
+        <div class="card-block">
+          <div class="block-label">Navigates To</div>
+          <div class="nav-links">
+            <span class="nav-link">Client Detail</span>
+            <span class="nav-link">Family Portal Task List</span>
+          </div>
+        </div>
+        <div class="card-block">
+          <div class="block-label">External Services</div>
+          <div class="services-row">
+            <span class="svc-badge s-firebase">Firestore</span>
+            <span class="svc-badge s-fcm">FCM (reminders)</span>
+            <span class="svc-badge s-email">Email (overdue alerts)</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card card-practitioner">
+        <div class="card-header">
+          <div>
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+              <div class="card-title">Provider Directory</div>
+              <span class="phase-tag phase-3">P3</span>
+            </div>
+            <div class="card-desc">Practitioner's personal vetted network — facilities, doctors, home care agencies.</div>
+          </div>
+          <span class="section-badge badge-practitioner">Practitioner</span>
+        </div>
+        <div class="card-block">
+          <div class="block-label">Content</div>
+          <ul class="content-list">
+            <li>Add/edit providers (name, type, location, contact)</li>
+            <li>Vetted flag per provider</li>
+            <li>Notes and ratings</li>
+            <li>Filter by type and state</li>
+            <li>Share provider with family</li>
+          </ul>
+        </div>
+        <div class="card-block">
+          <div class="block-label">Navigates To</div>
+          <div class="nav-links">
+            <span class="nav-link">Client Detail</span>
+            <span class="nav-link">Family Portal</span>
+          </div>
+        </div>
+        <div class="card-block">
+          <div class="block-label">External Services</div>
+          <div class="services-row">
+            <span class="svc-badge s-firebase">Firestore</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card card-practitioner">
+        <div class="card-header">
+          <div>
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+              <div class="card-title">Practitioner Settings</div>
+              <span class="phase-tag">MVP</span>
+            </div>
+            <div class="card-desc">Account, subscription, notification preferences, and team management.</div>
+          </div>
+          <span class="section-badge badge-practitioner">Practitioner</span>
+        </div>
+        <div class="card-block">
+          <div class="block-label">Content</div>
+          <ul class="content-list">
+            <li>Profile (name, profession, license states)</li>
+            <li>Subscription tier + billing management</li>
+            <li>Notification preferences</li>
+            <li>Password / Google SSO management</li>
+            <li>Data export and account deletion (HIPAA)</li>
+          </ul>
+        </div>
+        <div class="card-block">
+          <div class="block-label">Navigates To</div>
+          <div class="nav-links">
+            <span class="nav-link">Client Roster</span>
+            <span class="nav-link">Login (on logout)</span>
+          </div>
+        </div>
+        <div class="card-block">
+          <div class="block-label">External Services</div>
+          <div class="services-row">
+            <span class="svc-badge s-firebase">Firebase Auth</span>
+            <span class="svc-badge s-stripe">Stripe (billing portal)</span>
+            <span class="svc-badge s-fcm">FCM</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════ -->
+  <!-- FAMILY PORTAL -->
+  <!-- ══════════════════════════════════════ -->
+  <div class="page-section">
+    <div class="section-title">Family Portal — The Family's Single Source of Truth</div>
+    <div class="page-grid">
+
+      <div class="card card-family">
+        <div class="card-header">
+          <div>
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+              <div class="card-title">Family Dashboard</div>
+              <span class="phase-tag">MVP</span>
+            </div>
+            <div class="card-desc">Home screen for family members. Parent overview and quick access to everything.</div>
+          </div>
+          <span class="section-badge badge-family">Family</span>
+        </div>
+        <div class="card-block">
+          <div class="block-label">Content</div>
+          <ul class="content-list">
+            <li>Parent name, photo, care level summary</li>
+            <li>Quick links: medications, crisis card, tasks</li>
+            <li>Recent care updates from practitioner</li>
+            <li>Upcoming appointments</li>
+            <li>Pending tasks assigned to this user</li>
+          </ul>
+        </div>
+        <div class="card-block">
+          <div class="block-label">Who Lands Here</div>
+          <div class="roles-row"><span class="role-badge r-family">Family Member</span></div>
+        </div>
+        <div class="card-block">
+          <div class="block-label">Navigates To</div>
+          <div class="nav-links">
+            <span class="nav-link">Medications</span>
+            <span class="nav-link">Crisis Card</span>
+            <span class="nav-link">Care Updates</span>
+            <span class="nav-link">Task List</span>
+            <span class="nav-link">Documents</span>
+            <span class="nav-link">Appointments</span>
+            <span class="nav-link">AI Assistant</span>
+          </div>
+        </div>
+        <div class="card-block">
+          <div class="block-label">External Services</div>
+          <div class="services-row">
+            <span class="svc-badge s-firebase">Firestore (real-time)</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card card-family">
+        <div class="card-header">
+          <div>
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+              <div class="card-title">Medication Tracker</div>
+              <span class="phase-tag">MVP</span>
+            </div>
+            <div class="card-desc">Always-current medication list. Shareable with any provider or ER staff.</div>
+          </div>
+          <span class="section-badge badge-family">Family</span>
+        </div>
+        <div class="card-block">
+          <div class="block-label">Content</div>
+          <ul class="content-list">
+            <li>Medication name, dosage, frequency, prescriber</li>
+            <li>Active vs. archived medications</li>
+            <li>Last administered (if tracked)</li>
+            <li>Share button (link or PDF)</li>
+            <li>Reminder notifications</li>
+          </ul>
+        </div>
+        <div class="card-block">
+          <div class="block-label">Navigates To</div>
+          <div class="nav-links">
+            <span class="nav-link">Crisis Card</span>
+            <span class="nav-link">Family Dashboard</span>
+          </div>
+        </div>
+        <div class="card-block">
+          <div class="block-label">External Services</div>
+          <div class="services-row">
+            <span class="svc-badge s-firebase">Firestore</span>
+            <span class="svc-badge s-fcm">FCM (reminders)</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card card-family" style="border-color:#1a4a4a;">
+        <div class="card-header">
+          <div>
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+              <div class="card-title">Crisis Card</div>
+              <span class="phase-tag">MVP</span>
+            </div>
+            <div class="card-desc">★ One page. Everything a paramedic or ER nurse needs. Always current. Always shareable.</div>
+          </div>
+          <span class="section-badge badge-family">Family</span>
+        </div>
+        <div class="card-block">
+          <div class="block-label">Content</div>
+          <ul class="content-list">
+            <li>Parent name, DOB, photo</li>
+            <li>Current medications (auto-pulled from tracker)</li>
+            <li>Active conditions and allergies</li>
+            <li>DNR / advance directive status</li>
+            <li>Emergency contacts (ranked)</li>
+            <li>Legal authority (who has POA)</li>
+            <li>Primary physician and pharmacy</li>
+            <li>Print button + shareable link</li>
+          </ul>
+        </div>
+        <div class="card-block">
+          <div class="block-label">Navigates To</div>
+          <div class="nav-links">
+            <span class="nav-link">Medication Tracker</span>
+            <span class="nav-link">Documents</span>
+            <span class="nav-link">Family Dashboard</span>
+          </div>
+        </div>
+        <div class="card-block">
+          <div class="block-label">External Services</div>
+          <div class="services-row">
+            <span class="svc-badge s-firebase">Firestore</span>
+            <span class="svc-badge s-logging">Cloud Logging (HIPAA share events)</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card card-family">
+        <div class="card-header">
+          <div>
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+              <div class="card-title">Care Updates Feed</div>
+              <span class="phase-tag phase-2">P2</span>
+            </div>
+            <div class="card-desc">Practitioner posts updates. Every family member sees them in real time.</div>
+          </div>
+          <span class="section-badge badge-family">Family</span>
+        </div>
+        <div class="card-block">
+          <div class="block-label">Content</div>
+          <ul class="content-list">
+            <li>Chronological update feed</li>
+            <li>Updates from practitioner (text, attachments)</li>
+            <li>AI-assisted update drafts (practitioner side)</li>
+            <li>Read receipts per family member</li>
+            <li>Push notification on new update</li>
+          </ul>
+        </div>
+        <div class="card-block">
+          <div class="block-label">Navigates To</div>
+          <div class="nav-links">
+            <span class="nav-link">Family Dashboard</span>
+          </div>
+        </div>
+        <div class="card-block">
+          <div class="block-label">External Services</div>
+          <div class="services-row">
+            <span class="svc-badge s-firebase">Firestore (real-time)</span>
+            <span class="svc-badge s-fcm">FCM (push)</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card card-family">
+        <div class="card-header">
+          <div>
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+              <div class="card-title">Documents</div>
+              <span class="phase-tag phase-2">P2</span>
+            </div>
+            <div class="card-desc">Role-gated access to legal and medical documents uploaded by the practitioner.</div>
+          </div>
+          <span class="section-badge badge-family">Family</span>
+        </div>
+        <div class="card-block">
+          <div class="block-label">Content</div>
+          <ul class="content-list">
+            <li>Documents visible to this family member (access-controlled)</li>
+            <li>Type labels (POA, AD, Insurance, Will, etc.)</li>
+            <li>Upload date and who uploaded</li>
+            <li>Download and view</li>
+          </ul>
+        </div>
+        <div class="card-block">
+          <div class="block-label">Navigates To</div>
+          <div class="nav-links">
+            <span class="nav-link">Family Dashboard</span>
+            <span class="nav-link">Crisis Card</span>
+          </div>
+        </div>
+        <div class="card-block">
+          <div class="block-label">External Services</div>
+          <div class="services-row">
+            <span class="svc-badge s-firebase">Firebase Storage</span>
+            <span class="svc-badge s-firebase">Firestore</span>
+            <span class="svc-badge s-logging">Cloud Logging (HIPAA)</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card card-family">
+        <div class="card-header">
+          <div>
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+              <div class="card-title">Task List</div>
+              <span class="phase-tag phase-2">P2</span>
+            </div>
+            <div class="card-desc">Family task coordination. Who is doing what, by when.</div>
+          </div>
+          <span class="section-badge badge-family">Family</span>
+        </div>
+        <div class="card-block">
+          <div class="block-label">Content</div>
+          <ul class="content-list">
+            <li>Tasks assigned to this family member</li>
+            <li>All family tasks (visible, not editable)</li>
+            <li>Mark complete</li>
+            <li>Due date + overdue flag</li>
+            <li>Task notes</li>
+          </ul>
+        </div>
+        <div class="card-block">
+          <div class="block-label">Navigates To</div>
+          <div class="nav-links">
+            <span class="nav-link">Family Dashboard</span>
+          </div>
+        </div>
+        <div class="card-block">
+          <div class="block-label">External Services</div>
+          <div class="services-row">
+            <span class="svc-badge s-firebase">Firestore</span>
+            <span class="svc-badge s-fcm">FCM (due date reminders)</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card card-family">
+        <div class="card-header">
+          <div>
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+              <div class="card-title">Appointment Calendar</div>
+              <span class="phase-tag phase-2">P2</span>
+            </div>
+            <div class="card-desc">Upcoming and past appointments. Shared across family. Visit notes attached.</div>
+          </div>
+          <span class="section-badge badge-family">Family</span>
+        </div>
+        <div class="card-block">
+          <div class="block-label">Content</div>
+          <ul class="content-list">
+            <li>Calendar view (month/week/list)</li>
+            <li>Appointment: title, date, provider, location</li>
+            <li>Post-visit notes + AI summary</li>
+            <li>Recurring appointment support</li>
+            <li>Reminder notifications</li>
+          </ul>
+        </div>
+        <div class="card-block">
+          <div class="block-label">Navigates To</div>
+          <div class="nav-links">
+            <span class="nav-link">Family Dashboard</span>
+          </div>
+        </div>
+        <div class="card-block">
+          <div class="block-label">External Services</div>
+          <div class="services-row">
+            <span class="svc-badge s-firebase">Firestore</span>
+            <span class="svc-badge s-fcm">FCM (reminders)</span>
+            <span class="svc-badge s-claude" style="color:#e9d5ff;">Claude API (visit summaries)</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card card-family">
+        <div class="card-header">
+          <div>
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+              <div class="card-title">AI Assistant</div>
+              <span class="phase-tag phase-2">P2</span>
+            </div>
+            <div class="card-desc">Q&A for family members. Never gives medical or legal advice. Always connects to professionals.</div>
+          </div>
+          <span class="section-badge badge-family">Family</span>
+        </div>
+        <div class="card-block">
+          <div class="block-label">Content</div>
+          <ul class="content-list">
+            <li>Free-form question input</li>
+            <li>Claude answers in plain English</li>
+            <li>Guardrail: no medical or legal advice</li>
+            <li>Disclaimer on every response</li>
+            <li>"Talk to a professional" prompts when appropriate</li>
+            <li>Conversation history</li>
+          </ul>
+        </div>
+        <div class="card-block">
+          <div class="block-label">Navigates To</div>
+          <div class="nav-links">
+            <span class="nav-link">Family Dashboard</span>
+            <span class="nav-link">Professional Directory</span>
+          </div>
+        </div>
+        <div class="card-block">
+          <div class="block-label">External Services</div>
+          <div class="services-row">
+            <span class="svc-badge s-run">Cloud Run / FastAPI</span>
+            <span class="svc-badge s-claude" style="color:#e9d5ff;">Claude API</span>
+            <span class="svc-badge s-firebase">Firestore (history)</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card card-family">
+        <div class="card-header">
+          <div>
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+              <div class="card-title">Professional Directory</div>
+              <span class="phase-tag phase-3">P3</span>
+            </div>
+            <div class="card-desc">Searchable directory of elder care professionals. Families find help by type and state.</div>
+          </div>
+          <span class="section-badge badge-family">Family</span>
+        </div>
+        <div class="card-block">
+          <div class="block-label">Content</div>
+          <ul class="content-list">
+            <li>Filter by profession type and state</li>
+            <li>Name, contact, specialty, location</li>
+            <li>Verified badge</li>
+            <li>Disclaimer: referral only, not endorsement</li>
+          </ul>
+        </div>
+        <div class="card-block">
+          <div class="block-label">Navigates To</div>
+          <div class="nav-links">
+            <span class="nav-link">Family Dashboard</span>
+          </div>
+        </div>
+        <div class="card-block">
+          <div class="block-label">External Services</div>
+          <div class="services-row">
+            <span class="svc-badge s-firebase">Firestore</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card card-family">
+        <div class="card-header">
+          <div>
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+              <div class="card-title">Family Settings</div>
+              <span class="phase-tag">MVP</span>
+            </div>
+            <div class="card-desc">Account, notification preferences, family member management.</div>
+          </div>
+          <span class="section-badge badge-family">Family</span>
+        </div>
+        <div class="card-block">
+          <div class="block-label">Content</div>
+          <ul class="content-list">
+            <li>Profile (name, relationship to parent)</li>
+            <li>Notification preferences</li>
+            <li>Family member list (who else has access)</li>
+            <li>Subscription (self-serve families only)</li>
+            <li>HIPAA consent record</li>
+          </ul>
+        </div>
+        <div class="card-block">
+          <div class="block-label">Navigates To</div>
+          <div class="nav-links">
+            <span class="nav-link">Family Dashboard</span>
+            <span class="nav-link">Login (on logout)</span>
+          </div>
+        </div>
+        <div class="card-block">
+          <div class="block-label">External Services</div>
+          <div class="services-row">
+            <span class="svc-badge s-firebase">Firebase Auth</span>
+            <span class="svc-badge s-fcm">FCM</span>
+            <span class="svc-badge s-stripe">Stripe (self-serve only)</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════ -->
+  <!-- ADMIN -->
+  <!-- ══════════════════════════════════════ -->
+  <div class="page-section">
+    <div class="section-title">Admin Layer — Internal Operations</div>
+    <div class="page-grid">
+
+      <div class="card card-admin">
+        <div class="card-header">
+          <div>
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+              <div class="card-title">Admin Dashboard</div>
+              <span class="phase-tag">MVP</span>
+            </div>
+            <div class="card-desc">Internal view of all practitioners, subscriptions, and platform health.</div>
+          </div>
+          <span class="section-badge badge-admin">Admin</span>
+        </div>
+        <div class="card-block">
+          <div class="block-label">Content</div>
+          <ul class="content-list">
+            <li>Practitioner list + subscription status</li>
+            <li>Beta flag management</li>
+            <li>MRR summary from Stripe</li>
+            <li>AI feedback log (thumbs down reviews)</li>
+            <li>Audit log viewer (HIPAA events)</li>
+            <li>User suspension / deletion</li>
+          </ul>
+        </div>
+        <div class="card-block">
+          <div class="block-label">External Services</div>
+          <div class="services-row">
+            <span class="svc-badge s-firebase">Firestore</span>
+            <span class="svc-badge s-stripe">Stripe</span>
+            <span class="svc-badge s-logging">Cloud Logging</span>
+            <span class="svc-badge s-firebase">Firebase Auth</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════ -->
+  <!-- EXTERNAL SERVICES -->
+  <!-- ══════════════════════════════════════ -->
+  <div class="services-section">
+    <div class="section-title">External Services — What Each One Does in PCG</div>
+    <div class="services-grid">
+
+      <div class="svc-card">
+        <div class="svc-card-header">
+          <div class="svc-icon" style="background:#ffa000;color:#0d1117;">FB</div>
+          <div><div class="svc-card-name">Firebase Auth</div><div class="svc-card-vendor">Google Firebase</div></div>
+        </div>
+        <div class="svc-card-desc">Handles all user identity. Email/password and Google SSO. Role-based routing on login. Session management and token refresh.</div>
+        <div class="svc-used-by">Used by: <span>Login, Sign Up, Invite Accept, all authenticated pages</span></div>
+      </div>
+
+      <div class="svc-card">
+        <div class="svc-card-header">
+          <div class="svc-icon" style="background:#ffa000;color:#0d1117;">FS</div>
+          <div><div class="svc-card-name">Firestore</div><div class="svc-card-vendor">Google Firebase</div></div>
+        </div>
+        <div class="svc-card-desc">Primary database. Stores all structured data: users, families, parents, medications, care plans, tasks, conversations. Real-time sync for the care updates feed.</div>
+        <div class="svc-used-by">Used by: <span>Every authenticated page. Core data layer.</span></div>
+      </div>
+
+      <div class="svc-card">
+        <div class="svc-card-header">
+          <div class="svc-icon" style="background:#ffa000;color:#0d1117;">FG</div>
+          <div><div class="svc-card-name">Firebase Storage</div><div class="svc-card-vendor">Google Firebase</div></div>
+        </div>
+        <div class="svc-card-desc">Binary file storage for documents (PDFs, images). All PHI files stored here with access control enforced by Firebase Security Rules. BAA required.</div>
+        <div class="svc-used-by">Used by: <span>Document Vault, Family Documents, Crisis Card (photo)</span></div>
+      </div>
+
+      <div class="svc-card">
+        <div class="svc-card-header">
+          <div class="svc-icon" style="background:#7c3aed;color:#e9d5ff;">AI</div>
+          <div><div class="svc-card-name">Claude API</div><div class="svc-card-vendor">Anthropic</div></div>
+        </div>
+        <div class="svc-card-desc">Powers all AI features. Intake → care plan summarization (anchor feature), session note drafting, Medicare Q&A, family communication drafting, facility matching, AI assistant. BAA required before PHI enters prompts.</div>
+        <div class="svc-used-by">Used by: <span>Intake, Care Plan, Session Notes, AI Research, AI Assistant, Appointments</span></div>
+      </div>
+
+      <div class="svc-card">
+        <div class="svc-card-header">
+          <div class="svc-icon" style="background:#635bff;color:#c4c2ff;">ST</div>
+          <div><div class="svc-card-name">Stripe</div><div class="svc-card-vendor">Stripe Inc.</div></div>
+        </div>
+        <div class="svc-card-desc">Subscription billing for all three tiers. Manages beta flags (free), $149/$199 practitioner plans, $39 family self-serve. Webhook events handled in FastAPI. Billing portal for practitioners.</div>
+        <div class="svc-used-by">Used by: <span>Practitioner Sign Up, Family Sign Up, Settings, Admin Dashboard</span></div>
+      </div>
+
+      <div class="svc-card">
+        <div class="svc-card-header">
+          <div class="svc-icon" style="background:#34a853;color:#0d1117;">CR</div>
+          <div><div class="svc-card-name">Cloud Run / FastAPI</div><div class="svc-card-vendor">Google Cloud + Python</div></div>
+        </div>
+        <div class="svc-card-desc">The Python API layer. Handles all AI requests (intake → Claude, session notes → Claude, Q&A → Claude), Stripe webhooks, and any server-side business logic. Containerized, auto-scales to zero.</div>
+        <div class="svc-used-by">Used by: <span>Intake Interview, Session Notes, AI Research, AI Assistant, billing webhooks</span></div>
+      </div>
+
+      <div class="svc-card">
+        <div class="svc-card-header">
+          <div class="svc-icon" style="background:#4285f4;color:#bfdbfe;">WS</div>
+          <div><div class="svc-card-name">Web Speech API</div><div class="svc-card-vendor">Browser Native</div></div>
+        </div>
+        <div class="svc-card-desc">Browser-native voice-to-text. No third-party cost. Used in Intake Interview and Session Notes. Transcription happens client-side before sending to Claude.</div>
+        <div class="svc-used-by">Used by: <span>Intake Interview, Session Notes</span></div>
+      </div>
+
+      <div class="svc-card">
+        <div class="svc-card-header">
+          <div class="svc-icon" style="background:#ff6d00;color:#0d1117;">FCM</div>
+          <div><div class="svc-card-name">Firebase Cloud Messaging</div><div class="svc-card-vendor">Google Firebase</div></div>
+        </div>
+        <div class="svc-card-desc">Push notifications for medication reminders, care update alerts, task due dates, and overdue flags. Works on web and mobile (PWA).</div>
+        <div class="svc-used-by">Used by: <span>Medication Tracker, Care Updates, Task List, Appointments</span></div>
+      </div>
+
+      <div class="svc-card">
+        <div class="svc-card-header">
+          <div class="svc-icon" style="background:#ea4335;color:#fecaca;">EM</div>
+          <div><div class="svc-card-name">Email (Transactional)</div><div class="svc-card-vendor">SendGrid or Resend</div></div>
+        </div>
+        <div class="svc-card-desc">Transactional emails: welcome, family invite links, password reset, overdue task alerts, invoice delivery. Sent from FastAPI backend.</div>
+        <div class="svc-used-by">Used by: <span>Sign Up, Family Invite, Task Manager, Billing Tracker</span></div>
+      </div>
+
+      <div class="svc-card">
+        <div class="svc-card-header">
+          <div class="svc-icon" style="background:#5f6368;color:#e2e8f0;">CL</div>
+          <div><div class="svc-card-name">Cloud Logging</div><div class="svc-card-vendor">Google Cloud</div></div>
+        </div>
+        <div class="svc-card-desc">HIPAA audit log. Records PHI access events: document views, downloads, shares, and crisis card accesses. Required for HIPAA compliance. Not visible to end users.</div>
+        <div class="svc-used-by">Used by: <span>Document Vault, Crisis Card, Family Documents (all PHI access points)</span></div>
+      </div>
+
+    </div>
+  </div>
+
+</body>
+</html>
