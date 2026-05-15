@@ -2,12 +2,12 @@ import { initializeApp }          from 'https://www.gstatic.com/firebasejs/11.8.
 import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/11.8.0/firebase-auth.js';
 
 const FIREBASE_CONFIG = {
-  apiKey:            "REPLACE_WITH_API_KEY",
+  apiKey:            "AIzaSyB0GaJXI_lbLhEXmctMJ0LoHiV3cHL5vQY",
   authDomain:        "careguide-def76.firebaseapp.com",
   projectId:         "careguide-def76",
   storageBucket:     "careguide-def76.firebasestorage.app",
-  messagingSenderId: "REPLACE_WITH_SENDER_ID",
-  appId:             "REPLACE_WITH_APP_ID"
+  messagingSenderId: "658340465706",
+  appId:             "1:658340465706:web:0e412731947ff51474c753"
 };
 
 const CONFIG_READY = !FIREBASE_CONFIG.apiKey.startsWith('REPLACE');
