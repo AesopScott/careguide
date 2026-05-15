@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PCG — Favicon Options</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Gilda+Display&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Jost', sans-serif;
+      min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(148deg,
+        #FFF5F0 0%, #FFD6CC 12%, #F4B8C1 26%, #E8A0B4 40%,
+        #D4A0C8 55%, #B8A8D8 70%, #98A8E0 84%, #8ABCE8 100%);
+      z-index: 0;
+    }
+
+    .top-bar {
+      position: relative; z-index: 2; height: 4px;
+      background: linear-gradient(90deg, #FFD6CC, #F4B8C1, #E8A0B4, #D4A0C8, #B8A8D8, #98A8E0, #8ABCE8);
+    }
+
+    .page {
+      position: relative;
+      z-index: 2;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 60px 40px 80px;
+    }
+
+    .page-title {
+      font-family: 'Gilda Display', Georgia, serif;
+      font-size: 2rem;
+      color: rgba(30, 18, 48, 0.88);
+      margin-bottom: 8px;
+    }
+
+    .page-sub {
+      font-size: 0.9rem;
+      font-weight: 300;
+      color: rgba(60, 40, 80, 0.6);
+      margin-bottom: 56px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 28px;
+    }
+
+    .option {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .preview-stack {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+    }
+
+    /* Large preview — 128×128 */
+    .fav-lg {
+      width: 128px;
+      height: 128px;
+      border-radius: 24px;
+      box-shadow: 0 8px 28px rgba(100, 60, 140, 0.18);
+      flex-shrink: 0;
+    }
+
+    /* Small preview row */
+    .small-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .fav-sm {
+      border-radius: 6px;
+      box-shadow: 0 2px 8px rgba(100, 60, 140, 0.15);
+      flex-shrink: 0;
+    }
+
+    .option-label {
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: rgba(30, 18, 48, 0.7);
+      text-align: center;
+      letter-spacing: 0.02em;
+    }
+
+    .option-num {
+      font-family: 'Gilda Display', Georgia, serif;
+      font-size: 1.1rem;
+      color: rgba(80, 40, 100, 0.82);
+    }
+
+    @media (max-width: 900px) {
+      .grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    @media (max-width: 600px) {
+      .grid { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+  <div class="top-bar"></div>
+  <div class="page">
+    <h1 class="page-title">Favicon Options</h1>
+    <p class="page-sub">Shown at 128px (app icon) and 32px / 16px (browser tab). Pick a number.</p>
+
+    <div class="grid">
+
+      <!-- 1: Gradient circle with PCG monogram -->
+      <div class="option">
+        <div class="preview-stack">
+          <svg class="fav-lg" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="g1" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#FFD6CC"/>
+                <stop offset="50%" stop-color="#D4A0C8"/>
+                <stop offset="100%" stop-color="#8ABCE8"/>
+              </linearGradient>
+            </defs>
+            <rect width="128" height="128" rx="24" fill="url(#g1)"/>
+            <text x="64" y="80" font-family="Georgia, serif" font-size="52" font-weight="400" fill="rgba(60,25,80,0.82)" text-anchor="middle" font-style="italic">P</text>
+          </svg>
+          <div class="small-row">
+            <svg class="fav-sm" width="32" height="32" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+              <defs><linearGradient id="g1b" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#FFD6CC"/><stop offset="50%" stop-color="#D4A0C8"/><stop offset="100%" stop-color="#8ABCE8"/></linearGradient></defs>
+              <rect width="128" height="128" rx="24" fill="url(#g1b)"/>
+              <text x="64" y="80" font-family="Georgia, serif" font-size="52" fill="rgba(60,25,80,0.82)" text-anchor="middle" font-style="italic">P</text>
+            </svg>
+            <svg class="fav-sm" width="16" height="16" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+              <defs><linearGradient id="g1c" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#FFD6CC"/><stop offset="50%" stop-color="#D4A0C8"/><stop offset="100%" stop-color="#8ABCE8"/></linearGradient></defs>
+              <rect width="128" height="128" rx="24" fill="url(#g1c)"/>
+              <text x="64" y="80" font-family="Georgia, serif" font-size="52" fill="rgba(60,25,80,0.82)" text-anchor="middle" font-style="italic">P</text>
+            </svg>
+          </div>
+        </div>
+        <div class="option-num">1</div>
+        <div class="option-label">Italic P<br>Dawn gradient</div>
+      </div>
+
+      <!-- 2: Deep plum with white heart -->
+      <div class="option">
+        <div class="preview-stack">
+          <svg class="fav-lg" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+            <rect width="128" height="128" rx="24" fill="rgba(72,35,92,1)"/>
+            <path d="M64 92 C64 92 28 68 28 46 C28 34 38 26 50 30 C56 32 60 36 64 40 C68 36 72 32 78 30 C90 26 100 34 100 46 C100 68 64 92 64 92Z" fill="rgba(255,255,255,0.9)"/>
+          </svg>
+          <div class="small-row">
+            <svg class="fav-sm" width="32" height="32" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+              <rect width="128" height="128" rx="24" fill="rgba(72,35,92,1)"/>
+              <path d="M64 92 C64 92 28 68 28 46 C28 34 38 26 50 30 C56 32 60 36 64 40 C68 36 72 32 78 30 C90 26 100 34 100 46 C100 68 64 92 64 92Z" fill="rgba(255,255,255,0.9)"/>
+            </svg>
+            <svg class="fav-sm" width="16" height="16" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+              <rect width="128" height="128" rx="24" fill="rgba(72,35,92,1)"/>
+              <path d="M64 92 C64 92 28 68 28 46 C28 34 38 26 50 30 C56 32 60 36 64 40 C68 36 72 32 78 30 C90 26 100 34 100 46 C100 68 64 92 64 92Z" fill="rgba(255,255,255,0.9)"/>
+            </svg>
+          </div>
+        </div>
+        <div class="option-num">2</div>
+        <div class="option-label">White heart<br>Deep plum</div>
+      </div>
+
+      <!-- 3: Gradient heart -->
+      <div class="option">
+        <div class="preview-stack">
+          <svg class="fav-lg" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="g3" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#F4B8C1"/>
+                <stop offset="100%" stop-color="#B8A8D8"/>
+              </linearGradient>
+            </defs>
+            <rect width="128" height="128" rx="24" fill="white"/>
+            <path d="M64 96 C64 96 22 70 22 44 C22 30 33 20 48 25 C55 27 60 33 64 38 C68 33 73 27 80 25 C95 20 106 30 106 44 C106 70 64 96 64 96Z" fill="url(#g3)"/>
+          </svg>
+          <div class="small-row">
+            <svg class="fav-sm" width="32" height="32" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+              <defs><linearGradient id="g3b" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#F4B8C1"/><stop offset="100%" stop-color="#B8A8D8"/></linearGradient></defs>
+              <rect width="128" height="128" rx="24" fill="white"/>
+              <path d="M64 96 C64 96 22 70 22 44 C22 30 33 20 48 25 C55 27 60 33 64 38 C68 33 73 27 80 25 C95 20 106 30 106 44 C106 70 64 96 64 96Z" fill="url(#g3b)"/>
+            </svg>
+            <svg class="fav-sm" width="16" height="16" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+              <defs><linearGradient id="g3c" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#F4B8C1"/><stop offset="100%" stop-color="#B8A8D8"/></linearGradient></defs>
+              <rect width="128" height="128" rx="24" fill="white"/>
+              <path d="M64 96 C64 96 22 70 22 44 C22 30 33 20 48 25 C55 27 60 33 64 38 C68 33 73 27 80 25 C95 20 106 30 106 44 C106 70 64 96 64 96Z" fill="url(#g3c)"/>
+            </svg>
+          </div>
+        </div>
+        <div class="option-num">3</div>
+        <div class="option-label">Gradient heart<br>White bg</div>
+      </div>
+
+      <!-- 4: House with heart inside -->
+      <div class="option">
+        <div class="preview-stack">
+          <svg class="fav-lg" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="g4" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#FFD6CC"/>
+                <stop offset="100%" stop-color="#D4A0C8"/>
+              </linearGradient>
+            </defs>
+            <rect width="128" height="128" rx="24" fill="url(#g4)"/>
+            <!-- house body -->
+            <rect x="34" y="62" width="60" height="44" rx="4" fill="rgba(72,35,92,0.85)"/>
+            <!-- roof -->
+            <polygon points="20,66 64,22 108,66" fill="rgba(72,35,92,1)"/>
+            <!-- heart -->
+            <path d="M64 85 C64 85 50 76 50 68 C50 63 55 60 60 63 C61.5 63.8 63 65 64 66.5 C65 65 66.5 63.8 68 63 C73 60 78 63 78 68 C78 76 64 85 64 85Z" fill="rgba(255,255,255,0.92)"/>
+          </svg>
+          <div class="small-row">
+            <svg class="fav-sm" width="32" height="32" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+              <defs><linearGradient id="g4b" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#FFD6CC"/><stop offset="100%" stop-color="#D4A0C8"/></linearGradient></defs>
+              <rect width="128" height="128" rx="24" fill="url(#g4b)"/>
+              <rect x="34" y="62" width="60" height="44" rx="4" fill="rgba(72,35,92,0.85)"/>
+              <polygon points="20,66 64,22 108,66" fill="rgba(72,35,92,1)"/>
+              <path d="M64 85 C64 85 50 76 50 68 C50 63 55 60 60 63 C61.5 63.8 63 65 64 66.5 C65 65 66.5 63.8 68 63 C73 60 78 63 78 68 C78 76 64 85 64 85Z" fill="rgba(255,255,255,0.92)"/>
+            </svg>
+            <svg class="fav-sm" width="16" height="16" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+              <defs><linearGradient id="g4c" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#FFD6CC"/><stop offset="100%" stop-color="#D4A0C8"/></linearGradient></defs>
+              <rect width="128" height="128" rx="24" fill="url(#g4c)"/>
+              <rect x="34" y="62" width="60" height="44" rx="4" fill="rgba(72,35,92,0.85)"/>
+              <polygon points="20,66 64,22 108,66" fill="rgba(72,35,92,1)"/>
+              <path d="M64 85 C64 85 50 76 50 68 C50 63 55 60 60 63 C61.5 63.8 63 65 64 66.5 C65 65 66.5 63.8 68 63 C73 60 78 63 78 68 C78 76 64 85 64 85Z" fill="rgba(255,255,255,0.92)"/>
+            </svg>
+          </div>
+        </div>
+        <div class="option-num">4</div>
+        <div class="option-label">Home + heart<br>Dawn gradient</div>
+      </div>
+
+      <!-- 5: Two hands cradling -->
+      <div class="option">
+        <div class="preview-stack">
+          <svg class="fav-lg" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+            <rect width="128" height="128" rx="24" fill="rgba(72,35,92,1)"/>
+            <!-- left hand arc -->
+            <path d="M20 90 Q20 50 50 40 Q58 38 64 42" stroke="rgba(255,210,220,0.95)" stroke-width="9" fill="none" stroke-linecap="round"/>
+            <!-- right hand arc -->
+            <path d="M108 90 Q108 50 78 40 Q70 38 64 42" stroke="rgba(184,168,216,0.95)" stroke-width="9" fill="none" stroke-linecap="round"/>
+            <!-- heart in center -->
+            <path d="M64 72 C64 72 52 64 52 56 C52 51 56.5 48 61 51 C62.2 51.7 63.2 52.8 64 54 C64.8 52.8 65.8 51.7 67 51 C71.5 48 76 51 76 56 C76 64 64 72 64 72Z" fill="rgba(255,255,255,0.9)"/>
+          </svg>
+          <div class="small-row">
+            <svg class="fav-sm" width="32" height="32" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+              <rect width="128" height="128" rx="24" fill="rgba(72,35,92,1)"/>
+              <path d="M20 90 Q20 50 50 40 Q58 38 64 42" stroke="rgba(255,210,220,0.95)" stroke-width="9" fill="none" stroke-linecap="round"/>
+              <path d="M108 90 Q108 50 78 40 Q70 38 64 42" stroke="rgba(184,168,216,0.95)" stroke-width="9" fill="none" stroke-linecap="round"/>
+              <path d="M64 72 C64 72 52 64 52 56 C52 51 56.5 48 61 51 C62.2 51.7 63.2 52.8 64 54 C64.8 52.8 65.8 51.7 67 51 C71.5 48 76 51 76 56 C76 64 64 72 64 72Z" fill="rgba(255,255,255,0.9)"/>
+            </svg>
+            <svg class="fav-sm" width="16" height="16" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+              <rect width="128" height="128" rx="24" fill="rgba(72,35,92,1)"/>
+              <path d="M20 90 Q20 50 50 40 Q58 38 64 42" stroke="rgba(255,210,220,0.95)" stroke-width="9" fill="none" stroke-linecap="round"/>
+              <path d="M108 90 Q108 50 78 40 Q70 38 64 42" stroke="rgba(184,168,216,0.95)" stroke-width="9" fill="none" stroke-linecap="round"/>
+              <path d="M64 72 C64 72 52 64 52 56 C52 51 56.5 48 61 51 C62.2 51.7 63.2 52.8 64 54 C64.8 52.8 65.8 51.7 67 51 C71.5 48 76 51 76 56 C76 64 64 72 64 72Z" fill="rgba(255,255,255,0.9)"/>
+            </svg>
+          </div>
+        </div>
+        <div class="option-num">5</div>
+        <div class="option-label">Cupped hands<br>Deep plum</div>
+      </div>
+
+      <!-- 6: Sunrise / dawn arc -->
+      <div class="option">
+        <div class="preview-stack">
+          <svg class="fav-lg" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="g6sky" x1="0%" y1="100%" x2="0%" y2="0%">
+                <stop offset="0%" stop-color="#B8A8D8"/>
+                <stop offset="100%" stop-color="#FFD6CC"/>
+              </linearGradient>
+              <linearGradient id="g6sun" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#FFD6CC"/>
+                <stop offset="100%" stop-color="#F4B8C1"/>
+              </linearGradient>
+            </defs>
+            <rect width="128" height="128" rx="24" fill="url(#g6sky)"/>
+            <!-- horizon line -->
+            <rect x="16" y="80" width="96" height="3" rx="1.5" fill="rgba(72,35,92,0.3)"/>
+            <!-- sun semicircle -->
+            <path d="M32 80 A32 32 0 0 1 96 80" fill="url(#g6sun)"/>
+            <!-- rays -->
+            <line x1="64" y1="38" x2="64" y2="28" stroke="rgba(255,200,180,0.8)" stroke-width="4" stroke-linecap="round"/>
+            <line x1="82" y1="44" x2="88" y2="36" stroke="rgba(255,200,180,0.8)" stroke-width="4" stroke-linecap="round"/>
+            <line x1="46" y1="44" x2="40" y2="36" stroke="rgba(255,200,180,0.8)" stroke-width="4" stroke-linecap="round"/>
+            <line x1="92" y1="62" x2="102" y2="58" stroke="rgba(255,200,180,0.8)" stroke-width="4" stroke-linecap="round"/>
+            <line x1="36" y1="62" x2="26" y2="58" stroke="rgba(255,200,180,0.8)" stroke-width="4" stroke-linecap="round"/>
+          </svg>
+          <div class="small-row">
+            <svg class="fav-sm" width="32" height="32" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+              <defs><linearGradient id="g6skyb" x1="0%" y1="100%" x2="0%" y2="0%"><stop offset="0%" stop-color="#B8A8D8"/><stop offset="100%" stop-color="#FFD6CC"/></linearGradient><linearGradient id="g6sunb" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#FFD6CC"/><stop offset="100%" stop-color="#F4B8C1"/></linearGradient></defs>
+              <rect width="128" height="128" rx="24" fill="url(#g6skyb)"/>
+              <rect x="16" y="80" width="96" height="3" rx="1.5" fill="rgba(72,35,92,0.3)"/>
+              <path d="M32 80 A32 32 0 0 1 96 80" fill="url(#g6sunb)"/>
+            </svg>
+            <svg class="fav-sm" width="16" height="16" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+              <defs><linearGradient id="g6skyc" x1="0%" y1="100%" x2="0%" y2="0%"><stop offset="0%" stop-color="#B8A8D8"/><stop offset="100%" stop-color="#FFD6CC"/></linearGradient><linearGradient id="g6sunc" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#FFD6CC"/><stop offset="100%" stop-color="#F4B8C1"/></linearGradient></defs>
+              <rect width="128" height="128" rx="24" fill="url(#g6skyc)"/>
+              <rect x="16" y="80" width="96" height="3" rx="1.5" fill="rgba(72,35,92,0.3)"/>
+              <path d="M32 80 A32 32 0 0 1 96 80" fill="url(#g6sunc)"/>
+            </svg>
+          </div>
+        </div>
+        <div class="option-num">6</div>
+        <div class="option-label">Sunrise<br>Dawn gradient</div>
+      </div>
+
+      <!-- 7: Shield with P -->
+      <div class="option">
+        <div class="preview-stack">
+          <svg class="fav-lg" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="g7" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#E8A0B4"/>
+                <stop offset="100%" stop-color="#98A8E0"/>
+              </linearGradient>
+            </defs>
+            <rect width="128" height="128" rx="24" fill="white"/>
+            <!-- shield -->
+            <path d="M64 18 L100 32 L100 68 C100 88 80 104 64 110 C48 104 28 88 28 68 L28 32 Z" fill="url(#g7)"/>
+            <text x="64" y="80" font-family="Georgia, serif" font-size="46" font-weight="400" fill="white" text-anchor="middle" font-style="italic">P</text>
+          </svg>
+          <div class="small-row">
+            <svg class="fav-sm" width="32" height="32" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+              <defs><linearGradient id="g7b" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#E8A0B4"/><stop offset="100%" stop-color="#98A8E0"/></linearGradient></defs>
+              <rect width="128" height="128" rx="24" fill="white"/>
+              <path d="M64 18 L100 32 L100 68 C100 88 80 104 64 110 C48 104 28 88 28 68 L28 32 Z" fill="url(#g7b)"/>
+              <text x="64" y="80" font-family="Georgia, serif" font-size="46" fill="white" text-anchor="middle" font-style="italic">P</text>
+            </svg>
+            <svg class="fav-sm" width="16" height="16" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+              <defs><linearGradient id="g7c" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#E8A0B4"/><stop offset="100%" stop-color="#98A8E0"/></linearGradient></defs>
+              <rect width="128" height="128" rx="24" fill="white"/>
+              <path d="M64 18 L100 32 L100 68 C100 88 80 104 64 110 C48 104 28 88 28 68 L28 32 Z" fill="url(#g7c)"/>
+              <text x="64" y="80" font-family="Georgia, serif" font-size="46" fill="white" text-anchor="middle" font-style="italic">P</text>
+            </svg>
+          </div>
+        </div>
+        <div class="option-num">7</div>
+        <div class="option-label">Shield + P<br>Blush to slate</div>
+      </div>
+
+      <!-- 8: Leaf / nature -->
+      <div class="option">
+        <div class="preview-stack">
+          <svg class="fav-lg" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="g8" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#D4A0C8"/>
+                <stop offset="100%" stop-color="#8ABCE8"/>
+              </linearGradient>
+            </defs>
+            <rect width="128" height="128" rx="24" fill="rgba(72,35,92,1)"/>
+            <!-- leaf shape -->
+            <path d="M64 100 Q30 80 30 48 Q30 20 64 16 Q98 20 98 48 Q98 80 64 100Z" fill="url(#g8)" opacity="0.95"/>
+            <!-- stem -->
+            <line x1="64" y1="100" x2="64" y2="112" stroke="rgba(212,160,200,0.7)" stroke-width="5" stroke-linecap="round"/>
+            <!-- vein -->
+            <line x1="64" y1="28" x2="64" y2="96" stroke="rgba(72,35,92,0.4)" stroke-width="2.5" stroke-linecap="round"/>
+          </svg>
+          <div class="small-row">
+            <svg class="fav-sm" width="32" height="32" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+              <defs><linearGradient id="g8b" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#D4A0C8"/><stop offset="100%" stop-color="#8ABCE8"/></linearGradient></defs>
+              <rect width="128" height="128" rx="24" fill="rgba(72,35,92,1)"/>
+              <path d="M64 100 Q30 80 30 48 Q30 20 64 16 Q98 20 98 48 Q98 80 64 100Z" fill="url(#g8b)" opacity="0.95"/>
+              <line x1="64" y1="100" x2="64" y2="112" stroke="rgba(212,160,200,0.7)" stroke-width="5" stroke-linecap="round"/>
+            </svg>
+            <svg class="fav-sm" width="16" height="16" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+              <defs><linearGradient id="g8c" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#D4A0C8"/><stop offset="100%" stop-color="#8ABCE8"/></linearGradient></defs>
+              <rect width="128" height="128" rx="24" fill="rgba(72,35,92,1)"/>
+              <path d="M64 100 Q30 80 30 48 Q30 20 64 16 Q98 20 98 48 Q98 80 64 100Z" fill="url(#g8c)" opacity="0.95"/>
+            </svg>
+          </div>
+        </div>
+        <div class="option-num">8</div>
+        <div class="option-label">Leaf<br>Lavender to sky</div>
+      </div>
+
+      <!-- 9: Three connected circles (family) -->
+      <div class="option">
+        <div class="preview-stack">
+          <svg class="fav-lg" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="g9" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#FFD6CC"/>
+                <stop offset="50%" stop-color="#E8A0B4"/>
+                <stop offset="100%" stop-color="#B8A8D8"/>
+              </linearGradient>
+            </defs>
+            <rect width="128" height="128" rx="24" fill="rgba(72,35,92,1)"/>
+            <!-- connecting lines -->
+            <line x1="40" y1="56" x2="88" y2="56" stroke="rgba(212,160,200,0.4)" stroke-width="3"/>
+            <line x1="64" y1="56" x2="64" y2="84" stroke="rgba(212,160,200,0.4)" stroke-width="3"/>
+            <!-- parent left -->
+            <circle cx="40" cy="50" r="18" fill="url(#g9)" opacity="0.9"/>
+            <!-- parent right -->
+            <circle cx="88" cy="50" r="18" fill="url(#g9)" opacity="0.9"/>
+            <!-- child bottom -->
+            <circle cx="64" cy="90" r="14" fill="url(#g9)" opacity="0.75"/>
+          </svg>
+          <div class="small-row">
+            <svg class="fav-sm" width="32" height="32" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+              <defs><linearGradient id="g9b" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#FFD6CC"/><stop offset="50%" stop-color="#E8A0B4"/><stop offset="100%" stop-color="#B8A8D8"/></linearGradient></defs>
+              <rect width="128" height="128" rx="24" fill="rgba(72,35,92,1)"/>
+              <line x1="40" y1="56" x2="88" y2="56" stroke="rgba(212,160,200,0.4)" stroke-width="3"/>
+              <line x1="64" y1="56" x2="64" y2="84" stroke="rgba(212,160,200,0.4)" stroke-width="3"/>
+              <circle cx="40" cy="50" r="18" fill="url(#g9b)" opacity="0.9"/>
+              <circle cx="88" cy="50" r="18" fill="url(#g9b)" opacity="0.9"/>
+              <circle cx="64" cy="90" r="14" fill="url(#g9b)" opacity="0.75"/>
+            </svg>
+            <svg class="fav-sm" width="16" height="16" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+              <defs><linearGradient id="g9c" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#FFD6CC"/><stop offset="50%" stop-color="#E8A0B4"/><stop offset="100%" stop-color="#B8A8D8"/></linearGradient></defs>
+              <rect width="128" height="128" rx="24" fill="rgba(72,35,92,1)"/>
+              <circle cx="40" cy="50" r="18" fill="url(#g9c)" opacity="0.9"/>
+              <circle cx="88" cy="50" r="18" fill="url(#g9c)" opacity="0.9"/>
+              <circle cx="64" cy="90" r="14" fill="url(#g9c)" opacity="0.75"/>
+            </svg>
+          </div>
+        </div>
+        <div class="option-num">9</div>
+        <div class="option-label">Family nodes<br>Deep plum</div>
+      </div>
+
+      <!-- 10: Compass / guide -->
+      <div class="option">
+        <div class="preview-stack">
+          <svg class="fav-lg" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="g10a" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#FFD6CC"/>
+                <stop offset="100%" stop-color="#D4A0C8"/>
+              </linearGradient>
+              <linearGradient id="g10b" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#B8A8D8"/>
+                <stop offset="100%" stop-color="#8ABCE8"/>
+              </linearGradient>
+            </defs>
+            <rect width="128" height="128" rx="24" fill="white"/>
+            <!-- outer ring -->
+            <circle cx="64" cy="64" r="46" fill="none" stroke="rgba(212,160,200,0.35)" stroke-width="3"/>
+            <!-- north needle warm -->
+            <polygon points="64,18 70,64 58,64" fill="url(#g10a)"/>
+            <!-- south needle cool -->
+            <polygon points="64,110 70,64 58,64" fill="url(#g10b)"/>
+            <!-- east/west ticks -->
+            <line x1="18" y1="64" x2="28" y2="64" stroke="rgba(180,140,200,0.5)" stroke-width="3" stroke-linecap="round"/>
+            <line x1="100" y1="64" x2="110" y2="64" stroke="rgba(180,140,200,0.5)" stroke-width="3" stroke-linecap="round"/>
+            <!-- center dot -->
+            <circle cx="64" cy="64" r="6" fill="rgba(72,35,92,0.9)"/>
+          </svg>
+          <div class="small-row">
+            <svg class="fav-sm" width="32" height="32" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+              <defs><linearGradient id="g10ab" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#FFD6CC"/><stop offset="100%" stop-color="#D4A0C8"/></linearGradient><linearGradient id="g10bb" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#B8A8D8"/><stop offset="100%" stop-color="#8ABCE8"/></linearGradient></defs>
+              <rect width="128" height="128" rx="24" fill="white"/>
+              <circle cx="64" cy="64" r="46" fill="none" stroke="rgba(212,160,200,0.35)" stroke-width="3"/>
+              <polygon points="64,18 70,64 58,64" fill="url(#g10ab)"/>
+              <polygon points="64,110 70,64 58,64" fill="url(#g10bb)"/>
+              <circle cx="64" cy="64" r="6" fill="rgba(72,35,92,0.9)"/>
+            </svg>
+            <svg class="fav-sm" width="16" height="16" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+              <defs><linearGradient id="g10ac" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#FFD6CC"/><stop offset="100%" stop-color="#D4A0C8"/></linearGradient><linearGradient id="g10bc" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#B8A8D8"/><stop offset="100%" stop-color="#8ABCE8"/></linearGradient></defs>
+              <rect width="128" height="128" rx="24" fill="white"/>
+              <polygon points="64,18 70,64 58,64" fill="url(#g10ac)"/>
+              <polygon points="64,110 70,64 58,64" fill="url(#g10bc)"/>
+              <circle cx="64" cy="64" r="5" fill="rgba(72,35,92,0.9)"/>
+            </svg>
+          </div>
+        </div>
+        <div class="option-num">10</div>
+        <div class="option-label">Compass<br>Guide theme</div>
+      </div>
+
+    </div>
+  </div>
+</body>
+</html>
