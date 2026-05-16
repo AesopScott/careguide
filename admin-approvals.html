@@ -297,7 +297,7 @@
 
     // ── Auth guard ──
     function showBlocker(msg) {
-      document.getElementById('app-content').style.visibility = '';
+      document.getElementById('app-content').style.visibility = 'visible';
       const main = document.querySelector('main');
       main.innerHTML = `<div class="empty"><div class="empty-icon">⚠️</div><h3>Can't load this page</h3><p>${msg}</p><p style="margin-top:16px"><a href="/login.html" style="color:var(--plum);font-weight:500">Sign in again</a></p></div>`;
     }
@@ -310,7 +310,7 @@
           showBlocker(`Signed in as <strong>${user.email}</strong>, but this account is not an admin. Custom claims: <code>${JSON.stringify(token.claims)}</code>`);
           return;
         }
-        document.getElementById('app-content').style.visibility = '';
+        document.getElementById('app-content').style.visibility = 'visible';
         wireSignOut();
         loadAll();
       } catch (err) {
