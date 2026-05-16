@@ -367,13 +367,13 @@ onAuthStateChanged(auth, async (user) => {
   }
   if (!token.claims.family) {
     // Unactivated user — show waiting state
-    document.body.style.visibility = '';
+    document.body.style.visibility = 'visible';
     showWaiting(); return;
   }
 
   currentUser = user;
   familyId    = token.claims.family_group_id || null;
-  document.body.style.visibility = '';
+  document.body.style.visibility = 'visible';
 
   // Greeting
   document.getElementById('navUser').textContent = user.displayName || user.email;

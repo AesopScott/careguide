@@ -338,7 +338,7 @@ onAuthStateChanged(auth, async (user) => {
     window.location.href = '/login.html'; return;
   }
   currentUser = user;
-  document.body.style.visibility = '';
+  document.body.style.visibility = 'visible';
   document.getElementById('backToClient').href = `/client.html?id=${familyId}`;
   await loadData();
 });

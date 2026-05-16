@@ -683,7 +683,7 @@ onAuthStateChanged(auth, async (user) => {
     return;
   }
   currentUser = user;
-  document.body.style.visibility = '';
+  document.body.style.visibility = 'visible';
   await loadClient();
 });
 

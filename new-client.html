@@ -653,7 +653,7 @@ onAuthStateChanged(auth, async (user) => {
     return;
   }
   currentUser = user;
-  document.body.style.visibility = '';
+  document.body.style.visibility = 'visible';
 });
 
 document.getElementById('signOutBtn').addEventListener('click', async () => {

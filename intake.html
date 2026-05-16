@@ -446,7 +446,7 @@ onAuthStateChanged(auth, async (user) => {
   const token = await user.getIdTokenResult();
   if (!token.claims.practitioner && !token.claims.admin) { window.location.href = '/login.html'; return; }
   currentUser = user;
-  document.body.style.visibility = '';
+  document.body.style.visibility = 'visible';
   document.getElementById('backLink').href = `/client.html?id=${familyId}`;
   document.getElementById('goToPlanBtn').href = `/care-plan.html?id=${familyId}`;
 
