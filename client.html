@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Parental Care Guide — Client</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Gilda+Display&family=Jost:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --plum:        #501464;
+      --plum-light:  #6b1e85;
+      --plum-pale:   #f5eeff;
+      --plum-muted:  rgba(80,20,100,0.08);
+      --text-dark:   #1e1230;
+      --text-mid:    #4a3060;
+      --text-muted:  #8b7a9e;
+      --bg:          #faf9fc;
+      --surface:     #ffffff;
+      --border:      #ece6f4;
+      --border-mid:  #d8cce8;
+
+      --level-low:    #2ea043;
+      --level-medium: #e3a008;
+      --level-high:   #d97706;
+      --level-crisis: #dc2626;
+
+      --nav-h: 60px;
+    }
+
+    body {
+      font-family: 'Jost', 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text-dark);
+      font-size: 14px;
+      line-height: 1.5;
+      min-height: 100vh;
+      visibility: hidden;
+    }
+
+    /* ── Nav ── */
+    .top-nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: var(--nav-h);
+      background: var(--plum);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      z-index: 100;
+    }
+    .nav-brand {
+      font-family: 'Gilda Display', Georgia, serif;
+      font-size: 1rem;
+      color: rgba(255,255,255,0.9);
+      letter-spacing: 0.01em;
+      text-decoration: none;
+    }
+    .nav-center {
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: rgba(255,255,255,0.5);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .nav-right { display: flex; align-items: center; gap: 16px; }
+    .nav-back {
+      font-size: 0.8rem;
+      color: rgba(255,255,255,0.6);
+      background: none;
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 6px;
+      padding: 5px 12px;
+      cursor: pointer;
+      font-family: 'Jost', sans-serif;
+      text-decoration: none;
+      transition: all 0.15s;
+    }
+    .nav-back:hover { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.85); }
+
+    /* ── Page ── */
+    .page {
+      padding-top: calc(var(--nav-h) + 32px);
+      padding-bottom: 80px;
+      max-width: 960px;
+      margin: 0 auto;
+      padding-left: 24px;
+      padding-right: 24px;
+    }
+
+    /* ── Client header ── */
+    .client-header {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .client-header-left {}
+
+    .client-name {
+      font-family: 'Gilda Display', Georgia, serif;
+      font-size: 1.6rem;
+      font-weight: 400;
+      color: var(--text-dark);
+      letter-spacing: -0.02em;
+      margin-bottom: 4px;
+    }
+    .client-meta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .client-meta-item {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+    .meta-sep { color: var(--border-mid); }
+
+    .level-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: 20px;
+    }
+    .level-badge::before {
+      content: '';
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+    .badge-low    { color: var(--level-low);    background: #f0faf3; }
+    .badge-medium { color: var(--level-medium);  background: #fffbeb; }
+    .badge-high   { color: var(--level-high);    background: #fff7ed; }
+    .badge-crisis { color: var(--level-crisis);  background: #fff5f5; }
+
+    .client-header-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .btn-action {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 9px 18px;
+      border-radius: 8px;
+      font-size: 0.825rem;
+      font-weight: 600;
+      font-family: 'Jost', sans-serif;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.15s;
+      border: 1px solid transparent;
+    }
+    .btn-primary {
+      background: var(--plum);
+      color: #fff;
+    }
+    .btn-primary:hover { background: var(--plum-light); }
+    .btn-outline {
+      background: transparent;
+      color: var(--plum);
+      border-color: var(--border-mid);
+    }
+    .btn-outline:hover { background: var(--plum-muted); border-color: var(--plum); }
+    .btn-danger-outline {
+      background: transparent;
+      color: var(--level-crisis);
+      border-color: #fca5a5;
+    }
+    .btn-danger-outline:hover { background: #fff5f5; }
+
+    /* ── Urgent flags ── */
+    .urgent-banner {
+      background: #fff5f5;
+      border: 1px solid #fca5a5;
+      border-radius: 12px;
+      padding: 16px 20px;
+      margin-bottom: 20px;
+      display: none;
+    }
+    .urgent-banner.visible { display: block; }
+    .urgent-banner-title {
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #b91c1c;
+      margin-bottom: 10px;
+    }
+    .urgent-flag-list { display: flex; flex-direction: column; gap: 6px; }
+    .urgent-flag-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.875rem;
+      color: #b91c1c;
+    }
+
+    /* ── Section tabs ── */
+    .tabs {
+      display: flex;
+      gap: 4px;
+      border-bottom: 2px solid var(--border);
+      margin-bottom: 24px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .tabs::-webkit-scrollbar { display: none; }
+    .tab {
+      padding: 10px 18px;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -2px;
+      cursor: pointer;
+      font-family: 'Jost', sans-serif;
+      white-space: nowrap;
+      transition: color 0.15s, border-color 0.15s;
+    }
+    .tab:hover { color: var(--text-mid); }
+    .tab.active { color: var(--plum); border-bottom-color: var(--plum); font-weight: 600; }
+
+    /* ── Tab panels ── */
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* ── Section card ── */
+    .section-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      margin-bottom: 16px;
+      overflow: hidden;
+    }
+    .section-card-header {
+      padding: 18px 24px 14px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .section-card-title {
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+    .section-card-body {
+      padding: 20px 24px;
+    }
+
+    /* ── Info grid ── */
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 16px;
+    }
+    .info-field label {
+      display: block;
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+    .info-field .val {
+      font-size: 0.9rem;
+      color: var(--text-dark);
+    }
+    .info-field .val.empty { color: var(--text-muted); font-style: italic; }
+
+    /* ── Edit fields (inline) ── */
+    .inline-edit {
+      width: 100%;
+      padding: 6px 10px;
+      border: 1px solid var(--border-mid);
+      border-radius: 6px;
+      font-family: 'Jost', sans-serif;
+      font-size: 0.9rem;
+      color: var(--text-dark);
+      background: #fff;
+    }
+    .inline-edit:focus { outline: none; border-color: var(--plum); box-shadow: 0 0 0 3px var(--plum-muted); }
+
+    /* ── Empty section ── */
+    .empty-section {
+      text-align: center;
+      padding: 48px 24px;
+      color: var(--text-muted);
+    }
+    .empty-section p { font-size: 0.9rem; margin-bottom: 16px; }
+
+    /* ── Notes list ── */
+    .note-item {
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .note-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .note-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 6px;
+    }
+    .note-date { font-size: 0.75rem; color: var(--text-muted); }
+    .note-type {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--plum);
+      background: var(--plum-pale);
+      padding: 2px 8px;
+      border-radius: 10px;
+    }
+    .note-text { font-size: 0.875rem; color: var(--text-dark); line-height: 1.6; }
+
+    /* ── Med list ── */
+    .med-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+      gap: 12px;
+    }
+    .med-item:last-child { border-bottom: none; }
+    .med-name { font-weight: 600; font-size: 0.9rem; color: var(--text-dark); }
+    .med-detail { font-size: 0.8rem; color: var(--text-muted); margin-top: 2px; }
+    .med-status {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border-radius: 10px;
+      flex-shrink: 0;
+    }
+    .med-active   { color: var(--level-low); background: #f0faf3; }
+    .med-inactive { color: var(--text-muted); background: var(--bg); }
+
+    /* ── Care level editor ── */
+    .level-select {
+      padding: 6px 10px;
+      border: 1px solid var(--border-mid);
+      border-radius: 6px;
+      font-family: 'Jost', sans-serif;
+      font-size: 0.875rem;
+      color: var(--text-dark);
+      background: #fff;
+      cursor: pointer;
+    }
+    .level-select:focus { outline: none; border-color: var(--plum); }
+
+    /* ── Crisis card panel ── */
+    .crisis-card-preview {
+      border: 2px solid #fca5a5;
+      border-radius: 12px;
+      padding: 24px;
+      background: #fff5f5;
+    }
+    .crisis-card-preview h3 {
+      font-family: 'Gilda Display', Georgia, serif;
+      font-size: 1.1rem;
+      color: #b91c1c;
+      margin-bottom: 16px;
+    }
+    .crisis-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    .crisis-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #b91c1c;
+      width: 100px;
+      flex-shrink: 0;
+      padding-top: 1px;
+    }
+    .crisis-val {
+      font-size: 0.875rem;
+      color: var(--text-dark);
+    }
+    .crisis-val.empty { color: var(--text-muted); font-style: italic; }
+
+    /* ── Skeleton loading ── */
+    .skeleton {
+      background: linear-gradient(90deg, #ede8f5 25%, #f5f0ff 50%, #ede8f5 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.4s infinite;
+      border-radius: 6px;
+    }
+    @keyframes shimmer { to { background-position: -200% 0; } }
+
+    .skel-h1  { height: 28px; width: 220px; margin-bottom: 10px; }
+    .skel-sm  { height: 14px; width: 160px; }
+    .skel-block { height: 14px; width: 100%; margin-bottom: 8px; }
+    .skel-block:last-child { width: 60%; }
+
+    /* ── Inline save feedback ── */
+    .save-toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: var(--plum);
+      color: #fff;
+      padding: 10px 20px;
+      border-radius: 10px;
+      font-size: 0.875rem;
+      font-weight: 500;
+      opacity: 0;
+      transform: translateY(8px);
+      transition: opacity 0.2s, transform 0.2s;
+      pointer-events: none;
+      z-index: 200;
+    }
+    .save-toast.show { opacity: 1; transform: translateY(0); }
+  </style>
+</head>
+<body>
+
+<nav class="top-nav">
+  <a href="/dashboard.html" class="nav-brand">Parental Care Guide</a>
+  <span class="nav-center" id="navTitle">Client</span>
+  <div class="nav-right">
+    <a href="/dashboard.html" class="nav-back">← Roster</a>
+  </div>
+</nav>
+
+<main class="page">
+
+  <!-- ── Client header ── -->
+  <div class="client-header" id="clientHeader">
+    <!-- skeleton while loading -->
+    <div>
+      <div class="skeleton skel-h1"></div>
+      <div class="skeleton skel-sm"></div>
+    </div>
+  </div>
+
+  <!-- ── Urgent flags ── -->
+  <div class="urgent-banner" id="urgentBanner">
+    <div class="urgent-banner-title">⚑ Urgent flags</div>
+    <div class="urgent-flag-list" id="urgentFlagList"></div>
+  </div>
+
+  <!-- ── Tabs ── -->
+  <div class="tabs" id="tabs" style="display:none;">
+    <button class="tab active" data-tab="overview">Overview</button>
+    <button class="tab" data-tab="notes">Session Notes</button>
+    <button class="tab" data-tab="medications">Medications</button>
+    <button class="tab" data-tab="crisis">Crisis Card</button>
+  </div>
+
+  <!-- ── Overview ── -->
+  <div class="tab-panel active" id="panel-overview">
+
+    <div class="section-card">
+      <div class="section-card-header">
+        <span class="section-card-title">Primary Parent</span>
+        <button class="btn-outline btn-action" id="editParentBtn" style="padding:5px 14px;font-size:0.78rem;" onclick="toggleEditParent()">Edit</button>
+      </div>
+      <div class="section-card-body">
+        <div class="info-grid" id="parentInfo">
+          <div class="skeleton skel-block"></div>
+          <div class="skeleton skel-block"></div>
+          <div class="skeleton skel-block"></div>
+          <div class="skeleton skel-block"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <div class="section-card-header">
+        <span class="section-card-title">Care Level</span>
+      </div>
+      <div class="section-card-body">
+        <div id="careLevelSection">
+          <select class="level-select" id="careLevelSelect" onchange="saveCareLevelChange()">
+            <option value="low">Low — Stable, monitoring and check-ins</option>
+            <option value="medium">Medium — Active support, regular coordination</option>
+            <option value="high">High — Complex needs, frequent attention</option>
+            <option value="crisis">Crisis — Immediate risk, priority response</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <div class="section-card-header">
+        <span class="section-card-title">Urgent Flags</span>
+        <button class="btn-outline btn-action" style="padding:5px 14px;font-size:0.78rem;" onclick="addUrgentFlag()">+ Add flag</button>
+      </div>
+      <div class="section-card-body">
+        <div id="flagsList">
+          <div class="empty-section" style="padding:24px;">
+            <p>No urgent flags.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ── Session Notes ── -->
+  <div class="tab-panel" id="panel-notes">
+    <div class="section-card">
+      <div class="section-card-header">
+        <span class="section-card-title">Session Notes</span>
+        <button class="btn-primary btn-action" style="padding:6px 14px;font-size:0.78rem;" onclick="openAddNote()">+ Add note</button>
+      </div>
+      <div class="section-card-body" id="notesList">
+        <div class="empty-section">
+          <p>No session notes yet.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Medications ── -->
+  <div class="tab-panel" id="panel-medications">
+    <div class="section-card">
+      <div class="section-card-header">
+        <span class="section-card-title">Medications</span>
+        <a href="/medications.html?id=FAMILY_ID" class="btn-primary btn-action" id="manageMedsBtn" style="padding:6px 14px;font-size:0.78rem;">Manage</a>
+      </div>
+      <div class="section-card-body" id="medsList">
+        <div class="empty-section">
+          <p>No medications on record.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Crisis Card ── -->
+  <div class="tab-panel" id="panel-crisis">
+    <div class="section-card">
+      <div class="section-card-header">
+        <span class="section-card-title">Crisis Card</span>
+        <a href="/crisis-card.html?id=FAMILY_ID" class="btn-danger-outline btn-action" id="crisisCardBtn" style="padding:6px 14px;font-size:0.78rem;">View / Print</a>
+      </div>
+      <div class="section-card-body">
+        <div class="crisis-card-preview" id="crisisPreview">
+          <h3>Emergency Information</h3>
+          <div id="crisisContent">
+            <div class="crisis-row">
+              <span class="crisis-label">Patient</span>
+              <span class="crisis-val" id="crisisPatientName">—</span>
+            </div>
+            <div class="crisis-row">
+              <span class="crisis-label">DOB</span>
+              <span class="crisis-val" id="crisisDob">—</span>
+            </div>
+            <div class="crisis-row">
+              <span class="crisis-label">State</span>
+              <span class="crisis-val" id="crisisState">—</span>
+            </div>
+            <div class="crisis-row">
+              <span class="crisis-label">Care Level</span>
+              <span class="crisis-val" id="crisisCareLevel">—</span>
+            </div>
+            <div class="crisis-row">
+              <span class="crisis-label">Active Meds</span>
+              <span class="crisis-val crisis-val-empty" id="crisisMeds">Not yet recorded</span>
+            </div>
+            <div class="crisis-row">
+              <span class="crisis-label">Allergies</span>
+              <span class="crisis-val crisis-val-empty" id="crisisAllergies">Not yet recorded</span>
+            </div>
+            <div class="crisis-row">
+              <span class="crisis-label">Emergency</span>
+              <span class="crisis-val crisis-val-empty" id="crisisEmergency">Not yet recorded</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<!-- ── Add Note Modal ── -->
+<div id="noteModal" style="display:none;position:fixed;inset:0;background:rgba(30,18,48,0.5);z-index:300;align-items:center;justify-content:center;padding:24px;">
+  <div style="background:#fff;border-radius:16px;padding:28px;width:100%;max-width:520px;">
+    <h2 style="font-family:'Gilda Display',serif;font-size:1.2rem;font-weight:400;margin-bottom:20px;color:var(--text-dark);">Add Session Note</h2>
+    <label style="font-size:0.78rem;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--text-muted);display:block;margin-bottom:6px;">Type</label>
+    <select id="noteType" style="width:100%;padding:9px 12px;border:1px solid var(--border-mid);border-radius:8px;font-family:'Jost',sans-serif;font-size:0.875rem;margin-bottom:16px;">
+      <option value="check-in">Check-in</option>
+      <option value="assessment">Assessment</option>
+      <option value="care-plan">Care Plan Update</option>
+      <option value="family">Family Communication</option>
+      <option value="crisis">Crisis Intervention</option>
+      <option value="other">Other</option>
+    </select>
+    <label style="font-size:0.78rem;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--text-muted);display:block;margin-bottom:6px;">Note</label>
+    <textarea id="noteText" rows="5" style="width:100%;padding:10px 12px;border:1px solid var(--border-mid);border-radius:8px;font-family:'Jost',sans-serif;font-size:0.875rem;resize:vertical;line-height:1.6;" placeholder="Enter session notes…"></textarea>
+    <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:20px;">
+      <button onclick="closeAddNote()" style="padding:9px 18px;border:1px solid var(--border-mid);border-radius:8px;background:none;font-family:'Jost',sans-serif;font-size:0.875rem;cursor:pointer;color:var(--text-mid);">Cancel</button>
+      <button onclick="saveNote()" style="padding:9px 20px;background:var(--plum);color:#fff;border:none;border-radius:8px;font-family:'Jost',sans-serif;font-size:0.875rem;font-weight:600;cursor:pointer;">Save Note</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── Save toast ── -->
+<div class="save-toast" id="saveToast">Saved</div>
+
+<script type="module">
+import { initializeApp }           from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { getAuth, onAuthStateChanged }
+                                   from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+import { getFirestore, doc, collection, getDoc, getDocs, addDoc, updateDoc,
+         query, where, orderBy, serverTimestamp }
+                                   from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+const firebaseConfig = {
+  apiKey:            "AIzaSyB0GaJXI_lbLhEXmctMJ0LoHiV3cHL5vQY",
+  authDomain:        "careguide-def76.firebaseapp.com",
+  projectId:         "careguide-def76",
+  storageBucket:     "careguide-def76.firebasestorage.app",
+  messagingSenderId: "658340465706",
+  appId:             "1:658340465706:web:0e412731947ff51474c753"
+};
+
+const app  = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db   = getFirestore(app);
+
+const params   = new URLSearchParams(location.search);
+const familyId = params.get('id');
+
+if (!familyId) window.location.href = '/dashboard.html';
+
+let currentUser = null;
+let familyData  = null;
+let parentData  = null;
+let medsData    = [];
+
+// ── Auth guard ───────────────────────────────────────────────────────────────
+onAuthStateChanged(auth, async (user) => {
+  if (!user) {
+    window.location.href = `/login.html?next=/client.html?id=${familyId}`;
+    return;
+  }
+  const token = await user.getIdTokenResult();
+  if (!token.claims.practitioner && !token.claims.admin) {
+    window.location.href = '/login.html';
+    return;
+  }
+  currentUser = user;
+  document.body.style.visibility = '';
+  await loadClient();
+});
+
+// ── Load all client data ─────────────────────────────────────────────────────
+async function loadClient() {
+  const [familySnap, parentsSnap, medsSnap, notesSnap] = await Promise.all([
+    getDoc(doc(db, 'family_groups', familyId)),
+    getDocs(query(collection(db, 'parents'), where('family_group_id', '==', familyId))),
+    getDocs(query(collection(db, 'medications'), where('family_group_id', '==', familyId))),
+    getDocs(query(collection(db, 'session_notes'), where('family_group_id', '==', familyId), orderBy('created_at', 'desc'))),
+  ]);
+
+  if (!familySnap.exists()) {
+    window.location.href = '/dashboard.html';
+    return;
+  }
+
+  familyData = { id: familySnap.id, ...familySnap.data() };
+  parentData = parentsSnap.empty ? null : { id: parentsSnap.docs[0].id, ...parentsSnap.docs[0].data() };
+  medsData   = medsSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+  const notesData = notesSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+
+  renderHeader();
+  renderUrgentFlags();
+  renderParentInfo();
+  renderCareLevel();
+  renderFlagsSection();
+  renderNotes(notesData);
+  renderMeds();
+  renderCrisisCard();
+
+  // wire dynamic links
+  document.getElementById('manageMedsBtn').href   = `/medications.html?id=${familyId}`;
+  document.getElementById('crisisCardBtn').href    = `/crisis-card.html?id=${familyId}`;
+
+  document.getElementById('tabs').style.display = '';
+}
+
+// ── Render header ────────────────────────────────────────────────────────────
+function renderHeader() {
+  const lvl    = familyData.care_level || 'low';
+  const parent = parentData;
+  const name   = parent
+    ? `${parent.first_name} ${parent.last_name}`
+    : familyData.name || 'Unknown';
+
+  document.getElementById('navTitle').textContent = familyData.name || 'Client';
+
+  const metaParts = [];
+  if (parent?.dob)   metaParts.push(calcAge(parent.dob) + ' y/o');
+  if (parent?.state) metaParts.push(parent.state);
+  metaParts.push(familyData.name || '');
+
+  document.getElementById('clientHeader').innerHTML = `
+    <div class="client-header-left">
+      <div class="client-name">${name}</div>
+      <div class="client-meta">
+        <span class="level-badge badge-${lvl}">${cap(lvl)}</span>
+        ${metaParts.filter(Boolean).map((p, i) =>
+          (i > 0 ? '<span class="meta-sep">·</span>' : '') + `<span class="client-meta-item">${p}</span>`
+        ).join('')}
+      </div>
+    </div>
+    <div class="client-header-actions">
+      <a href="/intake.html?id=${familyId}" class="btn-primary btn-action">AI Intake</a>
+      <a href="/care-plan.html?id=${familyId}" class="btn-outline btn-action">Care Plan</a>
+      <a href="/crisis-card.html?id=${familyId}" class="btn-danger-outline btn-action">Crisis Card</a>
+    </div>
+  `;
+}
+
+// ── Render urgent banner ─────────────────────────────────────────────────────
+function renderUrgentFlags() {
+  const flags = familyData.urgent_flags || [];
+  const banner = document.getElementById('urgentBanner');
+  const list   = document.getElementById('urgentFlagList');
+  if (!flags.length) return;
+  banner.classList.add('visible');
+  list.innerHTML = flags.map(f => `
+    <div class="urgent-flag-item">
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor">
+        <path d="M6 0L7.5 4.5H12L8.5 7L10 12L6 9L2 12L3.5 7L0 4.5H4.5Z"/>
+      </svg>
+      ${f}
+    </div>
+  `).join('');
+}
+
+// ── Render parent info ───────────────────────────────────────────────────────
+let editingParent = false;
+
+function renderParentInfo() {
+  const p = parentData;
+  const el = document.getElementById('parentInfo');
+
+  if (!p) {
+    el.innerHTML = `<p style="color:var(--text-muted);font-size:0.875rem;">No parent record found.</p>`;
+    return;
+  }
+
+  if (editingParent) {
+    el.innerHTML = `
+      <div class="info-field">
+        <label>First name</label>
+        <input class="inline-edit" id="ef_first" value="${p.first_name || ''}" />
+      </div>
+      <div class="info-field">
+        <label>Last name</label>
+        <input class="inline-edit" id="ef_last" value="${p.last_name || ''}" />
+      </div>
+      <div class="info-field">
+        <label>Date of birth</label>
+        <input class="inline-edit" type="date" id="ef_dob" value="${p.dob || ''}" />
+      </div>
+      <div class="info-field">
+        <label>State</label>
+        <input class="inline-edit" id="ef_state" value="${p.state || ''}" />
+      </div>
+      <div class="info-field">
+        <label>Email</label>
+        <input class="inline-edit" id="ef_email" value="${p.invite_email || ''}" />
+      </div>
+      <div style="grid-column:1/-1;display:flex;gap:10px;margin-top:4px;">
+        <button class="btn-primary btn-action" onclick="saveParent()" style="padding:7px 16px;font-size:0.8rem;">Save</button>
+        <button class="btn-outline btn-action" onclick="cancelEditParent()" style="padding:7px 16px;font-size:0.8rem;">Cancel</button>
+      </div>
+    `;
+  } else {
+    el.innerHTML = `
+      <div class="info-field">
+        <label>First name</label>
+        <span class="val">${p.first_name || '<span class="empty">—</span>'}</span>
+      </div>
+      <div class="info-field">
+        <label>Last name</label>
+        <span class="val">${p.last_name || '<span class="empty">—</span>'}</span>
+      </div>
+      <div class="info-field">
+        <label>Date of birth</label>
+        <span class="val">${formatDob(p.dob)}</span>
+      </div>
+      <div class="info-field">
+        <label>State</label>
+        <span class="val">${p.state || '<span class="empty">—</span>'}</span>
+      </div>
+      <div class="info-field">
+        <label>Email</label>
+        <span class="val">${p.invite_email || '<span class="empty">—</span>'}</span>
+      </div>
+    `;
+  }
+}
+
+window.toggleEditParent = function () {
+  editingParent = true;
+  document.getElementById('editParentBtn').style.display = 'none';
+  renderParentInfo();
+};
+window.cancelEditParent = function () {
+  editingParent = false;
+  document.getElementById('editParentBtn').style.display = '';
+  renderParentInfo();
+};
+window.saveParent = async function () {
+  if (!parentData) return;
+  const updates = {
+    first_name:   document.getElementById('ef_first').value.trim(),
+    last_name:    document.getElementById('ef_last').value.trim(),
+    dob:          document.getElementById('ef_dob').value || null,
+    state:        document.getElementById('ef_state').value.trim() || null,
+    invite_email: document.getElementById('ef_email').value.trim() || null,
+    updated_at:   serverTimestamp(),
+  };
+  await updateDoc(doc(db, 'parents', parentData.id), updates);
+  Object.assign(parentData, updates);
+  editingParent = false;
+  document.getElementById('editParentBtn').style.display = '';
+  renderParentInfo();
+  renderHeader();
+  showToast('Saved');
+};
+
+// ── Render care level ────────────────────────────────────────────────────────
+function renderCareLevel() {
+  const sel = document.getElementById('careLevelSelect');
+  sel.value = familyData.care_level || 'low';
+}
+
+window.saveCareLevelChange = async function () {
+  const newLevel = document.getElementById('careLevelSelect').value;
+  await updateDoc(doc(db, 'family_groups', familyId), {
+    care_level: newLevel,
+    updated_at: serverTimestamp(),
+  });
+  familyData.care_level = newLevel;
+  renderHeader();
+  showToast('Care level updated');
+};
+
+// ── Render flags section ─────────────────────────────────────────────────────
+function renderFlagsSection() {
+  const flags = familyData.urgent_flags || [];
+  const el    = document.getElementById('flagsList');
+
+  if (!flags.length) {
+    el.innerHTML = `<div class="empty-section" style="padding:20px;"><p>No urgent flags.</p></div>`;
+    return;
+  }
+
+  el.innerHTML = flags.map((f, i) => `
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);">
+      <span style="font-size:0.875rem;color:var(--level-crisis);">⚑ ${f}</span>
+      <button onclick="removeFlag(${i})" style="background:none;border:none;cursor:pointer;color:var(--text-muted);font-size:0.8rem;padding:2px 6px;" title="Remove">✕</button>
+    </div>
+  `).join('') + `<div style="border-bottom:none;"></div>`;
+}
+
+window.addUrgentFlag = async function () {
+  const text = prompt('Enter urgent flag:');
+  if (!text?.trim()) return;
+  const flags = [...(familyData.urgent_flags || []), text.trim()];
+  await updateDoc(doc(db, 'family_groups', familyId), { urgent_flags: flags, updated_at: serverTimestamp() });
+  familyData.urgent_flags = flags;
+  renderFlagsSection();
+  renderUrgentFlags();
+  showToast('Flag added');
+};
+
+window.removeFlag = async function (index) {
+  const flags = (familyData.urgent_flags || []).filter((_, i) => i !== index);
+  await updateDoc(doc(db, 'family_groups', familyId), { urgent_flags: flags, updated_at: serverTimestamp() });
+  familyData.urgent_flags = flags;
+  renderFlagsSection();
+  renderUrgentFlags();
+  showToast('Flag removed');
+};
+
+// ── Render notes ─────────────────────────────────────────────────────────────
+function renderNotes(notes) {
+  const el = document.getElementById('notesList');
+  if (!notes.length) {
+    el.innerHTML = `<div class="empty-section"><p>No session notes yet.</p></div>`;
+    return;
+  }
+  el.innerHTML = notes.map(n => `
+    <div class="note-item">
+      <div class="note-meta">
+        <span class="note-date">${formatTs(n.created_at)}</span>
+        <span class="note-type">${n.type || 'Note'}</span>
+      </div>
+      <div class="note-text">${n.text || ''}</div>
+    </div>
+  `).join('');
+}
+
+window.openAddNote = function () {
+  document.getElementById('noteModal').style.display = 'flex';
+  document.getElementById('noteText').focus();
+};
+window.closeAddNote = function () {
+  document.getElementById('noteModal').style.display = 'none';
+  document.getElementById('noteText').value = '';
+};
+window.saveNote = async function () {
+  const text = document.getElementById('noteText').value.trim();
+  const type = document.getElementById('noteType').value;
+  if (!text) return;
+
+  const ref = await addDoc(collection(db, 'session_notes'), {
+    family_group_id:  familyId,
+    practitioner_id:  currentUser.uid,
+    type,
+    text,
+    created_at: serverTimestamp(),
+  });
+
+  // optimistic update
+  const el = document.getElementById('notesList');
+  const emptySection = el.querySelector('.empty-section');
+  if (emptySection) el.innerHTML = '';
+  const item = document.createElement('div');
+  item.className = 'note-item';
+  item.innerHTML = `
+    <div class="note-meta">
+      <span class="note-date">Just now</span>
+      <span class="note-type">${type}</span>
+    </div>
+    <div class="note-text">${text}</div>
+  `;
+  el.insertBefore(item, el.firstChild);
+
+  closeAddNote();
+  showToast('Note saved');
+};
+
+// ── Render meds ──────────────────────────────────────────────────────────────
+function renderMeds() {
+  const el = document.getElementById('medsList');
+  if (!medsData.length) {
+    el.innerHTML = `<div class="empty-section"><p>No medications on record. <a href="/medications.html?id=${familyId}" style="color:var(--plum);">Add medications →</a></p></div>`;
+    return;
+  }
+  el.innerHTML = medsData.map(m => `
+    <div class="med-item">
+      <div>
+        <div class="med-name">${m.name || 'Unknown medication'}</div>
+        <div class="med-detail">${[m.dosage, m.frequency].filter(Boolean).join(' · ')}</div>
+      </div>
+      <span class="med-status ${m.status === 'active' ? 'med-active' : 'med-inactive'}">${m.status || 'active'}</span>
+    </div>
+  `).join('');
+}
+
+// ── Render crisis card preview ───────────────────────────────────────────────
+function renderCrisisCard() {
+  const p = parentData;
+  document.getElementById('crisisPatientName').textContent =
+    p ? `${p.first_name} ${p.last_name}` : '—';
+  document.getElementById('crisisDob').textContent    = p?.dob ? formatDob(p.dob) : '—';
+  document.getElementById('crisisState').textContent  = p?.state || '—';
+  document.getElementById('crisisCareLevel').textContent = cap(familyData.care_level || 'low');
+
+  const activeMeds = medsData.filter(m => m.status !== 'inactive');
+  document.getElementById('crisisMeds').textContent =
+    activeMeds.length ? activeMeds.map(m => m.name).join(', ') : 'None on record';
+}
+
+// ── Tabs ─────────────────────────────────────────────────────────────────────
+document.getElementById('tabs').addEventListener('click', e => {
+  const btn = e.target.closest('.tab');
+  if (!btn) return;
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('panel-' + btn.dataset.tab).classList.add('active');
+});
+
+// ── Helpers ──────────────────────────────────────────────────────────────────
+function cap(str) { return str ? str.charAt(0).toUpperCase() + str.slice(1) : ''; }
+
+function calcAge(dob) {
+  if (!dob) return null;
+  const d = new Date(dob);
+  const now = new Date();
+  let age = now.getFullYear() - d.getFullYear();
+  if (now < new Date(now.getFullYear(), d.getMonth(), d.getDate())) age--;
+  return age;
+}
+
+function formatDob(dob) {
+  if (!dob) return '<span class="empty">—</span>';
+  const [y, m, d] = dob.split('-');
+  return `${m}/${d}/${y}`;
+}
+
+function formatTs(ts) {
+  if (!ts) return 'Recently';
+  const date = ts.toDate ? ts.toDate() : new Date(ts);
+  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+}
+
+function showToast(msg) {
+  const t = document.getElementById('saveToast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+// close note modal on backdrop click
+document.getElementById('noteModal').addEventListener('click', e => {
+  if (e.target === document.getElementById('noteModal')) closeAddNote();
+});
+</script>
+</body>
+</html>
