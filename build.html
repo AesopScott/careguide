@@ -419,6 +419,24 @@
     .card[data-status="none"] { border: 2px solid #f85149 !important; box-shadow: 0 0 12px rgba(248,81,73,0.12); }
     .card[data-status="wip"]  { border: 2px solid #58a6ff !important; box-shadow: 0 0 12px rgba(88,166,255,0.15); }
 
+    /* Linked From block */
+    .linked-from-block { margin-top: 6px; }
+    .linked-from-row { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 5px; }
+    .linked-from-badge {
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.12);
+      color: #8b949e;
+      font-weight: 500;
+    }
+    .linked-from-none {
+      font-size: 11px;
+      color: #6e7681;
+      font-style: italic;
+    }
+
     /* URL label shown on done cards */
     .card-url {
       display: none;
@@ -2191,6 +2209,40 @@
       updateDashboard();
     }
 
+    // Forward navigation map — which cards each card links to
+    const LINKS_TO = {
+      'card-landing':               ['card-pricing', 'card-how-it-works', 'card-practitioner-signup', 'card-login'],
+      'card-pricing':               ['card-practitioner-signup', 'card-login'],
+      'card-how-it-works':          ['card-practitioner-signup', 'card-login'],
+      'card-practitioner-signup':   ['card-login', 'card-client-roster'],
+      'card-family-invite':         ['card-login', 'card-family-dashboard'],
+      'card-family-signup':         ['card-login', 'card-family-dashboard'],
+      'card-login':                 ['card-client-roster', 'card-family-dashboard'],
+      'card-client-roster':         ['card-new-client', 'card-client-detail', 'card-practitioner-settings'],
+      'card-new-client':            ['card-client-detail'],
+      'card-client-detail':         ['card-intake', 'card-care-plan', 'card-medications', 'card-crisis-card', 'card-session-notes', 'card-doc-vault'],
+      'card-intake':                ['card-care-plan'],
+      'card-care-plan':             ['card-client-detail', 'card-intake'],
+      'card-medications':           ['card-client-detail'],
+      'card-crisis-card':           ['card-client-detail'],
+      'card-session-notes':         ['card-client-detail'],
+      'card-doc-vault':             ['card-client-detail'],
+      'card-billing':               ['card-practitioner-settings'],
+      'card-ai-research':           ['card-client-detail', 'card-care-plan'],
+      'card-task-manager':          ['card-client-detail', 'card-client-roster'],
+      'card-provider-dir':          ['card-client-detail'],
+      'card-practitioner-settings': ['card-client-roster', 'card-billing'],
+      'card-family-dashboard':      ['card-medications', 'card-care-plan', 'card-appointments', 'card-documents', 'card-task-list', 'card-ai-assistant', 'card-family-settings'],
+      'card-care-updates':          ['card-family-dashboard'],
+      'card-documents':             ['card-family-dashboard'],
+      'card-task-list':             ['card-family-dashboard'],
+      'card-appointments':          ['card-family-dashboard'],
+      'card-ai-assistant':          ['card-family-dashboard'],
+      'card-professional-dir':      ['card-family-dashboard'],
+      'card-family-settings':       ['card-family-dashboard'],
+      'card-admin':                 ['card-client-roster'],
+    };
+
     // URL for each card — shown at bottom when status is done
     const CARD_URLS = {
       'card-landing':               '/index.html',
@@ -2248,6 +2300,48 @@
         if (!(id in data)) { data[id] = status; seeded = true; }
       });
       if (seeded) saveStatus(data);
+
+      // Build reverse link map (linked from)
+      const linkedFrom = {};
+      Object.entries(LINKS_TO).forEach(([srcId, targets]) => {
+        targets.forEach(tgtId => {
+          if (!linkedFrom[tgtId]) linkedFrom[tgtId] = [];
+          linkedFrom[tgtId].push(srcId);
+        });
+      });
+
+      // Inject "Linked From" block into each card before its footer
+      document.querySelectorAll('.card[id]').forEach(card => {
+        if (card.querySelector('.linked-from-block')) return; // already injected
+        const footer = card.querySelector('.card-footer');
+        if (!footer) return;
+        const sources = linkedFrom[card.id] || [];
+        const block = document.createElement('div');
+        block.className = 'card-block linked-from-block';
+        const label = document.createElement('div');
+        label.className = 'block-label';
+        label.textContent = 'Linked From';
+        block.appendChild(label);
+        if (sources.length === 0) {
+          const none = document.createElement('span');
+          none.className = 'linked-from-none';
+          none.textContent = 'No pages link here';
+          block.appendChild(none);
+        } else {
+          const row = document.createElement('div');
+          row.className = 'linked-from-row';
+          sources.forEach(srcId => {
+            const srcCard = document.getElementById(srcId);
+            const title = srcCard ? srcCard.querySelector('.card-title')?.textContent : srcId;
+            const badge = document.createElement('span');
+            badge.className = 'linked-from-badge';
+            badge.textContent = title || srcId;
+            row.appendChild(badge);
+          });
+          block.appendChild(row);
+        }
+        footer.parentNode.insertBefore(block, footer);
+      });
 
       // Inject URL label into each card footer
       document.querySelectorAll('.card[id]').forEach(card => {
