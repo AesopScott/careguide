@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Parental Care Guide — Add Client</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Gilda+Display&family=Jost:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --plum:        #501464;
+      --plum-light:  #6b1e85;
+      --plum-pale:   #f5eeff;
+      --plum-muted:  rgba(80,20,100,0.08);
+      --text-dark:   #1e1230;
+      --text-mid:    #4a3060;
+      --text-muted:  #8b7a9e;
+      --bg:          #faf9fc;
+      --surface:     #ffffff;
+      --border:      #ece6f4;
+      --border-mid:  #d8cce8;
+
+      --level-low:    #2ea043;
+      --level-medium: #e3a008;
+      --level-high:   #d97706;
+      --level-crisis: #dc2626;
+
+      --nav-h: 60px;
+    }
+
+    body {
+      font-family: 'Jost', 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text-dark);
+      font-size: 14px;
+      line-height: 1.5;
+      min-height: 100vh;
+      visibility: hidden;
+    }
+
+    /* ── Top Nav ── */
+    .top-nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: var(--nav-h);
+      background: var(--plum);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      z-index: 100;
+    }
+
+    .nav-brand {
+      font-family: 'Gilda Display', Georgia, serif;
+      font-size: 1rem;
+      color: rgba(255,255,255,0.9);
+      letter-spacing: 0.01em;
+      text-decoration: none;
+    }
+
+    .nav-center {
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: rgba(255,255,255,0.5);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .nav-back {
+      font-size: 0.8rem;
+      color: rgba(255,255,255,0.6);
+      background: none;
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 6px;
+      padding: 5px 12px;
+      cursor: pointer;
+      font-family: 'Jost', sans-serif;
+      text-decoration: none;
+      transition: all 0.15s;
+    }
+    .nav-back:hover {
+      background: rgba(255,255,255,0.1);
+      color: rgba(255,255,255,0.85);
+    }
+
+    /* ── Page shell ── */
+    .page {
+      padding-top: calc(var(--nav-h) + 40px);
+      padding-bottom: 80px;
+      max-width: 680px;
+      margin: 0 auto;
+      padding-left: 24px;
+      padding-right: 24px;
+    }
+
+    /* ── Page header ── */
+    .page-header {
+      margin-bottom: 32px;
+    }
+
+    .page-header h1 {
+      font-family: 'Gilda Display', Georgia, serif;
+      font-size: 1.75rem;
+      font-weight: 400;
+      color: var(--text-dark);
+      letter-spacing: -0.02em;
+      margin-bottom: 6px;
+    }
+
+    .page-header p {
+      color: var(--text-muted);
+      font-size: 0.875rem;
+    }
+
+    /* ── Form sections ── */
+    .form-section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+      margin-bottom: 20px;
+    }
+
+    .section-label {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+    }
+
+    /* ── Form fields ── */
+    .field {
+      margin-bottom: 20px;
+    }
+    .field:last-child { margin-bottom: 0; }
+
+    .field label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--text-mid);
+      margin-bottom: 6px;
+    }
+
+    .field label .required {
+      color: var(--level-crisis);
+      margin-left: 2px;
+    }
+
+    .field label .hint {
+      font-weight: 400;
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      margin-left: 6px;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="date"],
+    select {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1px solid var(--border-mid);
+      border-radius: 8px;
+      font-family: 'Jost', sans-serif;
+      font-size: 0.875rem;
+      color: var(--text-dark);
+      background: #fff;
+      transition: border-color 0.15s, box-shadow 0.15s;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+    input[type="text"]:focus,
+    input[type="email"]:focus,
+    input[type="date"]:focus,
+    select:focus {
+      outline: none;
+      border-color: var(--plum);
+      box-shadow: 0 0 0 3px rgba(80,20,100,0.08);
+    }
+    input::placeholder { color: var(--text-muted); }
+
+    .select-wrap {
+      position: relative;
+    }
+    .select-wrap::after {
+      content: '';
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 0;
+      height: 0;
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
+      border-top: 5px solid var(--text-muted);
+      pointer-events: none;
+    }
+
+    .field-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    /* ── Care level cards ── */
+    .care-level-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .care-level-card {
+      position: relative;
+      cursor: pointer;
+    }
+
+    .care-level-card input[type="radio"] {
+      position: absolute;
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .care-level-card label {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 14px 16px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.15s;
+      background: #fff;
+    }
+
+    .care-level-card input:checked + label {
+      border-color: var(--level-color, var(--plum));
+      background: var(--level-bg, var(--plum-pale));
+    }
+
+    .care-level-card label:hover {
+      border-color: var(--border-mid);
+      background: var(--bg);
+    }
+
+    .level-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--level-color, #ccc);
+      flex-shrink: 0;
+      margin-top: 4px;
+    }
+
+    .level-info .level-name {
+      font-weight: 600;
+      font-size: 0.875rem;
+      color: var(--text-dark);
+    }
+    .level-info .level-desc {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+      font-weight: 400;
+    }
+
+    .card-low    { --level-color: #2ea043; --level-bg: #f0faf3; }
+    .card-medium { --level-color: #e3a008; --level-bg: #fffbeb; }
+    .card-high   { --level-color: #d97706; --level-bg: #fff7ed; }
+    .card-crisis { --level-color: #dc2626; --level-bg: #fff5f5; }
+
+    /* ── Invite toggle ── */
+    .invite-toggle {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 16px;
+    }
+
+    .toggle-switch {
+      position: relative;
+      width: 36px;
+      height: 20px;
+      flex-shrink: 0;
+    }
+    .toggle-switch input { opacity: 0; width: 0; height: 0; }
+    .toggle-track {
+      position: absolute;
+      inset: 0;
+      background: var(--border-mid);
+      border-radius: 20px;
+      transition: background 0.2s;
+    }
+    .toggle-thumb {
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 14px;
+      height: 14px;
+      background: #fff;
+      border-radius: 50%;
+      transition: transform 0.2s;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    }
+    .toggle-switch input:checked ~ .toggle-track { background: var(--plum); }
+    .toggle-switch input:checked ~ .toggle-thumb { transform: translateX(16px); }
+
+    .toggle-label {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text-dark);
+      user-select: none;
+    }
+    .toggle-sub {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      display: block;
+      font-weight: 400;
+    }
+
+    .invite-email-field { display: none; }
+    .invite-email-field.visible { display: block; }
+
+    /* ── Submit row ── */
+    .submit-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      justify-content: flex-end;
+      margin-top: 8px;
+    }
+
+    .btn-cancel {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-family: 'Jost', sans-serif;
+      padding: 10px 4px;
+      text-decoration: underline;
+    }
+    .btn-cancel:hover { color: var(--text-mid); }
+
+    .btn-submit {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--plum);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: 12px 28px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      font-family: 'Jost', sans-serif;
+      cursor: pointer;
+      transition: background 0.15s, transform 0.1s;
+    }
+    .btn-submit:hover { background: var(--plum-light); }
+    .btn-submit:active { transform: scale(0.98); }
+    .btn-submit:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .btn-submit .spinner {
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      display: none;
+    }
+    .btn-submit.loading .spinner { display: block; }
+    .btn-submit.loading .btn-text { display: none; }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* ── Error banner ── */
+    .error-banner {
+      background: #fff5f5;
+      border: 1px solid #fca5a5;
+      border-radius: 10px;
+      padding: 14px 18px;
+      color: #b91c1c;
+      font-size: 0.875rem;
+      display: none;
+      margin-bottom: 16px;
+    }
+    .error-banner.visible { display: block; }
+
+    /* ── Field error ── */
+    .field-error {
+      font-size: 0.75rem;
+      color: var(--level-crisis);
+      margin-top: 5px;
+      display: none;
+    }
+    .field-error.visible { display: block; }
+    input.invalid, select.invalid {
+      border-color: var(--level-crisis);
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── Top Nav ── -->
+<nav class="top-nav">
+  <a href="/dashboard.html" class="nav-brand">Parental Care Guide</a>
+  <span class="nav-center">Add Client</span>
+  <div class="nav-right">
+    <a href="/dashboard.html" class="nav-back">← Back to Roster</a>
+  </div>
+</nav>
+
+<!-- ── Page ── -->
+<main class="page">
+
+  <header class="page-header">
+    <h1>New Client Setup</h1>
+    <p>Add a family to your roster. You can fill in more details from their Client page.</p>
+  </header>
+
+  <div id="errorBanner" class="error-banner"></div>
+
+  <form id="newClientForm" novalidate>
+
+    <!-- ── Family ── -->
+    <section class="form-section">
+      <div class="section-label">Family</div>
+
+      <div class="field">
+        <label for="familyName">
+          Family name <span class="required">*</span>
+          <span class="hint">e.g. "The Martinez Family" or just "Martinez"</span>
+        </label>
+        <input type="text" id="familyName" name="familyName"
+               placeholder="Martinez Family" autocomplete="off" />
+        <div class="field-error" id="familyNameErr">Please enter a family name.</div>
+      </div>
+    </section>
+
+    <!-- ── Primary Parent ── -->
+    <section class="form-section">
+      <div class="section-label">Primary Parent</div>
+
+      <div class="field">
+        <div class="field-row">
+          <div>
+            <label for="parentFirst">First name <span class="required">*</span></label>
+            <input type="text" id="parentFirst" name="parentFirst"
+                   placeholder="Maria" autocomplete="given-name" />
+            <div class="field-error" id="parentFirstErr">Required.</div>
+          </div>
+          <div>
+            <label for="parentLast">Last name <span class="required">*</span></label>
+            <input type="text" id="parentLast" name="parentLast"
+                   placeholder="Martinez" autocomplete="family-name" />
+            <div class="field-error" id="parentLastErr">Required.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="field-row">
+          <div>
+            <label for="parentDob">Date of birth</label>
+            <input type="date" id="parentDob" name="parentDob" />
+          </div>
+          <div>
+            <label for="parentState">State</label>
+            <div class="select-wrap">
+              <select id="parentState" name="parentState">
+                <option value="">— Select —</option>
+                <option>Alabama</option><option>Alaska</option><option>Arizona</option>
+                <option>Arkansas</option><option>California</option><option>Colorado</option>
+                <option>Connecticut</option><option>Delaware</option><option>Florida</option>
+                <option>Georgia</option><option>Hawaii</option><option>Idaho</option>
+                <option>Illinois</option><option>Indiana</option><option>Iowa</option>
+                <option>Kansas</option><option>Kentucky</option><option>Louisiana</option>
+                <option>Maine</option><option>Maryland</option><option>Massachusetts</option>
+                <option>Michigan</option><option>Minnesota</option><option>Mississippi</option>
+                <option>Missouri</option><option>Montana</option><option>Nebraska</option>
+                <option>Nevada</option><option>New Hampshire</option><option>New Jersey</option>
+                <option>New Mexico</option><option>New York</option><option>North Carolina</option>
+                <option>North Dakota</option><option>Ohio</option><option>Oklahoma</option>
+                <option>Oregon</option><option>Pennsylvania</option><option>Rhode Island</option>
+                <option>South Carolina</option><option>South Dakota</option><option>Tennessee</option>
+                <option>Texas</option><option>Utah</option><option>Vermont</option>
+                <option>Virginia</option><option>Washington</option><option>West Virginia</option>
+                <option>Wisconsin</option><option>Wyoming</option>
+                <option>Washington D.C.</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Care Level ── -->
+    <section class="form-section">
+      <div class="section-label">Care Level <span style="color:var(--level-crisis);font-size:0.8rem;">*</span></div>
+
+      <div class="care-level-grid">
+        <div class="care-level-card card-low">
+          <input type="radio" id="levelLow" name="careLevel" value="low" />
+          <label for="levelLow">
+            <span class="level-dot"></span>
+            <span class="level-info">
+              <span class="level-name">Low</span>
+              <span class="level-desc">Stable. Monitoring and check-ins.</span>
+            </span>
+          </label>
+        </div>
+        <div class="care-level-card card-medium">
+          <input type="radio" id="levelMedium" name="careLevel" value="medium" />
+          <label for="levelMedium">
+            <span class="level-dot"></span>
+            <span class="level-info">
+              <span class="level-name">Medium</span>
+              <span class="level-desc">Active support. Regular coordination.</span>
+            </span>
+          </label>
+        </div>
+        <div class="care-level-card card-high">
+          <input type="radio" id="levelHigh" name="careLevel" value="high" />
+          <label for="levelHigh">
+            <span class="level-dot"></span>
+            <span class="level-info">
+              <span class="level-name">High</span>
+              <span class="level-desc">Complex needs. Frequent attention.</span>
+            </span>
+          </label>
+        </div>
+        <div class="care-level-card card-crisis">
+          <input type="radio" id="levelCrisis" name="careLevel" value="crisis" />
+          <label for="levelCrisis">
+            <span class="level-dot"></span>
+            <span class="level-info">
+              <span class="level-name">Crisis</span>
+              <span class="level-desc">Immediate risk. Priority response.</span>
+            </span>
+          </label>
+        </div>
+      </div>
+      <div class="field-error" id="careLevelErr" style="margin-top:10px;">Please select a care level.</div>
+    </section>
+
+    <!-- ── Family Portal Invite ── -->
+    <section class="form-section">
+      <div class="section-label">Family Portal</div>
+
+      <label class="invite-toggle" for="sendInviteToggle">
+        <div class="toggle-switch">
+          <input type="checkbox" id="sendInviteToggle" />
+          <div class="toggle-track"></div>
+          <div class="toggle-thumb"></div>
+        </div>
+        <span>
+          <span class="toggle-label">Send portal invite now</span>
+          <span class="toggle-sub">Email the family a link to create their account</span>
+        </span>
+      </label>
+
+      <div class="invite-email-field" id="inviteEmailField">
+        <div class="field">
+          <label for="inviteEmail">Family email address</label>
+          <input type="email" id="inviteEmail" name="inviteEmail"
+                 placeholder="maria@example.com" autocomplete="email" />
+          <div class="field-error" id="inviteEmailErr">Please enter a valid email address.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Submit ── -->
+    <div class="submit-row">
+      <button type="button" class="btn-cancel" onclick="window.location.href='/dashboard.html'">
+        Cancel
+      </button>
+      <button type="submit" class="btn-submit" id="submitBtn">
+        <div class="spinner"></div>
+        <span class="btn-text">Add Client →</span>
+      </button>
+    </div>
+
+  </form>
+</main>
+
+<script type="module">
+import { initializeApp }           from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { getAuth, onAuthStateChanged }
+                                   from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+import { getFirestore, collection, doc, addDoc, setDoc, serverTimestamp }
+                                   from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+const firebaseConfig = {
+  apiKey:            "AIzaSyBbDfnBNqRGb2WqN8MnBm6YUqH1KnYiHXo",
+  authDomain:        "careguide-def76.firebaseapp.com",
+  projectId:         "careguide-def76",
+  storageBucket:     "careguide-def76.appspot.com",
+  messagingSenderId: "658340465706",
+  appId:             "1:658340465706:web:placeholder"
+};
+
+const app  = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db   = getFirestore(app);
+
+const API_BASE = 'https://careguide-api-658340465706.us-central1.run.app';
+
+let currentUser = null;
+
+// ── Auth guard ──────────────────────────────────────────────────────────────
+onAuthStateChanged(auth, async (user) => {
+  if (!user) {
+    window.location.href = '/login.html?next=/new-client.html';
+    return;
+  }
+  const token = await user.getIdTokenResult();
+  if (!token.claims.practitioner && !token.claims.admin) {
+    window.location.href = '/login.html';
+    return;
+  }
+  currentUser = user;
+  document.body.style.visibility = '';
+});
+
+// ── Invite toggle ────────────────────────────────────────────────────────────
+const sendInviteToggle  = document.getElementById('sendInviteToggle');
+const inviteEmailField  = document.getElementById('inviteEmailField');
+
+sendInviteToggle.addEventListener('change', () => {
+  inviteEmailField.classList.toggle('visible', sendInviteToggle.checked);
+  if (!sendInviteToggle.checked) {
+    document.getElementById('inviteEmail').value = '';
+    clearError('inviteEmail', 'inviteEmailErr');
+  }
+});
+
+// ── Validation helpers ───────────────────────────────────────────────────────
+function showError(inputId, errId) {
+  const el = document.getElementById(inputId);
+  if (el) el.classList.add('invalid');
+  document.getElementById(errId).classList.add('visible');
+}
+function clearError(inputId, errId) {
+  const el = document.getElementById(inputId);
+  if (el) el.classList.remove('invalid');
+  document.getElementById(errId).classList.remove('visible');
+}
+function clearAll() {
+  ['familyName','parentFirst','parentLast','inviteEmail'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.classList.remove('invalid');
+  });
+  document.querySelectorAll('.field-error').forEach(e => e.classList.remove('visible'));
+  document.getElementById('errorBanner').classList.remove('visible');
+}
+
+function validate() {
+  clearAll();
+  let ok = true;
+
+  const familyName = document.getElementById('familyName').value.trim();
+  if (!familyName) { showError('familyName', 'familyNameErr'); ok = false; }
+
+  const parentFirst = document.getElementById('parentFirst').value.trim();
+  if (!parentFirst) { showError('parentFirst', 'parentFirstErr'); ok = false; }
+
+  const parentLast = document.getElementById('parentLast').value.trim();
+  if (!parentLast) { showError('parentLast', 'parentLastErr'); ok = false; }
+
+  const careLevel = document.querySelector('input[name="careLevel"]:checked')?.value;
+  if (!careLevel) { document.getElementById('careLevelErr').classList.add('visible'); ok = false; }
+
+  if (sendInviteToggle.checked) {
+    const email = document.getElementById('inviteEmail').value.trim();
+    const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email || !emailRe.test(email)) {
+      showError('inviteEmail', 'inviteEmailErr');
+      ok = false;
+    }
+  }
+
+  return ok;
+}
+
+// ── Form submit ──────────────────────────────────────────────────────────────
+document.getElementById('newClientForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  if (!currentUser) return;
+  if (!validate()) return;
+
+  const submitBtn = document.getElementById('submitBtn');
+  submitBtn.disabled = true;
+  submitBtn.classList.add('loading');
+
+  const familyName  = document.getElementById('familyName').value.trim();
+  const parentFirst = document.getElementById('parentFirst').value.trim();
+  const parentLast  = document.getElementById('parentLast').value.trim();
+  const parentDob   = document.getElementById('parentDob').value || null;
+  const parentState = document.getElementById('parentState').value || null;
+  const careLevel   = document.querySelector('input[name="careLevel"]:checked').value;
+  const sendInvite  = sendInviteToggle.checked;
+  const inviteEmail = sendInvite ? document.getElementById('inviteEmail').value.trim() : null;
+
+  try {
+    const uid = currentUser.uid;
+    const now = serverTimestamp();
+
+    // 1. Create family_groups document
+    const familyRef = await addDoc(collection(db, 'family_groups'), {
+      name:             familyName,
+      practitioner_id:  uid,
+      care_level:       careLevel,
+      status:           'active',
+      urgent_flags:     [],
+      created_at:       now,
+      updated_at:       now,
+    });
+    const familyId = familyRef.id;
+
+    // 2. Create parents document
+    const parentData = {
+      family_group_id:  familyId,
+      practitioner_id:  uid,
+      first_name:       parentFirst,
+      last_name:        parentLast,
+      care_level:       careLevel,
+      created_at:       now,
+      updated_at:       now,
+    };
+    if (parentDob)   parentData.dob   = parentDob;
+    if (parentState) parentData.state = parentState;
+    if (inviteEmail) parentData.invite_email = inviteEmail;
+
+    await addDoc(collection(db, 'parents'), parentData);
+
+    // 3. If invite requested, call API (best-effort, non-blocking)
+    if (inviteEmail && API_BASE) {
+      try {
+        const idToken = await currentUser.getIdToken();
+        await fetch(`${API_BASE}/family-groups/${familyId}/invite`, {
+          method:  'POST',
+          headers: {
+            'Content-Type':  'application/json',
+            'Authorization': `Bearer ${idToken}`,
+          },
+          body: JSON.stringify({ email: inviteEmail, family_name: familyName }),
+        });
+      } catch {
+        // Invite fails silently — can retry from client page
+      }
+    }
+
+    // 4. Navigate to new client's page
+    window.location.href = `/client.html?id=${familyId}`;
+
+  } catch (err) {
+    console.error('Failed to create client:', err);
+    const banner = document.getElementById('errorBanner');
+    banner.textContent = 'Something went wrong. Please try again.';
+    banner.classList.add('visible');
+
+    submitBtn.disabled = false;
+    submitBtn.classList.remove('loading');
+  }
+});
+
+// ── Live clear on input ──────────────────────────────────────────────────────
+['familyName','parentFirst','parentLast','inviteEmail'].forEach(id => {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.addEventListener('input', () => {
+    el.classList.remove('invalid');
+    const errEl = document.getElementById(id + 'Err');
+    if (errEl) errEl.classList.remove('visible');
+  });
+});
+
+document.querySelectorAll('input[name="careLevel"]').forEach(radio => {
+  radio.addEventListener('change', () => {
+    document.getElementById('careLevelErr').classList.remove('visible');
+  });
+});
+</script>
+</body>
+</html>
