@@ -296,13 +296,27 @@
     };
 
     // ── Auth guard ──
-    onAuthStateChanged(auth, async user => {
-      if (!user) { location.href = '/login.html?next=/admin-approvals.html'; return; }
-      const token = await user.getIdTokenResult();
-      if (!token.claims.admin) { location.href = '/login.html?error=admin_required&next=/admin-approvals.html'; return; }
+    function showBlocker(msg) {
       document.getElementById('app-content').style.visibility = '';
-      wireSignOut();
-      loadAll();
+      const main = document.querySelector('main');
+      main.innerHTML = `<div class="empty"><div class="empty-icon">⚠️</div><h3>Can't load this page</h3><p>${msg}</p><p style="margin-top:16px"><a href="/login.html" style="color:var(--plum);font-weight:500">Sign in again</a></p></div>`;
+    }
+
+    onAuthStateChanged(auth, async user => {
+      try {
+        if (!user) { location.href = '/login.html?next=/admin-approvals.html'; return; }
+        const token = await user.getIdTokenResult();
+        if (!token.claims.admin) {
+          showBlocker(`Signed in as <strong>${user.email}</strong>, but this account is not an admin. Custom claims: <code>${JSON.stringify(token.claims)}</code>`);
+          return;
+        }
+        document.getElementById('app-content').style.visibility = '';
+        wireSignOut();
+        loadAll();
+      } catch (err) {
+        console.error('Auth guard error:', err);
+        showBlocker('Auth check failed: ' + (err?.message || err));
+      }
     });
 
     function wireSignOut() {
