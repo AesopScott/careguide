@@ -616,8 +616,13 @@
         btn.disabled = true;
         btn.textContent = 'Sending…';
         try {
-          const { sendEmailVerification } = await import('https://www.gstatic.com/firebasejs/11.8.0/firebase-auth.js');
-          await sendEmailVerification(user);
+          const idToken = await user.getIdToken();
+          const res = await fetch('https://careguide-api-658340465706.us-central1.run.app/auth/send-verification', {
+            method: 'POST',
+            headers: { 'Authorization': `Bearer ${idToken}` },
+          });
+          if (!res.ok) throw new Error('Send failed');
+          msg.style.color = '#16a34a';
           msg.textContent = '✓ Verification email sent — check your inbox.';
           msg.style.display = 'block';
           btn.textContent = 'Resend verification email';
@@ -626,7 +631,7 @@
           btn.disabled = false;
           btn.textContent = 'Resend verification email';
           msg.style.color = '#dc2626';
-          msg.textContent = err.message || 'Could not send email. Try again in a moment.';
+          msg.textContent = 'Could not send email. Try again in a moment.';
           msg.style.display = 'block';
         }
       };

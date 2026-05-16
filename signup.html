@@ -681,7 +681,7 @@
 
   <script type="module">
     import { initializeApp }         from 'https://www.gstatic.com/firebasejs/11.8.0/firebase-app.js';
-    import { getAuth, createUserWithEmailAndPassword, updateProfile, sendEmailVerification }
+    import { getAuth, createUserWithEmailAndPassword, updateProfile }
                                      from 'https://www.gstatic.com/firebasejs/11.8.0/firebase-auth.js';
     import { getFirestore, doc, setDoc, serverTimestamp }
                                      from 'https://www.gstatic.com/firebasejs/11.8.0/firebase-firestore.js';
@@ -857,22 +857,31 @@
           created_at:     serverTimestamp(),
         });
 
-        // 3. Send Firebase email verification
-        await sendEmailVerification(cred.user);
+        // 3. Get ID token for API calls
+        const idToken = await cred.user.getIdToken();
 
-        // 4. Call API to register profile + send "pending review" notification email (best-effort)
+        // 4. Call API: register profile + send "pending review" notification email (best-effort)
         try {
-          const idToken = await cred.user.getIdToken();
           await fetch(`${API_BASE}/users/register`, {
             method:  'POST',
             headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${idToken}` },
             body: JSON.stringify({ full_name: fullName, profession, license_states: licenseStates }),
           });
         } catch {
-          // API not critical at this point — Firestore record is already written
+          // API not critical — Firestore record is already written
         }
 
-        // 5. Show confirmation screen — do NOT redirect to dashboard until email is verified
+        // 5. Send branded verification email via Brevo (best-effort)
+        try {
+          await fetch(`${API_BASE}/auth/send-verification`, {
+            method:  'POST',
+            headers: { 'Authorization': `Bearer ${idToken}` },
+          });
+        } catch {
+          // Non-critical — user can request resend from the gate screen
+        }
+
+        // 6. Show confirmation screen — do NOT redirect to dashboard until email is verified
         showConfirmation(email);
 
       } catch (err) {
