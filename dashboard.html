@@ -536,9 +536,23 @@
       if (!user) { redirect(); return; }
       try {
         const token = await user.getIdTokenResult();
-        if (!token.claims.practitioner && !token.claims.admin) { redirect(); return; }
-        document.body.style.visibility = '';
-        initDashboard(user);
+        const hasClaim = token.claims.practitioner || token.claims.admin;
+
+        if (hasClaim) {
+          document.body.style.visibility = '';
+          initDashboard(user);
+          return;
+        }
+
+        // Beta fallback: custom claims not yet set by API — check Firestore users doc
+        const { doc, getDoc } = await import('https://www.gstatic.com/firebasejs/11.8.0/firebase-firestore.js');
+        const snap = await getDoc(doc(db, 'users', user.uid));
+        if (snap.exists() && (snap.data().role === 'practitioner' || snap.data().role === 'admin')) {
+          document.body.style.visibility = '';
+          initDashboard(user);
+        } else {
+          redirect();
+        }
       } catch { redirect(); }
     });
 
