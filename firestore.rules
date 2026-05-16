@@ -41,16 +41,21 @@ service cloud.firestore {
 
     // ── Family Groups ─────────────────────────────────────────────────────────
     // Top-level family_groups doc. Practitioners own them; family members
-    // belong via token.claims.family_group_id (set when the practitioner
-    // invites them). Subcollections of family_groups are not used — related
-    // data (parents, medications, etc.) lives in top-level collections keyed
-    // by family_group_id.
+    // belong via token.claims.family_group_ids (array; set by accept-invite).
+    // Subcollections of family_groups are not used — related data (parents,
+    // medications, etc.) lives in top-level collections keyed by
+    // family_group_id field.
+
+    function inFamilyGroups(groupId) {
+      return request.auth.token.family_group_ids != null &&
+             groupId in request.auth.token.family_group_ids;
+    }
 
     match /family_groups/{groupId} {
       allow read:   if isAuth() && (
                        request.auth.token.admin == true ||
                        resource.data.practitioner_id == request.auth.uid ||
-                       request.auth.token.family_group_id == groupId
+                       inFamilyGroups(groupId)
                      );
       allow create: if isPractitioner() &&
                        request.resource.data.practitioner_id == request.auth.uid;
@@ -66,8 +71,8 @@ service cloud.firestore {
 
     // ── Family-scoped collections (parents, medications) ─────────────────────
     // Top-level collections filtered by family_group_id. Access is granted to
-    // the practitioner who owns the parent family_group, family members of
-    // that group (via custom claim), and admins.
+    // the practitioner who owns the parent family_group, family members whose
+    // family_group_ids claim includes the group, and admins.
 
     function ownsGroup(groupId) {
       return get(/databases/$(database)/documents/family_groups/$(groupId)).data.practitioner_id == request.auth.uid;
@@ -76,7 +81,7 @@ service cloud.firestore {
     function canAccessFamilyData(familyGroupId) {
       return isAuth() && (
         request.auth.token.admin == true ||
-        request.auth.token.family_group_id == familyGroupId ||
+        inFamilyGroups(familyGroupId) ||
         ownsGroup(familyGroupId)
       );
     }
@@ -149,6 +154,35 @@ service cloud.firestore {
       // Crisis card — practitioner full access, family read (emergency).
       allow read:                if canAccessFamilyData(groupId);
       allow write:               if canWriteFamilyData(groupId);
+    }
+
+    // ── Family invitations and care updates ──────────────────────────────────
+
+    match /family_invitations/{invitationId} {
+      // Pending invitations from practitioner to a family-member email.
+      // The accept-invite endpoint uses Admin SDK so it bypasses these rules.
+      // Practitioners can manage invites for groups they own; admin can manage any.
+      // Family members never read or write these directly.
+      allow read:                if isAuth() && (
+                                    request.auth.token.admin == true ||
+                                    ownsGroup(resource.data.family_group_id)
+                                  );
+      allow create:              if isAuth() && (
+                                    request.auth.token.admin == true ||
+                                    ownsGroup(request.resource.data.family_group_id)
+                                  );
+      allow update, delete:      if isAuth() && (
+                                    request.auth.token.admin == true ||
+                                    ownsGroup(resource.data.family_group_id)
+                                  );
+    }
+
+    match /care_updates/{updateId} {
+      // Practitioner posts; family in that group can read.
+      allow read:                if canAccessFamilyData(resource.data.family_group_id);
+      allow create:              if canWriteFamilyData(request.resource.data.family_group_id) &&
+                                    request.resource.data.author_uid == request.auth.uid;
+      allow update, delete:      if canWriteFamilyData(resource.data.family_group_id);
     }
 
     // ── Waitlist ──────────────────────────────────────────────────────────────

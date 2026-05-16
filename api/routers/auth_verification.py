@@ -125,6 +125,116 @@ async def send_verification(user: dict = Depends(require_auth)):
     return {"success": True, "email": email}
 
 
+@router.post("/auth/accept-invite")
+async def accept_invite(user: dict = Depends(require_auth)):
+    """
+    Called by /accept-invite.html after the user signs in via Firebase email
+    link. Looks up any pending family_invitations matching the signed-in
+    user's email, sets the "family" claim, appends each group's id to the
+    family_group_ids array claim, writes/merges the users doc, and marks
+    each invitation accepted.
+    """
+    uid   = user["uid"]
+    email = (user.get("email") or "").strip().lower()
+
+    if not email:
+        raise HTTPException(status_code=400, detail="No email address on this account.")
+
+    db = get_db()
+    now = datetime.now(timezone.utc).isoformat()
+
+    # Find pending invitations matching the signed-in email
+    pending_q = db.collection("family_invitations") \
+                  .where("invited_email", "==", email) \
+                  .where("status", "==", "pending") \
+                  .stream()
+    pending = list(pending_q)
+
+    if not pending:
+        # Not an error — the user may have used the link just to sign in.
+        # Return zero accepted so the client can show the right message.
+        return {"success": True, "accepted": [], "family_group_ids": []}
+
+    # Filter out expired
+    accepted_invites = []
+    accepted_group_ids: list[str] = []
+    primary_relationship = ""
+
+    for inv in pending:
+        data = inv.to_dict()
+        # Expiry check
+        try:
+            expires_at = datetime.fromisoformat(data["expires_at"])
+            if expires_at.tzinfo is None:
+                expires_at = expires_at.replace(tzinfo=timezone.utc)
+            if datetime.now(timezone.utc) > expires_at:
+                inv.reference.update({"status": "expired", "expired_at": now})
+                continue
+        except Exception:
+            continue
+
+        group_id = data.get("family_group_id")
+        if not group_id:
+            continue
+
+        inv.reference.update({
+            "status":          "accepted",
+            "accepted_at":     now,
+            "accepted_by_uid": uid,
+        })
+        accepted_invites.append(inv.id)
+        accepted_group_ids.append(group_id)
+        if not primary_relationship and data.get("invited_relationship"):
+            primary_relationship = data["invited_relationship"]
+
+    if not accepted_group_ids:
+        return {"success": True, "accepted": [], "family_group_ids": [], "warning": "All matching invitations were expired."}
+
+    # Merge accepted groups into the user's existing claims (deduped, preserving order)
+    try:
+        target = firebase_auth.get_user(uid)
+    except Exception:
+        raise HTTPException(status_code=500, detail="Failed to read user record.")
+
+    existing_claims = dict(target.custom_claims or {})
+    current_groups  = list(existing_claims.get("family_group_ids") or [])
+    for gid in accepted_group_ids:
+        if gid not in current_groups:
+            current_groups.append(gid)
+
+    existing_claims["family"] = True
+    existing_claims["family_group_ids"] = current_groups
+
+    try:
+        firebase_auth.set_custom_user_claims(uid, existing_claims)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to set claims: {str(e)}")
+
+    # Write/merge the user document
+    user_ref = db.collection("users").document(uid)
+    snap = user_ref.get()
+    existing_user = snap.to_dict() if snap.exists else {}
+    user_payload: dict = {
+        "uid":               uid,
+        "email":             email,
+        "role":              "family",
+        "family_group_ids":  current_groups,
+        "updated_at":        now,
+    }
+    if primary_relationship and not existing_user.get("relationship_to_parent"):
+        user_payload["relationship_to_parent"] = primary_relationship
+    if not existing_user:
+        user_payload["full_name"]  = target.display_name or email.split("@")[0]
+        user_payload["created_at"] = now
+    user_ref.set(user_payload, merge=True)
+
+    return {
+        "success":          True,
+        "accepted":         accepted_invites,
+        "family_group_ids": current_groups,
+    }
+
+
 @router.post("/auth/verify-email")
 async def verify_email(token: str):
     """
