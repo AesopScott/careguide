@@ -189,6 +189,19 @@
       display: none;
     }
     .error.show { display: block; }
+
+    .signup-link {
+      margin-top: 20px;
+      text-align: center;
+      font-size: 0.875rem;
+      color: var(--text-mid);
+    }
+    .signup-link a {
+      color: var(--deep-plum);
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .signup-link a:hover { text-decoration: underline; }
   </style>
 </head>
 <body>
@@ -207,6 +220,7 @@
       <input type="password" id="password" placeholder="••••••••" autocomplete="current-password" />
       <button id="btn" onclick="signIn()">Sign In</button>
       <div class="error" id="error-msg"></div>
+      <div class="signup-link">New here? <a href="/signup.html">Create a practitioner account</a></div>
     </div>
   </div>
 

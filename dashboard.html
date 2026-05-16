@@ -593,11 +593,12 @@
       const age       = calcAge(client.parent_dob);
       const lvl       = client.care_level || 'low';
 
-      const card = document.createElement('a');
-      card.href  = `/client.html?id=${client.id}`;
+      const clientUrl = `/client.html?id=${client.id}`;
+      const card = document.createElement('div');
       card.className = `client-card${hasUrgent ? ' has-urgent' : ''}`;
       card.dataset.name  = (client.parent_name || client.name || '').toLowerCase();
       card.dataset.level = lvl;
+      card.addEventListener('click', () => { window.location.href = clientUrl; });
 
       card.innerHTML = `
         <div class="card-top">
@@ -619,11 +620,19 @@
             </div>`).join('')}
         </div>` : ''}
         <div class="card-actions">
-          <a href="/care-plan.html?id=${client.id}"    class="card-action-btn">Care Plan</a>
-          <a href="/medications.html?id=${client.id}"  class="card-action-btn">Meds</a>
-          <a href="/crisis-card.html?id=${client.id}"  class="card-action-btn">Crisis Card</a>
+          <button class="card-action-btn" data-href="/care-plan.html?id=${client.id}">Care Plan</button>
+          <button class="card-action-btn" data-href="/medications.html?id=${client.id}">Meds</button>
+          <button class="card-action-btn" data-href="/crisis-card.html?id=${client.id}">Crisis Card</button>
         </div>
       `;
+
+      // action buttons navigate without bubbling to the card click
+      card.querySelectorAll('.card-action-btn').forEach(btn => {
+        btn.addEventListener('click', e => {
+          e.stopPropagation();
+          window.location.href = btn.dataset.href;
+        });
+      });
 
       return card;
     }
