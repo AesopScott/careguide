@@ -715,8 +715,10 @@
     function setGreeting(name) {
       const h = new Date().getHours();
       const salutation = h < 12 ? 'Good morning' : h < 17 ? 'Good afternoon' : 'Good evening';
-      const first = name?.split(' ')[0] || '';
-      document.getElementById('greeting').textContent = `${salutation}${first ? ', ' + first : ''}.`;
+      const formal = (name || '').trim().replace(/\.$/, '');
+      document.getElementById('greeting').textContent = formal
+        ? `${salutation}, ${formal}.`
+        : `${salutation}.`;
       document.getElementById('page-date').textContent = new Date().toLocaleDateString('en-US', {
         weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
       });
