@@ -80,28 +80,46 @@ Base URL (production): `https://careguide-api-658340465706.us-central1.run.app`
 ## Parents
 
 ### `POST /parents/`
-**Served by:** `api/routers/parents.py:31`
+**Served by:** `api/routers/parents.py`
+**Auth:** `require_practitioner` (must own the target `family_group`)
 **Callers:** none (client uses direct Firestore write)
-**Status:** ⚠ orphan — correctly writes top-level `parents` with ownership check. Available when client switches to API-mediated writes.
+**Request:** `{family_group_id, first_name, last_name, care_level?, dob?, state?, invite_email?}`
+**Response:** `{id, ...parent fields}`
+**Status:** ⚠ orphan — endpoint is correct, but no client caller. Direct Firestore write from `new-client.html:773` is the live path.
 
-### `GET /parents/{group_id}`
-**Served by:** `api/routers/parents.py:54`
+### `GET /parents/?family_group_id=...`
+**Served by:** `api/routers/parents.py`
 **Callers:** none
-**Status:** ⚠ orphan — correctly reads top-level `parents` filtered by `family_group_id`.
+**Status:** ⚠ orphan.
+
+### `GET /parents/{parent_id}`, `PATCH /parents/{parent_id}`, `DELETE /parents/{parent_id}`
+**Served by:** `api/routers/parents.py`
+**Auth:** `require_practitioner` (must own the parent's family group)
+**Callers:** none
+**Status:** ⚠ orphan.
 
 ---
 
 ## Medications
 
 ### `POST /medications/`
-**Served by:** `api/routers/medications.py:30`
+**Served by:** `api/routers/medications.py`
+**Auth:** `require_practitioner` (must own the target `family_group`)
 **Callers:** none (client uses direct Firestore write)
-**Status:** ⚠ orphan — correctly writes top-level `medications` with ownership check.
+**Request:** `{family_group_id, name, dosage?, frequency?, prescriber?, start_date?, status?, notes?}`
+**Response:** `{id, ...medication fields}`
+**Status:** ⚠ orphan — endpoint is correct, but no client caller. Direct Firestore writes from `medications.html` are the live path.
 
-### `GET /medications/{group_id}`
-**Served by:** `api/routers/medications.py:53`
+### `GET /medications/?family_group_id=...`
+**Served by:** `api/routers/medications.py`
 **Callers:** none
-**Status:** ⚠ orphan — correctly reads top-level `medications` ordered by `created_at` desc.
+**Status:** ⚠ orphan.
+
+### `GET /medications/{med_id}`, `PATCH /medications/{med_id}`, `DELETE /medications/{med_id}`
+**Served by:** `api/routers/medications.py`
+**Auth:** `require_practitioner` (must own the med's family group)
+**Callers:** none
+**Status:** ⚠ orphan.
 
 ---
 
@@ -194,8 +212,8 @@ Base URL (production): `https://careguide-api-658340465706.us-central1.run.app`
 | POST /family-groups/{id}/invite         | stub (501) | ✓ | ⚠ not implemented, but surfaces |
 | POST /ai/intake                         | ✗      | ✓      | ⚠ missing endpoint        |
 | GET/POST/GET /family-groups/...         | ✓      | ✗      | orphan (correct schema)   |
-| POST/GET /parents/...                   | ✓      | ✗      | orphan (correct schema)   |
-| POST/GET /medications/...               | ✓      | ✗      | orphan (correct schema)   |
+| /parents/ (CRUD)                        | ✓      | ✗      | orphan (client uses direct Firestore) |
+| /medications/ (CRUD)                    | ✓      | ✗      | orphan (client uses direct Firestore) |
 | POST/GET /session-notes/...             | ✓ (broken) | ✗ | ⚠ orphan + wrong collection |
 | POST /ai/care-plan-draft, /session-note-draft, /ask | ✓ | ✗ | ⚠ orphan (planned) |
 | POST /notifications/email, /sms, /reminder | ✓   | ✗      | ⚠ orphan                  |

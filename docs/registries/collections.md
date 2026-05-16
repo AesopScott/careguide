@@ -67,7 +67,7 @@ Parent records, one per parent within a family group. Top-level, keyed by `famil
 
 **Indexes:** none needed (no orderBy queries).
 
-**API:** `api/routers/parents.py` writes/reads top-level `parents` collection with `family_group_id` filtering. ✓
+**API:** `api/routers/parents.py` writes/reads top-level `parents` filtered by `family_group_id`. CRUD endpoints (create, list, get/patch/delete by id) all enforce ownership of the parent's `family_group`. ✓
 
 ---
 
@@ -88,7 +88,7 @@ Top-level medication records keyed by `family_group_id`.
 
 **Indexes:** `medications` (family_group_id ASC, created_at DESC). ✓
 
-**API:** `api/routers/medications.py` writes/reads top-level `medications` collection with `family_group_id` filtering. ✓
+**API:** `api/routers/medications.py` writes/reads top-level `medications` filtered by `family_group_id` (uses created_at index for list). CRUD endpoints (create, list, get/patch/delete by id) all enforce ownership of the med's `family_group`. ✓
 
 ---
 
