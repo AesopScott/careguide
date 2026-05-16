@@ -552,7 +552,7 @@
 
         // Admins skip the status check
         if (token.claims.admin) {
-          document.getElementById('page').style.visibility = '';
+          document.getElementById('page').style.visibility = 'visible';
           initDashboard(user);
           return;
         }
@@ -563,7 +563,7 @@
         const status = snap.exists() ? snap.data().status : null;
 
         if (status === 'active') {
-          document.getElementById('page').style.visibility = '';
+          document.getElementById('page').style.visibility = 'visible';
           initDashboard(user);
         } else if (status === 'rejected') {
           showRejectedGate();
