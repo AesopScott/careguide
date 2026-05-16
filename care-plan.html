@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Parental Care Guide — Care Plan</title>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Gilda+Display&family=Jost:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --plum:        #501464;
+      --plum-light:  #6b1e85;
+      --plum-pale:   #f5eeff;
+      --plum-muted:  rgba(80,20,100,0.08);
+      --text-dark:   #1e1230;
+      --text-mid:    #4a3060;
+      --text-muted:  #8b7a9e;
+      --bg:          #faf9fc;
+      --surface:     #ffffff;
+      --border:      #ece6f4;
+      --border-mid:  #d8cce8;
+      --nav-h: 60px;
+    }
+
+    body {
+      font-family: 'Jost', 'Segoe UI', sans-serif;
+      background: var(--bg); color: var(--text-dark);
+      font-size: 14px; line-height: 1.5; min-height: 100vh; visibility: hidden;
+    }
+
+    .top-nav {
+      position: fixed; top: 0; left: 0; right: 0; height: var(--nav-h);
+      background: var(--plum); display: flex; align-items: center;
+      justify-content: space-between; padding: 0 24px; z-index: 100;
+    }
+    .nav-brand { font-family: 'Gilda Display', Georgia, serif; font-size: 1rem; color: rgba(255,255,255,0.9); text-decoration: none; }
+    .nav-center { font-size: 0.8rem; font-weight: 500; color: rgba(255,255,255,0.5); letter-spacing: 0.08em; text-transform: uppercase; }
+    .nav-right { display: flex; align-items: center; gap: 12px; }
+    .nav-back {
+      font-size: 0.8rem; color: rgba(255,255,255,0.6); background: none;
+      border: 1px solid rgba(255,255,255,0.2); border-radius: 6px; padding: 5px 12px;
+      cursor: pointer; font-family: 'Jost', sans-serif; text-decoration: none; transition: all 0.15s;
+    }
+    .nav-back:hover { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.85); }
+    .btn-nav-print {
+      font-size: 0.8rem; color: #fff; background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.3); border-radius: 6px; padding: 5px 14px;
+      cursor: pointer; font-family: 'Jost', sans-serif; transition: all 0.15s;
+    }
+    .btn-nav-print:hover { background: rgba(255,255,255,0.25); }
+
+    .page {
+      padding-top: calc(var(--nav-h) + 32px); padding-bottom: 80px;
+      max-width: 860px; margin: 0 auto; padding-left: 24px; padding-right: 24px;
+    }
+
+    .page-header {
+      display: flex; align-items: flex-start; justify-content: space-between;
+      margin-bottom: 24px; gap: 16px; flex-wrap: wrap;
+    }
+    .page-header h1 {
+      font-family: 'Gilda Display', Georgia, serif; font-size: 1.6rem;
+      font-weight: 400; color: var(--text-dark); letter-spacing: -0.02em;
+    }
+    .page-header .sub { font-size: 0.8rem; color: var(--text-muted); margin-top: 3px; }
+    .header-actions { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--plum); color: #fff; border: none;
+      border-radius: 8px; padding: 9px 18px; font-size: 0.875rem; font-weight: 600;
+      font-family: 'Jost', sans-serif; cursor: pointer; text-decoration: none; transition: background 0.15s;
+    }
+    .btn-primary:hover { background: var(--plum-light); }
+    .btn-primary:disabled { opacity: 0.55; cursor: not-allowed; }
+
+    .btn-outline {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 9px 18px; border: 1px solid var(--border-mid); border-radius: 8px;
+      background: none; color: var(--plum); font-size: 0.875rem; font-weight: 600;
+      font-family: 'Jost', sans-serif; cursor: pointer; text-decoration: none; transition: all 0.15s;
+    }
+    .btn-outline:hover { background: var(--plum-muted); border-color: var(--plum); }
+
+    /* ── Status bar ── */
+    .status-bar {
+      display: flex; align-items: center; justify-content: space-between;
+      background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
+      padding: 10px 18px; margin-bottom: 20px; gap: 16px; flex-wrap: wrap;
+    }
+    .status-meta { display: flex; gap: 16px; flex-wrap: wrap; }
+    .status-item { font-size: 0.78rem; color: var(--text-muted); }
+    .status-item strong { color: var(--text-mid); font-weight: 600; }
+    .version-badge {
+      font-size: 0.7rem; font-weight: 600; letter-spacing: 0.06em;
+      text-transform: uppercase; padding: 3px 10px; border-radius: 20px;
+      color: var(--plum); background: var(--plum-pale);
+    }
+
+    /* ── Care plan sections ── */
+    .plan-section {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 14px; margin-bottom: 16px; overflow: hidden;
+    }
+    .plan-section-header {
+      padding: 16px 24px 14px;
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .plan-section-title {
+      font-size: 0.78rem; font-weight: 700; letter-spacing: 0.08em;
+      text-transform: uppercase; color: var(--text-muted);
+    }
+    .plan-section-body { padding: 20px 24px; }
+
+    /* view mode */
+    .plan-text {
+      font-size: 0.9rem; color: var(--text-dark); line-height: 1.75;
+      white-space: pre-wrap;
+    }
+    .plan-text.empty { color: var(--text-muted); font-style: italic; }
+
+    /* edit mode */
+    .plan-textarea {
+      width: 100%; min-height: 120px; padding: 12px;
+      border: 1px solid var(--border-mid); border-radius: 8px;
+      font-family: 'Jost', sans-serif; font-size: 0.9rem; color: var(--text-dark);
+      line-height: 1.7; resize: vertical; background: #fff;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .plan-textarea:focus { outline: none; border-color: var(--plum); box-shadow: 0 0 0 3px var(--plum-muted); }
+
+    .btn-edit-section {
+      background: none; border: 1px solid var(--border-mid); border-radius: 6px;
+      padding: 4px 12px; font-size: 0.75rem; color: var(--text-muted);
+      font-family: 'Jost', sans-serif; cursor: pointer; transition: all 0.15s;
+    }
+    .btn-edit-section:hover { border-color: var(--plum); color: var(--plum); }
+
+    /* ── Review date ── */
+    input[type="date"] {
+      padding: 8px 12px; border: 1px solid var(--border-mid); border-radius: 8px;
+      font-family: 'Jost', sans-serif; font-size: 0.875rem; color: var(--text-dark); background: #fff;
+    }
+    input[type="date"]:focus { outline: none; border-color: var(--plum); box-shadow: 0 0 0 3px var(--plum-muted); }
+
+    /* ── Empty / no plan state ── */
+    .empty-plan {
+      text-align: center; padding: 64px 24px;
+      background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
+    }
+    .empty-plan-icon {
+      width: 64px; height: 64px; background: var(--plum-muted);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 20px; color: var(--plum);
+    }
+    .empty-plan h2 {
+      font-family: 'Gilda Display', serif; font-size: 1.2rem;
+      font-weight: 400; color: var(--text-dark); margin-bottom: 8px;
+    }
+    .empty-plan p { font-size: 0.875rem; color: var(--text-muted); margin-bottom: 24px; }
+
+    /* ── AI banner ── */
+    .ai-banner {
+      background: linear-gradient(135deg, var(--plum-pale) 0%, #ede8f5 100%);
+      border: 1px solid var(--border-mid); border-radius: 12px;
+      padding: 16px 20px; margin-bottom: 20px;
+      display: flex; align-items: center; justify-content: space-between; gap: 16px;
+      flex-wrap: wrap;
+    }
+    .ai-banner-text { font-size: 0.875rem; color: var(--text-mid); }
+    .ai-banner-text strong { color: var(--plum); }
+
+    .save-toast {
+      position: fixed; bottom: 24px; right: 24px;
+      background: var(--plum); color: #fff; padding: 10px 20px;
+      border-radius: 10px; font-size: 0.875rem; font-weight: 500;
+      opacity: 0; transform: translateY(8px);
+      transition: opacity 0.2s, transform 0.2s; pointer-events: none; z-index: 400;
+    }
+    .save-toast.show { opacity: 1; transform: translateY(0); }
+
+    @media print {
+      .top-nav, .header-actions, .status-bar .btn-outline, .btn-edit-section, .ai-banner, .save-toast { display: none !important; }
+      body { visibility: visible !important; }
+      .page { padding: 0; max-width: 100%; }
+      .plan-section { break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="top-nav">
+  <a href="/dashboard.html" class="nav-brand">Parental Care Guide</a>
+  <span class="nav-center">Care Plan</span>
+  <div class="nav-right">
+    <a id="backToClient" href="/dashboard.html" class="nav-back">← Client</a>
+    <button class="btn-nav-print" onclick="window.print()">🖨 Print</button>
+  </div>
+</nav>
+
+<main class="page">
+
+  <div class="page-header">
+    <div>
+      <h1 id="pageTitle">Care Plan</h1>
+      <div class="sub" id="pageSubtitle">Loading…</div>
+    </div>
+    <div class="header-actions">
+      <a id="intakeLink" href="#" class="btn-outline">Run AI Intake →</a>
+      <button class="btn-primary" id="saveBtn" onclick="savePlan()" style="display:none;">Save Plan</button>
+    </div>
+  </div>
+
+  <!-- shown when a plan exists -->
+  <div id="planExists" style="display:none;">
+    <div class="status-bar">
+      <div class="status-meta">
+        <span class="status-item">Last updated: <strong id="lastUpdated">—</strong></span>
+        <span class="status-item">Review by: <strong id="reviewDateDisplay">—</strong></span>
+      </div>
+      <div style="display:flex;gap:10px;align-items:center;">
+        <span class="version-badge" id="versionBadge">v1</span>
+        <button class="btn-outline" onclick="window.print()" style="padding:5px 14px;font-size:0.78rem;">Print / PDF</button>
+      </div>
+    </div>
+
+    <div class="ai-banner" id="aiBanner" style="display:none;">
+      <div class="ai-banner-text"><strong>AI draft available.</strong> This plan was generated from your intake interview. Review each section and save when ready.</div>
+      <button class="btn-primary" onclick="document.getElementById('aiBanner').style.display='none';" style="padding:6px 14px;font-size:0.8rem;">Got it</button>
+    </div>
+
+    <div id="planSections"></div>
+  </div>
+
+  <!-- shown when no plan exists -->
+  <div class="empty-plan" id="emptyPlan" style="display:none;">
+    <div class="empty-plan-icon">
+      <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+        <path d="M7 4h14a2 2 0 012 2v16a2 2 0 01-2 2H7a2 2 0 01-2-2V6a2 2 0 012-2z" stroke="currentColor" stroke-width="1.8"/>
+        <path d="M10 10h8M10 14h8M10 18h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <h2>No care plan yet</h2>
+    <p>Run an AI intake interview to automatically generate a care plan draft, or start one from scratch.</p>
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+      <a id="intakeLinkEmpty" href="#" class="btn-primary">Run AI Intake</a>
+      <button class="btn-outline" onclick="createBlankPlan()">Start from scratch</button>
+    </div>
+  </div>
+
+</main>
+
+<div class="save-toast" id="saveToast">Saved</div>
+
+<script type="module">
+import { initializeApp }           from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { getAuth, onAuthStateChanged }
+                                   from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+import { getFirestore, doc, getDoc, setDoc, serverTimestamp }
+                                   from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+const firebaseConfig = {
+  apiKey:            "AIzaSyB0GaJXI_lbLhEXmctMJ0LoHiV3cHL5vQY",
+  authDomain:        "careguide-def76.firebaseapp.com",
+  projectId:         "careguide-def76",
+  storageBucket:     "careguide-def76.firebasestorage.app",
+  messagingSenderId: "658340465706",
+  appId:             "1:658340465706:web:0e412731947ff51474c753"
+};
+
+const app  = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db   = getFirestore(app);
+
+const params   = new URLSearchParams(location.search);
+const familyId = params.get('id');
+if (!familyId) window.location.href = '/dashboard.html';
+
+let currentUser = null;
+let planData    = null;
+
+// Section definitions
+const SECTIONS = [
+  { key: 'situation',     label: 'Current Situation',    placeholder: 'Describe the current care situation, living arrangement, and key context…' },
+  { key: 'goals',         label: 'Care Goals',           placeholder: 'Short-term and long-term goals for this care relationship…' },
+  { key: 'interventions', label: 'Interventions',        placeholder: 'Specific interventions, services, and supports being provided…' },
+  { key: 'family_role',   label: 'Family Role',          placeholder: 'Family members involved, their roles, and communication preferences…' },
+  { key: 'barriers',      label: 'Barriers & Risks',     placeholder: 'Known barriers to care, risk factors, and mitigation strategies…' },
+  { key: 'next_steps',    label: 'Next Steps',           placeholder: 'Specific action items and who is responsible for each…' },
+];
+
+let editingSection = null;
+let sectionDrafts  = {};
+
+onAuthStateChanged(auth, async (user) => {
+  if (!user) { window.location.href = `/login.html?next=/care-plan.html?id=${familyId}`; return; }
+  const token = await user.getIdTokenResult();
+  if (!token.claims.practitioner && !token.claims.admin) { window.location.href = '/login.html'; return; }
+  currentUser = user;
+  document.body.style.visibility = '';
+  document.getElementById('backToClient').href    = `/client.html?id=${familyId}`;
+  document.getElementById('intakeLink').href       = `/intake.html?id=${familyId}`;
+  document.getElementById('intakeLinkEmpty').href  = `/intake.html?id=${familyId}`;
+  await loadData();
+});
+
+async function loadData() {
+  const [familySnap, planSnap] = await Promise.all([
+    getDoc(doc(db, 'family_groups', familyId)),
+    getDoc(doc(db, 'care_plans',    familyId)),
+  ]);
+
+  if (familySnap.exists()) {
+    const fam = familySnap.data();
+    document.getElementById('pageTitle').textContent    = `${fam.name || 'Client'} — Care Plan`;
+    document.getElementById('pageSubtitle').textContent = `Personalized care plan for ${fam.name || 'this family'}`;
+  }
+
+  if (planSnap.exists()) {
+    planData = planSnap.data();
+    renderPlan();
+    document.getElementById('planExists').style.display = '';
+    if (planData.ai_generated && !planData.reviewed) {
+      document.getElementById('aiBanner').style.display = '';
+    }
+  } else {
+    document.getElementById('emptyPlan').style.display = '';
+  }
+}
+
+function renderPlan() {
+  // status bar
+  document.getElementById('lastUpdated').textContent    = formatTs(planData.updated_at);
+  document.getElementById('reviewDateDisplay').textContent = planData.review_date ? formatDate(planData.review_date) : 'Not set';
+  document.getElementById('versionBadge').textContent   = `v${planData.version || 1}`;
+
+  // sections
+  const container = document.getElementById('planSections');
+  container.innerHTML = '';
+
+  SECTIONS.forEach(sec => {
+    const text = planData.sections?.[sec.key] || '';
+    const div  = document.createElement('div');
+    div.className = 'plan-section';
+    div.id = `section-${sec.key}`;
+    div.innerHTML = `
+      <div class="plan-section-header">
+        <span class="plan-section-title">${sec.label}</span>
+        <button class="btn-edit-section" onclick="startEdit('${sec.key}')">Edit</button>
+      </div>
+      <div class="plan-section-body" id="body-${sec.key}">
+        <div class="plan-text ${text ? '' : 'empty'}" id="view-${sec.key}">${text || 'Not yet filled in.'}</div>
+      </div>
+    `;
+    container.appendChild(div);
+  });
+
+  // review date editor
+  const reviewDiv = document.createElement('div');
+  reviewDiv.className = 'plan-section';
+  reviewDiv.innerHTML = `
+    <div class="plan-section-header">
+      <span class="plan-section-title">Next Review Date</span>
+    </div>
+    <div class="plan-section-body">
+      <input type="date" id="reviewDateInput" value="${planData.review_date || ''}"
+             onchange="updateReviewDate()" />
+    </div>
+  `;
+  container.appendChild(reviewDiv);
+}
+
+window.startEdit = function (key) {
+  if (editingSection) finishEdit(editingSection, false);
+  editingSection = key;
+  const sec  = SECTIONS.find(s => s.key === key);
+  const text = planData.sections?.[key] || '';
+  sectionDrafts[key] = text;
+
+  const body = document.getElementById(`body-${key}`);
+  body.innerHTML = `
+    <textarea class="plan-textarea" id="edit-${key}" placeholder="${sec.placeholder}">${text}</textarea>
+    <div style="display:flex;gap:8px;margin-top:12px;">
+      <button class="btn-primary" style="padding:7px 16px;font-size:0.8rem;" onclick="finishEdit('${key}', true)">Done</button>
+      <button class="btn-outline" style="padding:7px 16px;font-size:0.8rem;" onclick="finishEdit('${key}', false)">Cancel</button>
+    </div>
+  `;
+  document.getElementById(`edit-${key}`).focus();
+
+  // show save button
+  document.getElementById('saveBtn').style.display = '';
+};
+
+window.finishEdit = function (key, keep) {
+  if (keep) {
+    const val = document.getElementById(`edit-${key}`)?.value || sectionDrafts[key] || '';
+    if (!planData.sections) planData.sections = {};
+    planData.sections[key] = val;
+  }
+
+  const text = planData.sections?.[key] || '';
+  const body = document.getElementById(`body-${key}`);
+  body.innerHTML = `<div class="plan-text ${text ? '' : 'empty'}" id="view-${key}">${text || 'Not yet filled in.'}</div>`;
+  editingSection = null;
+};
+
+window.updateReviewDate = function () {
+  const d = document.getElementById('reviewDateInput').value;
+  planData.review_date = d || null;
+  document.getElementById('reviewDateDisplay').textContent = d ? formatDate(d) : 'Not set';
+  document.getElementById('saveBtn').style.display = '';
+};
+
+window.savePlan = async function () {
+  if (editingSection) finishEdit(editingSection, true);
+
+  const data = {
+    family_group_id: familyId,
+    practitioner_id: currentUser.uid,
+    sections:        planData.sections || {},
+    review_date:     planData.review_date || null,
+    version:         (planData.version || 1),
+    reviewed:        true,
+    updated_at:      serverTimestamp(),
+  };
+  if (!planData.created_at) data.created_at = serverTimestamp();
+
+  await setDoc(doc(db, 'care_plans', familyId), data, { merge: true });
+  planData = { ...planData, ...data };
+  document.getElementById('lastUpdated').textContent = 'Just now';
+  document.getElementById('saveBtn').style.display   = 'none';
+  showToast('Care plan saved');
+};
+
+window.createBlankPlan = async function () {
+  planData = { sections: {}, version: 1, ai_generated: false };
+  await setDoc(doc(db, 'care_plans', familyId), {
+    family_group_id: familyId,
+    practitioner_id: currentUser.uid,
+    sections: {},
+    version: 1,
+    ai_generated: false,
+    created_at: serverTimestamp(),
+    updated_at: serverTimestamp(),
+  });
+  document.getElementById('emptyPlan').style.display  = 'none';
+  document.getElementById('planExists').style.display = '';
+  renderPlan();
+  document.getElementById('saveBtn').style.display    = '';
+};
+
+function formatTs(ts) {
+  if (!ts) return '—';
+  const d = ts.toDate ? ts.toDate() : new Date(ts);
+  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+}
+function formatDate(d) {
+  if (!d) return '—';
+  const [y, m, dd] = d.split('-');
+  return `${m}/${dd}/${y}`;
+}
+function showToast(msg) {
+  const t = document.getElementById('saveToast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2200);
+}
+</script>
+</body>
+</html>
