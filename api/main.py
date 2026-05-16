@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 import os
 
-from routers import health, ai, family_groups, parents, medications, session_notes, notifications, users
+from routers import health, ai, family_groups, parents, medications, session_notes, notifications, users, contact
 
 load_dotenv()
 
@@ -30,3 +30,4 @@ app.include_router(medications.router, prefix="/medications", tags=["Medications
 app.include_router(session_notes.router, prefix="/session-notes", tags=["Session Notes"])
 app.include_router(notifications.router, prefix="/notifications", tags=["Notifications"])
 app.include_router(users.router,         prefix="/users",         tags=["Users"])
+app.include_router(contact.router,       tags=["Contact"])

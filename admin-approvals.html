@@ -199,15 +199,6 @@
     .toast.success { background: rgba(22,163,74,0.15); border: 1px solid rgba(22,163,74,0.3); color: #15803d; }
     .toast.error   { background: rgba(220,38,38,0.12); border: 1px solid rgba(220,38,38,0.25); color: #991b1b; }
 
-    /* ── Email notice ── */
-    .email-notice {
-      display: flex; align-items: flex-start; gap: 12px;
-      padding: 14px 18px; border-radius: 12px; margin-bottom: 24px;
-      background: var(--amber-bg); border: 1px solid rgba(217,119,6,0.25);
-      font-size: 0.875rem; color: var(--amber); line-height: 1.5;
-    }
-    .email-notice strong { color: #92400e; display: block; margin-bottom: 2px; }
-
     /* ── Loading skeletons ── */
     .skeleton {
       background: linear-gradient(90deg, rgba(255,255,255,0.4) 25%, rgba(255,255,255,0.65) 50%, rgba(255,255,255,0.4) 75%);
@@ -248,14 +239,6 @@
     <div class="page-header">
       <h1>Practitioner Approvals</h1>
       <p>Review new practitioner signups and approve or reject access.</p>
-    </div>
-
-    <div class="email-notice" id="emailNotice">
-      <span>⚠</span>
-      <div>
-        <strong>Email notifications not yet wired</strong>
-        Approvals and rejections update Firestore immediately. Automated emails to practitioners will be enabled once Brevo is configured.
-      </div>
     </div>
 
     <div class="tabs">
@@ -419,7 +402,7 @@
     };
 
     window.reject = async function(uid) {
-      if (!confirm('Reject this practitioner? They will be notified by email once email is configured.')) return;
+      if (!confirm('Reject this practitioner? They will be notified by email.')) return;
       await setStatus(uid, 'rejected', '✗ Rejected', 'rejected');
     };
 
@@ -463,8 +446,8 @@
         document.getElementById('count-rejected').textContent = rejected;
 
         showToast(status === 'active'
-          ? '✓ Practitioner approved. Email notification will send once Brevo is configured.'
-          : '✗ Practitioner rejected. Email notification will send once Brevo is configured.',
+          ? '✓ Practitioner approved and notified by email.'
+          : '✗ Practitioner rejected and notified by email.',
           status === 'active' ? 'success' : 'error'
         );
 

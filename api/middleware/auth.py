@@ -14,9 +14,18 @@ def require_auth(credentials: HTTPAuthorizationCredentials = Depends(bearer)) ->
         )
 
 def require_practitioner(user: dict = Depends(require_auth)) -> dict:
-    if user.get("role") != "practitioner":
+    if not user.get("practitioner"):
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Practitioner access required",
+        )
+    return user
+
+
+def require_admin(user: dict = Depends(require_auth)) -> dict:
+    if not user.get("admin"):
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Admin access required",
         )
     return user
