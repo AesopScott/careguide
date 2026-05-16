@@ -2178,8 +2178,30 @@
       updateDashboard();
     }
 
+    // Pages that have been built — seed as done on first load
+    const BUILT_PAGES = {
+      'card-landing':              'done',
+      'card-login':                'done',
+      'card-practitioner-signup':  'done',
+      'card-client-roster':        'done',
+      'card-new-client':           'done',
+      'card-client-detail':        'done',
+      'card-intake':               'done',
+      'card-care-plan':            'done',
+      'card-medications':          'done',
+      'card-crisis-card':          'done',
+      'card-family-dashboard':     'done',
+    };
+
     function init() {
       const data = loadStatus();
+      // Seed built pages only if they haven't been touched yet
+      let seeded = false;
+      Object.entries(BUILT_PAGES).forEach(([id, status]) => {
+        if (!(id in data)) { data[id] = status; seeded = true; }
+      });
+      if (seeded) saveStatus(data);
+
       document.querySelectorAll('.card[id]').forEach(card => {
         const status = data[card.id] || 'none';
         applyStatus(card.id, status);
