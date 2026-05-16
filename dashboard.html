@@ -534,6 +534,13 @@
     // ── Auth guard ──
     onAuthStateChanged(auth, async user => {
       if (!user) { redirect(); return; }
+
+      // Email must be verified before accessing the dashboard
+      if (!user.emailVerified) {
+        showEmailVerifyGate(user);
+        return;
+      }
+
       try {
         const token = await user.getIdTokenResult();
         const hasClaim = token.claims.practitioner || token.claims.admin;
@@ -559,6 +566,75 @@
     function redirect() {
       document.body.style.visibility = '';
       location.href = '/login.html?next=/dashboard.html';
+    }
+
+    function showEmailVerifyGate(user) {
+      document.body.style.visibility = '';
+      document.body.innerHTML = `
+        <div style="
+          min-height:100vh;
+          display:flex;align-items:center;justify-content:center;
+          background:linear-gradient(148deg,#FFF5F0 0%,#FFD6CC 12%,#F4B8C1 26%,#E8A0B4 40%,#D4A0C8 55%,#B8A8D8 70%,#98A8E0 84%,#8ABCE8 100%);
+          font-family:'Jost',sans-serif;padding:24px;
+        ">
+          <div style="
+            background:rgba(255,255,255,0.42);border:1px solid rgba(255,255,255,0.6);
+            backdrop-filter:blur(16px);border-radius:20px;
+            padding:48px 44px;max-width:480px;width:100%;text-align:center;
+          ">
+            <div style="font-size:2.5rem;margin-bottom:16px;">✉️</div>
+            <h1 style="font-family:'Gilda Display',Georgia,serif;font-size:1.6rem;color:#1e1230;margin-bottom:10px;font-weight:400;">
+              Check your inbox
+            </h1>
+            <p style="font-size:0.95rem;color:#4a2d65;font-weight:300;line-height:1.6;margin-bottom:8px;">
+              We sent a verification link to<br>
+              <strong style="color:#1e1230;">${user.email}</strong>
+            </p>
+            <p style="font-size:0.875rem;color:#6b4d85;font-weight:300;line-height:1.5;margin-bottom:28px;">
+              Click the link in that email to verify your address, then come back here to sign in. Check your spam folder if you don't see it.
+            </p>
+            <button id="btn-resend" onclick="resendVerification()" style="
+              display:block;width:100%;padding:13px;
+              background:#501464;color:#fff;border:none;border-radius:100px;
+              font-family:'Jost',sans-serif;font-size:0.95rem;font-weight:500;
+              cursor:pointer;margin-bottom:12px;
+            ">Resend verification email</button>
+            <button onclick="signOutAndRedirect()" style="
+              display:block;width:100%;padding:11px;
+              background:rgba(255,255,255,0.45);color:#4a2d65;
+              border:1px solid rgba(80,20,100,0.25);border-radius:100px;
+              font-family:'Jost',sans-serif;font-size:0.9rem;
+              cursor:pointer;
+            ">Sign out</button>
+            <p id="verify-msg" style="font-size:0.85rem;color:#16a34a;margin-top:14px;display:none;"></p>
+          </div>
+        </div>`;
+
+      window.resendVerification = async () => {
+        const btn = document.getElementById('btn-resend');
+        const msg = document.getElementById('verify-msg');
+        btn.disabled = true;
+        btn.textContent = 'Sending…';
+        try {
+          const { sendEmailVerification } = await import('https://www.gstatic.com/firebasejs/11.8.0/firebase-auth.js');
+          await sendEmailVerification(user);
+          msg.textContent = '✓ Verification email sent — check your inbox.';
+          msg.style.display = 'block';
+          btn.textContent = 'Resend verification email';
+          setTimeout(() => { btn.disabled = false; }, 30000);
+        } catch (err) {
+          btn.disabled = false;
+          btn.textContent = 'Resend verification email';
+          msg.style.color = '#dc2626';
+          msg.textContent = err.message || 'Could not send email. Try again in a moment.';
+          msg.style.display = 'block';
+        }
+      };
+
+      window.signOutAndRedirect = async () => {
+        await signOut(auth);
+        location.href = '/login.html';
+      };
     }
 
     // ── Sign out ──

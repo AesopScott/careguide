@@ -681,7 +681,7 @@
 
   <script type="module">
     import { initializeApp }         from 'https://www.gstatic.com/firebasejs/11.8.0/firebase-app.js';
-    import { getAuth, createUserWithEmailAndPassword, updateProfile }
+    import { getAuth, createUserWithEmailAndPassword, updateProfile, sendEmailVerification }
                                      from 'https://www.gstatic.com/firebasejs/11.8.0/firebase-auth.js';
     import { getFirestore, doc, setDoc, serverTimestamp }
                                      from 'https://www.gstatic.com/firebasejs/11.8.0/firebase-firestore.js';
@@ -857,26 +857,23 @@
           created_at:     serverTimestamp(),
         });
 
-        // 3. Call API to set custom claims + send welcome email (best-effort)
-        if (API_BASE) {
-          try {
-            const idToken = await cred.user.getIdToken();
-            const res = await fetch(`${API_BASE}/users/register`, {
-              method:  'POST',
-              headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${idToken}` },
-              body: JSON.stringify({ full_name: fullName, profession, license_states: licenseStates }),
-            });
-            if (res.ok) {
-              // Force token refresh so practitioner claim is available immediately
-              await cred.user.getIdToken(true);
-            }
-          } catch {
-            // API not yet deployed — account is created, admin will activate
-          }
+        // 3. Send Firebase email verification
+        await sendEmailVerification(cred.user);
+
+        // 4. Call API to register profile + send "pending review" notification email (best-effort)
+        try {
+          const idToken = await cred.user.getIdToken();
+          await fetch(`${API_BASE}/users/register`, {
+            method:  'POST',
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${idToken}` },
+            body: JSON.stringify({ full_name: fullName, profession, license_states: licenseStates }),
+          });
+        } catch {
+          // API not critical at this point — Firestore record is already written
         }
 
-        // 4. Go to dashboard
-        location.href = '/dashboard.html';
+        // 5. Show confirmation screen — do NOT redirect to dashboard until email is verified
+        showConfirmation(email);
 
       } catch (err) {
         let msg = 'Something went wrong. Please try again.';
@@ -889,6 +886,35 @@
         btn.textContent = 'Create Account';
       }
     };
+
+    function showConfirmation(email) {
+      document.querySelector('.card').innerHTML = `
+        <div style="text-align:center;padding:8px 0 16px;">
+          <div style="font-size:2.8rem;margin-bottom:20px;">✉️</div>
+          <h1 style="font-family:'Gilda Display',Georgia,serif;font-size:1.55rem;font-weight:400;color:var(--text-dark);margin-bottom:12px;line-height:1.2;">
+            Your account is created.<br>Check your email.
+          </h1>
+          <p style="font-size:0.95rem;color:var(--text-mid);font-weight:300;line-height:1.6;margin-bottom:8px;">
+            We sent a verification link to<br>
+            <strong style="color:var(--text-dark);">${email}</strong>
+          </p>
+          <p style="font-size:0.875rem;color:var(--text-light);font-weight:300;line-height:1.55;margin-bottom:28px;">
+            Click the link to verify your email address. Once verified, your application will be reviewed and you'll receive a second email when your account is approved.
+          </p>
+          <div style="background:rgba(80,20,100,0.06);border:1px solid rgba(80,20,100,0.15);border-radius:12px;padding:14px 18px;font-size:0.85rem;color:var(--text-mid);line-height:1.5;margin-bottom:24px;text-align:left;">
+            <strong style="color:var(--text-dark);display:block;margin-bottom:4px;">What happens next</strong>
+            1. Verify your email (link we just sent)<br>
+            2. Our team reviews your application<br>
+            3. You'll get an approval email when you're in
+          </div>
+          <a href="/login.html" style="display:block;padding:13px;background:var(--deep-plum);color:#fff;border-radius:100px;font-family:'Jost',sans-serif;font-size:0.95rem;font-weight:500;text-decoration:none;text-align:center;">
+            Go to sign in
+          </a>
+          <p style="font-size:0.8rem;color:var(--text-light);margin-top:16px;">
+            Didn't get it? Check your spam folder, or <a href="/contact.html" style="color:var(--deep-plum);">contact us</a>.
+          </p>
+        </div>`;
+    }
   </script>
   <script src="/version.js"></script>
 </body>

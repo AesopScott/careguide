@@ -92,37 +92,51 @@ async def register_practitioner(body: RegisterRequest, user: dict = Depends(requ
             profession_label = PROFESSION_LABELS[body.profession]
             states_str = ", ".join(body.license_states)
             html = f"""
-<p style="font-family:Georgia,serif;font-size:18px;color:#1e1230;margin-bottom:6px;">
-  Welcome to Parental Care Guide, {body.full_name}.
-</p>
-<p style="font-family:sans-serif;font-size:15px;color:#4a2d65;margin-bottom:16px;">
-  Your account is set up and ready. You're one of the first professionals on the platform — we built this for you.
-</p>
-<hr style="border:none;border-top:1px solid #e8d5f0;margin:20px 0;" />
-<p style="font-family:sans-serif;font-size:13px;color:#6b4d85;margin-bottom:4px;">
-  <strong>Role:</strong> {profession_label}
-</p>
-<p style="font-family:sans-serif;font-size:13px;color:#6b4d85;margin-bottom:20px;">
-  <strong>License states:</strong> {states_str}
-</p>
-<p style="font-family:sans-serif;font-size:13px;color:#4a2d65;">
-  You're on <strong>Beta Access</strong> — free while we build. We'll notify you well before billing begins, and you'll lock in a founding member rate.
-</p>
-<p style="font-family:sans-serif;font-size:13px;color:#6b4d85;margin-top:20px;">
-  — The Parental Care Guide team
-</p>
+<div style="font-family:'Georgia',serif;max-width:560px;margin:0 auto;">
+  <p style="font-size:20px;color:#1e1230;margin-bottom:8px;">
+    We received your application, {body.full_name}.
+  </p>
+  <p style="font-family:sans-serif;font-size:15px;color:#4a2d65;margin-bottom:16px;font-weight:300;">
+    Thank you for signing up as a practitioner on Parental Care Guide. Your application is now pending review — we'll be in touch soon.
+  </p>
+  <hr style="border:none;border-top:1px solid #e8d5f0;margin:20px 0;" />
+  <p style="font-family:sans-serif;font-size:13px;color:#6b4d85;margin-bottom:4px;">
+    <strong>Role:</strong> {profession_label}
+  </p>
+  <p style="font-family:sans-serif;font-size:13px;color:#6b4d85;margin-bottom:20px;">
+    <strong>License states:</strong> {states_str}
+  </p>
+  <div style="background:#f8f4fb;border-left:3px solid #501464;padding:14px 18px;border-radius:0 8px 8px 0;margin-bottom:20px;">
+    <p style="font-family:sans-serif;font-size:13px;color:#1e1230;margin:0 0 6px;font-weight:600;">What happens next</p>
+    <p style="font-family:sans-serif;font-size:13px;color:#4a2d65;margin:0;line-height:1.6;font-weight:300;">
+      1. Verify your email address (link in a separate email)<br>
+      2. Our team reviews your application<br>
+      3. You'll receive an approval email when you're cleared to sign in
+    </p>
+  </div>
+  <p style="font-family:sans-serif;font-size:13px;color:#6b4d85;font-weight:300;">
+    You're on <strong>Beta Access</strong> — free while we build. We'll notify you well before billing begins, and you'll lock in a founding member rate.
+  </p>
+  <p style="font-family:sans-serif;font-size:13px;color:#6b4d85;margin-top:20px;font-weight:300;">
+    — The Parental Care Guide team
+  </p>
+</div>
 """
             brevo.send_email(
                 to_email=email,
                 to_name=body.full_name,
-                subject="Welcome to Parental Care Guide",
+                subject="We received your application — Parental Care Guide",
                 html_content=html,
                 text_content=(
-                    f"Welcome to Parental Care Guide, {body.full_name}.\n\n"
-                    f"Your account is ready. Role: {profession_label}. "
-                    f"License states: {states_str}.\n\n"
-                    "You're on Beta Access — free while we build. "
-                    "We'll notify you before billing begins."
+                    f"We received your application, {body.full_name}.\n\n"
+                    f"Role: {profession_label}\n"
+                    f"License states: {states_str}\n\n"
+                    "What happens next:\n"
+                    "1. Verify your email address\n"
+                    "2. Our team reviews your application\n"
+                    "3. You'll receive an approval email when you're cleared to sign in\n\n"
+                    "You're on Beta Access — free while we build.\n"
+                    "— The Parental Care Guide team"
                 ),
             )
         except Exception:
