@@ -16,22 +16,6 @@ service cloud.firestore {
       return isAuth() && userDoc().role == 'practitioner';
     }
 
-    function groupData(groupId) {
-      return get(/databases/$(database)/documents/family_groups/$(groupId)).data;
-    }
-
-    function isGroupPractitioner(groupId) {
-      return isAuth() && groupData(groupId).practitioner_id == request.auth.uid;
-    }
-
-    function isGroupMember(groupId) {
-      return isAuth() && request.auth.uid in groupData(groupId).members;
-    }
-
-    function canAccessGroup(groupId) {
-      return isGroupPractitioner(groupId) || isGroupMember(groupId);
-    }
-
     // ── Users ─────────────────────────────────────────────────────────────────
     // Each user can read/write their own profile. Admins can read all profiles.
 
@@ -56,58 +40,64 @@ service cloud.firestore {
     }
 
     // ── Family Groups ─────────────────────────────────────────────────────────
-    // Practitioners create groups. Both practitioners and members can read.
-    // Write access on sub-collections is practitioner-only unless noted.
+    // Top-level family_groups doc. Practitioners own them; family members
+    // belong via token.claims.family_group_id (set when the practitioner
+    // invites them). Subcollections of family_groups are not used — related
+    // data (parents, medications, etc.) lives in top-level collections keyed
+    // by family_group_id.
 
     match /family_groups/{groupId} {
       allow read:   if isAuth() && (
+                       request.auth.token.admin == true ||
                        resource.data.practitioner_id == request.auth.uid ||
-                       (resource.data.members != null && request.auth.uid in resource.data.members)
+                       request.auth.token.family_group_id == groupId
                      );
       allow create: if isPractitioner() &&
                        request.resource.data.practitioner_id == request.auth.uid;
-      allow update: if isAuth() && resource.data.practitioner_id == request.auth.uid;
-      allow delete: if isAuth() && resource.data.practitioner_id == request.auth.uid;
+      allow update: if isAuth() && (
+                       request.auth.token.admin == true ||
+                       resource.data.practitioner_id == request.auth.uid
+                     );
+      allow delete: if isAuth() && (
+                       request.auth.token.admin == true ||
+                       resource.data.practitioner_id == request.auth.uid
+                     );
+    }
 
-      // Parents — practitioner writes, members read
-      match /parents/{parentId} {
-        allow read:  if canAccessGroup(groupId);
-        allow write: if isGroupPractitioner(groupId);
-      }
+    // ── Family-scoped collections (parents, medications) ─────────────────────
+    // Top-level collections filtered by family_group_id. Access is granted to
+    // the practitioner who owns the parent family_group, family members of
+    // that group (via custom claim), and admins.
 
-      // Medications — practitioner writes, members read
-      match /medications/{medId} {
-        allow read:  if canAccessGroup(groupId);
-        allow write: if isGroupPractitioner(groupId);
-      }
+    function ownsGroup(groupId) {
+      return get(/databases/$(database)/documents/family_groups/$(groupId)).data.practitioner_id == request.auth.uid;
+    }
 
-      // Documents — respect per-document access_roles list
-      match /documents/{docId} {
-        allow read:  if isGroupPractitioner(groupId) ||
-                        (isGroupMember(groupId) &&
-                         request.auth.uid in resource.data.access_roles);
-        allow write: if isGroupPractitioner(groupId);
-      }
+    function canAccessFamilyData(familyGroupId) {
+      return isAuth() && (
+        request.auth.token.admin == true ||
+        request.auth.token.family_group_id == familyGroupId ||
+        ownsGroup(familyGroupId)
+      );
+    }
 
-      // Events — practitioner writes, members read
-      match /events/{eventId} {
-        allow read:  if canAccessGroup(groupId);
-        allow write: if isGroupPractitioner(groupId);
-      }
+    function canWriteFamilyData(familyGroupId) {
+      return isAuth() && (
+        request.auth.token.admin == true ||
+        ownsGroup(familyGroupId)
+      );
+    }
 
-      // Tasks — anyone in the group can create/update; only practitioner deletes
-      match /tasks/{taskId} {
-        allow read:   if canAccessGroup(groupId);
-        allow create: if canAccessGroup(groupId);
-        allow update: if canAccessGroup(groupId);
-        allow delete: if isGroupPractitioner(groupId);
-      }
+    match /parents/{parentId} {
+      allow read:                if canAccessFamilyData(resource.data.family_group_id);
+      allow create:              if canWriteFamilyData(request.resource.data.family_group_id);
+      allow update, delete:      if canWriteFamilyData(resource.data.family_group_id);
+    }
 
-      // Care plans — practitioner writes, members read
-      match /carePlans/{planId} {
-        allow read:  if canAccessGroup(groupId);
-        allow write: if isGroupPractitioner(groupId);
-      }
+    match /medications/{medId} {
+      allow read:                if canAccessFamilyData(resource.data.family_group_id);
+      allow create:              if canWriteFamilyData(request.resource.data.family_group_id);
+      allow update, delete:      if canWriteFamilyData(resource.data.family_group_id);
     }
 
     // ── Waitlist ──────────────────────────────────────────────────────────────

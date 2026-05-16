@@ -15,6 +15,14 @@
         { "fieldPath": "practitioner_id", "order": "ASCENDING" },
         { "fieldPath": "created_at",      "order": "DESCENDING" }
       ]
+    },
+    {
+      "collectionGroup": "medications",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "family_group_id", "order": "ASCENDING" },
+        { "fieldPath": "created_at",      "order": "DESCENDING" }
+      ]
     }
   ],
   "fieldOverrides": []
