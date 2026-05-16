@@ -309,7 +309,7 @@ let sectionDrafts  = {};
 onAuthStateChanged(auth, async (user) => {
   if (!user) { window.location.href = `/login.html?next=/care-plan.html?id=${familyId}`; return; }
   const token = await user.getIdTokenResult();
-  if (!token.claims.practitioner && !token.claims.admin) { window.location.href = '/login.html'; return; }
+  if (!token.claims.practitioner && !token.claims.admin && !token.claims.family) { window.location.href = '/login.html'; return; }
   currentUser = user;
   document.body.style.visibility = 'visible';
   document.getElementById('backToClient').href    = `/client.html?id=${familyId}`;

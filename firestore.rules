@@ -100,6 +100,57 @@ service cloud.firestore {
       allow update, delete:      if canWriteFamilyData(resource.data.family_group_id);
     }
 
+    match /session_notes/{noteId} {
+      // Clinical notes — practitioner + admin only, no family read.
+      allow read:                if isAuth() && (
+                                    request.auth.token.admin == true ||
+                                    ownsGroup(resource.data.family_group_id)
+                                  );
+      allow create:              if isAuth() && (
+                                    request.auth.token.admin == true ||
+                                    ownsGroup(request.resource.data.family_group_id)
+                                  );
+      allow update, delete:      if isAuth() && (
+                                    request.auth.token.admin == true ||
+                                    ownsGroup(resource.data.family_group_id)
+                                  );
+    }
+
+    match /family_messages/{messageId} {
+      // Family <-> practitioner messaging. Both can read/write within their group.
+      allow read:                if canAccessFamilyData(resource.data.family_group_id);
+      allow create:              if canAccessFamilyData(request.resource.data.family_group_id) &&
+                                    request.resource.data.from_uid == request.auth.uid;
+      allow update, delete:      if canAccessFamilyData(resource.data.family_group_id) &&
+                                    (request.auth.token.admin == true ||
+                                     resource.data.from_uid == request.auth.uid);
+    }
+
+    // ── Doc-id-equals-family_group_id collections ────────────────────────────
+    // care_plans, intake_data, crisis_info are keyed by family_group_id as the
+    // document id, so the rule can use {groupId} directly without reading
+    // resource.data.
+
+    match /care_plans/{groupId} {
+      // Care plans — practitioner full access, family read, admin full access.
+      allow read:                if canAccessFamilyData(groupId);
+      allow write:               if canWriteFamilyData(groupId);
+    }
+
+    match /intake_data/{groupId} {
+      // Intake form — practitioner-driven; family not granted access.
+      allow read, write:         if isAuth() && (
+                                    request.auth.token.admin == true ||
+                                    ownsGroup(groupId)
+                                  );
+    }
+
+    match /crisis_info/{groupId} {
+      // Crisis card — practitioner full access, family read (emergency).
+      allow read:                if canAccessFamilyData(groupId);
+      allow write:               if canWriteFamilyData(groupId);
+    }
+
     // ── Waitlist ──────────────────────────────────────────────────────────────
     // Anyone can join; only admins can read the list.
 

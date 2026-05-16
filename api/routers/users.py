@@ -247,6 +247,7 @@ async def set_user_status(
     full_name  = user_data.get("full_name", "")
     email      = user_data.get("email", "")
     profession = user_data.get("profession", "")
+    prior_status = user_data.get("status")
 
     # 1. Update custom claims
     try:
@@ -260,6 +261,15 @@ async def set_user_status(
             firebase_auth.set_custom_user_claims(uid, {})
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to update Firebase claims: {str(e)}")
+
+    # Revoke existing refresh tokens when access shifts in a way the client
+    # can't detect from a stale ID token: rejection (kick them out immediately)
+    # and re-approval from a rejected state (force fresh token so claims apply).
+    if body.status == "rejected" or (body.status == "active" and prior_status == "rejected"):
+        try:
+            firebase_auth.revoke_refresh_tokens(uid)
+        except Exception:
+            pass  # Token revocation is best-effort; claim+status updates already succeeded
 
     # 2. Update Firestore status
     try:

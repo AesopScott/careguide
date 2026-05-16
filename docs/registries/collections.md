@@ -67,7 +67,7 @@ Parent records, one per parent within a family group. Top-level, keyed by `famil
 
 **Indexes:** none needed (no orderBy queries).
 
-⚠ **API mismatch:** `api/routers/parents.py:17,20,29,32` writes/reads `familyGroups/{id}/parents` (camelCase, subcollection). Collection does not exist. Dead endpoint. (Already flagged for rewrite.)
+**API:** `api/routers/parents.py` writes/reads top-level `parents` collection with `family_group_id` filtering. ✓
 
 ---
 
@@ -88,7 +88,7 @@ Top-level medication records keyed by `family_group_id`.
 
 **Indexes:** `medications` (family_group_id ASC, created_at DESC). ✓
 
-⚠ **API mismatch:** `api/routers/medications.py:19,22,37,40` writes/reads `familyGroups/{id}/medications` (camelCase, subcollection). Dead endpoint. (Already flagged.)
+**API:** `api/routers/medications.py` writes/reads top-level `medications` collection with `family_group_id` filtering. ✓
 
 ---
 
@@ -104,11 +104,11 @@ Practitioner clinical notes per family group. Top-level, keyed by `family_group_
 **Consumers**
 - `client.html:701` — list by `family_group_id` orderBy `created_at` desc
 
-⚠ **Rule:** missing. Client reads will be denied.
+**Rule:** `firestore.rules` /session_notes — practitioner who owns the group + admin. No family read. ✓
 
-⚠ **Indexes:** missing. Composite needed: `session_notes` (family_group_id ASC, created_at DESC).
+**Indexes:** `session_notes` (family_group_id ASC, created_at DESC). ✓
 
-⚠ **API mismatch:** `api/routers/session_notes.py:17,18,31,32` writes/reads `practitioners/{uid}/sessionNotes` (subcollection under practitioners, never matches client). Dead endpoint.
+⚠ **API mismatch:** `api/routers/session_notes.py:17,18,31,32` writes/reads `practitioners/{uid}/sessionNotes` (subcollection, never matches client). Dead endpoint — flagged for rewrite.
 
 ---
 
@@ -126,7 +126,7 @@ One care plan per family group. Document id = `family_group_id`.
 - `care-plan.html:329` — getDoc by family id
 - `family.html:405` — getDoc by family id
 
-⚠ **Rule:** missing. Reads/writes will be denied.
+**Rule:** `firestore.rules` /care_plans — practitioner full access, family read, admin full access. ✓
 
 **Indexes:** none needed (doc-id reads only).
 
@@ -144,7 +144,7 @@ Practitioner intake form data per family group. Document id = `family_group_id`.
 **Consumers**
 - None currently — written but not read anywhere.
 
-⚠ **Rule:** missing. Writes will be denied.
+**Rule:** `firestore.rules` /intake_data — practitioner-only (no family access). ✓
 
 ⚠ **Orphaned:** producer with no consumer. Either add a consumer or remove the producer.
 
@@ -162,7 +162,7 @@ Crisis card data per family group. Document id = `family_group_id`.
 **Consumers**
 - `crisis-card.html:414` — getDoc by family id
 
-⚠ **Rule:** missing.
+**Rule:** `firestore.rules` /crisis_info — practitioner full access, family read (emergency access), admin full access. ✓
 
 ---
 
@@ -174,9 +174,11 @@ Family-side messaging (family.html flow, not yet implemented end-to-end).
 - `family.html:549` — addDoc
 
 **Consumers**
-- None currently.
+- None currently — practitioner-side reader not yet built.
 
-⚠ **Rule:** missing. Deferred — family flow not implemented yet.
+**Rule:** `firestore.rules` /family_messages — both practitioner and family member can read/write within their group; only the sender (or admin) can edit/delete. ✓
+
+⚠ **Note:** rule is in place but the family flow itself (claim setters, accept-invite, message UI on practitioner side) is not implemented. Writes from family.html will succeed once the claim is set.
 
 ---
 

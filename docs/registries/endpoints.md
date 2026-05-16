@@ -55,53 +55,53 @@ Base URL (production): `https://careguide-api-658340465706.us-central1.run.app`
 ## Family Groups
 
 ### `GET /family-groups/`
-**Served by:** `api/routers/family_groups.py:12`
+**Served by:** `api/routers/family_groups.py:21`
 **Auth:** `require_practitioner`
 **Callers:** none
-**Status:** ⚠ orphan — no caller. Also reads `familyGroups` (camelCase, doesn't exist).
+**Status:** ⚠ orphan — no caller, but correctly reads top-level `family_groups`. Available when the client switches to API-mediated reads.
 
 ### `POST /family-groups/`
-**Served by:** `api/routers/family_groups.py:20`
+**Served by:** `api/routers/family_groups.py:30`
 **Callers:** none
-**Status:** ⚠ orphan + writes `familyGroups` (camelCase).
+**Status:** ⚠ orphan — correctly writes top-level `family_groups`.
 
 ### `GET /family-groups/{group_id}`
-**Served by:** `api/routers/family_groups.py:32`
+**Served by:** `api/routers/family_groups.py:49`
 **Callers:** none
-**Status:** ⚠ orphan + reads `familyGroups` (camelCase).
+**Status:** ⚠ orphan — correctly reads top-level `family_groups` with ownership check.
 
-### `POST /family-groups/{family_id}/invite` ⚠ MISSING
-**Served by:** none
+### `POST /family-groups/{group_id}/invite`
+**Served by:** `api/routers/family_groups.py:62` (stub)
 **Callers:** `new-client.html:779`
-**Status:** ⚠ **CRITICAL** — caller exists, endpoint not implemented. Wrapped in `try/catch {}` so failure is silent. Family invites silently dropped.
+**Status:** ⚠ **501 Not Implemented** — endpoint exists and explicitly returns 501. `new-client.html` now surfaces the failure to the practitioner via a toast on landing instead of silently dropping. Full invite/accept flow tracked in [docs/registries/claims.md](claims.md) (missing `family` and `family_group_id` setters).
 
 ---
 
 ## Parents
 
 ### `POST /parents/`
-**Served by:** `api/routers/parents.py:14`
+**Served by:** `api/routers/parents.py:31`
 **Callers:** none (client uses direct Firestore write)
-**Status:** ⚠ orphan + writes wrong path (`familyGroups/{id}/parents` subcollection).
+**Status:** ⚠ orphan — correctly writes top-level `parents` with ownership check. Available when client switches to API-mediated writes.
 
 ### `GET /parents/{group_id}`
-**Served by:** `api/routers/parents.py:26`
+**Served by:** `api/routers/parents.py:54`
 **Callers:** none
-**Status:** ⚠ orphan + wrong path.
+**Status:** ⚠ orphan — correctly reads top-level `parents` filtered by `family_group_id`.
 
 ---
 
 ## Medications
 
 ### `POST /medications/`
-**Served by:** `api/routers/medications.py:16`
+**Served by:** `api/routers/medications.py:30`
 **Callers:** none (client uses direct Firestore write)
-**Status:** ⚠ orphan + wrong path.
+**Status:** ⚠ orphan — correctly writes top-level `medications` with ownership check.
 
 ### `GET /medications/{group_id}`
-**Served by:** `api/routers/medications.py:34`
+**Served by:** `api/routers/medications.py:53`
 **Callers:** none
-**Status:** ⚠ orphan + wrong path.
+**Status:** ⚠ orphan — correctly reads top-level `medications` ordered by `created_at` desc.
 
 ---
 
@@ -191,11 +191,11 @@ Base URL (production): `https://careguide-api-658340465706.us-central1.run.app`
 | POST /auth/verify-email                 | ✓      | ✓      | OK                        |
 | POST /contact                           | ✓      | ✓      | OK                        |
 | GET  /health                            | ✓      | ✓      | OK                        |
-| POST /family-groups/{id}/invite         | ✗      | ✓      | ⚠ missing endpoint        |
+| POST /family-groups/{id}/invite         | stub (501) | ✓ | ⚠ not implemented, but surfaces |
 | POST /ai/intake                         | ✗      | ✓      | ⚠ missing endpoint        |
-| GET/POST/GET /family-groups/...         | ✓ (broken) | ✗ | ⚠ orphan + wrong collection |
-| POST/GET /parents/...                   | ✓ (broken) | ✗ | ⚠ orphan + wrong collection |
-| POST/GET /medications/...               | ✓ (broken) | ✗ | ⚠ orphan + wrong collection |
+| GET/POST/GET /family-groups/...         | ✓      | ✗      | orphan (correct schema)   |
+| POST/GET /parents/...                   | ✓      | ✗      | orphan (correct schema)   |
+| POST/GET /medications/...               | ✓      | ✗      | orphan (correct schema)   |
 | POST/GET /session-notes/...             | ✓ (broken) | ✗ | ⚠ orphan + wrong collection |
 | POST /ai/care-plan-draft, /session-note-draft, /ask | ✓ | ✗ | ⚠ orphan (planned) |
 | POST /notifications/email, /sms, /reminder | ✓   | ✗      | ⚠ orphan                  |

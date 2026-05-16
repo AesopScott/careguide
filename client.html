@@ -684,6 +684,14 @@ onAuthStateChanged(auth, async (user) => {
   }
   currentUser = user;
   document.body.style.visibility = 'visible';
+
+  // Surface any warning passed from new-client.html (e.g. invite not sent)
+  const inviteWarning = sessionStorage.getItem('pcg_invite_warning');
+  if (inviteWarning) {
+    sessionStorage.removeItem('pcg_invite_warning');
+    showToast(inviteWarning);
+  }
+
   await loadClient();
 });
 

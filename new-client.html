@@ -772,11 +772,14 @@ document.getElementById('newClientForm').addEventListener('submit', async (e) =>
 
     await addDoc(collection(db, 'parents'), parentData);
 
-    // 3. If invite requested, call API (best-effort, non-blocking)
+    // 3. If invite requested, call API. The accept-invite flow isn't built
+    //    yet so the endpoint returns 501 — surface that to the practitioner
+    //    via sessionStorage so client.html can show a notice on landing.
+    let inviteWarning = null;
     if (inviteEmail && API_BASE) {
       try {
         const idToken = await currentUser.getIdToken();
-        await fetch(`${API_BASE}/family-groups/${familyId}/invite`, {
+        const inviteRes = await fetch(`${API_BASE}/family-groups/${familyId}/invite`, {
           method:  'POST',
           headers: {
             'Content-Type':  'application/json',
@@ -784,12 +787,22 @@ document.getElementById('newClientForm').addEventListener('submit', async (e) =>
           },
           body: JSON.stringify({ email: inviteEmail, family_name: familyName }),
         });
+        if (!inviteRes.ok) {
+          if (inviteRes.status === 501) {
+            inviteWarning = 'Client saved, but family invites are not available yet. The invite to ' + inviteEmail + ' was not sent.';
+          } else {
+            inviteWarning = 'Client saved, but we could not send the invite to ' + inviteEmail + '. You can resend it from the client page.';
+          }
+        }
       } catch {
-        // Invite fails silently — can retry from client page
+        inviteWarning = 'Client saved, but we could not reach the invite service. Try resending from the client page.';
       }
     }
 
-    // 4. Navigate to new client's page
+    // 4. Navigate to new client's page (with optional invite warning)
+    if (inviteWarning) {
+      sessionStorage.setItem('pcg_invite_warning', inviteWarning);
+    }
     window.location.href = `/client.html?id=${familyId}`;
 
   } catch (err) {

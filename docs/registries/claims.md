@@ -54,7 +54,7 @@ Marks an approved practitioner.
 **Checkers (rules)**
 - `firestore.rules` `isPractitioner()` — used by /family_groups create rule.
 
-⚠ **Edge case:** rejected → re-approved practitioners' existing tokens have no `practitioner` claim and won't auto-refresh. They must sign out / sign in to pick up the re-issued claim. No UX prompt currently warns them. (Audit item HIGH #5.)
+**Edge case (handled):** rejected → re-approved practitioners would otherwise have stale tokens. `api/routers/users.py` now calls `firebase_auth.revoke_refresh_tokens(uid)` on rejection and on re-approval from rejected, forcing the next request to fail and the user to re-authenticate. ✓
 
 ---
 
