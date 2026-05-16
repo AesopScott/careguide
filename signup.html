@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Parental Care Guide — Join as a Professional</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="alternate icon" href="/favicon.svg">
+  <link rel="apple-touch-icon" href="/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Gilda+Display&family=Jost:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --rose:       #FFD6CC;
+      --blush:      #F4B8C1;
+      --mauve:      #E8A0B4;
+      --lavender:   #D4A0C8;
+      --periwinkle: #B8A8D8;
+      --slate-blue: #98A8E0;
+      --sky:        #8ABCE8;
+      --deep-plum:  #501464;
+      --deep-plum-hover: #3a0f4e;
+      --text-dark:  #1e1230;
+      --text-mid:   #4a2d65;
+      --text-light: #6b4d85;
+      --glass-bg:   rgba(255, 255, 255, 0.38);
+      --glass-border: rgba(255, 255, 255, 0.55);
+      --error:      #a0283c;
+    }
+
+    body {
+      font-family: 'Jost', 'Segoe UI', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(
+        148deg,
+        #FFF5F0 0%,
+        #FFD6CC 12%,
+        #F4B8C1 26%,
+        #E8A0B4 40%,
+        #D4A0C8 55%,
+        #B8A8D8 70%,
+        #98A8E0 84%,
+        #8ABCE8 100%
+      );
+      z-index: 0;
+    }
+
+    .blob {
+      position: fixed;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .blob-1 {
+      width: 560px; height: 560px;
+      background: radial-gradient(circle, rgba(255, 210, 220, 0.45) 0%, transparent 70%);
+      top: -140px; left: -120px;
+      animation: drift 10s ease-in-out infinite;
+    }
+    .blob-2 {
+      width: 700px; height: 700px;
+      background: radial-gradient(circle, rgba(170, 148, 210, 0.3) 0%, transparent 70%);
+      bottom: -200px; right: -160px;
+      animation: drift 13s ease-in-out infinite reverse;
+    }
+    @keyframes drift {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      50%       { transform: translate(16px, -22px) scale(1.04); }
+    }
+
+    .top-bar {
+      position: relative;
+      z-index: 2;
+      height: 4px;
+      background: linear-gradient(90deg,
+        #FFD6CC, #F4B8C1, #E8A0B4,
+        #D4A0C8, #B8A8D8, #98A8E0, #8ABCE8
+      );
+    }
+
+    .page {
+      position: relative;
+      z-index: 2;
+      flex: 1;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 32px 20px 60px;
+    }
+
+    /* ── Card ── */
+    .card {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
+      padding: 44px 44px 40px;
+      width: 100%;
+      max-width: 480px;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+
+    .logo {
+      font-family: 'Gilda Display', Georgia, serif;
+      font-size: 1.05rem;
+      color: var(--text-dark);
+      letter-spacing: 0.02em;
+      margin-bottom: 28px;
+    }
+
+    /* ── Progress ── */
+    .progress {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      margin-bottom: 32px;
+    }
+    .step-dot {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 2px solid rgba(80, 20, 100, 0.25);
+      background: rgba(255,255,255,0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-light);
+      flex-shrink: 0;
+      transition: all 0.25s;
+    }
+    .step-dot.active {
+      background: var(--deep-plum);
+      border-color: var(--deep-plum);
+      color: #fff;
+    }
+    .step-dot.done {
+      background: rgba(80, 20, 100, 0.15);
+      border-color: rgba(80, 20, 100, 0.4);
+      color: var(--deep-plum);
+    }
+    .step-dot.done::after {
+      content: '✓';
+      font-size: 0.8rem;
+    }
+    .step-dot.done span { display: none; }
+    .step-line {
+      flex: 1;
+      height: 2px;
+      background: rgba(80, 20, 100, 0.15);
+      transition: background 0.25s;
+    }
+    .step-line.done { background: rgba(80, 20, 100, 0.4); }
+
+    /* ── Step heading ── */
+    .step-heading {
+      margin-bottom: 24px;
+    }
+    .step-heading h1 {
+      font-family: 'Gilda Display', Georgia, serif;
+      font-size: 1.55rem;
+      font-weight: 400;
+      color: var(--text-dark);
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+    }
+    .step-heading p {
+      font-size: 0.95rem;
+      color: var(--text-mid);
+      margin-top: 6px;
+    }
+
+    /* ── Form fields ── */
+    label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-mid);
+      margin-bottom: 5px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    select {
+      width: 100%;
+      padding: 12px 16px;
+      background: rgba(255, 255, 255, 0.5);
+      border: 1px solid var(--glass-border);
+      border-radius: 10px;
+      color: var(--text-dark);
+      font-family: 'Jost', sans-serif;
+      font-size: 0.95rem;
+      outline: none;
+      margin-bottom: 18px;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    input::placeholder { color: #7a5a8a; }
+    input:focus,
+    select:focus {
+      border-color: var(--lavender);
+      background: rgba(255, 255, 255, 0.65);
+    }
+
+    /* ── Profession radio cards ── */
+    .profession-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 22px;
+    }
+    .profession-card {
+      position: relative;
+      cursor: pointer;
+    }
+    .profession-card input[type="radio"] {
+      position: absolute;
+      opacity: 0;
+      width: 0; height: 0;
+    }
+    .profession-card label {
+      display: block;
+      padding: 14px 14px 12px;
+      background: rgba(255,255,255,0.4);
+      border: 2px solid rgba(80,20,100,0.15);
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.18s;
+      text-transform: none;
+      letter-spacing: 0;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text-dark);
+      margin-bottom: 0;
+    }
+    .profession-card label:hover {
+      border-color: rgba(80,20,100,0.35);
+      background: rgba(255,255,255,0.55);
+    }
+    .profession-card input:checked + label {
+      border-color: var(--deep-plum);
+      background: rgba(80, 20, 100, 0.08);
+    }
+    .profession-card .role-title {
+      font-weight: 600;
+      color: var(--text-dark);
+      margin-bottom: 2px;
+      font-size: 0.875rem;
+    }
+    .profession-card .role-price {
+      font-size: 0.75rem;
+      color: var(--text-light);
+      font-weight: 400;
+    }
+    .profession-card .role-desc {
+      font-size: 0.75rem;
+      color: var(--text-light);
+      margin-top: 5px;
+      font-weight: 400;
+      line-height: 1.4;
+    }
+
+    /* ── State select ── */
+    .state-select-wrap {
+      position: relative;
+      margin-bottom: 18px;
+    }
+    .state-search {
+      margin-bottom: 6px !important;
+    }
+    .state-list {
+      max-height: 150px;
+      overflow-y: auto;
+      background: rgba(255,255,255,0.6);
+      border: 1px solid var(--glass-border);
+      border-radius: 10px;
+      padding: 8px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .state-list label {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.8rem;
+      text-transform: none;
+      letter-spacing: 0;
+      font-weight: 400;
+      color: var(--text-dark);
+      padding: 3px 8px;
+      border-radius: 20px;
+      border: 1px solid rgba(80,20,100,0.2);
+      background: rgba(255,255,255,0.4);
+      cursor: pointer;
+      transition: all 0.15s;
+      margin-bottom: 0;
+      white-space: nowrap;
+    }
+    .state-list input[type="checkbox"] {
+      width: auto;
+      padding: 0;
+      margin: 0;
+      background: none;
+      border: none;
+      margin-bottom: 0;
+      accent-color: var(--deep-plum);
+    }
+    .state-list label:has(input:checked) {
+      background: rgba(80,20,100,0.12);
+      border-color: var(--deep-plum);
+      color: var(--deep-plum);
+    }
+
+    /* ── Plan display ── */
+    .plan-card {
+      background: rgba(255,255,255,0.45);
+      border: 2px solid var(--deep-plum);
+      border-radius: 14px;
+      padding: 20px 20px 18px;
+      margin-bottom: 20px;
+    }
+    .plan-name {
+      font-family: 'Gilda Display', Georgia, serif;
+      font-size: 1.1rem;
+      color: var(--text-dark);
+      margin-bottom: 4px;
+    }
+    .plan-price {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--deep-plum);
+      letter-spacing: -0.02em;
+    }
+    .plan-price span {
+      font-size: 0.85rem;
+      font-weight: 400;
+      color: var(--text-light);
+    }
+    .plan-features {
+      list-style: none;
+      margin-top: 12px;
+    }
+    .plan-features li {
+      font-size: 0.875rem;
+      color: var(--text-mid);
+      padding: 3px 0;
+    }
+    .plan-features li::before {
+      content: '✓  ';
+      color: var(--deep-plum);
+      font-weight: 600;
+    }
+    .beta-notice {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      background: rgba(80,20,100,0.06);
+      border: 1px solid rgba(80,20,100,0.2);
+      border-radius: 10px;
+      padding: 12px 14px;
+      font-size: 0.85rem;
+      color: var(--text-mid);
+      line-height: 1.45;
+      margin-bottom: 4px;
+    }
+    .beta-notice strong { color: var(--text-dark); }
+
+    /* ── Legal checkboxes ── */
+    .legal-item {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      margin-bottom: 18px;
+      cursor: pointer;
+    }
+    .legal-item input[type="checkbox"] {
+      width: auto;
+      padding: 0;
+      margin: 0;
+      margin-top: 2px;
+      flex-shrink: 0;
+      accent-color: var(--deep-plum);
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+    }
+    .legal-item .legal-text {
+      font-size: 0.875rem;
+      color: var(--text-mid);
+      line-height: 1.5;
+    }
+    .legal-item .legal-text a {
+      color: var(--deep-plum);
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+    .legal-item .legal-text strong {
+      color: var(--text-dark);
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 2px;
+    }
+
+    /* ── Buttons ── */
+    .btn-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 8px;
+    }
+    .btn-back {
+      flex: 0 0 auto;
+      padding: 13px 20px;
+      background: rgba(255,255,255,0.45);
+      border: 1px solid rgba(80,20,100,0.25);
+      border-radius: 100px;
+      font-family: 'Jost', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: var(--text-mid);
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn-back:hover { background: rgba(255,255,255,0.65); }
+
+    .btn-next {
+      flex: 1;
+      padding: 13px;
+      background: var(--deep-plum);
+      color: #ffffff;
+      border: none;
+      border-radius: 100px;
+      font-family: 'Jost', sans-serif;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn-next:hover { background: var(--deep-plum-hover); }
+    .btn-next:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .btn-next-only {
+      width: 100%;
+      padding: 13px;
+      background: var(--deep-plum);
+      color: #ffffff;
+      border: none;
+      border-radius: 100px;
+      font-family: 'Jost', sans-serif;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      margin-top: 8px;
+      transition: background 0.2s;
+    }
+    .btn-next-only:hover { background: var(--deep-plum-hover); }
+    .btn-next-only:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    /* ── Error + helper ── */
+    .error-msg {
+      font-size: 0.875rem;
+      color: var(--error);
+      margin-top: 10px;
+      display: none;
+    }
+    .error-msg.show { display: block; }
+
+    .signin-link {
+      text-align: center;
+      font-size: 0.875rem;
+      color: var(--text-light);
+      margin-top: 22px;
+    }
+    .signin-link a {
+      color: var(--deep-plum);
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .signin-link a:hover { text-decoration: underline; }
+
+    /* ── Step visibility ── */
+    .step { display: none; }
+    .step.active { display: block; }
+
+    @media (max-width: 500px) {
+      .card { padding: 32px 24px 28px; }
+      .profession-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="top-bar"></div>
+
+  <div class="page">
+    <div class="card">
+      <div class="logo">Parental Care Guide</div>
+
+      <!-- Progress dots -->
+      <div class="progress" id="progress">
+        <div class="step-dot active" id="dot-1"><span>1</span></div>
+        <div class="step-line"       id="line-1"></div>
+        <div class="step-dot"        id="dot-2"><span>2</span></div>
+        <div class="step-line"       id="line-2"></div>
+        <div class="step-dot"        id="dot-3"><span>3</span></div>
+        <div class="step-line"       id="line-3"></div>
+        <div class="step-dot"        id="dot-4"><span>4</span></div>
+      </div>
+
+      <!-- ── Step 1: Account ── -->
+      <div class="step active" id="step-1">
+        <div class="step-heading">
+          <h1>Create your account.</h1>
+          <p>Professional access for care managers, attorneys, and social workers.</p>
+        </div>
+
+        <label for="full-name">Full Name</label>
+        <input type="text" id="full-name" placeholder="Dr. Sarah Chen" autocomplete="name" />
+
+        <label for="email">Work Email</label>
+        <input type="email" id="email" placeholder="you@yourpractice.com" autocomplete="email" />
+
+        <label for="password">Password</label>
+        <input type="password" id="password" placeholder="At least 8 characters" autocomplete="new-password" />
+
+        <label for="confirm-password">Confirm Password</label>
+        <input type="password" id="confirm-password" placeholder="••••••••" autocomplete="new-password" />
+
+        <div class="error-msg" id="err-1"></div>
+        <button class="btn-next-only" onclick="nextStep(1)">Continue</button>
+        <div class="signin-link">Already have an account? <a href="/login.html">Sign in</a></div>
+      </div>
+
+      <!-- ── Step 2: Practice ── -->
+      <div class="step" id="step-2">
+        <div class="step-heading">
+          <h1>Your practice.</h1>
+          <p>Tell us about your professional role so we can tailor your experience.</p>
+        </div>
+
+        <label>Professional Role</label>
+        <div class="profession-grid">
+          <div class="profession-card">
+            <input type="radio" name="profession" id="prof-gcm" value="gcm" />
+            <label for="prof-gcm">
+              <div class="role-title">Geriatric Care Manager</div>
+              <div class="role-price">$149 / month</div>
+              <div class="role-desc">Holistic care management, client rosters, care planning.</div>
+            </label>
+          </div>
+          <div class="profession-card">
+            <input type="radio" name="profession" id="prof-elder" value="elder_law" />
+            <label for="prof-elder">
+              <div class="role-title">Elder Law Attorney</div>
+              <div class="role-price">$199 / month</div>
+              <div class="role-desc">Document-heavy: POAs, advance directives, estate coordination.</div>
+            </label>
+          </div>
+          <div class="profession-card">
+            <input type="radio" name="profession" id="prof-social" value="social_work" />
+            <label for="prof-social">
+              <div class="role-title">Social Worker</div>
+              <div class="role-price">$149 / month</div>
+              <div class="role-desc">Family handoffs, crisis moments, discharge planning.</div>
+            </label>
+          </div>
+          <div class="profession-card">
+            <input type="radio" name="profession" id="prof-financial" value="financial" />
+            <label for="prof-financial">
+              <div class="role-title">Financial Planner</div>
+              <div class="role-price">$149 / month</div>
+              <div class="role-desc">Care cost coordination, estate planning, financial documents.</div>
+            </label>
+          </div>
+        </div>
+
+        <label>License State(s)</label>
+        <input type="text" class="state-search" id="state-search" placeholder="Filter states…" />
+        <div class="state-list" id="state-list"></div>
+
+        <div class="error-msg" id="err-2"></div>
+        <div class="btn-row">
+          <button class="btn-back" onclick="goBack(2)">Back</button>
+          <button class="btn-next" onclick="nextStep(2)">Continue</button>
+        </div>
+      </div>
+
+      <!-- ── Step 3: Plan ── -->
+      <div class="step" id="step-3">
+        <div class="step-heading">
+          <h1>Your plan.</h1>
+          <p>Based on your role — no payment required during beta.</p>
+        </div>
+
+        <div class="plan-card">
+          <div class="plan-name" id="plan-name">Standard Plan</div>
+          <div class="plan-price" id="plan-price">$149 <span>/ month after beta</span></div>
+          <ul class="plan-features">
+            <li>Unlimited client families</li>
+            <li>AI care plan generation</li>
+            <li>Voice-to-text session notes</li>
+            <li>Family portal for every client</li>
+            <li>Document vault with access control</li>
+            <li>Medication + appointment tracking</li>
+            <li>Crisis card (always shareable)</li>
+          </ul>
+        </div>
+
+        <div class="beta-notice">
+          <span style="font-size:1.1rem;">🎉</span>
+          <span><strong>You're in early access.</strong> Free during beta — we'll give you plenty of notice before billing begins, and you'll lock in a founding member rate.</span>
+        </div>
+
+        <div class="btn-row" style="margin-top:18px;">
+          <button class="btn-back" onclick="goBack(3)">Back</button>
+          <button class="btn-next" onclick="nextStep(3)">Looks good</button>
+        </div>
+      </div>
+
+      <!-- ── Step 4: Legal ── -->
+      <div class="step" id="step-4">
+        <div class="step-heading">
+          <h1>A few agreements.</h1>
+          <p>Required before accessing any patient health information.</p>
+        </div>
+
+        <label class="legal-item">
+          <input type="checkbox" id="chk-baa" />
+          <div class="legal-text">
+            <strong>Business Associate Agreement (BAA)</strong>
+            I acknowledge that as a HIPAA-covered entity or business associate, I agree to the <a href="#" onclick="return false;">Business Associate Agreement</a> with Parental Care Guide, establishing our mutual obligations for protecting protected health information (PHI).
+          </div>
+        </label>
+
+        <label class="legal-item">
+          <input type="checkbox" id="chk-hipaa" />
+          <div class="legal-text">
+            <strong>HIPAA Privacy &amp; Security Acknowledgment</strong>
+            I confirm that I will use this platform in accordance with HIPAA Privacy and Security rules, and that I am authorized to access the patient information I enter or view.
+          </div>
+        </label>
+
+        <label class="legal-item">
+          <input type="checkbox" id="chk-terms" />
+          <div class="legal-text">
+            <strong>Terms of Service &amp; Privacy Policy</strong>
+            I agree to the <a href="#" onclick="return false;">Terms of Service</a> and <a href="#" onclick="return false;">Privacy Policy</a>.
+          </div>
+        </label>
+
+        <div class="error-msg" id="err-4"></div>
+        <div class="btn-row" style="margin-top:4px;">
+          <button class="btn-back" onclick="goBack(4)">Back</button>
+          <button class="btn-next" id="btn-submit" onclick="submitSignup()">Create Account</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp }         from 'https://www.gstatic.com/firebasejs/11.8.0/firebase-app.js';
+    import { getAuth, createUserWithEmailAndPassword, updateProfile }
+                                     from 'https://www.gstatic.com/firebasejs/11.8.0/firebase-auth.js';
+    import { getFirestore, doc, setDoc, serverTimestamp }
+                                     from 'https://www.gstatic.com/firebasejs/11.8.0/firebase-firestore.js';
+
+    const FIREBASE_CONFIG = {
+      apiKey:            "AIzaSyB0GaJXI_lbLhEXmctMJ0LoHiV3cHL5vQY",
+      authDomain:        "careguide-def76.firebaseapp.com",
+      projectId:         "careguide-def76",
+      storageBucket:     "careguide-def76.firebasestorage.app",
+      messagingSenderId: "658340465706",
+      appId:             "1:658340465706:web:0e412731947ff51474c753"
+    };
+
+    // ── Set once the Cloud Run API is deployed (see .github/workflows/deploy-api.yml) ──
+    const API_BASE = '';   // e.g. 'https://careguide-api-xxxxxxxx-uc.a.run.app'
+
+    const app  = initializeApp(FIREBASE_CONFIG);
+    const auth = getAuth(app);
+    const db   = getFirestore(app);
+
+    // ── States ──
+    const STATES = [
+      'AL','AK','AZ','AR','CA','CO','CT','DE','FL','GA',
+      'HI','ID','IL','IN','IA','KS','KY','LA','ME','MD',
+      'MA','MI','MN','MS','MO','MT','NE','NV','NH','NJ',
+      'NM','NY','NC','ND','OH','OK','OR','PA','RI','SC',
+      'SD','TN','TX','UT','VT','VA','WA','WV','WI','WY','DC'
+    ];
+
+    function buildStateList(filter = '') {
+      const list = document.getElementById('state-list');
+      list.innerHTML = '';
+      const term = filter.toLowerCase();
+      STATES
+        .filter(s => s.toLowerCase().includes(term))
+        .forEach(s => {
+          const lbl = document.createElement('label');
+          const cb  = document.createElement('input');
+          cb.type  = 'checkbox';
+          cb.value = s;
+          cb.id    = `state-${s}`;
+          lbl.appendChild(cb);
+          lbl.appendChild(document.createTextNode(s));
+          list.appendChild(lbl);
+        });
+    }
+
+    document.getElementById('state-search').addEventListener('input', e => {
+      buildStateList(e.target.value);
+    });
+
+    buildStateList();
+
+    function getSelectedStates() {
+      return [...document.querySelectorAll('#state-list input[type="checkbox"]:checked')]
+        .map(cb => cb.value);
+    }
+
+    // ── Plan display by profession ──
+    const PLAN_NAMES = {
+      gcm:       'Standard Plan',
+      elder_law: 'Premium Plan',
+      social_work:'Standard Plan',
+      financial: 'Standard Plan',
+    };
+    const PLAN_PRICES = {
+      gcm:       '$149',
+      elder_law: '$199',
+      social_work:'$149',
+      financial: '$149',
+    };
+
+    function updatePlanDisplay() {
+      const prof = document.querySelector('input[name="profession"]:checked')?.value;
+      if (!prof) return;
+      document.getElementById('plan-name').textContent  = PLAN_NAMES[prof]  || 'Standard Plan';
+      document.getElementById('plan-price').innerHTML   =
+        `${PLAN_PRICES[prof] || '$149'} <span>/ month after beta</span>`;
+    }
+
+    // ── Step navigation ──
+    function setStep(n) {
+      document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+      document.getElementById(`step-${n}`).classList.add('active');
+
+      for (let i = 1; i <= 4; i++) {
+        const dot  = document.getElementById(`dot-${i}`);
+        const line = i < 4 ? document.getElementById(`line-${i}`) : null;
+        dot.classList.toggle('active', i === n);
+        dot.classList.toggle('done',   i < n);
+        if (line) line.classList.toggle('done', i < n);
+      }
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function showErr(id, msg) {
+      const el = document.getElementById(id);
+      el.textContent = msg;
+      el.classList.add('show');
+    }
+    function clearErr(id) {
+      const el = document.getElementById(id);
+      el.textContent = '';
+      el.classList.remove('show');
+    }
+
+    window.nextStep = function (from) {
+      clearErr(`err-${from}`);
+
+      if (from === 1) {
+        const name  = document.getElementById('full-name').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const pw    = document.getElementById('password').value;
+        const pw2   = document.getElementById('confirm-password').value;
+        if (!name)                  return showErr('err-1', 'Please enter your full name.');
+        if (!email)                 return showErr('err-1', 'Please enter your work email.');
+        if (pw.length < 8)          return showErr('err-1', 'Password must be at least 8 characters.');
+        if (pw !== pw2)             return showErr('err-1', 'Passwords do not match.');
+        setStep(2);
+
+      } else if (from === 2) {
+        const prof   = document.querySelector('input[name="profession"]:checked');
+        const states = getSelectedStates();
+        if (!prof)             return showErr('err-2', 'Please select your professional role.');
+        if (states.length < 1) return showErr('err-2', 'Please select at least one license state.');
+        updatePlanDisplay();
+        setStep(3);
+
+      } else if (from === 3) {
+        setStep(4);
+      }
+    };
+
+    window.goBack = function (from) {
+      setStep(from - 1);
+    };
+
+    window.submitSignup = async function () {
+      clearErr('err-4');
+
+      if (!document.getElementById('chk-baa').checked)   return showErr('err-4', 'You must agree to the BAA to access protected health information.');
+      if (!document.getElementById('chk-hipaa').checked) return showErr('err-4', 'You must acknowledge the HIPAA Privacy & Security requirements.');
+      if (!document.getElementById('chk-terms').checked) return showErr('err-4', 'You must agree to the Terms of Service and Privacy Policy.');
+
+      const btn = document.getElementById('btn-submit');
+      btn.disabled    = true;
+      btn.textContent = 'Creating account…';
+
+      const fullName     = document.getElementById('full-name').value.trim();
+      const email        = document.getElementById('email').value.trim();
+      const password     = document.getElementById('password').value;
+      const profession   = document.querySelector('input[name="profession"]:checked').value;
+      const licenseStates = getSelectedStates();
+
+      try {
+        // 1. Create Firebase Auth account
+        const cred = await createUserWithEmailAndPassword(auth, email, password);
+        await updateProfile(cred.user, { displayName: fullName });
+        const uid = cred.user.uid;
+
+        // 2. Write pending profile to Firestore immediately (always works)
+        await setDoc(doc(db, 'users', uid), {
+          uid,
+          email,
+          full_name:      fullName,
+          role:           'practitioner',
+          profession,
+          license_states: licenseStates,
+          plan:           profession === 'elder_law' ? 'premium' : 'standard',
+          beta:           true,
+          baa_accepted:   true,
+          status:         'pending_activation',  // updated to 'active' by API
+          created_at:     serverTimestamp(),
+        });
+
+        // 3. Call API to set custom claims + send welcome email (best-effort)
+        if (API_BASE) {
+          try {
+            const idToken = await cred.user.getIdToken();
+            const res = await fetch(`${API_BASE}/users/register`, {
+              method:  'POST',
+              headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${idToken}` },
+              body: JSON.stringify({ full_name: fullName, profession, license_states: licenseStates }),
+            });
+            if (res.ok) {
+              // Force token refresh so practitioner claim is available immediately
+              await cred.user.getIdToken(true);
+            }
+          } catch {
+            // API not yet deployed — account is created, admin will activate
+          }
+        }
+
+        // 4. Go to dashboard
+        location.href = '/dashboard.html';
+
+      } catch (err) {
+        let msg = 'Something went wrong. Please try again.';
+        if (err.code === 'auth/email-already-in-use') msg = 'An account with this email already exists. Try signing in.';
+        else if (err.code === 'auth/invalid-email')   msg = 'That doesn\'t look like a valid email address.';
+        else if (err.code === 'auth/weak-password')   msg = 'Please choose a stronger password (8+ characters).';
+        else if (err.message) msg = err.message;
+        showErr('err-4', msg);
+        btn.disabled    = false;
+        btn.textContent = 'Create Account';
+      }
+    };
+  </script>
+  <script src="/version.js"></script>
+</body>
+</html>
