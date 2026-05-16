@@ -4,7 +4,7 @@ from typing import Optional
 
 BREVO_API_URL = "https://api.brevo.com/v3"
 SENDER_NAME  = "Parental Care Guide"
-SENDER_EMAIL = "noreply@ParentalCareGuide.com"
+SENDER_EMAIL = "noreply@parentalcareguide.com"
 SMS_SENDER   = "PCG"  # max 11 chars, alphanumeric, shown as sender name on SMS
 
 
