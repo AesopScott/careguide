@@ -36,8 +36,8 @@ jobs:
 
       - name: Authenticate Docker to Artifact Registry
         run: |
-          gcloud auth print-access-token | \
-            docker login -u oauth2accesstoken --password-stdin us-central1-docker.pkg.dev
+          echo '${{ secrets.GCP_SA_KEY }}' | \
+            docker login -u _json_key --password-stdin us-central1-docker.pkg.dev
 
       - name: Build and push image
         run: |
