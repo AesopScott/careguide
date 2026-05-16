@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Business Associate Agreement — Parental Care Guide</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Gilda+Display&family=Jost:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --plum:       #501464;
+      --text-dark:  #1e1230;
+      --text-mid:   #4a2d65;
+      --text-light: #6b4d85;
+      --glass-bg:   rgba(255, 255, 255, 0.38);
+      --glass-border: rgba(255, 255, 255, 0.55);
+    }
+
+    body {
+      font-family: 'Jost', 'Segoe UI', sans-serif;
+      min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
+      background: #faf8fc;
+    }
+
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background: linear-gradient(148deg, #FFF5F0 0%, #FFD6CC 12%, #F4B8C1 26%, #E8A0B4 40%, #D4A0C8 55%, #B8A8D8 70%, #98A8E0 84%, #8ABCE8 100%);
+      z-index: 0;
+    }
+
+    .top-bar { position: relative; z-index: 2; height: 4px; background: linear-gradient(90deg, #FFD6CC, #F4B8C1, #E8A0B4, #D4A0C8, #B8A8D8, #98A8E0, #8ABCE8); }
+
+    header {
+      position: relative; z-index: 10;
+      padding: 20px 48px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .logo { font-family: 'Gilda Display', serif; font-size: 1.1rem; color: var(--text-dark); text-decoration: none; }
+    .logo span { color: var(--plum); }
+    .back-link { font-size: 0.9rem; color: var(--text-mid); text-decoration: none; font-weight: 500; }
+    .back-link:hover { color: var(--text-dark); }
+
+    main {
+      position: relative; z-index: 2;
+      max-width: 800px; margin: 0 auto;
+      padding: 32px 24px 80px;
+    }
+
+    .doc-card {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 56px 64px;
+    }
+
+    .doc-header { margin-bottom: 40px; padding-bottom: 32px; border-bottom: 1px solid rgba(80,20,100,0.12); }
+    .doc-header h1 { font-family: 'Gilda Display', serif; font-size: 1.8rem; color: var(--text-dark); margin-bottom: 8px; }
+    .doc-meta { font-size: 0.875rem; color: var(--text-light); font-weight: 300; }
+    .doc-meta strong { color: var(--text-mid); font-weight: 500; }
+
+    .notice {
+      background: rgba(80,20,100,0.06);
+      border: 1px solid rgba(80,20,100,0.18);
+      border-radius: 10px;
+      padding: 16px 20px;
+      font-size: 0.875rem;
+      color: var(--text-mid);
+      line-height: 1.6;
+      margin-bottom: 36px;
+    }
+    .notice strong { color: var(--text-dark); }
+
+    h2 {
+      font-family: 'Gilda Display', serif;
+      font-size: 1.15rem;
+      color: var(--text-dark);
+      margin: 36px 0 12px;
+    }
+
+    h3 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text-dark);
+      margin: 24px 0 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    p {
+      font-size: 0.9rem;
+      font-weight: 300;
+      color: var(--text-mid);
+      line-height: 1.8;
+      margin-bottom: 14px;
+    }
+
+    ol, ul {
+      padding-left: 20px;
+      margin-bottom: 14px;
+    }
+    li {
+      font-size: 0.9rem;
+      font-weight: 300;
+      color: var(--text-mid);
+      line-height: 1.8;
+      margin-bottom: 6px;
+    }
+
+    .definitions dt {
+      font-weight: 600;
+      color: var(--text-dark);
+      font-size: 0.9rem;
+      margin-top: 16px;
+    }
+    .definitions dd {
+      font-size: 0.9rem;
+      font-weight: 300;
+      color: var(--text-mid);
+      line-height: 1.8;
+      margin-left: 0;
+      margin-top: 4px;
+      padding-left: 16px;
+      border-left: 2px solid rgba(80,20,100,0.15);
+    }
+
+    .signature-block {
+      margin-top: 48px;
+      padding-top: 32px;
+      border-top: 1px solid rgba(80,20,100,0.12);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+    }
+    .sig-party h4 {
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-light);
+      margin-bottom: 16px;
+    }
+    .sig-line {
+      border-bottom: 1px solid rgba(80,20,100,0.25);
+      margin-bottom: 8px;
+      height: 32px;
+    }
+    .sig-label {
+      font-size: 0.8rem;
+      color: var(--text-light);
+      font-weight: 300;
+    }
+
+    .print-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 32px;
+      padding: 10px 22px;
+      background: var(--plum);
+      color: #fff;
+      border: none;
+      border-radius: 100px;
+      font-family: 'Jost', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+    .print-btn:hover { background: #3a0f4e; }
+
+    @media print {
+      body::before { display: none; }
+      .top-bar, header, .print-btn { display: none; }
+      main { padding: 0; }
+      .doc-card { box-shadow: none; border: none; padding: 0; background: #fff; }
+    }
+
+    @media (max-width: 640px) {
+      .doc-card { padding: 32px 24px; }
+      header { padding: 16px 20px; }
+      .signature-block { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="top-bar"></div>
+  <header>
+    <a href="/" class="logo">Parental <span>Care</span> Guide</a>
+    <a href="/signup.html" class="back-link">← Back to sign up</a>
+  </header>
+
+  <main>
+    <div class="doc-card">
+
+      <div class="doc-header">
+        <h1>Business Associate Agreement</h1>
+        <p class="doc-meta">
+          <strong>Parental Care Guide</strong> &mdash; parentalcareguide.com<br>
+          Adapted from the U.S. Department of Health &amp; Human Services model BAA.<br>
+          Effective upon practitioner account creation.
+        </p>
+      </div>
+
+      <div class="notice">
+        <strong>Note for beta practitioners:</strong> This agreement is based on the HHS model Business Associate Agreement and is provided for informational purposes during the beta period. Parental Care Guide is in active development. A finalized, attorney-reviewed BAA will be issued prior to general availability. By checking the acknowledgment box during sign-up, you confirm you have read and understood these terms.
+      </div>
+
+      <h2>Preamble</h2>
+      <p>
+        This Business Associate Agreement ("Agreement") is entered into between <strong>Parental Care Guide</strong> ("Business Associate") and the professional practitioner creating an account ("Covered Entity" or "Practitioner"), collectively referred to as the "Parties."
+      </p>
+      <p>
+        The Parties wish to enter into this Agreement to comply with the requirements of the Health Insurance Portability and Accountability Act of 1996 ("HIPAA"), the Health Information Technology for Economic and Clinical Health Act ("HITECH"), and their implementing regulations, including the HIPAA Privacy Rule (45 C.F.R. Parts 160 and 164, Subparts A and E) and the HIPAA Security Rule (45 C.F.R. Parts 160 and 164, Subparts A and C).
+      </p>
+
+      <h2>I. Definitions</h2>
+      <dl class="definitions">
+        <dt>Business Associate</dt>
+        <dd>Parental Care Guide, a technology platform that creates, receives, maintains, or transmits Protected Health Information on behalf of a Covered Entity.</dd>
+
+        <dt>Covered Entity</dt>
+        <dd>The professional practitioner (Geriatric Care Manager, Elder Law Attorney, Social Worker, Financial Planner, or similar) who has entered into this Agreement by creating a practitioner account on the Platform.</dd>
+
+        <dt>Protected Health Information (PHI)</dt>
+        <dd>Information that relates to the past, present, or future physical or mental health or condition of an individual; the provision of health care to an individual; or the past, present, or future payment for the provision of health care to an individual, and that identifies the individual or for which there is a reasonable basis to believe can be used to identify the individual. PHI includes electronic PHI (ePHI).</dd>
+
+        <dt>Services</dt>
+        <dd>The care coordination, care planning, medication tracking, document management, family communication, and related technology services provided by the Platform to the Covered Entity.</dd>
+
+        <dt>Platform</dt>
+        <dd>The Parental Care Guide software application accessible at parentalcareguide.com and associated APIs and services.</dd>
+
+        <dt>Breach</dt>
+        <dd>The acquisition, access, use, or disclosure of PHI in a manner not permitted by the HIPAA Privacy Rule that compromises the security or privacy of such information, as defined under 45 C.F.R. § 164.402.</dd>
+
+        <dt>Security Incident</dt>
+        <dd>The attempted or successful unauthorized access, use, disclosure, modification, or destruction of information or interference with system operations in an information system, as defined under 45 C.F.R. § 164.304.</dd>
+      </dl>
+
+      <h2>II. Obligations of the Business Associate</h2>
+
+      <h3>A. Permitted Uses and Disclosures</h3>
+      <p>The Business Associate agrees to:</p>
+      <ol>
+        <li>Not use or disclose PHI other than as permitted or required by this Agreement or as required by law.</li>
+        <li>Use appropriate safeguards and comply with the HIPAA Security Rule with respect to electronic PHI, to prevent use or disclosure of PHI other than as provided for by this Agreement.</li>
+        <li>Report to the Covered Entity any use or disclosure of PHI not provided for by this Agreement of which it becomes aware, including breaches of unsecured PHI as required by 45 C.F.R. § 164.410, and any Security Incidents of which it becomes aware.</li>
+        <li>In accordance with 45 C.F.R. §§ 164.502(e)(1)(ii) and 164.308(b)(2), ensure that any subcontractors that create, receive, maintain, or transmit PHI on behalf of the Business Associate agree to the same restrictions, conditions, and requirements that apply to the Business Associate with respect to such information.</li>
+        <li>Make available PHI in a designated record set to the Covered Entity as necessary to satisfy the Covered Entity's obligations under 45 C.F.R. § 164.524.</li>
+        <li>Make any amendment(s) to PHI in a designated record set as directed or agreed to by the Covered Entity pursuant to 45 C.F.R. § 164.526, or take other measures as necessary to satisfy the Covered Entity's obligations under 45 C.F.R. § 164.526.</li>
+        <li>Maintain and make available the information required to provide an accounting of disclosures to the Covered Entity as necessary to satisfy the Covered Entity's obligations under 45 C.F.R. § 164.528.</li>
+        <li>To the extent the Business Associate is to carry out one or more of the Covered Entity's obligation(s) under Subpart E of 45 C.F.R. Part 164, comply with the requirements of Subpart E that apply to the Covered Entity in the performance of such obligation(s).</li>
+        <li>Make its internal practices, books, and records available to the Secretary of the U.S. Department of Health and Human Services for purposes of determining compliance with the HIPAA Rules.</li>
+      </ol>
+
+      <h3>B. Minimum Necessary</h3>
+      <p>The Business Associate shall, to the extent practicable, use, disclose, and request only the minimum amount of PHI necessary to accomplish the intended purpose of the use, disclosure, or request.</p>
+
+      <h3>C. Safeguards</h3>
+      <p>The Business Associate shall implement administrative, physical, and technical safeguards that reasonably and appropriately protect the confidentiality, integrity, and availability of electronic PHI that it creates, receives, maintains, or transmits on behalf of the Covered Entity, in accordance with 45 C.F.R. Part 164, Subpart C.</p>
+
+      <h2>III. Permitted Uses and Disclosures by Business Associate</h2>
+
+      <h3>A. General Use and Disclosure</h3>
+      <p>Except as otherwise limited in this Agreement, the Business Associate may use or disclose PHI to perform functions, activities, or services for, or on behalf of, the Covered Entity as specified in this Agreement, provided that such use or disclosure would not violate the HIPAA Privacy Rule if done by the Covered Entity.</p>
+
+      <h3>B. Specific Use and Disclosure Provisions</h3>
+      <ol>
+        <li>The Business Associate may use PHI for the proper management and administration of the Business Associate or to carry out the legal responsibilities of the Business Associate.</li>
+        <li>The Business Associate may disclose PHI for the proper management and administration of the Business Associate, provided that disclosures are required by law, or the Business Associate obtains reasonable assurances from the person to whom the information is disclosed that it will remain confidential and used or further disclosed only as required by law or for the purpose for which it was disclosed.</li>
+        <li>The Business Associate may use PHI to provide Data Aggregation services to the Covered Entity as permitted by 45 C.F.R. § 164.504(e)(2)(i)(B).</li>
+        <li>The Business Associate may use PHI to report violations of law to appropriate Federal and State authorities, consistent with 45 C.F.R. § 164.502(j)(1).</li>
+      </ol>
+
+      <h2>IV. Obligations of the Covered Entity</h2>
+      <p>The Covered Entity agrees to:</p>
+      <ol>
+        <li>Notify the Business Associate of any limitation(s) in the Covered Entity's Notice of Privacy Practices, to the extent that such limitation may affect the Business Associate's use or disclosure of PHI.</li>
+        <li>Notify the Business Associate of any changes in, or revocation of, permission by an individual to use or disclose PHI, to the extent that such changes may affect the Business Associate's use or disclosure of PHI.</li>
+        <li>Notify the Business Associate of any restriction on the use or disclosure of PHI that the Covered Entity has agreed to or is required to abide by under 45 C.F.R. § 164.522, to the extent that such restriction may affect the Business Associate's use or disclosure of PHI.</li>
+        <li>Not request the Business Associate to use or disclose PHI in any manner that would not be permissible under the HIPAA Privacy Rule if done by the Covered Entity.</li>
+        <li>Ensure that any PHI entered into the Platform has been obtained lawfully and with appropriate patient authorization as required under applicable law.</li>
+        <li>Be solely responsible for obtaining any required patient authorizations, consents, or notices prior to entering PHI into the Platform.</li>
+      </ol>
+
+      <h2>V. Breach Notification</h2>
+      <p>The Business Associate shall notify the Covered Entity without unreasonable delay and in no case later than <strong>60 days</strong> following discovery of a Breach of Unsecured PHI. Notification shall include, to the extent possible:</p>
+      <ol>
+        <li>The identification of each individual whose unsecured PHI has been, or is reasonably believed to have been, accessed, acquired, used, or disclosed during the Breach;</li>
+        <li>A brief description of what happened, including the date of the Breach and the date of discovery of the Breach;</li>
+        <li>A description of the types of unsecured PHI involved in the Breach;</li>
+        <li>Any steps individuals should take to protect themselves from potential harm resulting from the Breach;</li>
+        <li>A brief description of what the Business Associate is doing to investigate the Breach, mitigate harm, and protect against further Breaches; and</li>
+        <li>Contact procedures for individuals to ask questions or obtain additional information.</li>
+      </ol>
+
+      <h2>VI. Term and Termination</h2>
+
+      <h3>A. Term</h3>
+      <p>This Agreement shall be effective as of the date the Covered Entity creates a practitioner account on the Platform and shall terminate when all PHI provided by the Covered Entity to the Business Associate is destroyed or returned to the Covered Entity, or, if it is infeasible to return or destroy PHI, protections are extended to such information in accordance with the termination provisions in Section VI.C.</p>
+
+      <h3>B. Termination for Cause</h3>
+      <p>Upon either Party's knowledge of a material breach by the other Party, the non-breaching Party shall provide an opportunity for the breaching Party to cure the breach or end the violation. If the breaching Party does not cure the breach or end the violation within a reasonable time period, or if cure is not possible, the non-breaching Party may terminate this Agreement and the Covered Entity's access to the Platform.</p>
+
+      <h3>C. Effect of Termination</h3>
+      <ol>
+        <li>Upon termination of this Agreement for any reason, the Business Associate shall return or destroy all PHI received from the Covered Entity that the Business Associate still maintains in any form. The Business Associate shall retain no copies of the PHI.</li>
+        <li>If the Business Associate determines that returning or destroying the PHI is infeasible, the Business Associate shall provide notification to the Covered Entity of the conditions that make return or destruction infeasible. Upon notification, the Business Associate shall extend the protections of this Agreement to such PHI and limit further uses and disclosures of such PHI to those purposes that make the return or destruction infeasible, for so long as the Business Associate maintains such PHI.</li>
+      </ol>
+
+      <h2>VII. Miscellaneous</h2>
+
+      <h3>A. Regulatory References</h3>
+      <p>A reference in this Agreement to a section in the HIPAA Rules means the section as in effect or as amended, and for which compliance is required.</p>
+
+      <h3>B. Amendment</h3>
+      <p>The Parties agree to take such action as is necessary to amend this Agreement from time to time as is necessary for compliance with the requirements of the HIPAA Rules and any other applicable law.</p>
+
+      <h3>C. Survival</h3>
+      <p>The respective rights and obligations of the Business Associate under Section VI.C of this Agreement shall survive the termination of this Agreement.</p>
+
+      <h3>D. Interpretation</h3>
+      <p>Any ambiguity in this Agreement shall be resolved to permit the Parties to comply with the HIPAA Rules. The Parties agree that any inconsistency between the provisions of this Agreement and the HIPAA Rules shall be resolved in favor of the HIPAA Rules.</p>
+
+      <h3>E. Governing Law</h3>
+      <p>This Agreement shall be governed by and construed in accordance with applicable federal law, including HIPAA and HITECH, and the laws of the State in which the Covered Entity is licensed to practice.</p>
+
+      <h3>F. Entire Agreement</h3>
+      <p>This Agreement constitutes the entire agreement between the Parties with respect to the subject matter hereof and supersedes all prior negotiations, representations, warranties, and understandings of the Parties with respect to the subject matter hereof.</p>
+
+      <div class="signature-block">
+        <div class="sig-party">
+          <h4>Business Associate</h4>
+          <div class="sig-line"></div>
+          <div class="sig-label">Parental Care Guide</div>
+          <div class="sig-line" style="margin-top:20px;"></div>
+          <div class="sig-label">Date</div>
+        </div>
+        <div class="sig-party">
+          <h4>Covered Entity (Practitioner)</h4>
+          <div class="sig-line"></div>
+          <div class="sig-label">Name &amp; Signature</div>
+          <div class="sig-line" style="margin-top:20px;"></div>
+          <div class="sig-label">Date</div>
+        </div>
+      </div>
+
+      <p style="margin-top:32px; font-size:0.8rem; color: var(--text-light); font-style:italic;">
+        Adapted from the U.S. Department of Health &amp; Human Services model Business Associate Agreement. Source: U.S. Department of Health &amp; Human Services, Office for Civil Rights. This document does not constitute legal advice. Parental Care Guide recommends consulting a qualified healthcare attorney prior to handling protected health information in a production environment.
+      </p>
+
+      <button class="print-btn" onclick="window.print()">🖨 Print / Save as PDF</button>
+
+    </div>
+  </main>
+</body>
+</html>
