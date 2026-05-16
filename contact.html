@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact Us — Parental Care Guide</title>
+  <meta name="description" content="Get in touch with the Parental Care Guide team." />
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Gilda+Display&family=Jost:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --plum:       #501464;
+      --plum-hover: #3a0f4e;
+      --text-dark:  #1e1230;
+      --text-mid:   #4a2d65;
+      --text-light: #6b4d85;
+      --glass-bg:   rgba(255, 255, 255, 0.38);
+      --glass-border: rgba(255, 255, 255, 0.55);
+    }
+
+    body {
+      font-family: 'Jost', 'Segoe UI', sans-serif;
+      min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(
+        148deg,
+        #FFF5F0 0%,
+        #FFD6CC 12%,
+        #F4B8C1 26%,
+        #E8A0B4 40%,
+        #D4A0C8 55%,
+        #B8A8D8 70%,
+        #98A8E0 84%,
+        #8ABCE8 100%
+      );
+      z-index: 0;
+    }
+
+    .blob {
+      position: fixed;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 0;
+      filter: blur(72px);
+      opacity: 0.45;
+    }
+    .blob-1 { width: 520px; height: 520px; background: #c084fc; top: -120px; left: -100px; }
+    .blob-2 { width: 380px; height: 380px; background: #60a5fa; bottom: 80px; right: -100px; }
+    .blob-3 { width: 300px; height: 300px; background: #f472b6; bottom: -80px; left: 30%; }
+
+    /* ── Header ── */
+    header {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 48px;
+    }
+
+    .logo {
+      font-family: 'Gilda Display', serif;
+      font-size: 1.35rem;
+      color: var(--text-dark);
+      text-decoration: none;
+    }
+    .logo span { color: var(--plum); }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+    }
+
+    .nav-links a {
+      font-size: 0.95rem;
+      color: var(--text-mid);
+      text-decoration: none;
+      font-weight: 400;
+      transition: color 0.15s;
+    }
+    .nav-links a:hover { color: var(--text-dark); }
+
+    /* ── Page layout ── */
+    main {
+      position: relative;
+      z-index: 1;
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 48px 24px 80px;
+    }
+
+    .page-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .page-header h1 {
+      font-family: 'Gilda Display', serif;
+      font-size: 2.6rem;
+      color: var(--text-dark);
+      margin-bottom: 12px;
+    }
+
+    .page-header p {
+      font-size: 1.05rem;
+      color: var(--text-mid);
+      font-weight: 300;
+      line-height: 1.6;
+    }
+
+    /* ── Form card ── */
+    .form-card {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 40px;
+    }
+
+    .form-group {
+      margin-bottom: 24px;
+    }
+
+    label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--text-mid);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 8px;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.55);
+      font-family: 'Jost', sans-serif;
+      font-size: 0.95rem;
+      color: var(--text-dark);
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: var(--plum);
+      box-shadow: 0 0 0 3px rgba(80, 20, 100, 0.12);
+    }
+
+    input::placeholder,
+    textarea::placeholder { color: var(--text-light); opacity: 0.7; }
+
+    select {
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%234a2d65' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      padding-right: 40px;
+      cursor: pointer;
+    }
+
+    textarea {
+      min-height: 140px;
+      resize: vertical;
+      line-height: 1.6;
+    }
+
+    .form-row-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    @media (max-width: 520px) {
+      .form-row-2 { grid-template-columns: 1fr; }
+      .form-card { padding: 24px 20px; }
+      header { padding: 16px 20px; }
+      .page-header h1 { font-size: 2rem; }
+    }
+
+    /* ── Submit button ── */
+    .btn-submit {
+      width: 100%;
+      padding: 14px;
+      background: var(--plum);
+      color: #fff;
+      font-family: 'Jost', sans-serif;
+      font-size: 1rem;
+      font-weight: 500;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+      margin-top: 8px;
+    }
+    .btn-submit:hover { background: var(--plum-hover); }
+    .btn-submit:active { transform: scale(0.98); }
+    .btn-submit:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* ── States ── */
+    .status-msg {
+      display: none;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 18px;
+      border-radius: 10px;
+      font-size: 0.95rem;
+      margin-bottom: 20px;
+    }
+    .status-msg.show { display: flex; }
+    .status-msg.success {
+      background: rgba(220, 252, 231, 0.8);
+      border: 1px solid rgba(134, 239, 172, 0.6);
+      color: #166534;
+    }
+    .status-msg.error {
+      background: rgba(254, 226, 226, 0.8);
+      border: 1px solid rgba(252, 165, 165, 0.6);
+      color: #991b1b;
+    }
+
+    .spinner {
+      width: 18px; height: 18px;
+      border: 2px solid rgba(255,255,255,0.4);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      display: none;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .btn-submit.loading .spinner { display: inline-block; }
+    .btn-submit.loading .btn-text { display: none; }
+
+    /* ── Success screen ── */
+    .success-screen {
+      display: none;
+      text-align: center;
+      padding: 48px 24px;
+    }
+    .success-screen.show { display: block; }
+    .success-icon {
+      font-size: 3rem;
+      margin-bottom: 20px;
+    }
+    .success-screen h2 {
+      font-family: 'Gilda Display', serif;
+      font-size: 1.8rem;
+      color: var(--text-dark);
+      margin-bottom: 12px;
+    }
+    .success-screen p {
+      color: var(--text-mid);
+      font-size: 1rem;
+      font-weight: 300;
+      line-height: 1.6;
+      margin-bottom: 28px;
+    }
+    .btn-back {
+      display: inline-block;
+      padding: 12px 28px;
+      background: var(--plum);
+      color: #fff;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: 500;
+      transition: background 0.2s;
+    }
+    .btn-back:hover { background: var(--plum-hover); }
+  </style>
+</head>
+<body>
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+
+  <header>
+    <a href="/" class="logo">Parental <span>Care</span> Guide</a>
+    <nav class="nav-links">
+      <a href="/">Home</a>
+      <a href="/login.html">Sign In</a>
+    </nav>
+  </header>
+
+  <main>
+    <div class="page-header">
+      <h1>Get in touch</h1>
+      <p>Have a question, need support, or want to partner with us?<br>We'd love to hear from you.</p>
+    </div>
+
+    <div class="form-card">
+      <!-- Status messages -->
+      <div class="status-msg error" id="errorMsg">
+        <span>⚠</span>
+        <span id="errorText">Something went wrong. Please try again.</span>
+      </div>
+
+      <!-- Contact form -->
+      <form id="contactForm" novalidate>
+        <div class="form-row-2">
+          <div class="form-group">
+            <label for="firstName">First name</label>
+            <input type="text" id="firstName" name="firstName" placeholder="Jane" required autocomplete="given-name" />
+          </div>
+          <div class="form-group">
+            <label for="lastName">Last name</label>
+            <input type="text" id="lastName" name="lastName" placeholder="Smith" required autocomplete="family-name" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email address</label>
+          <input type="email" id="email" name="email" placeholder="jane@example.com" required autocomplete="email" />
+        </div>
+
+        <div class="form-group">
+          <label for="role">I am a…</label>
+          <select id="role" name="role" required>
+            <option value="" disabled selected>Select your role</option>
+            <option value="family_caregiver">Family caregiver</option>
+            <option value="care_professional">Care professional (social worker, nurse, etc.)</option>
+            <option value="healthcare_provider">Healthcare provider</option>
+            <option value="organization">Organization or agency</option>
+            <option value="press">Press / media</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="subject">Subject</label>
+          <input type="text" id="subject" name="subject" placeholder="How can we help?" required />
+        </div>
+
+        <div class="form-group">
+          <label for="message">Message</label>
+          <textarea id="message" name="message" placeholder="Tell us a bit more…" required></textarea>
+        </div>
+
+        <button type="submit" class="btn-submit" id="submitBtn">
+          <span class="spinner"></span>
+          <span class="btn-text">Send message</span>
+        </button>
+      </form>
+
+      <!-- Success screen (shown after submit) -->
+      <div class="success-screen" id="successScreen">
+        <div class="success-icon">💌</div>
+        <h2>Message sent!</h2>
+        <p>Thanks for reaching out. We'll get back to you at <strong id="confirmedEmail"></strong> within 1–2 business days.</p>
+        <a href="/" class="btn-back">Back to home</a>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const API = 'https://careguide-api-658340465706.us-central1.run.app';
+
+    const form       = document.getElementById('contactForm');
+    const submitBtn  = document.getElementById('submitBtn');
+    const errorMsg   = document.getElementById('errorMsg');
+    const errorText  = document.getElementById('errorText');
+    const successScr = document.getElementById('successScreen');
+
+    function showError(msg) {
+      errorText.textContent = msg;
+      errorMsg.classList.add('show');
+      errorMsg.classList.remove('error'); // reset
+      errorMsg.classList.add('error');
+    }
+
+    function hideError() {
+      errorMsg.classList.remove('show');
+    }
+
+    function setLoading(on) {
+      submitBtn.disabled = on;
+      submitBtn.classList.toggle('loading', on);
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      hideError();
+
+      const firstName = form.firstName.value.trim();
+      const lastName  = form.lastName.value.trim();
+      const email     = form.email.value.trim();
+      const role      = form.role.value;
+      const subject   = form.subject.value.trim();
+      const message   = form.message.value.trim();
+
+      // Client-side validation
+      if (!firstName || !lastName) return showError('Please enter your full name.');
+      if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return showError('Please enter a valid email address.');
+      if (!role) return showError('Please select your role.');
+      if (!subject) return showError('Please add a subject.');
+      if (message.length < 10) return showError('Please write a message (at least 10 characters).');
+
+      setLoading(true);
+
+      const payload = {
+        first_name: firstName,
+        last_name:  lastName,
+        email,
+        role,
+        subject,
+        message,
+        submitted_at: new Date().toISOString()
+      };
+
+      try {
+        const res = await fetch(`${API}/contact`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        if (!res.ok) {
+          const data = await res.json().catch(() => ({}));
+          throw new Error(data.detail || `Server error (${res.status})`);
+        }
+
+        // Show success
+        document.getElementById('confirmedEmail').textContent = email;
+        form.style.display = 'none';
+        successScr.classList.add('show');
+
+      } catch (err) {
+        console.error('Contact submit error:', err);
+        showError(err.message || 'Something went wrong. Please try again or email us directly.');
+      } finally {
+        setLoading(false);
+      }
+    });
+  </script>
+</body>
+</html>
