@@ -484,6 +484,7 @@
   <div class="tabs" id="tabs" style="display:none;">
     <button class="tab active" data-tab="overview">Overview</button>
     <button class="tab" data-tab="notes">Session Notes</button>
+    <button class="tab" data-tab="updates">Care Updates</button>
     <button class="tab" data-tab="medications">Medications</button>
     <button class="tab" data-tab="crisis">Crisis Card</button>
   </div>
@@ -548,6 +549,26 @@
       <div class="section-card-body" id="notesList">
         <div class="empty-section">
           <p>No session notes yet.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Care Updates ── -->
+  <div class="tab-panel" id="panel-updates">
+    <div class="section-card">
+      <div class="section-card-header">
+        <span class="section-card-title">Care Updates</span>
+        <span style="font-size:0.75rem;color:var(--text-muted);">Posted updates are visible to family members in the family portal.</span>
+      </div>
+      <div class="section-card-body">
+        <textarea id="updateText" rows="3" placeholder="Share an update with the family — anything they should know about their parent's care…"
+                  style="width:100%;padding:10px 12px;border:1px solid var(--border-mid);border-radius:8px;font-family:'Jost',sans-serif;font-size:0.875rem;resize:vertical;line-height:1.6;margin-bottom:10px;"></textarea>
+        <div style="display:flex;justify-content:flex-end;">
+          <button onclick="postCareUpdate()" class="btn-primary btn-action" style="padding:8px 18px;font-size:0.825rem;">Post update</button>
+        </div>
+        <div id="updatesList" style="margin-top:18px;">
+          <div class="empty-section"><p>No care updates posted yet.</p></div>
         </div>
       </div>
     </div>
@@ -702,11 +723,12 @@ document.getElementById('signOutBtn').addEventListener('click', async () => {
 
 // ── Load all client data ─────────────────────────────────────────────────────
 async function loadClient() {
-  const [familySnap, parentsSnap, medsSnap, notesSnap] = await Promise.all([
+  const [familySnap, parentsSnap, medsSnap, notesSnap, updatesSnap] = await Promise.all([
     getDoc(doc(db, 'family_groups', familyId)),
     getDocs(query(collection(db, 'parents'), where('family_group_id', '==', familyId))),
     getDocs(query(collection(db, 'medications'), where('family_group_id', '==', familyId))),
     getDocs(query(collection(db, 'session_notes'), where('family_group_id', '==', familyId), orderBy('created_at', 'desc'))),
+    getDocs(query(collection(db, 'care_updates'), where('family_group_id', '==', familyId), orderBy('posted_at', 'desc'))),
   ]);
 
   if (!familySnap.exists()) {
@@ -717,7 +739,8 @@ async function loadClient() {
   familyData = { id: familySnap.id, ...familySnap.data() };
   parentData = parentsSnap.empty ? null : { id: parentsSnap.docs[0].id, ...parentsSnap.docs[0].data() };
   medsData   = medsSnap.docs.map(d => ({ id: d.id, ...d.data() }));
-  const notesData = notesSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+  const notesData   = notesSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+  const updatesData = updatesSnap.docs.map(d => ({ id: d.id, ...d.data() }));
 
   renderHeader();
   renderUrgentFlags();
@@ -725,6 +748,7 @@ async function loadClient() {
   renderCareLevel();
   renderFlagsSection();
   renderNotes(notesData);
+  renderCareUpdates(updatesData);
   renderMeds();
   renderCrisisCard();
 
@@ -951,6 +975,57 @@ function renderNotes(notes) {
     </div>
   `).join('');
 }
+
+function renderCareUpdates(updates) {
+  const list = document.getElementById('updatesList');
+  if (!updates.length) {
+    list.innerHTML = `<div class="empty-section"><p>No care updates posted yet.</p></div>`;
+    return;
+  }
+  list.innerHTML = updates.map(u => {
+    const when = u.posted_at?.toDate?.() ? formatTs(u.posted_at) : '';
+    const body = (u.body || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    return `
+      <div style="padding:14px 0;border-bottom:1px solid var(--border-mid);">
+        <div style="font-size:0.875rem;color:var(--text-dark);line-height:1.6;white-space:pre-wrap;">${body}</div>
+        ${when ? `<div style="font-size:0.75rem;color:var(--text-muted);margin-top:6px;">${when}</div>` : ''}
+      </div>
+    `;
+  }).join('');
+}
+
+window.postCareUpdate = async function () {
+  const textarea = document.getElementById('updateText');
+  const body = textarea.value.trim();
+  if (!body) return;
+
+  textarea.disabled = true;
+  try {
+    const ref = await addDoc(collection(db, 'care_updates'), {
+      family_group_id: familyId,
+      author_uid:      currentUser.uid,
+      body,
+      posted_at:       serverTimestamp(),
+    });
+    textarea.value = '';
+    showToast('Update posted to family.');
+    // Optimistically prepend the new update to the list
+    const newUpdate = { id: ref.id, family_group_id: familyId, author_uid: currentUser.uid, body, posted_at: { toDate: () => new Date() } };
+    const existing = document.getElementById('updatesList');
+    const isEmpty  = existing.querySelector('.empty-section');
+    if (isEmpty) {
+      renderCareUpdates([newUpdate]);
+    } else {
+      // Reload from Firestore to get the real serverTimestamp
+      const snap = await getDocs(query(collection(db, 'care_updates'), where('family_group_id', '==', familyId), orderBy('posted_at', 'desc')));
+      renderCareUpdates(snap.docs.map(d => ({ id: d.id, ...d.data() })));
+    }
+  } catch (err) {
+    showToast('Failed to post: ' + (err.message || 'try again'));
+  } finally {
+    textarea.disabled = false;
+  }
+};
 
 window.openAddNote = function () {
   document.getElementById('noteModal').style.display = 'flex';

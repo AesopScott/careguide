@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Accept Invitation — Parental Care Guide</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Gilda+Display&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Jost', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      padding: 24px;
+    }
+
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background: linear-gradient(148deg,
+        #FFF5F0 0%, #FFD6CC 12%, #F4B8C1 26%, #E8A0B4 40%,
+        #D4A0C8 55%, #B8A8D8 70%, #98A8E0 84%, #8ABCE8 100%);
+      z-index: 0;
+    }
+
+    .blob { position: fixed; border-radius: 50%; pointer-events: none; z-index: 0; filter: blur(72px); opacity: 0.4; }
+    .blob-1 { width: 500px; height: 500px; background: #c084fc; top: -120px; left: -100px; }
+    .blob-2 { width: 380px; height: 380px; background: #60a5fa; bottom: 80px; right: -100px; }
+
+    .card {
+      position: relative; z-index: 2;
+      background: rgba(255,255,255,0.42);
+      border: 1px solid rgba(255,255,255,0.6);
+      backdrop-filter: blur(16px);
+      border-radius: 20px;
+      padding: 52px 48px 48px;
+      max-width: 480px;
+      width: 100%;
+      text-align: center;
+    }
+
+    .icon { font-size: 3rem; margin-bottom: 20px; line-height: 1; }
+
+    h1 {
+      font-family: 'Gilda Display', Georgia, serif;
+      font-size: 1.65rem;
+      font-weight: 400;
+      color: #1e1230;
+      margin-bottom: 12px;
+      line-height: 1.2;
+    }
+
+    .subtitle {
+      font-size: 0.95rem;
+      color: #4a2d65;
+      font-weight: 300;
+      line-height: 1.6;
+      margin-bottom: 28px;
+    }
+
+    label {
+      display: block;
+      text-align: left;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: #4a2d65;
+      margin-bottom: 6px;
+    }
+
+    input[type="email"] {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid rgba(80,20,100,0.25);
+      border-radius: 10px;
+      background: rgba(255,255,255,0.55);
+      font-family: 'Jost', sans-serif;
+      font-size: 0.95rem;
+      color: #1e1230;
+      margin-bottom: 20px;
+    }
+    input[type="email"]:focus { outline: 2px solid #501464; outline-offset: 1px; }
+
+    .btn {
+      display: block;
+      width: 100%;
+      padding: 13px;
+      background: #501464;
+      color: #fff;
+      border: none;
+      border-radius: 100px;
+      font-family: 'Jost', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 500;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.2s;
+      margin-bottom: 10px;
+    }
+    .btn:hover { background: #3a0f4e; }
+    .btn:disabled { opacity: 0.55; cursor: progress; }
+
+    .spinner {
+      width: 40px; height: 40px;
+      border: 3px solid rgba(80,20,100,0.15);
+      border-top-color: #501464;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 20px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .error-detail {
+      font-size: 0.85rem;
+      color: #6b4d85;
+      font-weight: 300;
+      margin-top: 8px;
+      line-height: 1.5;
+    }
+
+    #state-confirming-email,
+    #state-accepting,
+    #state-success,
+    #state-error,
+    #state-no-invites { display: none; }
+    #state-loading { display: block; }
+
+    @media (max-width: 520px) {
+      .card { padding: 36px 28px 32px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+
+  <div class="card">
+
+    <div id="state-loading">
+      <div class="spinner"></div>
+      <h1>Opening your invitation…</h1>
+      <p class="subtitle">Just a moment.</p>
+    </div>
+
+    <div id="state-confirming-email">
+      <div class="icon">✉️</div>
+      <h1>Confirm your email</h1>
+      <p class="subtitle">For security, please re-enter the email address this invitation was sent to.</p>
+      <form onsubmit="event.preventDefault(); confirmEmail();">
+        <label for="email-input">Email</label>
+        <input type="email" id="email-input" required autocomplete="email" placeholder="you@example.com" />
+        <button class="btn" type="submit" id="btn-confirm">Continue</button>
+      </form>
+      <p class="error-detail" id="confirm-error"></p>
+    </div>
+
+    <div id="state-accepting">
+      <div class="spinner"></div>
+      <h1>Joining your family portal…</h1>
+      <p class="subtitle">Setting up your access.</p>
+    </div>
+
+    <div id="state-success">
+      <div class="icon">✅</div>
+      <h1>You're in.</h1>
+      <p class="subtitle" id="success-detail">Your family portal access is set up. Taking you there now…</p>
+      <a href="/family.html" class="btn">Go to family portal</a>
+    </div>
+
+    <div id="state-no-invites">
+      <div class="icon">📭</div>
+      <h1>No pending invitations</h1>
+      <p class="subtitle">You're signed in, but there are no pending invitations on this email address. The invitation may have already been accepted, revoked, or expired.</p>
+      <a href="/contact.html" class="btn" style="background:rgba(80,20,100,0.1);color:#501464;">Contact support</a>
+    </div>
+
+    <div id="state-error">
+      <div class="icon">⚠️</div>
+      <h1 id="err-title">Something went wrong</h1>
+      <p class="subtitle" id="err-subtitle">We couldn't process your invitation.</p>
+      <p class="error-detail" id="err-detail"></p>
+      <a href="/contact.html" class="btn" style="margin-top:24px;background:rgba(80,20,100,0.1);color:#501464;">Contact support</a>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.8.0/firebase-app.js';
+    import {
+      getAuth,
+      isSignInWithEmailLink,
+      signInWithEmailLink,
+    } from 'https://www.gstatic.com/firebasejs/11.8.0/firebase-auth.js';
+
+    const FIREBASE_CONFIG = {
+      apiKey:            "AIzaSyB0GaJXI_lbLhEXmctMJ0LoHiV3cHL5vQY",
+      authDomain:        "careguide-def76.firebaseapp.com",
+      projectId:         "careguide-def76",
+      storageBucket:     "careguide-def76.firebasestorage.app",
+      messagingSenderId: "658340465706",
+      appId:             "1:658340465706:web:0e412731947ff51474c753"
+    };
+
+    const API = 'https://careguide-api-658340465706.us-central1.run.app';
+    const STORAGE_EMAIL_KEY = 'pcg_invite_email';
+
+    const app  = initializeApp(FIREBASE_CONFIG);
+    const auth = getAuth(app);
+
+    function show(stateId) {
+      ['state-loading', 'state-confirming-email', 'state-accepting', 'state-success', 'state-error', 'state-no-invites']
+        .forEach(id => document.getElementById(id).style.display = 'none');
+      document.getElementById(stateId).style.display = 'block';
+    }
+
+    function showError(title, subtitle, detail) {
+      document.getElementById('err-title').textContent = title;
+      document.getElementById('err-subtitle').textContent = subtitle;
+      document.getElementById('err-detail').textContent = detail || '';
+      show('state-error');
+    }
+
+    async function completeSignIn(email) {
+      try {
+        const cred = await signInWithEmailLink(auth, email, window.location.href);
+        localStorage.removeItem(STORAGE_EMAIL_KEY);
+        await acceptInvite(cred.user);
+      } catch (err) {
+        if (err.code === 'auth/invalid-action-code' || err.code === 'auth/expired-action-code') {
+          showError('Link expired or already used', 'This invitation link is no longer valid.', 'Ask your practitioner to send a fresh invitation.');
+        } else if (err.code === 'auth/invalid-email') {
+          show('state-confirming-email');
+          document.getElementById('confirm-error').textContent = 'That email doesn\'t match this invitation. Please try again.';
+        } else {
+          showError('Sign-in failed', 'We couldn\'t sign you in with this link.', err.message || '');
+        }
+      }
+    }
+
+    async function acceptInvite(user) {
+      show('state-accepting');
+      try {
+        const idToken = await user.getIdToken(true);
+        const res = await fetch(`${API}/auth/accept-invite`, {
+          method:  'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${idToken}` },
+        });
+
+        if (!res.ok) {
+          const data = await res.json().catch(() => ({}));
+          showError('We could not accept the invitation', 'The server returned an error.', data.detail || `Status ${res.status}`);
+          return;
+        }
+
+        const data = await res.json();
+        const groups = data.family_group_ids || [];
+
+        if (!groups.length) {
+          show('state-no-invites');
+          return;
+        }
+
+        // Force a token refresh so the new claims apply on /family.html
+        await user.getIdToken(true);
+
+        show('state-success');
+        setTimeout(() => { window.location.href = '/family.html'; }, 1200);
+      } catch (err) {
+        showError('Connection problem', 'We couldn\'t reach the server.', err.message || '');
+      }
+    }
+
+    window.confirmEmail = async function () {
+      const input = document.getElementById('email-input').value.trim();
+      const errEl = document.getElementById('confirm-error');
+      errEl.textContent = '';
+
+      if (!input) {
+        errEl.textContent = 'Please enter your email address.';
+        return;
+      }
+
+      const btn = document.getElementById('btn-confirm');
+      btn.disabled = true;
+      btn.textContent = 'Signing you in…';
+
+      localStorage.setItem(STORAGE_EMAIL_KEY, input);
+      await completeSignIn(input);
+
+      btn.disabled = false;
+      btn.textContent = 'Continue';
+    };
+
+    // Entry: did the user arrive via an email-link?
+    (async function init() {
+      if (!isSignInWithEmailLink(auth, window.location.href)) {
+        showError(
+          'Not a valid invitation link',
+          'This page can only be opened from an invitation email.',
+          'If you have an invitation email, click the link inside it again.',
+        );
+        return;
+      }
+
+      // Try the email we saved before redirecting; if not present (cross-device), ask.
+      const savedEmail = localStorage.getItem(STORAGE_EMAIL_KEY);
+      if (savedEmail) {
+        await completeSignIn(savedEmail);
+      } else {
+        show('state-confirming-email');
+      }
+    })();
+  </script>
+  <script src="/version.js"></script>
+</body>
+</html>

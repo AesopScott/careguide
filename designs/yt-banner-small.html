@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>YouTube Banner</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Gilda+Display&family=Jost:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      width: 2048px;
+      height: 1152px;
+      overflow: hidden;
+      font-family: 'Jost', sans-serif;
+      position: relative;
+    }
+
+    .bg {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        148deg,
+        #FFF5F0 0%,
+        #FFD6CC 12%,
+        #F4B8C1 26%,
+        #E8A0B4 40%,
+        #D4A0C8 55%,
+        #B8A8D8 70%,
+        #98A8E0 84%,
+        #8ABCE8 100%
+      );
+    }
+
+    .blob-1 {
+      position: absolute;
+      width: 1100px; height: 1100px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,210,220,0.45) 0%, transparent 70%);
+      top: -400px; left: -200px;
+    }
+    .blob-2 {
+      position: absolute;
+      width: 1200px; height: 1200px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(170,148,210,0.35) 0%, transparent 70%);
+      bottom: -500px; right: -300px;
+    }
+    .blob-3 {
+      position: absolute;
+      width: 800px; height: 800px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(138,188,232,0.25) 0%, transparent 70%);
+      top: -200px; right: 200px;
+    }
+
+    /* Top accent bar */
+    .top-bar {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 10px;
+      background: linear-gradient(90deg,
+        #FFD6CC, #F4B8C1, #E8A0B4,
+        #D4A0C8, #B8A8D8, #98A8E0, #8ABCE8
+      );
+      z-index: 10;
+    }
+
+    /*
+      YouTube safe zone: center 1546×423px of a 2048×1152 canvas.
+      That means: left margin = (2048-1546)/2 = 251px
+                  top margin  = (1152-423)/2  = 364px
+      Keep all text/logo inside this zone.
+    */
+    .safe-zone {
+      position: absolute;
+      left: 251px;
+      top: 364px;
+      width: 1546px;
+      height: 423px;
+      /* border: 2px dashed rgba(255,0,0,0.2); */ /* debug guide */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 28px;
+      z-index: 5;
+      text-align: center;
+    }
+
+    .logo-row {
+      display: flex;
+      align-items: center;
+      gap: 26px;
+    }
+
+    .logo-icon {
+      width: 96px; height: 96px;
+      background: rgba(255,255,255,0.52);
+      border: 2px solid rgba(255,255,255,0.82);
+      border-radius: 26px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8px 40px rgba(180,120,200,0.2);
+      flex-shrink: 0;
+    }
+
+    .logo-name {
+      font-family: 'Gilda Display', Georgia, serif;
+      font-size: 4rem;
+      font-weight: 400;
+      color: rgba(30,18,48,0.88);
+      letter-spacing: 0.01em;
+      line-height: 1;
+    }
+
+    .logo-name span { color: rgba(80,20,100,0.85); }
+
+    /* Diamond rule */
+    .rule {
+      width: 380px;
+      height: 16px;
+    }
+
+    .tagline {
+      font-family: 'Gilda Display', Georgia, serif;
+      font-style: italic;
+      font-size: 1.65rem;
+      color: rgba(30,18,48,0.58);
+      line-height: 1.5;
+    }
+
+    .url {
+      font-size: 0.88rem;
+      font-weight: 400;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(60,40,80,0.42);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="bg"></div>
+  <div class="blob-1"></div>
+  <div class="blob-2"></div>
+  <div class="blob-3"></div>
+  <div class="top-bar"></div>
+
+  <div class="safe-zone">
+
+    <div class="logo-row">
+      <div class="logo-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="62" height="62">
+          <defs>
+            <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#F4B8C1"/>
+              <stop offset="100%" stop-color="#B8A8D8"/>
+            </linearGradient>
+          </defs>
+          <path d="M64 96 C64 96 22 70 22 44 C22 30 33 20 48 25 C55 27 60 33 64 38 C68 33 73 27 80 25 C95 20 106 30 106 44 C106 70 64 96 64 96Z" fill="url(#g)"/>
+        </svg>
+      </div>
+      <div class="logo-name">Parental <span>Care</span> Guide</div>
+    </div>
+
+    <svg class="rule" viewBox="0 0 380 16" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="fl" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="rgba(255,255,255,0)"/>
+          <stop offset="100%" stop-color="rgba(255,255,255,0.65)"/>
+        </linearGradient>
+        <linearGradient id="fr" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="rgba(255,255,255,0.65)"/>
+          <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
+        </linearGradient>
+      </defs>
+      <line x1="0" y1="8" x2="178" y2="8" stroke="url(#fl)" stroke-width="1.5"/>
+      <polygon points="188,2 193,8 188,14 183,8" fill="rgba(255,255,255,0.8)"/>
+      <line x1="198" y1="8" x2="380" y2="8" stroke="url(#fr)" stroke-width="1.5"/>
+    </svg>
+
+    <div class="tagline">
+      Navigating aging parents — the appointments, the paperwork, the hard conversations — shouldn't have to be done alone.
+    </div>
+
+    <div class="url">parentalcareguide.com</div>
+
+  </div>
+
+</body>
+</html>

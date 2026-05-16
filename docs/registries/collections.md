@@ -168,17 +168,56 @@ Crisis card data per family group. Document id = `family_group_id`.
 
 ## `family_messages`
 
-Family-side messaging (family.html flow, not yet implemented end-to-end).
+Family-side messaging (family.html flow).
 
 **Producers**
-- `family.html:549` — addDoc
+- `family.html:549` — addDoc (family member side)
 
 **Consumers**
-- None currently — practitioner-side reader not yet built.
+- None on practitioner side yet — practitioner inbox UI not yet built.
 
 **Rule:** `firestore.rules` /family_messages — both practitioner and family member can read/write within their group; only the sender (or admin) can edit/delete. ✓
 
-⚠ **Note:** rule is in place but the family flow itself (claim setters, accept-invite, message UI on practitioner side) is not implemented. Writes from family.html will succeed once the claim is set.
+⚠ **Note:** family flow now reachable (claim setter + accept page built). Practitioner-side reader UI still to come.
+
+---
+
+## `family_invitations`
+
+Pending invitations from practitioner to family-member email.
+
+**Schema (key fields):** `family_group_id`, `invited_email` (lowercased), `invited_relationship`, `expires_at`, `status` (`pending` | `accepted` | `expired` | `revoked`), `invited_by_uid`, `invited_at`, `accepted_at`, `accepted_by_uid`, `revoked_at`.
+
+**Producers**
+- `api/routers/family_groups.py` invite_family_member — Admin SDK write (bypasses rules)
+- `api/routers/family_groups.py` revoke_family_member — Admin SDK update (bypasses rules)
+- `api/routers/auth_verification.py` accept_invite — Admin SDK status update (bypasses rules)
+
+**Consumers**
+- `api/routers/auth_verification.py` accept_invite — Admin SDK lookup by `invited_email` + `status` (bypasses rules)
+
+**Rule:** `firestore.rules` /family_invitations — practitioner who owns the family_group can read/write; admin full access; family members never touch directly. ✓
+
+**Indexes:** `family_invitations` (invited_email ASC, status ASC) for accept lookup; (family_group_id ASC, invited_at DESC) for practitioner-side list. ✓
+
+---
+
+## `care_updates`
+
+Practitioner-posted updates broadcast to the family portal.
+
+**Schema (key fields):** `family_group_id`, `author_uid` (practitioner), `body`, `posted_at`, optional attachment refs.
+
+**Producers**
+- `client.html` postCareUpdate — addDoc (direct Firestore write)
+
+**Consumers**
+- `client.html` loadClient + renderCareUpdates — list ordered by `posted_at desc`
+- `family.html` loadData + renderCareUpdates — list ordered by `posted_at desc`
+
+**Rule:** `firestore.rules` /care_updates — practitioner full access for owned group, family read, admin full access. ✓
+
+**Indexes:** `care_updates` (family_group_id ASC, posted_at DESC). ✓
 
 ---
 

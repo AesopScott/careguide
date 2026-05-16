@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FB Profile</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Gilda+Display&family=Jost:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      width: 360px;
+      height: 360px;
+      overflow: hidden;
+      font-family: 'Jost', sans-serif;
+      position: relative;
+    }
+
+    /* Full circle clip */
+    .frame {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      overflow: hidden;
+    }
+
+    /* Deep brand colors — maximum contrast for white heart */
+    .bg {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        148deg,
+        #6b1a7a 0%,
+        #501464 40%,
+        #3a2080 70%,
+        #2a4898 100%
+      );
+    }
+
+    .center {
+      position: absolute;
+      inset: 0;
+      z-index: 3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .pcg-label {
+      position: absolute;
+      font-family: 'Gilda Display', Georgia, serif;
+      font-size: 5.2rem;
+      font-weight: 400;
+      color: rgba(80, 20, 100, 0.78);
+      letter-spacing: 0.04em;
+      z-index: 5;
+      margin-top: -10px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="frame">
+    <div class="bg"></div>
+
+    <!-- Large heart fills the frame -->
+    <div class="center">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="300" height="300">
+        <path d="M64 96 C64 96 22 70 22 44 C22 30 33 20 48 25 C55 27 60 33 64 38 C68 33 73 27 80 25 C95 20 106 30 106 44 C106 70 64 96 64 96Z" fill="rgba(255,255,255,0.92)"/>
+      </svg>
+    </div>
+
+    <!-- PCG text centered over heart -->
+    <div class="center">
+      <div class="pcg-label">PCG</div>
+    </div>
+
+  </div>
+
+</body>
+</html>

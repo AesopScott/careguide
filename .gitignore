@@ -5,3 +5,8 @@ node_modules/
 package-lock.json
 package.json
 screenshot-og.js
+
+# Local-only auth dumps and worktree state — never commit
+tmp_auth_export.json
+tmp_*.json
+.claude/worktrees/

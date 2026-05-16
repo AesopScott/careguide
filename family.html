@@ -226,6 +226,21 @@
       font-size: 0.825rem; color: var(--level-low); font-weight: 500; margin-top: 8px; display: none;
     }
     .sent-confirmation.visible { display: block; }
+
+    /* Family group switcher (shown when user has >1 group) */
+    .nav-group-switcher {
+      display: none;
+      padding: 6px 10px 6px 12px;
+      border: 1px solid rgba(80,20,100,0.25);
+      border-radius: 100px;
+      background: rgba(255,255,255,0.55);
+      font-family: 'Jost', sans-serif;
+      font-size: 0.85rem;
+      color: var(--text-dark);
+      cursor: pointer;
+      margin-right: 4px;
+    }
+    .nav-group-switcher.visible { display: inline-block; }
   </style>
 </head>
 <body>
@@ -236,6 +251,7 @@
     <span class="nav-tag">Family Portal</span>
   </div>
   <div class="nav-right">
+    <select class="nav-group-switcher" id="groupSwitcher" onchange="window.switchFamilyGroup(this.value)"></select>
     <span class="nav-user" id="navUser"></span>
     <button class="nav-signout" id="signOutBtn">Sign out</button>
   </div>
@@ -270,6 +286,15 @@
       <p>View the crisis card with emergency contacts, medications, and directives.</p>
     </div>
     <a id="crisisLink" href="#" class="btn-crisis">View Crisis Card →</a>
+  </div>
+
+  <!-- ── Recent updates from practitioner ── -->
+  <div class="section-card">
+    <div class="section-header"><span class="section-label">Recent updates</span></div>
+    <div class="section-body" id="careUpdatesList">
+      <div class="skeleton" style="height:14px;width:100%;margin-bottom:10px;"></div>
+      <div class="skeleton" style="height:14px;width:85%;"></div>
+    </div>
   </div>
 
   <!-- ── Parent info ── -->
@@ -352,8 +377,11 @@ const app  = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db   = getFirestore(app);
 
-let currentUser = null;
-let familyId    = null;
+let currentUser    = null;
+let familyId       = null;
+let familyGroupIds = [];
+
+const SELECTED_GROUP_KEY = 'pcg_selected_family_group';
 
 // ── Auth guard ───────────────────────────────────────────────────────────────
 onAuthStateChanged(auth, async (user) => {
@@ -372,7 +400,15 @@ onAuthStateChanged(auth, async (user) => {
   }
 
   currentUser = user;
-  familyId    = token.claims.family_group_id || null;
+
+  // Read family_group_ids (array). Fall back to legacy singular claim for any
+  // users provisioned before the array migration.
+  const arrayClaim   = token.claims.family_group_ids;
+  const legacyClaim  = token.claims.family_group_id;
+  familyGroupIds = Array.isArray(arrayClaim) && arrayClaim.length
+    ? arrayClaim
+    : (legacyClaim ? [legacyClaim] : []);
+
   document.body.style.visibility = 'visible';
 
   // Greeting
@@ -382,13 +418,53 @@ onAuthStateChanged(auth, async (user) => {
   const firstName = (user.displayName || '').split(' ')[0] || 'there';
   document.getElementById('greeting').textContent = `Good ${tod}, ${firstName}.`;
 
-  if (!familyId) { showNoFamily(); return; }
+  if (!familyGroupIds.length) { showNoFamily(); return; }
 
+  // Pick the active group: previously selected (if still in the list), otherwise first.
+  const remembered = localStorage.getItem(SELECTED_GROUP_KEY);
+  familyId = (remembered && familyGroupIds.includes(remembered)) ? remembered : familyGroupIds[0];
+
+  await renderGroupSwitcher();
+  await loadAllForCurrentGroup();
+});
+
+async function renderGroupSwitcher() {
+  const switcher = document.getElementById('groupSwitcher');
+  if (familyGroupIds.length <= 1) {
+    switcher.classList.remove('visible');
+    return;
+  }
+
+  // Look up each family group's name for the dropdown labels.
+  switcher.innerHTML = '';
+  for (const gid of familyGroupIds) {
+    const option = document.createElement('option');
+    option.value = gid;
+    let label = gid;
+    try {
+      const snap = await getDoc(doc(db, 'family_groups', gid));
+      if (snap.exists()) label = snap.data().name || gid;
+    } catch {}
+    option.textContent = label;
+    if (gid === familyId) option.selected = true;
+    switcher.appendChild(option);
+  }
+  switcher.classList.add('visible');
+}
+
+window.switchFamilyGroup = async function (newId) {
+  if (!familyGroupIds.includes(newId) || newId === familyId) return;
+  familyId = newId;
+  localStorage.setItem(SELECTED_GROUP_KEY, newId);
+  await loadAllForCurrentGroup();
+};
+
+async function loadAllForCurrentGroup() {
   document.getElementById('crisisLink').href    = `/crisis-card.html?id=${familyId}`;
   document.getElementById('medsLink').href      = `/medications.html?id=${familyId}`;
   document.getElementById('carePlanLink').href  = `/care-plan.html?id=${familyId}`;
   await loadData();
-});
+}
 
 // ── Sign out ─────────────────────────────────────────────────────────────────
 document.getElementById('signOutBtn').addEventListener('click', async () => {
@@ -398,25 +474,26 @@ document.getElementById('signOutBtn').addEventListener('click', async () => {
 
 // ── Load data ─────────────────────────────────────────────────────────────────
 async function loadData() {
-  const [familySnap, parentsSnap, medsSnap, planSnap, practitionerSnap] = await Promise.all([
+  const [familySnap, parentsSnap, medsSnap, planSnap, updatesSnap] = await Promise.all([
     getDoc(doc(db, 'family_groups', familyId)),
     getDocs(query(collection(db, 'parents'), where('family_group_id', '==', familyId))),
     getDocs(query(collection(db, 'medications'), where('family_group_id', '==', familyId))),
     getDoc(doc(db, 'care_plans',    familyId)),
-    // We'll get practitioner info from the family_groups doc
-    Promise.resolve(null),
+    getDocs(query(collection(db, 'care_updates'), where('family_group_id', '==', familyId), orderBy('posted_at', 'desc'))),
   ]);
 
   const fam    = familySnap.exists()   ? familySnap.data()  : {};
   const parent = parentsSnap.empty     ? null : parentsSnap.docs[0].data();
   const meds   = medsSnap.docs.map(d => d.data());
   const plan   = planSnap.exists()     ? planSnap.data()    : null;
+  const updates = updatesSnap.docs.map(d => ({ id: d.id, ...d.data() }));
 
   document.getElementById('greetingSub').textContent =
     `Here's the latest on ${fam.name || 'your family'}'s care.`;
 
   renderCareLevel(fam);
   renderUrgentFlags(fam.urgent_flags || []);
+  renderCareUpdates(updates);
   renderParentInfo(parent);
   renderMedications(meds);
   renderCarePlan(plan);
@@ -511,6 +588,26 @@ function renderCarePlan(plan) {
     <p style="font-size:0.875rem;color:var(--text-dark);line-height:1.7;margin-bottom:12px;">${preview}</p>
     ${lastUpdated ? `<p style="font-size:0.75rem;color:var(--text-muted);">Last updated ${lastUpdated}</p>` : ''}
   `;
+}
+
+function renderCareUpdates(updates) {
+  const el = document.getElementById('careUpdatesList');
+  if (!updates.length) {
+    el.innerHTML = `<p class="empty">No updates from your care coordinator yet.</p>`;
+    return;
+  }
+  // Show most recent 5; if more exist, hint at it.
+  const recent = updates.slice(0, 5);
+  el.innerHTML = recent.map(u => {
+    const when = u.posted_at?.toDate?.() ? formatTs(u.posted_at) : '';
+    const body = (u.body || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    return `
+      <div style="padding:14px 0;border-bottom:1px solid var(--border-mid);">
+        <div style="font-size:0.875rem;color:var(--text-dark);line-height:1.6;white-space:pre-wrap;">${body}</div>
+        ${when ? `<div style="font-size:0.75rem;color:var(--text-muted);margin-top:6px;">${when}</div>` : ''}
+      </div>
+    `;
+  }).join('');
 }
 
 async function renderCareTeam(practitionerId) {

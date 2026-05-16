@@ -23,7 +23,8 @@
       "mcp__ccd_session_mgmt__*",
       "mcp__ccd_directory__*",
       "mcp__mcp-registry__*",
-      "mcp__4933ec38-97f8-40b8-84ab-a0ab0319b5ca__*"
+      "mcp__4933ec38-97f8-40b8-84ab-a0ab0319b5ca__*",
+      "Bash(mkdir -p ~/.claude/skills/cross-boundary-audit)"
     ],
     "defaultMode": "bypassPermissions"
   }

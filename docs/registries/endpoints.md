@@ -71,9 +71,31 @@ Base URL (production): `https://careguide-api-658340465706.us-central1.run.app`
 **Status:** ⚠ orphan — correctly reads top-level `family_groups` with ownership check.
 
 ### `POST /family-groups/{group_id}/invite`
-**Served by:** `api/routers/family_groups.py:62` (stub)
+**Served by:** `api/routers/family_groups.py` invite_family_member
+**Auth:** `require_practitioner` (must own the target family_group)
 **Callers:** `new-client.html:779`
-**Status:** ⚠ **501 Not Implemented** — endpoint exists and explicitly returns 501. `new-client.html` now surfaces the failure to the practitioner via a toast on landing instead of silently dropping. Full invite/accept flow tracked in [docs/registries/claims.md](claims.md) (missing `family` and `family_group_id` setters).
+**Request:** `{email, relationship}`
+**Response:** `{success, invitation_id, email_sent}`
+**Side effects:** creates / refreshes a `family_invitations` doc; generates a Firebase email-link sign-in URL via Admin SDK; sends via Brevo. Requires Firebase Console: Authentication → Sign-in method → Email/Password → Email link (passwordless sign-in) enabled.
+**Status:** ✓
+
+### `POST /family-groups/{group_id}/revoke`
+**Served by:** `api/routers/family_groups.py` revoke_family_member
+**Auth:** `require_practitioner` (must own the target family_group)
+**Callers:** none currently (no practitioner UI yet)
+**Request:** `{uid}`
+**Response:** `{success, uid, revoked, remaining_groups}`
+**Side effects:** removes the group_id from the target user's `family_group_ids` claim; revokes refresh tokens; updates the user doc; marks any associated `family_invitations` records as revoked.
+**Status:** ⚠ orphan — endpoint exists but no UI calls it yet. To be wired when a manage-family-members page is built.
+
+### `POST /auth/accept-invite`
+**Served by:** `api/routers/auth_verification.py` accept_invite
+**Auth:** `require_auth` (Firebase ID token from email-link sign-in)
+**Callers:** `accept-invite.html`
+**Request:** none (uses signed-in user's email)
+**Response:** `{success, accepted, family_group_ids}`
+**Side effects:** looks up pending `family_invitations` by the signed-in user's email; appends each group's id to `family_group_ids` claim; sets `family: true` claim; writes/merges users doc with `role: "family"`; marks invitations accepted.
+**Status:** ✓
 
 ---
 
@@ -209,7 +231,9 @@ Base URL (production): `https://careguide-api-658340465706.us-central1.run.app`
 | POST /auth/verify-email                 | ✓      | ✓      | OK                        |
 | POST /contact                           | ✓      | ✓      | OK                        |
 | GET  /health                            | ✓      | ✓      | OK                        |
-| POST /family-groups/{id}/invite         | stub (501) | ✓ | ⚠ not implemented, but surfaces |
+| POST /family-groups/{id}/invite         | ✓      | ✓      | OK                        |
+| POST /family-groups/{id}/revoke         | ✓      | ✗      | orphan (no UI yet)        |
+| POST /auth/accept-invite                | ✓      | ✓      | OK                        |
 | POST /ai/intake                         | ✗      | ✓      | ⚠ missing endpoint        |
 | GET/POST/GET /family-groups/...         | ✓      | ✗      | orphan (correct schema)   |
 | /parents/ (CRUD)                        | ✓      | ✗      | orphan (client uses direct Firestore) |

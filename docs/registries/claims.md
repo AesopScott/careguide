@@ -91,30 +91,30 @@ Beta-tester flag.
 Marks an approved family member with access to `family.html`.
 
 **Setters**
-- ⚠ **None.** Not set anywhere in the codebase.
+- `api/routers/auth_verification.py` accept_invite — sets on first invite acceptance; remains set even if all groups are later revoked.
 
 **Checkers**
 - `login.html:273` — redirect to `/family.html`
-- `crisis-card.html:396`, `medications.html:337` — allowed alongside practitioner/admin
+- `crisis-card.html:396`, `medications.html:337`, `care-plan.html:312` — allowed alongside practitioner/admin
 - `family.html:368` — required (else show waiting state)
 
-⚠ **CRITICAL:** consumer-only. Family-member flow is non-functional until a setter is built.
+**Status:** ✓ wired.
 
 ---
 
-## `family_group_id`
+## `family_group_ids`
 
-The family group a family-member user belongs to.
+Array of family group ids the family-member user has accepted invitations into. Replaces the planned-but-never-used singular `family_group_id`.
 
 **Setters**
-- ⚠ **None.** Not set anywhere in the codebase.
+- `api/routers/auth_verification.py` accept_invite — appends new group id (dedup).
+- `api/routers/family_groups.py` revoke_family_member — removes a group id; revokes refresh tokens for immediate effect.
 
 **Checkers**
-- `family.html:375` — read into local `familyId`
-- `firestore.rules` /family_groups read — `request.auth.token.family_group_id == groupId`
-- `firestore.rules` /parents, /medications read — via `canAccessFamilyData(familyGroupId)`
+- `family.html` — reads into local state, populates group switcher (falls back to legacy singular for any pre-migration accounts).
+- `firestore.rules` `inFamilyGroups(groupId)` helper — used by /family_groups read, `canAccessFamilyData` (parents, medications, care_plans, crisis_info reads), family_messages read.
 
-⚠ **CRITICAL:** consumer-only. Required for the entire family-member data path. Until set, family members can read nothing.
+**Status:** ✓ wired. The legacy singular `family_group_id` claim has been retired from rules but `family.html` keeps a fallback read of it for any user accounts provisioned before the array was introduced.
 
 ---
 
@@ -123,8 +123,8 @@ The family group a family-member user belongs to.
 | Claim             | Producers | Consumers | Status                |
 |-------------------|-----------|-----------|-----------------------|
 | admin             | manual    | many      | ✓                     |
-| practitioner      | API       | many      | ✓ (UX gap on re-approve) |
+| practitioner      | API       | many      | ✓                     |
 | profession        | API       | none      | ⚠ orphan              |
 | beta              | API       | none      | ⚠ orphan (planned)    |
-| family            | none      | many      | ⚠ missing setter      |
-| family_group_id   | none      | many + rules | ⚠ missing setter   |
+| family            | API       | many      | ✓                     |
+| family_group_ids  | API       | many + rules | ✓                  |
