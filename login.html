@@ -243,6 +243,14 @@
     const app  = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
+    // Show error if redirected due to insufficient permissions
+    const urlParams = new URLSearchParams(location.search);
+    if (urlParams.get('error') === 'admin_required') {
+      const errEl = document.getElementById('error-msg');
+      errEl.textContent = 'That page requires an admin account. Please sign in as an admin.';
+      errEl.classList.add('show');
+    }
+
     window.signIn = async function () {
       const email    = document.getElementById('email').value.trim();
       const password = document.getElementById('password').value;
@@ -259,7 +267,7 @@
 
         if (token.claims.admin) {
           localStorage.setItem('pcg_admin', '1');
-          location.href = next || '/index.html';
+          location.href = next || '/admin-approvals.html';
         } else if (token.claims.practitioner) {
           location.href = next || '/dashboard.html';
         } else if (token.claims.family) {

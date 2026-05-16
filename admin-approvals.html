@@ -296,7 +296,7 @@
     onAuthStateChanged(auth, async user => {
       if (!user) { location.href = '/login.html?next=/admin-approvals.html'; return; }
       const token = await user.getIdTokenResult();
-      if (!token.claims.admin) { location.href = '/login.html'; return; }
+      if (!token.claims.admin) { location.href = '/login.html?error=admin_required&next=/admin-approvals.html'; return; }
       document.body.style.visibility = '';
       wireSignOut();
       loadAll();
