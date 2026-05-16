@@ -78,6 +78,7 @@ async def register_practitioner(body: RegisterRequest, user: dict = Depends(requ
             "plan":           PROFESSION_PLANS[body.profession],
             "monthly_rate":   PROFESSION_MONTHLY_RATE[body.profession],
             "beta":           body.beta,
+            "status":         "pending_activation",
             "baa_accepted":   True,
             "baa_accepted_at": datetime.now(timezone.utc).isoformat(),
             "created_at":     datetime.now(timezone.utc).isoformat(),

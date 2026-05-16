@@ -327,7 +327,7 @@
     }
 
     function renderAll() {
-      const pending  = allUsers.filter(u => u.status === 'pending_activation');
+      const pending  = allUsers.filter(u => !u.status || u.status === 'pending_activation');
       const approved = allUsers.filter(u => u.status === 'active');
       const rejected = allUsers.filter(u => u.status === 'rejected');
 
