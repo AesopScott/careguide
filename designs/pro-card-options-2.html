@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PCG — Horizontal Card Options</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Gilda+Display&family=Jost:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Jost', sans-serif;
+      background: linear-gradient(148deg,
+        #FFF5F0 0%, #FFD6CC 12%, #F4B8C1 26%,
+        #E8A0B4 40%, #D4A0C8 55%,
+        #B8A8D8 70%, #98A8E0 84%, #8ABCE8 100%);
+      min-height: 100vh;
+    }
+
+    .top-bar { height: 4px; background: linear-gradient(90deg, #FFD6CC, #F4B8C1, #E8A0B4, #D4A0C8, #B8A8D8, #98A8E0, #8ABCE8); }
+
+    .page { max-width: 1100px; margin: 0 auto; padding: 52px 40px 100px; }
+
+    .page-title { font-family: 'Gilda Display', Georgia, serif; font-size: 2rem; color: #1e1230; margin-bottom: 6px; }
+    .page-sub { font-size: 0.875rem; font-weight: 300; color: rgba(60,40,80,0.6); margin-bottom: 64px; }
+
+    .option-block { margin-bottom: 64px; }
+    .option-label { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(80,40,100,0.5); margin-bottom: 5px; }
+    .option-desc { font-family: 'Gilda Display', Georgia, serif; font-size: 1.1rem; color: #1e1230; margin-bottom: 18px; }
+    .cards-col { display: flex; flex-direction: column; gap: 12px; }
+
+    /* shared resets */
+    .stars { letter-spacing: 1px; }
+    .badge-green { font-size: 0.68rem; font-weight: 600; color: #2A7A52; background: #edf7f2; border: 1px solid #b8deca; border-radius: 100px; padding: 2px 9px; white-space: nowrap; }
+
+    /* ─────────────────────────────────────────────
+       V1 — Clean baseline (original #4)
+    ───────────────────────────────────────────── */
+    .v1 { width: 580px; background: #fff; border-radius: 14px; box-shadow: 0 2px 4px rgba(0,0,0,0.04), 0 8px 24px rgba(80,20,100,0.09); display: flex; overflow: hidden; }
+    .v1 .photo { width: 110px; flex-shrink: 0; background: linear-gradient(160deg, #e8a0b4, #b8a8d8); }
+    .v1 .photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .v1 .body { flex: 1; padding: 18px; display: flex; flex-direction: column; gap: 8px; }
+    .v1 .row { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
+    .v1 .name { font-size: 0.9rem; font-weight: 600; color: #1e1230; }
+    .v1 .title { font-size: 0.78rem; color: #6b4d85; margin-top: 1px; }
+    .v1 .loc { font-size: 0.78rem; color: #9b7ab0; }
+    .v1 .tags { display: flex; gap: 4px; flex-wrap: wrap; }
+    .v1 .tag { font-size: 0.72rem; padding: 2px 8px; background: #f5f0fa; border-radius: 100px; color: #4a2d65; }
+    .v1 .footer { display: flex; align-items: center; justify-content: space-between; margin-top: auto; padding-top: 8px; border-top: 1px solid #f0e8f5; }
+    .v1 .rating { font-size: 0.75rem; color: #6b4d85; display: flex; align-items: center; gap: 4px; }
+    .v1 .stars { color: #c084d8; font-size: 0.75rem; }
+    .v1 .btn { font-family: 'Jost', sans-serif; font-size: 0.78rem; font-weight: 600; background: #501464; color: #fff; border: none; border-radius: 100px; padding: 6px 14px; cursor: pointer; }
+
+    /* ─────────────────────────────────────────────
+       V2 — Wide photo, premium shadow
+    ───────────────────────────────────────────── */
+    .v2 { width: 580px; background: #fff; border-radius: 16px; box-shadow: 0 4px 8px rgba(0,0,0,0.06), 0 20px 48px rgba(80,20,100,0.14); display: flex; overflow: hidden; }
+    .v2 .photo { width: 150px; flex-shrink: 0; }
+    .v2 .photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .v2 .body { flex: 1; padding: 20px; display: flex; flex-direction: column; gap: 9px; }
+    .v2 .top { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
+    .v2 .name { font-size: 0.95rem; font-weight: 600; color: #1e1230; }
+    .v2 .title { font-size: 0.8rem; color: #6b4d85; margin-top: 2px; }
+    .v2 .loc { font-size: 0.78rem; color: #9b7ab0; }
+    .v2 .tags { display: flex; gap: 4px; flex-wrap: wrap; }
+    .v2 .tag { font-size: 0.72rem; padding: 2px 9px; background: #f5f0fa; border-radius: 100px; color: #4a2d65; }
+    .v2 .footer { display: flex; align-items: center; justify-content: space-between; margin-top: auto; padding-top: 9px; border-top: 1px solid #f0e8f5; }
+    .v2 .rating { font-size: 0.75rem; color: #6b4d85; display: flex; align-items: center; gap: 4px; }
+    .v2 .stars { color: #c084d8; font-size: 0.75rem; }
+    .v2 .btn { font-family: 'Jost', sans-serif; font-size: 0.78rem; font-weight: 600; background: #501464; color: #fff; border: none; border-radius: 100px; padding: 6px 14px; cursor: pointer; }
+
+    /* ─────────────────────────────────────────────
+       V3 — Name on photo (reversed)
+    ───────────────────────────────────────────── */
+    .v3 { width: 580px; background: #fff; border-radius: 14px; box-shadow: 0 2px 4px rgba(0,0,0,0.04), 0 10px 28px rgba(80,20,100,0.1); display: flex; overflow: hidden; }
+    .v3 .photo { width: 180px; flex-shrink: 0; position: relative; }
+    .v3 .photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .v3 .photo-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(30,12,48,0.82) 0%, rgba(30,12,48,0.1) 55%, transparent 100%);
+      display: flex; flex-direction: column; justify-content: flex-end;
+      padding: 14px;
+    }
+    .v3 .photo-name { font-size: 0.88rem; font-weight: 600; color: #fff; line-height: 1.25; }
+    .v3 .photo-title { font-size: 0.72rem; color: rgba(212,184,220,0.9); margin-top: 2px; }
+    .v3 .body { flex: 1; padding: 18px; display: flex; flex-direction: column; gap: 9px; justify-content: center; }
+    .v3 .loc { font-size: 0.78rem; color: #9b7ab0; }
+    .v3 .tags { display: flex; gap: 4px; flex-wrap: wrap; }
+    .v3 .tag { font-size: 0.72rem; padding: 2px 8px; background: #f5f0fa; border-radius: 100px; color: #4a2d65; }
+    .v3 .footer { display: flex; align-items: center; justify-content: space-between; margin-top: auto; padding-top: 9px; border-top: 1px solid #f0e8f5; }
+    .v3 .rating { font-size: 0.75rem; color: #6b4d85; display: flex; align-items: center; gap: 4px; }
+    .v3 .stars { color: #c084d8; font-size: 0.75rem; }
+    .v3 .btn { font-family: 'Jost', sans-serif; font-size: 0.78rem; font-weight: 600; background: #501464; color: #fff; border: none; border-radius: 100px; padding: 6px 14px; cursor: pointer; }
+
+    /* ─────────────────────────────────────────────
+       V4 — Photo fades into card
+    ───────────────────────────────────────────── */
+    .v4 { width: 580px; background: #fff; border-radius: 14px; box-shadow: 0 2px 4px rgba(0,0,0,0.04), 0 10px 28px rgba(80,20,100,0.1); display: flex; overflow: hidden; position: relative; }
+    .v4 .photo { width: 160px; flex-shrink: 0; position: relative; }
+    .v4 .photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .v4 .photo::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to right, transparent 50%, #ffffff 100%); }
+    .v4 .body { flex: 1; padding: 20px 20px 20px 8px; display: flex; flex-direction: column; gap: 9px; }
+    .v4 .top { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
+    .v4 .name { font-size: 0.9rem; font-weight: 600; color: #1e1230; }
+    .v4 .title { font-size: 0.78rem; color: #6b4d85; margin-top: 2px; }
+    .v4 .loc { font-size: 0.78rem; color: #9b7ab0; }
+    .v4 .tags { display: flex; gap: 4px; flex-wrap: wrap; }
+    .v4 .tag { font-size: 0.72rem; padding: 2px 8px; background: #f5f0fa; border-radius: 100px; color: #4a2d65; }
+    .v4 .footer { display: flex; align-items: center; justify-content: space-between; margin-top: auto; padding-top: 9px; border-top: 1px solid #f0e8f5; }
+    .v4 .rating { font-size: 0.75rem; color: #6b4d85; display: flex; align-items: center; gap: 4px; }
+    .v4 .stars { color: #c084d8; font-size: 0.75rem; }
+    .v4 .btn { font-family: 'Jost', sans-serif; font-size: 0.78rem; font-weight: 600; background: #501464; color: #fff; border: none; border-radius: 100px; padding: 6px 14px; cursor: pointer; }
+
+    /* ─────────────────────────────────────────────
+       V5 — Circle photo, left-padded horizontal
+    ───────────────────────────────────────────── */
+    .v5 { width: 580px; background: #fff; border-radius: 14px; box-shadow: 0 2px 4px rgba(0,0,0,0.04), 0 10px 28px rgba(80,20,100,0.1); display: flex; align-items: center; padding: 20px; gap: 18px; }
+    .v5 .photo { width: 82px; height: 82px; border-radius: 50%; flex-shrink: 0; overflow: hidden; box-shadow: 0 4px 16px rgba(80,20,100,0.18); border: 3px solid #f0e0f8; }
+    .v5 .photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .v5 .body { flex: 1; display: flex; flex-direction: column; gap: 7px; }
+    .v5 .top { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
+    .v5 .name { font-size: 0.92rem; font-weight: 600; color: #1e1230; }
+    .v5 .title { font-size: 0.78rem; color: #6b4d85; margin-top: 1px; }
+    .v5 .loc { font-size: 0.78rem; color: #9b7ab0; }
+    .v5 .tags { display: flex; gap: 4px; flex-wrap: wrap; }
+    .v5 .tag { font-size: 0.72rem; padding: 2px 8px; background: #f5f0fa; border-radius: 100px; color: #4a2d65; }
+    .v5 .footer { display: flex; align-items: center; justify-content: space-between; padding-top: 8px; border-top: 1px solid #f0e8f5; }
+    .v5 .rating { font-size: 0.75rem; color: #6b4d85; display: flex; align-items: center; gap: 4px; }
+    .v5 .stars { color: #c084d8; font-size: 0.75rem; }
+    .v5 .btn { font-family: 'Jost', sans-serif; font-size: 0.78rem; font-weight: 600; background: #501464; color: #fff; border: none; border-radius: 100px; padding: 6px 14px; cursor: pointer; }
+
+    /* ─────────────────────────────────────────────
+       V6 — Dark panel + circular photo inset
+    ───────────────────────────────────────────── */
+    .v6 { width: 580px; background: #fff; border-radius: 14px; box-shadow: 0 2px 4px rgba(0,0,0,0.04), 0 10px 28px rgba(80,20,100,0.1); display: flex; overflow: hidden; }
+    .v6 .left { width: 120px; flex-shrink: 0; background: linear-gradient(180deg, #2a123c 0%, #501464 100%); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; padding: 20px 12px; }
+    .v6 .photo { width: 72px; height: 72px; border-radius: 50%; overflow: hidden; border: 2px solid rgba(244,184,193,0.4); }
+    .v6 .photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .v6 .v-rating { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+    .v6 .v-stars { color: #F4B8C1; font-size: 0.6rem; letter-spacing: 1px; }
+    .v6 .v-score { font-size: 0.7rem; color: rgba(212,184,220,0.8); }
+    .v6 .body { flex: 1; padding: 18px; display: flex; flex-direction: column; gap: 8px; }
+    .v6 .top { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
+    .v6 .name { font-size: 0.9rem; font-weight: 600; color: #1e1230; }
+    .v6 .title { font-size: 0.78rem; color: #6b4d85; margin-top: 1px; }
+    .v6 .loc { font-size: 0.78rem; color: #9b7ab0; }
+    .v6 .tags { display: flex; gap: 4px; flex-wrap: wrap; }
+    .v6 .tag { font-size: 0.72rem; padding: 2px 8px; background: #f5f0fa; border-radius: 100px; color: #4a2d65; }
+    .v6 .footer { display: flex; align-items: center; justify-content: flex-end; margin-top: auto; padding-top: 8px; border-top: 1px solid #f0e8f5; }
+    .v6 .btn { font-family: 'Jost', sans-serif; font-size: 0.78rem; font-weight: 600; background: #501464; color: #fff; border: none; border-radius: 100px; padding: 6px 14px; cursor: pointer; }
+
+    /* ─────────────────────────────────────────────
+       V7 — Airy / ultra minimal
+    ───────────────────────────────────────────── */
+    .v7 { width: 620px; background: #fff; border-radius: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.03), 0 6px 20px rgba(80,20,100,0.07); display: flex; overflow: hidden; }
+    .v7 .photo { width: 120px; flex-shrink: 0; }
+    .v7 .photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .v7 .body { flex: 1; padding: 26px 24px; display: flex; flex-direction: column; gap: 5px; }
+    .v7 .name { font-family: 'Gilda Display', Georgia, serif; font-size: 1.1rem; font-weight: 400; color: #1e1230; }
+    .v7 .title { font-size: 0.8rem; font-style: italic; color: #6b4d85; margin-bottom: 8px; }
+    .v7 .rule { height: 1px; background: linear-gradient(90deg, #e8a0b4, #b8a8d8, transparent); margin: 4px 0 10px; }
+    .v7 .meta { display: flex; gap: 20px; flex-wrap: wrap; }
+    .v7 .meta-item { font-size: 0.78rem; color: #9b7ab0; }
+    .v7 .meta-item strong { display: block; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: #c0a0d8; margin-bottom: 1px; }
+    .v7 .footer { display: flex; align-items: center; justify-content: space-between; margin-top: auto; padding-top: 14px; }
+    .v7 .badge-text { font-size: 0.68rem; font-weight: 600; color: #2A7A52; }
+    .v7 .btn { font-family: 'Jost', sans-serif; font-size: 0.78rem; font-weight: 600; color: #501464; background: transparent; border: 1.5px solid #501464; border-radius: 100px; padding: 6px 16px; cursor: pointer; }
+
+    /* ─────────────────────────────────────────────
+       V8 — Bottom stats bar
+    ───────────────────────────────────────────── */
+    .v8 { width: 580px; background: #fff; border-radius: 14px; box-shadow: 0 2px 4px rgba(0,0,0,0.04), 0 10px 28px rgba(80,20,100,0.1); display: flex; flex-direction: column; overflow: hidden; }
+    .v8 .top-row { display: flex; flex: 1; }
+    .v8 .photo { width: 110px; flex-shrink: 0; }
+    .v8 .photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .v8 .body { flex: 1; padding: 16px 18px; display: flex; flex-direction: column; gap: 7px; }
+    .v8 .hd { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
+    .v8 .name { font-size: 0.9rem; font-weight: 600; color: #1e1230; }
+    .v8 .title { font-size: 0.78rem; color: #6b4d85; margin-top: 1px; }
+    .v8 .tags { display: flex; gap: 4px; flex-wrap: wrap; }
+    .v8 .tag { font-size: 0.72rem; padding: 2px 8px; background: #f5f0fa; border-radius: 100px; color: #4a2d65; }
+    .v8 .stats-bar { display: flex; align-items: center; padding: 10px 18px; background: linear-gradient(90deg, rgba(232,160,180,0.12), rgba(184,168,216,0.12)); border-top: 1px solid #f0e8f5; gap: 20px; }
+    .v8 .stat { display: flex; align-items: center; gap: 6px; font-size: 0.75rem; color: #6b4d85; }
+    .v8 .stat .stars { color: #c084d8; font-size: 0.72rem; }
+    .v8 .spacer { flex: 1; }
+    .v8 .btn { font-family: 'Jost', sans-serif; font-size: 0.78rem; font-weight: 600; background: #501464; color: #fff; border: none; border-radius: 100px; padding: 6px 14px; cursor: pointer; }
+
+    /* ─────────────────────────────────────────────
+       V9 — Top gradient stripe + horizontal
+    ───────────────────────────────────────────── */
+    .v9 { width: 580px; background: #fff; border-radius: 14px; box-shadow: 0 2px 4px rgba(0,0,0,0.04), 0 10px 28px rgba(80,20,100,0.1); display: flex; flex-direction: column; overflow: hidden; }
+    .v9 .stripe { height: 4px; background: linear-gradient(90deg, #FFD6CC, #F4B8C1, #E8A0B4, #D4A0C8, #B8A8D8, #98A8E0); flex-shrink: 0; }
+    .v9 .content-row { display: flex; align-items: center; padding: 16px 18px; gap: 16px; }
+    .v9 .photo { width: 68px; height: 68px; border-radius: 50%; flex-shrink: 0; overflow: hidden; border: 2px solid #f0e0f8; box-shadow: 0 3px 10px rgba(80,20,100,0.13); }
+    .v9 .photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .v9 .info { flex: 1; }
+    .v9 .name { font-size: 0.9rem; font-weight: 600; color: #1e1230; margin-bottom: 1px; }
+    .v9 .title { font-size: 0.78rem; color: #6b4d85; }
+    .v9 .tags { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 6px; }
+    .v9 .tag { font-size: 0.7rem; padding: 2px 7px; background: #f5f0fa; border-radius: 100px; color: #4a2d65; }
+    .v9 .right { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; flex-shrink: 0; }
+    .v9 .loc { font-size: 0.75rem; color: #9b7ab0; text-align: right; }
+    .v9 .rating { font-size: 0.75rem; color: #6b4d85; display: flex; align-items: center; gap: 3px; }
+    .v9 .stars { color: #c084d8; font-size: 0.72rem; }
+    .v9 .btn { font-family: 'Jost', sans-serif; font-size: 0.78rem; font-weight: 600; background: #501464; color: #fff; border: none; border-radius: 100px; padding: 6px 14px; cursor: pointer; }
+
+    /* ─────────────────────────────────────────────
+       V10 — Duotone photo, editorial
+    ───────────────────────────────────────────── */
+    .v10 { width: 580px; background: #fdfbfe; border: 1.5px solid #ede0f5; border-radius: 14px; display: flex; overflow: hidden; }
+    .v10 .photo { width: 130px; flex-shrink: 0; position: relative; overflow: hidden; }
+    .v10 .photo img { width: 100%; height: 100%; object-fit: cover; display: block; filter: grayscale(30%) sepia(40%) hue-rotate(260deg) saturate(120%); }
+    .v10 .photo::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to right, transparent 70%, #fdfbfe 100%); }
+    .v10 .body { flex: 1; padding: 18px; display: flex; flex-direction: column; gap: 9px; }
+    .v10 .name { font-family: 'Gilda Display', Georgia, serif; font-size: 1rem; font-weight: 400; color: #1e1230; }
+    .v10 .title { font-size: 0.78rem; font-style: italic; color: #6b4d85; }
+    .v10 .rule { height: 1px; background: linear-gradient(90deg, #e8a0b4, #b8a8d8, transparent); }
+    .v10 .mid { display: flex; justify-content: space-between; align-items: center; }
+    .v10 .loc { font-size: 0.75rem; color: #9b7ab0; }
+    .v10 .tags { display: flex; gap: 4px; flex-wrap: wrap; }
+    .v10 .tag { font-size: 0.7rem; padding: 2px 8px; background: #f0eafa; border-radius: 3px; color: #4a2d65; font-weight: 500; }
+    .v10 .footer { display: flex; align-items: center; justify-content: space-between; margin-top: auto; }
+    .v10 .rating { font-size: 0.75rem; color: #6b4d85; display: flex; align-items: center; gap: 4px; }
+    .v10 .stars { color: #c084d8; font-size: 0.72rem; }
+    .v10 .btn { font-family: 'Jost', sans-serif; font-size: 0.78rem; font-weight: 600; color: #501464; background: transparent; border: 1.5px solid #501464; border-radius: 100px; padding: 5px 13px; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <div class="top-bar"></div>
+  <div class="page">
+    <h1 class="page-title">Horizontal Card — 10 Variations</h1>
+    <p class="page-sub">All based on the horizontal photo-left layout. Pick one or mix ideas.</p>
+
+    <!-- V1 -->
+    <div class="option-block">
+      <div class="option-label">Option 1</div>
+      <div class="option-desc">Clean baseline — original #4</div>
+      <div class="cards-col">
+        <div class="v1">
+          <div class="photo"><img src="https://randomuser.me/api/portraits/women/68.jpg" alt=""></div>
+          <div class="body">
+            <div class="row"><div><div class="name">Margaret Holloway, Esq.</div><div class="title">Elder Law &amp; Estate Planning</div></div><span class="badge-green">PCG Verified</span></div>
+            <div class="loc">📍 Boston, MA · Serves New England</div>
+            <div class="tags"><span class="tag">Power of Attorney</span><span class="tag">Medicaid planning</span><span class="tag">Trusts</span></div>
+            <div class="footer"><div class="rating"><span class="stars">★★★★★</span> 4.9 (38 reviews)</div><button class="btn">Contact</button></div>
+          </div>
+        </div>
+        <div class="v1">
+          <div class="photo"><img src="https://randomuser.me/api/portraits/men/33.jpg" alt=""></div>
+          <div class="body">
+            <div class="row"><div><div class="name">Robert Langston, CFP®</div><div class="title">Senior Care Financial Planning</div></div><span class="badge-green">PCG Verified</span></div>
+            <div class="loc">📍 Austin, TX · Nationwide</div>
+            <div class="tags"><span class="tag">Care cost planning</span><span class="tag">Medicare</span><span class="tag">Asset protection</span></div>
+            <div class="footer"><div class="rating"><span class="stars">★★★★★</span> 4.9 (44 reviews)</div><button class="btn">Contact</button></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- V2 -->
+    <div class="option-block">
+      <div class="option-label">Option 2</div>
+      <div class="option-desc">Wide photo — larger image, deeper shadow</div>
+      <div class="cards-col">
+        <div class="v2">
+          <div class="photo"><img src="https://randomuser.me/api/portraits/women/68.jpg" alt=""></div>
+          <div class="body">
+            <div class="top"><div><div class="name">Margaret Holloway, Esq.</div><div class="title">Elder Law &amp; Estate Planning</div></div><span class="badge-green">PCG Verified</span></div>
+            <div class="loc">📍 Boston, MA · Serves New England</div>
+            <div class="tags"><span class="tag">Power of Attorney</span><span class="tag">Medicaid planning</span><span class="tag">Trusts</span></div>
+            <div class="footer"><div class="rating"><span class="stars">★★★★★</span> 4.9 (38 reviews)</div><button class="btn">Contact</button></div>
+          </div>
+        </div>
+        <div class="v2">
+          <div class="photo"><img src="https://randomuser.me/api/portraits/men/33.jpg" alt=""></div>
+          <div class="body">
+            <div class="top"><div><div class="name">Robert Langston, CFP®</div><div class="title">Senior Care Financial Planning</div></div><span class="badge-green">PCG Verified</span></div>
+            <div class="loc">📍 Austin, TX · Nationwide</div>
+            <div class="tags"><span class="tag">Care cost planning</span><span class="tag">Medicare</span><span class="tag">Asset protection</span></div>
+            <div class="footer"><div class="rating"><span class="stars">★★★★★</span> 4.9 (44 reviews)</div><button class="btn">Contact</button></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- V3 -->
+    <div class="option-block">
+      <div class="option-label">Option 3</div>
+      <div class="option-desc">Name on photo — dark gradient overlay, name reversed out</div>
+      <div class="cards-col">
+        <div class="v3">
+          <div class="photo"><img src="https://randomuser.me/api/portraits/women/68.jpg" alt=""><div class="photo-overlay"><div class="photo-name">Margaret Holloway, Esq.</div><div class="photo-title">Elder Law &amp; Estate Planning</div></div></div>
+          <div class="body">
+            <span class="badge-green" style="align-self:flex-start">PCG Verified</span>
+            <div class="loc">📍 Boston, MA · Serves New England</div>
+            <div class="tags"><span class="tag">Power of Attorney</span><span class="tag">Medicaid planning</span><span class="tag">Trusts</span></div>
+            <div class="footer"><div class="rating"><span class="stars">★★★★★</span> 4.9 (38 reviews)</div><button class="btn">Contact</button></div>
+          </div>
+        </div>
+        <div class="v3">
+          <div class="photo"><img src="https://randomuser.me/api/portraits/men/33.jpg" alt=""><div class="photo-overlay"><div class="photo-name">Robert Langston, CFP®</div><div class="photo-title">Senior Care Financial Planning</div></div></div>
+          <div class="body">
+            <span class="badge-green" style="align-self:flex-start">PCG Verified</span>
+            <div class="loc">📍 Austin, TX · Nationwide</div>
+            <div class="tags"><span class="tag">Care cost planning</span><span class="tag">Medicare</span><span class="tag">Asset protection</span></div>
+            <div class="footer"><div class="rating"><span class="stars">★★★★★</span> 4.9 (44 reviews)</div><button class="btn">Contact</button></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- V4 -->
+    <div class="option-block">
+      <div class="option-label">Option 4</div>
+      <div class="option-desc">Fade to white — photo dissolves into card background</div>
+      <div class="cards-col">
+        <div class="v4">
+          <div class="photo"><img src="https://randomuser.me/api/portraits/women/68.jpg" alt=""></div>
+          <div class="body">
+            <div class="top"><div><div class="name">Margaret Holloway, Esq.</div><div class="title">Elder Law &amp; Estate Planning</div></div><span class="badge-green">PCG Verified</span></div>
+            <div class="loc">📍 Boston, MA · Serves New England</div>
+            <div class="tags"><span class="tag">Power of Attorney</span><span class="tag">Medicaid planning</span><span class="tag">Trusts</span></div>
+            <div class="footer"><div class="rating"><span class="stars">★★★★★</span> 4.9 (38 reviews)</div><button class="btn">Contact</button></div>
+          </div>
+        </div>
+        <div class="v4">
+          <div class="photo"><img src="https://randomuser.me/api/portraits/men/33.jpg" alt=""></div>
+          <div class="body">
+            <div class="top"><div><div class="name">Robert Langston, CFP®</div><div class="title">Senior Care Financial Planning</div></div><span class="badge-green">PCG Verified</span></div>
+            <div class="loc">📍 Austin, TX · Nationwide</div>
+            <div class="tags"><span class="tag">Care cost planning</span><span class="tag">Medicare</span><span class="tag">Asset protection</span></div>
+            <div class="footer"><div class="rating"><span class="stars">★★★★★</span> 4.9 (44 reviews)</div><button class="btn">Contact</button></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- V5 -->
+    <div class="option-block">
+      <div class="option-label">Option 5</div>
+      <div class="option-desc">Circle photo — large round headshot, padded horizontal</div>
+      <div class="cards-col">
+        <div class="v5">
+          <div class="photo"><img src="https://randomuser.me/api/portraits/women/68.jpg" alt=""></div>
+          <div class="body">
+            <div class="top"><div><div class="name">Margaret Holloway, Esq.</div><div class="title">Elder Law &amp; Estate Planning</div></div><span class="badge-green">PCG Verified</span></div>
+            <div class="loc">📍 Boston, MA · Serves New England</div>
+            <div class="tags"><span class="tag">Power of Attorney</span><span class="tag">Medicaid planning</span><span class="tag">Trusts</span></div>
+            <div class="footer"><div class="rating"><span class="stars">★★★★★</span> 4.9 (38 reviews)</div><button class="btn">Contact</button></div>
+          </div>
+        </div>
+        <div class="v5">
+          <div class="photo"><img src="https://randomuser.me/api/portraits/men/33.jpg" alt=""></div>
+          <div class="body">
+            <div class="top"><div><div class="name">Robert Langston, CFP®</div><div class="title">Senior Care Financial Planning</div></div><span class="badge-green">PCG Verified</span></div>
+            <div class="loc">📍 Austin, TX · Nationwide</div>
+            <div class="tags"><span class="tag">Care cost planning</span><span class="tag">Medicare</span><span class="tag">Asset protection</span></div>
+            <div class="footer"><div class="rating"><span class="stars">★★★★★</span> 4.9 (44 reviews)</div><button class="btn">Contact</button></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- V6 -->
+    <div class="option-block">
+      <div class="option-label">Option 6</div>
+      <div class="option-desc">Dark panel + circle — plum column, rating inset</div>
+      <div class="cards-col">
+        <div class="v6">
+          <div class="left"><div class="photo"><img src="https://randomuser.me/api/portraits/women/68.jpg" alt=""></div><div class="v-rating"><div class="v-stars">★★★★★</div><div class="v-score">4.9</div></div></div>
+          <div class="body">
+            <div class="top"><div><div class="name">Margaret Holloway, Esq.</div><div class="title">Elder Law &amp; Estate Planning</div></div><span class="badge-green">PCG Verified</span></div>
+            <div class="loc">📍 Boston, MA · Serves New England</div>
+            <div class="tags"><span class="tag">Power of Attorney</span><span class="tag">Medicaid planning</span><span class="tag">Trusts</span></div>
+            <div class="footer"><button class="btn">Contact</button></div>
+          </div>
+        </div>
+        <div class="v6">
+          <div class="left"><div class="photo"><img src="https://randomuser.me/api/portraits/men/33.jpg" alt=""></div><div class="v-rating"><div class="v-stars">★★★★★</div><div class="v-score">4.9</div></div></div>
+          <div class="body">
+            <div class="top"><div><div class="name">Robert Langston, CFP®</div><div class="title">Senior Care Financial Planning</div></div><span class="badge-green">PCG Verified</span></div>
+            <div class="loc">📍 Austin, TX · Nationwide</div>
+            <div class="tags"><span class="tag">Care cost planning</span><span class="tag">Medicare</span><span class="tag">Asset protection</span></div>
+            <div class="footer"><button class="btn">Contact</button></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- V7 -->
+    <div class="option-block">
+      <div class="option-label">Option 7</div>
+      <div class="option-desc">Airy minimal — Gilda Display name, generous whitespace, ghost button</div>
+      <div class="cards-col">
+        <div class="v7">
+          <div class="photo"><img src="https://randomuser.me/api/portraits/women/68.jpg" alt=""></div>
+          <div class="body">
+            <div class="name">Margaret Holloway, Esq.</div>
+            <div class="title">Elder Law &amp; Estate Planning</div>
+            <div class="rule"></div>
+            <div class="meta">
+              <div class="meta-item"><strong>Location</strong>Boston, MA</div>
+              <div class="meta-item"><strong>Coverage</strong>New England</div>
+              <div class="meta-item"><strong>Rating</strong>4.9 · 38 reviews</div>
+            </div>
+            <div class="footer"><span class="badge-text">✓ PCG Verified</span><button class="btn">Contact</button></div>
+          </div>
+        </div>
+        <div class="v7">
+          <div class="photo"><img src="https://randomuser.me/api/portraits/men/33.jpg" alt=""></div>
+          <div class="body">
+            <div class="name">Robert Langston, CFP®</div>
+            <div class="title">Senior Care Financial Planning</div>
+            <div class="rule"></div>
+            <div class="meta">
+              <div class="meta-item"><strong>Location</strong>Austin, TX</div>
+              <div class="meta-item"><strong>Coverage</strong>Nationwide</div>
+              <div class="meta-item"><strong>Rating</strong>4.9 · 44 reviews</div>
+            </div>
+            <div class="footer"><span class="badge-text">✓ PCG Verified</span><button class="btn">Contact</button></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- V8 -->
+    <div class="option-block">
+      <div class="option-label">Option 8</div>
+      <div class="option-desc">Stats bar — tinted footer strip spans full width</div>
+      <div class="cards-col">
+        <div class="v8">
+          <div class="top-row">
+            <div class="photo"><img src="https://randomuser.me/api/portraits/women/68.jpg" alt=""></div>
+            <div class="body">
+              <div class="hd"><div><div class="name">Margaret Holloway, Esq.</div><div class="title">Elder Law &amp; Estate Planning</div></div><span class="badge-green">PCG Verified</span></div>
+              <div class="tags"><span class="tag">Power of Attorney</span><span class="tag">Medicaid planning</span><span class="tag">Trusts</span></div>
+            </div>
+          </div>
+          <div class="stats-bar">
+            <div class="stat"><span class="stars">★★★★★</span> 4.9 (38 reviews)</div>
+            <div class="stat">📍 Boston, MA · New England</div>
+            <div class="spacer"></div>
+            <button class="btn">Contact</button>
+          </div>
+        </div>
+        <div class="v8">
+          <div class="top-row">
+            <div class="photo"><img src="https://randomuser.me/api/portraits/men/33.jpg" alt=""></div>
+            <div class="body">
+              <div class="hd"><div><div class="name">Robert Langston, CFP®</div><div class="title">Senior Care Financial Planning</div></div><span class="badge-green">PCG Verified</span></div>
+              <div class="tags"><span class="tag">Care cost planning</span><span class="tag">Medicare</span><span class="tag">Asset protection</span></div>
+            </div>
+          </div>
+          <div class="stats-bar">
+            <div class="stat"><span class="stars">★★★★★</span> 4.9 (44 reviews)</div>
+            <div class="stat">📍 Austin, TX · Nationwide</div>
+            <div class="spacer"></div>
+            <button class="btn">Contact</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- V9 -->
+    <div class="option-block">
+      <div class="option-label">Option 9</div>
+      <div class="option-desc">Top stripe + circle — gradient accent bar, round photo inline</div>
+      <div class="cards-col">
+        <div class="v9">
+          <div class="stripe"></div>
+          <div class="content-row">
+            <div class="photo"><img src="https://randomuser.me/api/portraits/women/68.jpg" alt=""></div>
+            <div class="info">
+              <div class="name">Margaret Holloway, Esq.</div>
+              <div class="title">Elder Law &amp; Estate Planning</div>
+              <div class="tags"><span class="tag">Power of Attorney</span><span class="tag">Medicaid</span><span class="tag">Trusts</span></div>
+            </div>
+            <div class="right">
+              <div class="loc">Boston, MA</div>
+              <div class="rating"><span class="stars">★★★★★</span> 4.9</div>
+              <span class="badge-green">PCG Verified</span>
+              <button class="btn">Contact</button>
+            </div>
+          </div>
+        </div>
+        <div class="v9">
+          <div class="stripe"></div>
+          <div class="content-row">
+            <div class="photo"><img src="https://randomuser.me/api/portraits/men/33.jpg" alt=""></div>
+            <div class="info">
+              <div class="name">Robert Langston, CFP®</div>
+              <div class="title">Senior Care Financial Planning</div>
+              <div class="tags"><span class="tag">Care cost planning</span><span class="tag">Medicare</span><span class="tag">Asset protection</span></div>
+            </div>
+            <div class="right">
+              <div class="loc">Austin, TX</div>
+              <div class="rating"><span class="stars">★★★★★</span> 4.9</div>
+              <span class="badge-green">PCG Verified</span>
+              <button class="btn">Contact</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- V10 -->
+    <div class="option-block">
+      <div class="option-label">Option 10</div>
+      <div class="option-desc">Duotone photo — purple-tinted image, editorial feel, ghost button</div>
+      <div class="cards-col">
+        <div class="v10">
+          <div class="photo"><img src="https://randomuser.me/api/portraits/women/68.jpg" alt=""></div>
+          <div class="body">
+            <div class="name">Margaret Holloway, Esq.</div>
+            <div class="title">Elder Law &amp; Estate Planning</div>
+            <div class="rule"></div>
+            <div class="mid"><div class="loc">📍 Boston, MA · New England</div><span class="badge-green">PCG Verified</span></div>
+            <div class="tags"><span class="tag">Power of Attorney</span><span class="tag">Medicaid</span><span class="tag">Trusts</span></div>
+            <div class="footer"><div class="rating"><span class="stars">★★★★★</span> 4.9 (38 reviews)</div><button class="btn">Contact</button></div>
+          </div>
+        </div>
+        <div class="v10">
+          <div class="photo"><img src="https://randomuser.me/api/portraits/men/33.jpg" alt=""></div>
+          <div class="body">
+            <div class="name">Robert Langston, CFP®</div>
+            <div class="title">Senior Care Financial Planning</div>
+            <div class="rule"></div>
+            <div class="mid"><div class="loc">📍 Austin, TX · Nationwide</div><span class="badge-green">PCG Verified</span></div>
+            <div class="tags"><span class="tag">Care cost planning</span><span class="tag">Medicare</span><span class="tag">Asset protection</span></div>
+            <div class="footer"><div class="rating"><span class="stars">★★★★★</span> 4.9 (44 reviews)</div><button class="btn">Contact</button></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>
