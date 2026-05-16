@@ -267,7 +267,7 @@
 
         if (token.claims.admin) {
           localStorage.setItem('pcg_admin', '1');
-          location.href = next || '/admin-approvals.html';
+          location.href = next || '/index.html';
         } else if (token.claims.practitioner) {
           location.href = next || '/dashboard.html';
         } else if (token.claims.family) {

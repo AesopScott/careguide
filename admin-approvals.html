@@ -31,8 +31,9 @@
       min-height: 100vh;
       position: relative;
       overflow-x: hidden;
-      visibility: hidden;
     }
+
+    #app-content { visibility: hidden; }
 
     body::before {
       content: '';
@@ -225,10 +226,11 @@
   <div class="blob blob-2"></div>
   <div class="top-bar"></div>
 
+  <div id="app-content">
   <header>
     <div class="nav-left">
       <a href="/" class="logo">Parental <span>Care</span> Guide</a>
-      <span class="nav-crumb">/ <a href="/admin.html">Admin</a> / Practitioner Approvals</span>
+      <span class="nav-crumb">/ Practitioner Approvals</span>
     </div>
     <div class="nav-right">
       <button class="btn-signout" id="btn-signout">Sign out</button>
@@ -260,6 +262,7 @@
     <div class="panel" id="panel-approved"></div>
     <div class="panel" id="panel-rejected"></div>
   </main>
+  </div><!-- /#app-content -->
 
   <div class="toast" id="toast"></div>
 
@@ -297,7 +300,7 @@
       if (!user) { location.href = '/login.html?next=/admin-approvals.html'; return; }
       const token = await user.getIdTokenResult();
       if (!token.claims.admin) { location.href = '/login.html?error=admin_required&next=/admin-approvals.html'; return; }
-      document.body.style.visibility = '';
+      document.getElementById('app-content').style.visibility = '';
       wireSignOut();
       loadAll();
     });
