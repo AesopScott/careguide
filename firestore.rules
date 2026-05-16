@@ -33,10 +33,11 @@ service cloud.firestore {
     }
 
     // ── Users ─────────────────────────────────────────────────────────────────
-    // Each user can only read and write their own profile.
+    // Each user can read/write their own profile. Admins can read all profiles.
 
     match /users/{userId} {
-      allow read, write: if isAuth() && request.auth.uid == userId;
+      allow read:  if isAuth() && (request.auth.uid == userId || request.auth.token.admin == true);
+      allow write: if isAuth() && request.auth.uid == userId;
     }
 
     // ── Practitioners ─────────────────────────────────────────────────────────
