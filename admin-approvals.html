@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Practitioner Approvals — PCG Admin</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Gilda+Display&family=Jost:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --plum:        #501464;
+      --plum-hover:  #3a0f4e;
+      --text-dark:   #1e1230;
+      --text-mid:    #4a2d65;
+      --text-light:  #6b4d85;
+      --glass-bg:    rgba(255,255,255,0.38);
+      --glass-border:rgba(255,255,255,0.55);
+      --green:       #16a34a;
+      --green-bg:    rgba(22,163,74,0.1);
+      --red:         #dc2626;
+      --red-bg:      rgba(220,38,38,0.1);
+      --amber:       #d97706;
+      --amber-bg:    rgba(217,119,6,0.1);
+    }
+
+    body {
+      font-family: 'Jost', sans-serif;
+      min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
+      visibility: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background: linear-gradient(148deg, #FFF5F0 0%, #FFD6CC 12%, #F4B8C1 26%, #E8A0B4 40%, #D4A0C8 55%, #B8A8D8 70%, #98A8E0 84%, #8ABCE8 100%);
+      z-index: 0;
+    }
+
+    .blob { position: fixed; border-radius: 50%; pointer-events: none; z-index: 0; filter: blur(72px); opacity: 0.4; }
+    .blob-1 { width: 500px; height: 500px; background: #c084fc; top: -120px; left: -100px; }
+    .blob-2 { width: 380px; height: 380px; background: #60a5fa; bottom: 80px; right: -100px; }
+
+    /* ── Nav ── */
+    .top-bar { position: relative; z-index: 10; height: 4px; background: linear-gradient(90deg, #FFD6CC, #F4B8C1, #E8A0B4, #D4A0C8, #B8A8D8, #98A8E0, #8ABCE8); }
+
+    header {
+      position: relative; z-index: 10;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 40px;
+      background: rgba(255,255,255,0.25);
+      border-bottom: 1px solid var(--glass-border);
+      backdrop-filter: blur(16px);
+    }
+
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { font-family: 'Gilda Display', serif; font-size: 1rem; color: var(--text-dark); text-decoration: none; }
+    .logo span { color: var(--plum); }
+    .nav-crumb { font-size: 0.85rem; color: var(--text-light); }
+    .nav-crumb a { color: var(--text-mid); text-decoration: none; }
+    .nav-crumb a:hover { color: var(--text-dark); }
+
+    .nav-right { display: flex; align-items: center; gap: 16px; }
+    .btn-signout {
+      padding: 7px 16px; border-radius: 100px;
+      background: rgba(255,255,255,0.4); border: 1px solid rgba(80,20,100,0.2);
+      font-family: 'Jost', sans-serif; font-size: 0.85rem; color: var(--text-mid);
+      cursor: pointer; transition: background 0.2s;
+    }
+    .btn-signout:hover { background: rgba(255,255,255,0.6); }
+
+    /* ── Layout ── */
+    main {
+      position: relative; z-index: 2;
+      max-width: 1000px; margin: 0 auto;
+      padding: 40px 24px 80px;
+    }
+
+    .page-header { margin-bottom: 32px; }
+    .page-header h1 { font-family: 'Gilda Display', serif; font-size: 2rem; color: var(--text-dark); margin-bottom: 6px; }
+    .page-header p { font-size: 0.95rem; font-weight: 300; color: var(--text-mid); }
+
+    /* ── Tabs ── */
+    .tabs { display: flex; gap: 4px; margin-bottom: 24px; }
+    .tab {
+      padding: 8px 20px; border-radius: 100px;
+      border: 1px solid rgba(255,255,255,0.5);
+      background: rgba(255,255,255,0.25);
+      font-family: 'Jost', sans-serif; font-size: 0.9rem; font-weight: 500;
+      color: var(--text-mid); cursor: pointer; transition: all 0.2s;
+    }
+    .tab:hover { background: rgba(255,255,255,0.45); }
+    .tab.active { background: var(--plum); color: #fff; border-color: var(--plum); }
+    .tab-count {
+      display: inline-flex; align-items: center; justify-content: center;
+      min-width: 20px; height: 20px; border-radius: 100px;
+      font-size: 0.75rem; font-weight: 700; margin-left: 6px;
+      background: rgba(255,255,255,0.25); color: inherit;
+    }
+    .tab.active .tab-count { background: rgba(255,255,255,0.25); color: #fff; }
+
+    /* ── Panel ── */
+    .panel { display: none; }
+    .panel.active { display: block; }
+
+    /* ── Empty state ── */
+    .empty {
+      text-align: center; padding: 64px 24px;
+      background: var(--glass-bg); border: 1px solid var(--glass-border);
+      backdrop-filter: blur(16px); border-radius: 16px;
+    }
+    .empty-icon { font-size: 2.5rem; margin-bottom: 16px; }
+    .empty h3 { font-family: 'Gilda Display', serif; font-size: 1.3rem; color: var(--text-dark); margin-bottom: 8px; }
+    .empty p { font-size: 0.9rem; color: var(--text-mid); font-weight: 300; }
+
+    /* ── Practitioner cards ── */
+    .practitioner-list { display: flex; flex-direction: column; gap: 12px; }
+
+    .p-card {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(16px);
+      border-radius: 16px;
+      padding: 20px 24px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 16px;
+      align-items: center;
+      transition: box-shadow 0.2s;
+    }
+    .p-card:hover { box-shadow: 0 4px 24px rgba(80,20,100,0.1); }
+
+    .p-card.status-approved { border-left: 3px solid var(--green); }
+    .p-card.status-rejected { border-left: 3px solid var(--red); opacity: 0.75; }
+    .p-card.status-pending  { border-left: 3px solid var(--amber); }
+
+    .p-info { display: flex; flex-direction: column; gap: 8px; }
+
+    .p-name-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .p-name { font-weight: 600; font-size: 1rem; color: var(--text-dark); }
+
+    .badge {
+      font-size: 0.75rem; font-weight: 600; padding: 2px 10px;
+      border-radius: 100px; letter-spacing: 0.03em;
+    }
+    .badge-pending  { background: var(--amber-bg); color: var(--amber); border: 1px solid rgba(217,119,6,0.25); }
+    .badge-approved { background: var(--green-bg);  color: var(--green);  border: 1px solid rgba(22,163,74,0.25); }
+    .badge-rejected { background: var(--red-bg);    color: var(--red);    border: 1px solid rgba(220,38,38,0.25); }
+
+    .p-email { font-size: 0.875rem; color: var(--text-mid); font-weight: 300; }
+
+    .p-meta { display: flex; gap: 16px; flex-wrap: wrap; }
+    .p-meta-item { font-size: 0.8rem; color: var(--text-light); }
+    .p-meta-item strong { color: var(--text-mid); font-weight: 500; }
+
+    .p-states { font-size: 0.8rem; color: var(--text-light); }
+    .p-states strong { color: var(--text-mid); font-weight: 500; }
+
+    .p-date { font-size: 0.8rem; color: var(--text-light); }
+
+    /* ── Action buttons ── */
+    .p-actions { display: flex; flex-direction: column; gap: 8px; align-items: flex-end; min-width: 120px; }
+
+    .btn-approve, .btn-reject {
+      padding: 8px 18px; border-radius: 100px;
+      font-family: 'Jost', sans-serif; font-size: 0.85rem; font-weight: 600;
+      cursor: pointer; border: none; transition: all 0.2s; white-space: nowrap;
+    }
+    .btn-approve {
+      background: var(--green); color: #fff;
+    }
+    .btn-approve:hover { background: #15803d; }
+    .btn-approve:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .btn-reject {
+      background: rgba(220,38,38,0.1); color: var(--red);
+      border: 1px solid rgba(220,38,38,0.25);
+    }
+    .btn-reject:hover { background: rgba(220,38,38,0.2); }
+    .btn-reject:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .action-done { font-size: 0.8rem; color: var(--text-light); font-style: italic; }
+
+    /* ── Toast ── */
+    .toast {
+      position: fixed; bottom: 32px; right: 32px; z-index: 999;
+      padding: 14px 20px; border-radius: 12px;
+      font-size: 0.9rem; font-weight: 500;
+      backdrop-filter: blur(16px);
+      transform: translateY(80px); opacity: 0;
+      transition: all 0.3s ease;
+      max-width: 320px;
+    }
+    .toast.show { transform: translateY(0); opacity: 1; }
+    .toast.success { background: rgba(22,163,74,0.15); border: 1px solid rgba(22,163,74,0.3); color: #15803d; }
+    .toast.error   { background: rgba(220,38,38,0.12); border: 1px solid rgba(220,38,38,0.25); color: #991b1b; }
+
+    /* ── Email notice ── */
+    .email-notice {
+      display: flex; align-items: flex-start; gap: 12px;
+      padding: 14px 18px; border-radius: 12px; margin-bottom: 24px;
+      background: var(--amber-bg); border: 1px solid rgba(217,119,6,0.25);
+      font-size: 0.875rem; color: var(--amber); line-height: 1.5;
+    }
+    .email-notice strong { color: #92400e; display: block; margin-bottom: 2px; }
+
+    /* ── Loading skeletons ── */
+    .skeleton {
+      background: linear-gradient(90deg, rgba(255,255,255,0.4) 25%, rgba(255,255,255,0.65) 50%, rgba(255,255,255,0.4) 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.4s infinite;
+      border-radius: 8px;
+    }
+    @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+    .skeleton-card {
+      height: 100px; border-radius: 16px; margin-bottom: 12px;
+    }
+
+    @media (max-width: 640px) {
+      header { padding: 14px 16px; }
+      main { padding: 24px 16px 60px; }
+      .p-card { grid-template-columns: 1fr; }
+      .p-actions { flex-direction: row; align-items: center; }
+    }
+  </style>
+</head>
+<body>
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="top-bar"></div>
+
+  <header>
+    <div class="nav-left">
+      <a href="/" class="logo">Parental <span>Care</span> Guide</a>
+      <span class="nav-crumb">/ <a href="/admin.html">Admin</a> / Practitioner Approvals</span>
+    </div>
+    <div class="nav-right">
+      <button class="btn-signout" id="btn-signout">Sign out</button>
+    </div>
+  </header>
+
+  <main>
+    <div class="page-header">
+      <h1>Practitioner Approvals</h1>
+      <p>Review new practitioner signups and approve or reject access.</p>
+    </div>
+
+    <div class="email-notice" id="emailNotice">
+      <span>⚠</span>
+      <div>
+        <strong>Email notifications not yet wired</strong>
+        Approvals and rejections update Firestore immediately. Automated emails to practitioners will be enabled once Brevo is configured.
+      </div>
+    </div>
+
+    <div class="tabs">
+      <button class="tab active" onclick="switchTab('pending')" id="tab-pending">
+        Pending <span class="tab-count" id="count-pending">—</span>
+      </button>
+      <button class="tab" onclick="switchTab('approved')" id="tab-approved">
+        Approved <span class="tab-count" id="count-approved">—</span>
+      </button>
+      <button class="tab" onclick="switchTab('rejected')" id="tab-rejected">
+        Rejected <span class="tab-count" id="count-rejected">—</span>
+      </button>
+    </div>
+
+    <div class="panel active" id="panel-pending">
+      <div class="skeleton-card skeleton"></div>
+      <div class="skeleton-card skeleton" style="opacity:0.6"></div>
+    </div>
+    <div class="panel" id="panel-approved"></div>
+    <div class="panel" id="panel-rejected"></div>
+  </main>
+
+  <div class="toast" id="toast"></div>
+
+  <script type="module">
+    import { initializeApp }        from 'https://www.gstatic.com/firebasejs/11.8.0/firebase-app.js';
+    import { getAuth, onAuthStateChanged, signOut }
+                                    from 'https://www.gstatic.com/firebasejs/11.8.0/firebase-auth.js';
+    import { getFirestore, collection, query, where, orderBy, getDocs, doc, updateDoc, serverTimestamp }
+                                    from 'https://www.gstatic.com/firebasejs/11.8.0/firebase-firestore.js';
+
+    const FIREBASE_CONFIG = {
+      apiKey:            "AIzaSyB0GaJXI_lbLhEXmctMJ0LoHiV3cHL5vQY",
+      authDomain:        "careguide-def76.firebaseapp.com",
+      projectId:         "careguide-def76",
+      storageBucket:     "careguide-def76.firebasestorage.app",
+      messagingSenderId: "658340465706",
+      appId:             "1:658340465706:web:0e412731947ff51474c753"
+    };
+
+    const API = 'https://careguide-api-658340465706.us-central1.run.app';
+
+    const app  = initializeApp(FIREBASE_CONFIG);
+    const auth = getAuth(app);
+    const db   = getFirestore(app);
+
+    const PROFESSION_LABELS = {
+      gcm:         'Geriatric Care Manager',
+      elder_law:   'Elder Law Attorney',
+      social_work: 'Social Worker',
+      financial:   'Financial Planner',
+    };
+
+    // ── Auth guard ──
+    onAuthStateChanged(auth, async user => {
+      if (!user) { location.href = '/login.html?next=/admin-approvals.html'; return; }
+      const token = await user.getIdTokenResult();
+      if (!token.claims.admin) { location.href = '/login.html'; return; }
+      document.body.style.visibility = '';
+      wireSignOut();
+      loadAll();
+    });
+
+    function wireSignOut() {
+      document.getElementById('btn-signout').addEventListener('click', async () => {
+        await signOut(auth);
+        location.href = '/login.html';
+      });
+    }
+
+    // ── Data ──
+    let allUsers = [];
+
+    async function loadAll() {
+      try {
+        const snap = await getDocs(
+          query(collection(db, 'users'), where('role', '==', 'practitioner'), orderBy('created_at', 'desc'))
+        );
+        allUsers = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        renderAll();
+      } catch (err) {
+        console.error(err);
+        showToast('Failed to load practitioners: ' + err.message, 'error');
+        clearSkeletons();
+      }
+    }
+
+    function renderAll() {
+      const pending  = allUsers.filter(u => u.status === 'pending_activation');
+      const approved = allUsers.filter(u => u.status === 'active');
+      const rejected = allUsers.filter(u => u.status === 'rejected');
+
+      document.getElementById('count-pending').textContent  = pending.length  || '0';
+      document.getElementById('count-approved').textContent = approved.length || '0';
+      document.getElementById('count-rejected').textContent = rejected.length || '0';
+
+      renderList('panel-pending',  pending,  true,  false);
+      renderList('panel-approved', approved, false, false);
+      renderList('panel-rejected', rejected, false, true);
+    }
+
+    function renderList(panelId, users, showActions, wasRejected) {
+      const panel = document.getElementById(panelId);
+      panel.innerHTML = '';
+
+      if (users.length === 0) {
+        panel.innerHTML = `
+          <div class="empty">
+            <div class="empty-icon">${wasRejected ? '🚫' : panelId === 'panel-approved' ? '✅' : '📬'}</div>
+            <h3>${wasRejected ? 'No rejected practitioners' : panelId === 'panel-approved' ? 'No approved practitioners yet' : 'No pending signups'}</h3>
+            <p>${panelId === 'panel-pending' ? 'New practitioner signups will appear here.' : 'Nothing here yet.'}</p>
+          </div>`;
+        return;
+      }
+
+      const list = document.createElement('div');
+      list.className = 'practitioner-list';
+      users.forEach(u => list.appendChild(buildCard(u, showActions)));
+      panel.appendChild(list);
+    }
+
+    function buildCard(u, showActions) {
+      const card = document.createElement('div');
+      const statusClass = u.status === 'active' ? 'approved' : u.status === 'rejected' ? 'rejected' : 'pending';
+      card.className = `p-card status-${statusClass}`;
+      card.id = `card-${u.id}`;
+
+      const signedUp = u.created_at?.toDate ? relativeTime(u.created_at.toDate()) : '—';
+      const states   = (u.license_states || []).join(', ') || '—';
+      const prof     = PROFESSION_LABELS[u.profession] || u.profession || '—';
+      const badgeClass = { active: 'badge-approved', rejected: 'badge-rejected', pending_activation: 'badge-pending' }[u.status] || 'badge-pending';
+      const badgeLabel = { active: 'Approved', rejected: 'Rejected', pending_activation: 'Pending' }[u.status] || 'Pending';
+
+      card.innerHTML = `
+        <div class="p-info">
+          <div class="p-name-row">
+            <span class="p-name">${esc(u.full_name || '—')}</span>
+            <span class="badge ${badgeClass}">${badgeLabel}</span>
+          </div>
+          <div class="p-email">${esc(u.email)}</div>
+          <div class="p-meta">
+            <div class="p-meta-item"><strong>Role:</strong> ${esc(prof)}</div>
+            <div class="p-meta-item"><strong>Plan:</strong> ${esc(u.plan || '—')}</div>
+            <div class="p-meta-item"><strong>BAA:</strong> ${u.baa_accepted ? '✓ Signed' : '✗ Not signed'}</div>
+          </div>
+          <div class="p-states"><strong>License states:</strong> ${esc(states)}</div>
+          <div class="p-date">Signed up ${signedUp}</div>
+        </div>
+        <div class="p-actions" id="actions-${u.id}">
+          ${showActions ? `
+            <button class="btn-approve" onclick="approve('${u.id}')">✓ Approve</button>
+            <button class="btn-reject"  onclick="reject('${u.id}')">✗ Reject</button>
+          ` : `<span class="action-done">${badgeLabel}</span>`}
+        </div>`;
+
+      return card;
+    }
+
+    window.approve = async function(uid) {
+      await setStatus(uid, 'active', '✓ Approved', 'approved');
+    };
+
+    window.reject = async function(uid) {
+      if (!confirm('Reject this practitioner? They will be notified by email once email is configured.')) return;
+      await setStatus(uid, 'rejected', '✗ Rejected', 'rejected');
+    };
+
+    async function setStatus(uid, status, label, cssStatus) {
+      const actionsEl = document.getElementById(`actions-${uid}`);
+      const btns = actionsEl.querySelectorAll('button');
+      btns.forEach(b => b.disabled = true);
+
+      try {
+        // 1. Update Firestore
+        await updateDoc(doc(db, 'users', uid), {
+          status,
+          [`${status}_at`]: serverTimestamp(),
+        });
+
+        // 2. Try API to set/clear custom claims (best-effort — API may not be live yet)
+        try {
+          const idToken = await auth.currentUser.getIdToken();
+          await fetch(`${API}/users/${uid}/status`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${idToken}` },
+            body: JSON.stringify({ status }),
+          });
+        } catch {
+          // API not live yet — Firestore update still succeeded
+        }
+
+        // 3. Update UI
+        const cardEl = document.getElementById(`card-${uid}`);
+        cardEl.className = `p-card status-${cssStatus}`;
+        actionsEl.innerHTML = `<span class="action-done">${label}</span>`;
+
+        // Update the in-memory record and re-count tabs
+        const rec = allUsers.find(u => u.id === uid);
+        if (rec) rec.status = status;
+        const pending  = allUsers.filter(u => u.status === 'pending_activation').length;
+        const approved = allUsers.filter(u => u.status === 'active').length;
+        const rejected = allUsers.filter(u => u.status === 'rejected').length;
+        document.getElementById('count-pending').textContent  = pending;
+        document.getElementById('count-approved').textContent = approved;
+        document.getElementById('count-rejected').textContent = rejected;
+
+        showToast(status === 'active'
+          ? '✓ Practitioner approved. Email notification will send once Brevo is configured.'
+          : '✗ Practitioner rejected. Email notification will send once Brevo is configured.',
+          status === 'active' ? 'success' : 'error'
+        );
+
+      } catch (err) {
+        btns.forEach(b => b.disabled = false);
+        showToast('Failed: ' + err.message, 'error');
+      }
+    }
+
+    function clearSkeletons() {
+      document.getElementById('panel-pending').innerHTML = '';
+    }
+
+    // ── Tab switching ──
+    window.switchTab = function(tab) {
+      document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.getElementById('panel-' + tab).classList.add('active');
+      document.getElementById('tab-' + tab).classList.add('active');
+    };
+
+    // ── Toast ──
+    let toastTimer;
+    function showToast(msg, type = 'success') {
+      const el = document.getElementById('toast');
+      el.textContent = msg;
+      el.className = `toast ${type} show`;
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => el.classList.remove('show'), 4000);
+    }
+
+    // ── Helpers ──
+    function esc(s) {
+      return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    }
+
+    function relativeTime(date) {
+      const diff = Math.floor((Date.now() - date) / 1000);
+      if (diff < 60)   return 'just now';
+      if (diff < 3600) return `${Math.floor(diff/60)}m ago`;
+      if (diff < 86400)return `${Math.floor(diff/3600)}h ago`;
+      return `${Math.floor(diff/86400)}d ago`;
+    }
+  </script>
+</body>
+</html>

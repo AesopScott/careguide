@@ -2023,6 +2023,43 @@
         <div class="card-footer"><button class="status-btn" onclick="cycleStatus('card-admin', this)">Not Started</button></div>
       </div>
 
+      <div class="card card-admin" id="card-practitioner-approval" data-phase="mvp" data-ai="false">
+        <div class="card-header">
+          <div>
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+              <div class="card-title">Practitioner Approvals</div>
+              <span class="phase-tag">MVP</span>
+            </div>
+            <div class="card-desc">Review and approve or reject new practitioner signups. Triggers welcome or rejection email on action.</div>
+          </div>
+          <span class="section-badge badge-admin">Admin</span>
+        </div>
+        <div class="card-block">
+          <div class="block-label">Content</div>
+          <ul class="content-list">
+            <li>Pending signups queue — name, email, profession, states, date</li>
+            <li>Approve → sets status active, sends welcome email, sets custom claims</li>
+            <li>Reject → sets status rejected, sends rejection email</li>
+            <li>Approved and rejected history tabs</li>
+          </ul>
+        </div>
+        <div class="card-block">
+          <div class="block-label">Navigates To</div>
+          <div class="nav-links">
+            <span class="nav-link">Admin Dashboard</span>
+          </div>
+        </div>
+        <div class="card-block">
+          <div class="block-label">External Services</div>
+          <div class="services-row">
+            <span class="svc-badge s-firebase">Firestore</span>
+            <span class="svc-badge s-firebase">Firebase Auth</span>
+            <span class="svc-badge s-email">Brevo (approval emails)</span>
+          </div>
+        </div>
+        <div class="card-footer"><button class="status-btn" onclick="cycleStatus('card-practitioner-approval', this)">Not Started</button></div>
+      </div>
+
     </div>
   </div>
 
@@ -2246,7 +2283,8 @@
       'card-ai-assistant':          ['card-family-dashboard'],
       'card-professional-dir':      ['card-family-dashboard'],
       'card-family-settings':       ['card-family-dashboard'],
-      'card-admin':                 ['card-client-roster'],
+      'card-admin':                 ['card-client-roster', 'card-practitioner-approval'],
+      'card-practitioner-approval': ['card-admin'],
     };
 
     // URL for each card — shown at bottom when status is done
@@ -2281,6 +2319,7 @@
       'card-professional-dir':      '/professionals.html',
       'card-family-settings':       '/family-settings.html',
       'card-admin':                 '/admin.html',
+      'card-practitioner-approval': '/admin-approvals.html',
     };
 
     // Pages that have been built — seed as done on first load
