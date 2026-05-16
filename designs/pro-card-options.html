@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PCG — Professional Card Options</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Gilda+Display&family=Jost:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Jost', sans-serif;
+      min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
+      background: linear-gradient(148deg,
+        #FFF5F0 0%, #FFD6CC 12%, #F4B8C1 26%,
+        #E8A0B4 40%, #D4A0C8 55%,
+        #B8A8D8 70%, #98A8E0 84%, #8ABCE8 100%);
+    }
+
+    .top-bar {
+      height: 4px;
+      background: linear-gradient(90deg, #FFD6CC, #F4B8C1, #E8A0B4, #D4A0C8, #B8A8D8, #98A8E0, #8ABCE8);
+    }
+
+    .page {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 52px 40px 100px;
+    }
+
+    .page-title {
+      font-family: 'Gilda Display', Georgia, serif;
+      font-size: 2rem;
+      color: #1e1230;
+      margin-bottom: 6px;
+    }
+
+    .page-sub {
+      font-size: 0.875rem;
+      font-weight: 300;
+      color: rgba(60,40,80,0.6);
+      margin-bottom: 64px;
+    }
+
+    .option-block {
+      margin-bottom: 72px;
+    }
+
+    .option-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(80,40,100,0.5);
+      margin-bottom: 6px;
+    }
+
+    .option-desc {
+      font-family: 'Gilda Display', Georgia, serif;
+      font-size: 1.15rem;
+      color: #1e1230;
+      margin-bottom: 20px;
+    }
+
+    .cards-row {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    /* ─────────────────────────────────────────────
+       OPTION 1 — Glass (current)
+    ───────────────────────────────────────────── */
+    .o1 {
+      width: 320px;
+      background: rgba(255,255,255,0.38);
+      border: 1px solid rgba(255,255,255,0.55);
+      border-radius: 18px;
+      padding: 22px;
+      backdrop-filter: blur(16px);
+      box-shadow: 0 4px 16px rgba(160,100,180,0.08), inset 0 1px 0 rgba(255,255,255,0.7);
+      display: flex; flex-direction: column; gap: 12px;
+    }
+    .o1 .top { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+    .o1 .avatar { width: 52px; height: 52px; border-radius: 50%; overflow: hidden; border: 2px solid rgba(255,255,255,0.7); flex-shrink: 0; }
+    .o1 .avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .o1 .name { font-size: 0.9rem; font-weight: 600; color: #1e1230; margin-bottom: 2px; }
+    .o1 .title { font-size: 0.8rem; color: #4a2d65; }
+    .o1 .badge { font-size: 0.7rem; font-weight: 600; color: #2A7A52; background: rgba(42,122,82,0.12); border: 1px solid rgba(42,122,82,0.25); border-radius: 100px; padding: 3px 9px; white-space: nowrap; flex-shrink: 0; }
+    .o1 .loc { font-size: 0.8rem; color: #6b4d85; }
+    .o1 .tags { display: flex; gap: 5px; flex-wrap: wrap; }
+    .o1 .tag { font-size: 0.75rem; padding: 3px 9px; background: rgba(255,255,255,0.4); border: 1px solid rgba(255,255,255,0.65); border-radius: 100px; color: #4a2d65; }
+    .o1 .footer { display: flex; align-items: center; justify-content: space-between; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.4); }
+    .o1 .stars { color: #D4A0C8; font-size: 0.8rem; letter-spacing: 1px; }
+    .o1 .rating { font-size: 0.78rem; color: #4a2d65; display: flex; align-items: center; gap: 4px; }
+    .o1 .btn { font-family: 'Jost', sans-serif; font-size: 0.8rem; font-weight: 600; background: #501464; color: #fff; border: none; border-radius: 100px; padding: 6px 14px; cursor: pointer; }
+
+    /* ─────────────────────────────────────────────
+       OPTION 2 — Clean White
+    ───────────────────────────────────────────── */
+    .o2 {
+      width: 320px;
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 22px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.04), 0 12px 32px rgba(80,20,100,0.1);
+      display: flex; flex-direction: column; gap: 12px;
+    }
+    .o2 .top { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+    .o2 .avatar { width: 52px; height: 52px; border-radius: 50%; overflow: hidden; flex-shrink: 0; box-shadow: 0 2px 8px rgba(80,20,100,0.15); }
+    .o2 .avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .o2 .name { font-size: 0.9rem; font-weight: 600; color: #1e1230; margin-bottom: 2px; }
+    .o2 .title { font-size: 0.8rem; color: #6b4d85; }
+    .o2 .badge { font-size: 0.7rem; font-weight: 600; color: #2A7A52; background: #edf7f2; border: 1px solid #b8deca; border-radius: 100px; padding: 3px 9px; white-space: nowrap; flex-shrink: 0; }
+    .o2 .loc { font-size: 0.8rem; color: #9b7ab0; }
+    .o2 .tags { display: flex; gap: 5px; flex-wrap: wrap; }
+    .o2 .tag { font-size: 0.75rem; padding: 3px 9px; background: #f5f0fa; border-radius: 100px; color: #4a2d65; }
+    .o2 .footer { display: flex; align-items: center; justify-content: space-between; padding-top: 10px; border-top: 1px solid #f0e8f5; }
+    .o2 .stars { color: #c084d8; font-size: 0.8rem; letter-spacing: 1px; }
+    .o2 .rating { font-size: 0.78rem; color: #6b4d85; display: flex; align-items: center; gap: 4px; }
+    .o2 .btn { font-family: 'Jost', sans-serif; font-size: 0.8rem; font-weight: 600; background: #501464; color: #fff; border: none; border-radius: 100px; padding: 6px 14px; cursor: pointer; }
+
+    /* ─────────────────────────────────────────────
+       OPTION 3 — Dark Premium
+    ───────────────────────────────────────────── */
+    .o3 {
+      width: 320px;
+      background: rgba(30, 12, 48, 0.92);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 18px;
+      padding: 22px;
+      backdrop-filter: blur(16px);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.35);
+      display: flex; flex-direction: column; gap: 12px;
+    }
+    .o3 .top { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+    .o3 .avatar { width: 52px; height: 52px; border-radius: 50%; overflow: hidden; border: 2px solid rgba(244,184,193,0.4); flex-shrink: 0; }
+    .o3 .avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .o3 .name { font-size: 0.9rem; font-weight: 600; color: rgba(255,245,248,0.95); margin-bottom: 2px; }
+    .o3 .title { font-size: 0.8rem; color: rgba(212,160,200,0.75); }
+    .o3 .badge { font-size: 0.7rem; font-weight: 600; color: #7de0b0; background: rgba(42,122,82,0.2); border: 1px solid rgba(42,122,82,0.35); border-radius: 100px; padding: 3px 9px; white-space: nowrap; flex-shrink: 0; }
+    .o3 .loc { font-size: 0.8rem; color: rgba(184,168,216,0.6); }
+    .o3 .tags { display: flex; gap: 5px; flex-wrap: wrap; }
+    .o3 .tag { font-size: 0.75rem; padding: 3px 9px; background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12); border-radius: 100px; color: rgba(212,160,200,0.85); }
+    .o3 .footer { display: flex; align-items: center; justify-content: space-between; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.08); }
+    .o3 .stars { color: #F4B8C1; font-size: 0.8rem; letter-spacing: 1px; }
+    .o3 .rating { font-size: 0.78rem; color: rgba(184,168,216,0.7); display: flex; align-items: center; gap: 4px; }
+    .o3 .btn { font-family: 'Jost', sans-serif; font-size: 0.8rem; font-weight: 600; background: linear-gradient(135deg, #F4B8C1, #B8A8D8); color: #1e0830; border: none; border-radius: 100px; padding: 6px 14px; cursor: pointer; }
+
+    /* ─────────────────────────────────────────────
+       OPTION 4 — Horizontal Strip
+    ───────────────────────────────────────────── */
+    .o4 {
+      width: 480px;
+      background: #ffffff;
+      border-radius: 14px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.04), 0 8px 24px rgba(80,20,100,0.09);
+      display: flex;
+      overflow: hidden;
+    }
+    .o4 .photo-col { width: 100px; flex-shrink: 0; background: linear-gradient(160deg, #e8a0b4, #b8a8d8); position: relative; }
+    .o4 .photo-col img { width: 100%; height: 100%; object-fit: cover; }
+    .o4 .content { flex: 1; padding: 18px; display: flex; flex-direction: column; gap: 8px; }
+    .o4 .top-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
+    .o4 .name { font-size: 0.9rem; font-weight: 600; color: #1e1230; }
+    .o4 .title { font-size: 0.78rem; color: #6b4d85; margin-top: 1px; }
+    .o4 .badge { font-size: 0.68rem; font-weight: 600; color: #2A7A52; background: #edf7f2; border: 1px solid #b8deca; border-radius: 100px; padding: 2px 8px; white-space: nowrap; flex-shrink: 0; }
+    .o4 .loc { font-size: 0.78rem; color: #9b7ab0; }
+    .o4 .tags { display: flex; gap: 4px; flex-wrap: wrap; }
+    .o4 .tag { font-size: 0.72rem; padding: 2px 8px; background: #f5f0fa; border-radius: 100px; color: #4a2d65; }
+    .o4 .footer { display: flex; align-items: center; justify-content: space-between; margin-top: auto; padding-top: 8px; border-top: 1px solid #f0e8f5; }
+    .o4 .stars { color: #c084d8; font-size: 0.78rem; letter-spacing: 1px; }
+    .o4 .rating { font-size: 0.75rem; color: #6b4d85; display: flex; align-items: center; gap: 3px; }
+    .o4 .btn { font-family: 'Jost', sans-serif; font-size: 0.78rem; font-weight: 600; background: #501464; color: #fff; border: none; border-radius: 100px; padding: 5px 12px; cursor: pointer; }
+
+    /* ─────────────────────────────────────────────
+       OPTION 5 — Centered Profile
+    ───────────────────────────────────────────── */
+    .o5 {
+      width: 240px;
+      background: #ffffff;
+      border-radius: 20px;
+      padding: 28px 20px 20px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.04), 0 12px 32px rgba(80,20,100,0.1);
+      display: flex; flex-direction: column; align-items: center; gap: 10px;
+      text-align: center;
+    }
+    .o5 .avatar { width: 76px; height: 76px; border-radius: 50%; overflow: hidden; border: 3px solid #f0e0f8; box-shadow: 0 4px 16px rgba(80,20,100,0.15); flex-shrink: 0; }
+    .o5 .avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .o5 .badge { font-size: 0.68rem; font-weight: 600; color: #2A7A52; background: #edf7f2; border: 1px solid #b8deca; border-radius: 100px; padding: 3px 9px; }
+    .o5 .name { font-size: 0.88rem; font-weight: 600; color: #1e1230; line-height: 1.3; }
+    .o5 .title { font-size: 0.78rem; color: #6b4d85; }
+    .o5 .loc { font-size: 0.75rem; color: #9b7ab0; }
+    .o5 .divider { width: 40px; height: 1px; background: linear-gradient(90deg, transparent, #d4a0c8, transparent); }
+    .o5 .tags { display: flex; gap: 4px; flex-wrap: wrap; justify-content: center; }
+    .o5 .tag { font-size: 0.72rem; padding: 3px 8px; background: #f5f0fa; border-radius: 100px; color: #4a2d65; }
+    .o5 .stars { color: #c084d8; font-size: 0.8rem; letter-spacing: 1px; }
+    .o5 .rating { font-size: 0.75rem; color: #6b4d85; }
+    .o5 .btn { font-family: 'Jost', sans-serif; font-size: 0.8rem; font-weight: 600; background: #501464; color: #fff; border: none; border-radius: 100px; padding: 8px 20px; cursor: pointer; width: 100%; margin-top: 4px; }
+
+    /* ─────────────────────────────────────────────
+       OPTION 6 — Top Band + Floating Photo
+    ───────────────────────────────────────────── */
+    .o6 {
+      width: 300px;
+      background: #ffffff;
+      border-radius: 18px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.04), 0 12px 32px rgba(80,20,100,0.1);
+      overflow: hidden;
+      display: flex; flex-direction: column;
+    }
+    .o6 .band {
+      height: 72px;
+      background: linear-gradient(135deg, #E8A0B4, #B8A8D8);
+      position: relative;
+      flex-shrink: 0;
+    }
+    .o6 .avatar {
+      position: absolute;
+      bottom: -28px; left: 20px;
+      width: 60px; height: 60px;
+      border-radius: 50%; overflow: hidden;
+      border: 3px solid #ffffff;
+      box-shadow: 0 4px 12px rgba(80,20,100,0.2);
+    }
+    .o6 .avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .o6 .badge-float {
+      position: absolute;
+      bottom: -14px; right: 16px;
+      font-size: 0.68rem; font-weight: 600; color: #2A7A52;
+      background: #edf7f2; border: 1px solid #b8deca;
+      border-radius: 100px; padding: 3px 9px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+    }
+    .o6 .content { padding: 38px 20px 18px; display: flex; flex-direction: column; gap: 9px; }
+    .o6 .name { font-size: 0.9rem; font-weight: 600; color: #1e1230; }
+    .o6 .title { font-size: 0.78rem; color: #6b4d85; }
+    .o6 .loc { font-size: 0.78rem; color: #9b7ab0; }
+    .o6 .tags { display: flex; gap: 4px; flex-wrap: wrap; }
+    .o6 .tag { font-size: 0.72rem; padding: 3px 8px; background: #f5f0fa; border-radius: 100px; color: #4a2d65; }
+    .o6 .footer { display: flex; align-items: center; justify-content: space-between; padding-top: 10px; border-top: 1px solid #f0e8f5; }
+    .o6 .stars { color: #c084d8; font-size: 0.78rem; letter-spacing: 1px; }
+    .o6 .rating { font-size: 0.75rem; color: #6b4d85; display: flex; align-items: center; gap: 3px; }
+    .o6 .btn { font-family: 'Jost', sans-serif; font-size: 0.78rem; font-weight: 600; background: #501464; color: #fff; border: none; border-radius: 100px; padding: 5px 12px; cursor: pointer; }
+
+    /* ─────────────────────────────────────────────
+       OPTION 7 — Left Accent Border
+    ───────────────────────────────────────────── */
+    .o7 {
+      width: 320px;
+      background: #ffffff;
+      border-radius: 0 14px 14px 0;
+      border-left: 5px solid;
+      border-image: linear-gradient(180deg, #F4B8C1, #B8A8D8) 1;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.04), 0 8px 24px rgba(80,20,100,0.09);
+      padding: 18px 18px 16px;
+      display: flex; flex-direction: column; gap: 10px;
+    }
+    .o7 .top { display: flex; align-items: center; gap: 12px; }
+    .o7 .avatar { width: 52px; height: 52px; border-radius: 10px; overflow: hidden; flex-shrink: 0; box-shadow: 0 2px 8px rgba(80,20,100,0.12); }
+    .o7 .avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .o7 .name { font-size: 0.9rem; font-weight: 600; color: #1e1230; margin-bottom: 2px; }
+    .o7 .title { font-size: 0.78rem; color: #6b4d85; }
+    .o7 .mid { display: flex; align-items: center; justify-content: space-between; }
+    .o7 .loc { font-size: 0.78rem; color: #9b7ab0; }
+    .o7 .badge { font-size: 0.68rem; font-weight: 600; color: #2A7A52; background: #edf7f2; border: 1px solid #b8deca; border-radius: 100px; padding: 2px 8px; }
+    .o7 .tags { display: flex; gap: 4px; flex-wrap: wrap; }
+    .o7 .tag { font-size: 0.72rem; padding: 3px 8px; background: #f5f0fa; border-radius: 100px; color: #4a2d65; }
+    .o7 .footer { display: flex; align-items: center; justify-content: space-between; padding-top: 10px; border-top: 1px solid #f0e8f5; }
+    .o7 .stars { color: #c084d8; font-size: 0.78rem; letter-spacing: 1px; }
+    .o7 .rating { font-size: 0.75rem; color: #6b4d85; display: flex; align-items: center; gap: 3px; }
+    .o7 .btn { font-family: 'Jost', sans-serif; font-size: 0.78rem; font-weight: 600; background: #501464; color: #fff; border: none; border-radius: 100px; padding: 5px 12px; cursor: pointer; }
+
+    /* ─────────────────────────────────────────────
+       OPTION 8 — Editorial / Type-Forward
+    ───────────────────────────────────────────── */
+    .o8 {
+      width: 340px;
+      background: #fdfbfe;
+      border: 1.5px solid #ede0f5;
+      border-radius: 14px;
+      padding: 22px;
+      display: flex; flex-direction: column; gap: 14px;
+    }
+    .o8 .top { display: flex; align-items: center; gap: 14px; }
+    .o8 .avatar { width: 44px; height: 44px; border-radius: 50%; overflow: hidden; flex-shrink: 0; }
+    .o8 .avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .o8 .big-name {
+      font-family: 'Gilda Display', Georgia, serif;
+      font-size: 1.15rem; font-weight: 400;
+      color: #1e1230; line-height: 1.2;
+    }
+    .o8 .divider-line { height: 1px; background: linear-gradient(90deg, #e8a0b4, #b8a8d8, transparent); }
+    .o8 .meta { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
+    .o8 .title { font-size: 0.8rem; font-weight: 400; color: #6b4d85; font-style: italic; }
+    .o8 .loc { font-size: 0.78rem; color: #9b7ab0; }
+    .o8 .tags { display: flex; gap: 5px; flex-wrap: wrap; }
+    .o8 .tag { font-size: 0.72rem; padding: 3px 9px; background: #f0e8f8; border-radius: 3px; color: #4a2d65; font-weight: 500; letter-spacing: 0.02em; }
+    .o8 .footer { display: flex; align-items: center; justify-content: space-between; }
+    .o8 .badge { font-size: 0.68rem; font-weight: 600; color: #2A7A52; }
+    .o8 .stars { color: #c084d8; font-size: 0.8rem; letter-spacing: 1px; }
+    .o8 .rating { font-size: 0.75rem; color: #6b4d85; display: flex; align-items: center; gap: 4px; }
+    .o8 .btn { font-family: 'Jost', sans-serif; font-size: 0.78rem; font-weight: 600; color: #501464; background: transparent; border: 1.5px solid #501464; border-radius: 100px; padding: 5px 14px; cursor: pointer; }
+
+    /* ─────────────────────────────────────────────
+       OPTION 9 — Split Panel
+    ───────────────────────────────────────────── */
+    .o9 {
+      width: 340px;
+      background: #ffffff;
+      border-radius: 16px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.04), 0 12px 32px rgba(80,20,100,0.1);
+      display: flex;
+      overflow: hidden;
+    }
+    .o9 .left-panel {
+      width: 100px; flex-shrink: 0;
+      background: linear-gradient(180deg, #2a123c, #501464);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: 20px 10px; gap: 10px;
+    }
+    .o9 .avatar { width: 62px; height: 62px; border-radius: 50%; overflow: hidden; border: 2px solid rgba(255,255,255,0.25); }
+    .o9 .avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .o9 .stars-vert { color: #F4B8C1; font-size: 0.65rem; letter-spacing: 1px; line-height: 1.8; writing-mode: vertical-lr; transform: rotate(180deg); }
+    .o9 .right-panel { flex: 1; padding: 18px; display: flex; flex-direction: column; gap: 8px; }
+    .o9 .name { font-size: 0.88rem; font-weight: 600; color: #1e1230; }
+    .o9 .title { font-size: 0.76rem; color: #6b4d85; }
+    .o9 .badge { font-size: 0.67rem; font-weight: 600; color: #2A7A52; background: #edf7f2; border: 1px solid #b8deca; border-radius: 100px; padding: 2px 7px; display: inline-block; }
+    .o9 .loc { font-size: 0.76rem; color: #9b7ab0; }
+    .o9 .tags { display: flex; gap: 4px; flex-wrap: wrap; }
+    .o9 .tag { font-size: 0.7rem; padding: 2px 7px; background: #f5f0fa; border-radius: 100px; color: #4a2d65; }
+    .o9 .footer { display: flex; align-items: center; justify-content: space-between; margin-top: auto; padding-top: 8px; border-top: 1px solid #f0e8f5; }
+    .o9 .rating { font-size: 0.72rem; color: #6b4d85; }
+    .o9 .btn { font-family: 'Jost', sans-serif; font-size: 0.75rem; font-weight: 600; background: #501464; color: #fff; border: none; border-radius: 100px; padding: 5px 11px; cursor: pointer; }
+
+    /* ─────────────────────────────────────────────
+       OPTION 10 — Compact Row / List
+    ───────────────────────────────────────────── */
+    .o10-wrap {
+      width: 700px;
+      background: #ffffff;
+      border-radius: 16px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.04), 0 8px 24px rgba(80,20,100,0.08);
+      overflow: hidden;
+    }
+    .o10 {
+      display: flex; align-items: center; gap: 14px;
+      padding: 14px 20px;
+      border-bottom: 1px solid #f5eefa;
+      transition: background 0.15s;
+    }
+    .o10:last-child { border-bottom: none; }
+    .o10:hover { background: #fdf8ff; }
+    .o10 .avatar { width: 44px; height: 44px; border-radius: 50%; overflow: hidden; flex-shrink: 0; box-shadow: 0 2px 6px rgba(80,20,100,0.12); }
+    .o10 .avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .o10 .info { flex: 1; min-width: 0; }
+    .o10 .name { font-size: 0.875rem; font-weight: 600; color: #1e1230; }
+    .o10 .title { font-size: 0.75rem; color: #6b4d85; }
+    .o10 .tags { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 4px; }
+    .o10 .tag { font-size: 0.68rem; padding: 1px 7px; background: #f5f0fa; border-radius: 100px; color: #4a2d65; }
+    .o10 .loc { font-size: 0.75rem; color: #9b7ab0; white-space: nowrap; }
+    .o10 .stars { color: #c084d8; font-size: 0.75rem; letter-spacing: 1px; white-space: nowrap; }
+    .o10 .badge { font-size: 0.67rem; font-weight: 600; color: #2A7A52; background: #edf7f2; border: 1px solid #b8deca; border-radius: 100px; padding: 2px 8px; white-space: nowrap; }
+    .o10 .btn { font-family: 'Jost', sans-serif; font-size: 0.75rem; font-weight: 600; background: #501464; color: #fff; border: none; border-radius: 100px; padding: 6px 14px; cursor: pointer; white-space: nowrap; flex-shrink: 0; }
+  </style>
+</head>
+<body>
+  <div class="top-bar"></div>
+  <div class="page">
+    <h1 class="page-title">Professional Card — 10 Options</h1>
+    <p class="page-sub">Each design uses the same data. Pick one (or mix ideas) and we'll build it.</p>
+
+    <!-- OPTION 1 -->
+    <div class="option-block">
+      <div class="option-label">Option 1</div>
+      <div class="option-desc">Glass — current design</div>
+      <div class="cards-row">
+        <div class="o1">
+          <div class="top">
+            <div class="avatar"><img src="https://randomuser.me/api/portraits/women/68.jpg" alt=""></div>
+            <div class="pro-info" style="flex:1">
+              <div class="name">Margaret Holloway, Esq.</div>
+              <div class="title">Elder Law &amp; Estate Planning</div>
+            </div>
+            <span class="badge">PCG Verified</span>
+          </div>
+          <div class="loc">📍 Boston, MA · Serves New England</div>
+          <div class="tags"><span class="tag">Power of Attorney</span><span class="tag">Medicaid</span><span class="tag">Trusts</span></div>
+          <div class="footer"><div class="rating"><span class="stars">★★★★★</span> 4.9 (38)</div><button class="btn">Contact</button></div>
+        </div>
+        <div class="o1">
+          <div class="top">
+            <div class="avatar"><img src="https://randomuser.me/api/portraits/men/54.jpg" alt=""></div>
+            <div class="pro-info" style="flex:1">
+              <div class="name">David Reyes, Esq.</div>
+              <div class="title">Elder Law &amp; Special Needs</div>
+            </div>
+            <span class="badge">PCG Verified</span>
+          </div>
+          <div class="loc">📍 Chicago, IL · Nationwide remote</div>
+          <div class="tags"><span class="tag">Advance directives</span><span class="tag">Guardianship</span><span class="tag">DNR</span></div>
+          <div class="footer"><div class="rating"><span class="stars">★★★★★</span> 4.8 (52)</div><button class="btn">Contact</button></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- OPTION 2 -->
+    <div class="option-block">
+      <div class="option-label">Option 2</div>
+      <div class="option-desc">Clean white — solid card, crisp shadow</div>
+      <div class="cards-row">
+        <div class="o2">
+          <div class="top">
+            <div class="avatar"><img src="https://randomuser.me/api/portraits/women/68.jpg" alt=""></div>
+            <div style="flex:1"><div class="name">Margaret Holloway, Esq.</div><div class="title">Elder Law &amp; Estate Planning</div></div>
+            <span class="badge">PCG Verified</span>
+          </div>
+          <div class="loc">📍 Boston, MA · Serves New England</div>
+          <div class="tags"><span class="tag">Power of Attorney</span><span class="tag">Medicaid</span><span class="tag">Trusts</span></div>
+          <div class="footer"><div class="rating"><span class="stars">★★★★★</span> 4.9 (38)</div><button class="btn">Contact</button></div>
+        </div>
+        <div class="o2">
+          <div class="top">
+            <div class="avatar"><img src="https://randomuser.me/api/portraits/men/54.jpg" alt=""></div>
+            <div style="flex:1"><div class="name">David Reyes, Esq.</div><div class="title">Elder Law &amp; Special Needs</div></div>
+            <span class="badge">PCG Verified</span>
+          </div>
+          <div class="loc">📍 Chicago, IL · Nationwide remote</div>
+          <div class="tags"><span class="tag">Advance directives</span><span class="tag">Guardianship</span><span class="tag">DNR</span></div>
+          <div class="footer"><div class="rating"><span class="stars">★★★★★</span> 4.8 (52)</div><button class="btn">Contact</button></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- OPTION 3 -->
+    <div class="option-block">
+      <div class="option-label">Option 3</div>
+      <div class="option-desc">Dark premium — deep plum, gradient button</div>
+      <div class="cards-row">
+        <div class="o3">
+          <div class="top">
+            <div class="avatar"><img src="https://randomuser.me/api/portraits/women/68.jpg" alt=""></div>
+            <div style="flex:1"><div class="name">Margaret Holloway, Esq.</div><div class="title">Elder Law &amp; Estate Planning</div></div>
+            <span class="badge">PCG Verified</span>
+          </div>
+          <div class="loc">📍 Boston, MA · Serves New England</div>
+          <div class="tags"><span class="tag">Power of Attorney</span><span class="tag">Medicaid</span><span class="tag">Trusts</span></div>
+          <div class="footer"><div class="rating"><span class="stars">★★★★★</span> 4.9 (38)</div><button class="btn">Contact</button></div>
+        </div>
+        <div class="o3">
+          <div class="top">
+            <div class="avatar"><img src="https://randomuser.me/api/portraits/men/54.jpg" alt=""></div>
+            <div style="flex:1"><div class="name">David Reyes, Esq.</div><div class="title">Elder Law &amp; Special Needs</div></div>
+            <span class="badge">PCG Verified</span>
+          </div>
+          <div class="loc">📍 Chicago, IL · Nationwide remote</div>
+          <div class="tags"><span class="tag">Advance directives</span><span class="tag">Guardianship</span><span class="tag">DNR</span></div>
+          <div class="footer"><div class="rating"><span class="stars">★★★★★</span> 4.8 (52)</div><button class="btn">Contact</button></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- OPTION 4 -->
+    <div class="option-block">
+      <div class="option-label">Option 4</div>
+      <div class="option-desc">Horizontal strip — photo panel on left</div>
+      <div class="cards-row" style="flex-direction:column">
+        <div class="o4">
+          <div class="photo-col"><img src="https://randomuser.me/api/portraits/women/68.jpg" alt=""></div>
+          <div class="content">
+            <div class="top-row"><div><div class="name">Margaret Holloway, Esq.</div><div class="title">Elder Law &amp; Estate Planning</div></div><span class="badge">PCG Verified</span></div>
+            <div class="loc">📍 Boston, MA · Serves New England</div>
+            <div class="tags"><span class="tag">Power of Attorney</span><span class="tag">Medicaid planning</span><span class="tag">Trusts</span></div>
+            <div class="footer"><div class="rating"><span class="stars">★★★★★</span> 4.9 (38)</div><button class="btn">Contact</button></div>
+          </div>
+        </div>
+        <div class="o4">
+          <div class="photo-col"><img src="https://randomuser.me/api/portraits/men/54.jpg" alt=""></div>
+          <div class="content">
+            <div class="top-row"><div><div class="name">David Reyes, Esq.</div><div class="title">Elder Law &amp; Special Needs</div></div><span class="badge">PCG Verified</span></div>
+            <div class="loc">📍 Chicago, IL · Nationwide remote</div>
+            <div class="tags"><span class="tag">Advance directives</span><span class="tag">Guardianship</span><span class="tag">DNR</span></div>
+            <div class="footer"><div class="rating"><span class="stars">★★★★★</span> 4.8 (52)</div><button class="btn">Contact</button></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- OPTION 5 -->
+    <div class="option-block">
+      <div class="option-label">Option 5</div>
+      <div class="option-desc">Centered profile — photo at top, everything aligned</div>
+      <div class="cards-row">
+        <div class="o5">
+          <div class="avatar"><img src="https://randomuser.me/api/portraits/women/68.jpg" alt=""></div>
+          <span class="badge">PCG Verified</span>
+          <div class="name">Margaret Holloway, Esq.</div>
+          <div class="title">Elder Law &amp; Estate Planning</div>
+          <div class="loc">📍 Boston, MA</div>
+          <div class="divider"></div>
+          <div class="tags"><span class="tag">Power of Attorney</span><span class="tag">Medicaid</span><span class="tag">Trusts</span></div>
+          <div><div class="stars">★★★★★</div><div class="rating">4.9 · 38 reviews</div></div>
+          <button class="btn">Contact</button>
+        </div>
+        <div class="o5">
+          <div class="avatar"><img src="https://randomuser.me/api/portraits/men/54.jpg" alt=""></div>
+          <span class="badge">PCG Verified</span>
+          <div class="name">David Reyes, Esq.</div>
+          <div class="title">Elder Law &amp; Special Needs</div>
+          <div class="loc">📍 Chicago, IL</div>
+          <div class="divider"></div>
+          <div class="tags"><span class="tag">Advance directives</span><span class="tag">Guardianship</span></div>
+          <div><div class="stars">★★★★★</div><div class="rating">4.8 · 52 reviews</div></div>
+          <button class="btn">Contact</button>
+        </div>
+        <div class="o5">
+          <div class="avatar"><img src="https://randomuser.me/api/portraits/women/79.jpg" alt=""></div>
+          <span class="badge">PCG Verified</span>
+          <div class="name">Patricia Chen, Esq.</div>
+          <div class="title">Estate &amp; Long-Term Care Law</div>
+          <div class="loc">📍 San Francisco, CA</div>
+          <div class="divider"></div>
+          <div class="tags"><span class="tag">Wills &amp; estates</span><span class="tag">LTC planning</span></div>
+          <div><div class="stars">★★★★★</div><div class="rating">5.0 · 21 reviews</div></div>
+          <button class="btn">Contact</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- OPTION 6 -->
+    <div class="option-block">
+      <div class="option-label">Option 6</div>
+      <div class="option-desc">Top band — gradient header, photo floats at boundary</div>
+      <div class="cards-row">
+        <div class="o6">
+          <div class="band"><div class="avatar"><img src="https://randomuser.me/api/portraits/women/68.jpg" alt=""></div><span class="badge-float">PCG Verified</span></div>
+          <div class="content">
+            <div class="name">Margaret Holloway, Esq.</div>
+            <div class="title">Elder Law &amp; Estate Planning</div>
+            <div class="loc">📍 Boston, MA · Serves New England</div>
+            <div class="tags"><span class="tag">Power of Attorney</span><span class="tag">Medicaid</span><span class="tag">Trusts</span></div>
+            <div class="footer"><div class="rating"><span class="stars">★★★★★</span> 4.9 (38)</div><button class="btn">Contact</button></div>
+          </div>
+        </div>
+        <div class="o6">
+          <div class="band"><div class="avatar"><img src="https://randomuser.me/api/portraits/men/54.jpg" alt=""></div><span class="badge-float">PCG Verified</span></div>
+          <div class="content">
+            <div class="name">David Reyes, Esq.</div>
+            <div class="title">Elder Law &amp; Special Needs</div>
+            <div class="loc">📍 Chicago, IL · Nationwide remote</div>
+            <div class="tags"><span class="tag">Advance directives</span><span class="tag">Guardianship</span></div>
+            <div class="footer"><div class="rating"><span class="stars">★★★★★</span> 4.8 (52)</div><button class="btn">Contact</button></div>
+          </div>
+        </div>
+        <div class="o6">
+          <div class="band"><div class="avatar"><img src="https://randomuser.me/api/portraits/women/79.jpg" alt=""></div><span class="badge-float">PCG Verified</span></div>
+          <div class="content">
+            <div class="name">Patricia Chen, Esq.</div>
+            <div class="title">Estate &amp; Long-Term Care Law</div>
+            <div class="loc">📍 San Francisco, CA · West Coast</div>
+            <div class="tags"><span class="tag">Wills &amp; estates</span><span class="tag">LTC planning</span></div>
+            <div class="footer"><div class="rating"><span class="stars">★★★★★</span> 5.0 (21)</div><button class="btn">Contact</button></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- OPTION 7 -->
+    <div class="option-block">
+      <div class="option-label">Option 7</div>
+      <div class="option-desc">Left accent — gradient border, square avatar</div>
+      <div class="cards-row">
+        <div class="o7">
+          <div class="top"><div class="avatar"><img src="https://randomuser.me/api/portraits/women/68.jpg" alt=""></div><div><div class="name">Margaret Holloway, Esq.</div><div class="title">Elder Law &amp; Estate Planning</div></div></div>
+          <div class="mid"><div class="loc">📍 Boston, MA</div><span class="badge">PCG Verified</span></div>
+          <div class="tags"><span class="tag">Power of Attorney</span><span class="tag">Medicaid</span><span class="tag">Trusts</span></div>
+          <div class="footer"><div class="rating"><span class="stars">★★★★★</span> 4.9 (38)</div><button class="btn">Contact</button></div>
+        </div>
+        <div class="o7">
+          <div class="top"><div class="avatar"><img src="https://randomuser.me/api/portraits/men/54.jpg" alt=""></div><div><div class="name">David Reyes, Esq.</div><div class="title">Elder Law &amp; Special Needs</div></div></div>
+          <div class="mid"><div class="loc">📍 Chicago, IL</div><span class="badge">PCG Verified</span></div>
+          <div class="tags"><span class="tag">Advance directives</span><span class="tag">Guardianship</span><span class="tag">DNR</span></div>
+          <div class="footer"><div class="rating"><span class="stars">★★★★★</span> 4.8 (52)</div><button class="btn">Contact</button></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- OPTION 8 -->
+    <div class="option-block">
+      <div class="option-label">Option 8</div>
+      <div class="option-desc">Editorial — Gilda Display name, outlined button, gradient rule</div>
+      <div class="cards-row">
+        <div class="o8">
+          <div class="top"><div class="avatar"><img src="https://randomuser.me/api/portraits/women/68.jpg" alt=""></div><div class="big-name">Margaret Holloway, Esq.</div></div>
+          <div class="divider-line"></div>
+          <div class="meta"><span class="title">Elder Law &amp; Estate Planning</span><span class="loc">Boston, MA</span></div>
+          <div class="tags"><span class="tag">Power of Attorney</span><span class="tag">Medicaid</span><span class="tag">Trusts</span></div>
+          <div class="footer"><div class="rating"><span class="stars">★★★★★</span> 4.9 (38)</div><button class="btn">Contact</button></div>
+        </div>
+        <div class="o8">
+          <div class="top"><div class="avatar"><img src="https://randomuser.me/api/portraits/men/54.jpg" alt=""></div><div class="big-name">David Reyes, Esq.</div></div>
+          <div class="divider-line"></div>
+          <div class="meta"><span class="title">Elder Law &amp; Special Needs</span><span class="loc">Chicago, IL</span></div>
+          <div class="tags"><span class="tag">Advance directives</span><span class="tag">Guardianship</span><span class="tag">DNR</span></div>
+          <div class="footer"><div class="rating"><span class="stars">★★★★★</span> 4.8 (52)</div><button class="btn">Contact</button></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- OPTION 9 -->
+    <div class="option-block">
+      <div class="option-label">Option 9</div>
+      <div class="option-desc">Split panel — dark photo column, white info column</div>
+      <div class="cards-row">
+        <div class="o9">
+          <div class="left-panel"><div class="avatar"><img src="https://randomuser.me/api/portraits/women/68.jpg" alt=""></div><div class="stars-vert">★★★★★</div></div>
+          <div class="right-panel">
+            <div class="name">Margaret Holloway, Esq.</div>
+            <div class="title">Elder Law &amp; Estate Planning</div>
+            <span class="badge">PCG Verified</span>
+            <div class="loc">📍 Boston, MA</div>
+            <div class="tags"><span class="tag">Power of Attorney</span><span class="tag">Medicaid</span></div>
+            <div class="footer"><div class="rating">4.9 · 38 reviews</div><button class="btn">Contact</button></div>
+          </div>
+        </div>
+        <div class="o9">
+          <div class="left-panel"><div class="avatar"><img src="https://randomuser.me/api/portraits/men/54.jpg" alt=""></div><div class="stars-vert">★★★★★</div></div>
+          <div class="right-panel">
+            <div class="name">David Reyes, Esq.</div>
+            <div class="title">Elder Law &amp; Special Needs</div>
+            <span class="badge">PCG Verified</span>
+            <div class="loc">📍 Chicago, IL</div>
+            <div class="tags"><span class="tag">Advance directives</span><span class="tag">Guardianship</span></div>
+            <div class="footer"><div class="rating">4.8 · 52 reviews</div><button class="btn">Contact</button></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- OPTION 10 -->
+    <div class="option-block">
+      <div class="option-label">Option 10</div>
+      <div class="option-desc">Compact list — high density, scannable rows</div>
+      <div class="cards-row">
+        <div class="o10-wrap">
+          <div class="o10">
+            <div class="avatar"><img src="https://randomuser.me/api/portraits/women/68.jpg" alt=""></div>
+            <div class="info"><div class="name">Margaret Holloway, Esq.</div><div class="title">Elder Law &amp; Estate Planning</div><div class="tags"><span class="tag">Power of Attorney</span><span class="tag">Medicaid</span><span class="tag">Trusts</span></div></div>
+            <div class="loc">Boston, MA</div>
+            <div class="stars">★★★★★ <span style="color:#6b4d85;font-size:0.72rem">4.9</span></div>
+            <span class="badge">PCG Verified</span>
+            <button class="btn">Contact</button>
+          </div>
+          <div class="o10">
+            <div class="avatar"><img src="https://randomuser.me/api/portraits/men/54.jpg" alt=""></div>
+            <div class="info"><div class="name">David Reyes, Esq.</div><div class="title">Elder Law &amp; Special Needs</div><div class="tags"><span class="tag">Advance directives</span><span class="tag">Guardianship</span><span class="tag">DNR</span></div></div>
+            <div class="loc">Chicago, IL</div>
+            <div class="stars">★★★★★ <span style="color:#6b4d85;font-size:0.72rem">4.8</span></div>
+            <span class="badge">PCG Verified</span>
+            <button class="btn">Contact</button>
+          </div>
+          <div class="o10">
+            <div class="avatar"><img src="https://randomuser.me/api/portraits/women/79.jpg" alt=""></div>
+            <div class="info"><div class="name">Patricia Chen, Esq.</div><div class="title">Estate &amp; Long-Term Care Law</div><div class="tags"><span class="tag">Wills &amp; estates</span><span class="tag">LTC planning</span><span class="tag">VA benefits</span></div></div>
+            <div class="loc">San Francisco, CA</div>
+            <div class="stars">★★★★★ <span style="color:#6b4d85;font-size:0.72rem">5.0</span></div>
+            <span class="badge">PCG Verified</span>
+            <button class="btn">Contact</button>
+          </div>
+          <div class="o10">
+            <div class="avatar"><img src="https://randomuser.me/api/portraits/men/33.jpg" alt=""></div>
+            <div class="info"><div class="name">Robert Langston, CFP®</div><div class="title">Senior Care Financial Planning</div><div class="tags"><span class="tag">Care cost planning</span><span class="tag">Medicare</span><span class="tag">Asset protection</span></div></div>
+            <div class="loc">Austin, TX</div>
+            <div class="stars">★★★★★ <span style="color:#6b4d85;font-size:0.72rem">4.9</span></div>
+            <span class="badge">PCG Verified</span>
+            <button class="btn">Contact</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>
