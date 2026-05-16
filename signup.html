@@ -693,8 +693,7 @@
       appId:             "1:658340465706:web:0e412731947ff51474c753"
     };
 
-    // ── Set once the Cloud Run API is deployed (see .github/workflows/deploy-api.yml) ──
-    const API_BASE = '';   // e.g. 'https://careguide-api-xxxxxxxx-uc.a.run.app'
+    const API_BASE = 'https://careguide-api-658340465706.us-central1.run.app';
 
     const app  = initializeApp(FIREBASE_CONFIG);
     const auth = getAuth(app);
