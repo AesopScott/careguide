@@ -683,10 +683,7 @@
     import { initializeApp }         from 'https://www.gstatic.com/firebasejs/11.8.0/firebase-app.js';
     import { getAuth, createUserWithEmailAndPassword, updateProfile }
                                      from 'https://www.gstatic.com/firebasejs/11.8.0/firebase-auth.js';
-    import { getFirestore, doc, setDoc, serverTimestamp }
-                                     from 'https://www.gstatic.com/firebasejs/11.8.0/firebase-firestore.js';
-    // NOTE: Firestore profile is written by the API (/users/register) — client write below
-    // is kept only as a fallback in case the API call fails.
+    // Firestore profile is written exclusively by the API (/users/register)
 
     const FIREBASE_CONFIG = {
       apiKey:            "AIzaSyB0GaJXI_lbLhEXmctMJ0LoHiV3cHL5vQY",
@@ -701,7 +698,6 @@
 
     const app  = initializeApp(FIREBASE_CONFIG);
     const auth = getAuth(app);
-    const db   = getFirestore(app);
 
     // ── States ──
     const STATES = [
@@ -844,36 +840,21 @@
         await updateProfile(cred.user, { displayName: fullName });
         const uid = cred.user.uid;
 
-        // 2. Write pending profile to Firestore (API will overwrite with full data)
-        await setDoc(doc(db, 'users', uid), {
-          uid,
-          email,
-          full_name:      fullName,
-          role:           'practitioner',
-          profession,
-          license_states: licenseStates,
-          plan:           profession === 'elder_law' ? 'premium' : 'standard',
-          beta:           true,
-          baa_accepted:   true,
-          status:         'pending_activation',
-          created_at:     new Date().toISOString(),
-        });
-
-        // 3. Get ID token for API calls
+        // 2. Get ID token for API calls
         const idToken = await cred.user.getIdToken();
 
-        // 4. Call API: register profile + send "pending review" notification email (best-effort)
-        try {
-          await fetch(`${API_BASE}/users/register`, {
-            method:  'POST',
-            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${idToken}` },
-            body: JSON.stringify({ full_name: fullName, profession, license_states: licenseStates }),
-          });
-        } catch {
-          // API not critical — Firestore record is already written
+        // 3. Call API: creates Firestore profile + sets custom claims + sends welcome email
+        const regRes = await fetch(`${API_BASE}/users/register`, {
+          method:  'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${idToken}` },
+          body: JSON.stringify({ full_name: fullName, profession, license_states: licenseStates }),
+        });
+        if (!regRes.ok) {
+          const err = await regRes.json().catch(() => ({}));
+          throw new Error(err.detail || 'Registration failed. Please try again.');
         }
 
-        // 5. Send branded verification email via Brevo (best-effort)
+        // 4. Send branded verification email via Brevo (best-effort — user can resend)
         try {
           await fetch(`${API_BASE}/auth/send-verification`, {
             method:  'POST',
@@ -883,7 +864,7 @@
           // Non-critical — user can request resend from the gate screen
         }
 
-        // 6. Show confirmation screen — do NOT redirect to dashboard until email is verified
+        // 5. Show confirmation screen
         showConfirmation(email);
 
       } catch (err) {
