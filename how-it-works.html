@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>How It Works — Parental Care Guide</title>
+  <meta name="description" content="See how Parental Care Guide works for families, care managers, elder law attorneys, and social workers." />
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Gilda+Display&family=Jost:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --plum:        #501464;
+      --plum-hover:  #3a0f4e;
+      --text-dark:   #1e1230;
+      --text-mid:    #4a2d65;
+      --text-light:  #6b4d85;
+      --glass-bg:    rgba(255, 255, 255, 0.38);
+      --glass-border:rgba(255, 255, 255, 0.55);
+    }
+
+    body {
+      font-family: 'Jost', 'Segoe UI', sans-serif;
+      min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background: linear-gradient(
+        148deg,
+        #FFF5F0 0%, #FFD6CC 12%, #F4B8C1 26%,
+        #E8A0B4 40%, #D4A0C8 55%,
+        #B8A8D8 70%, #98A8E0 84%, #8ABCE8 100%
+      );
+      z-index: 0;
+    }
+
+    .blob { position: fixed; border-radius: 50%; pointer-events: none; z-index: 0; filter: blur(72px); opacity: 0.45; }
+    .blob-1 { width: 560px; height: 560px; background: #c084fc; top: -140px; left: -120px; }
+    .blob-2 { width: 420px; height: 420px; background: #60a5fa; bottom: 100px; right: -100px; }
+    .blob-3 { width: 320px; height: 320px; background: #f472b6; bottom: -80px; left: 35%; }
+
+    /* ── Header ── */
+    .top-bar { position: relative; z-index: 2; height: 4px; background: linear-gradient(90deg, #FFD6CC, #F4B8C1, #E8A0B4, #D4A0C8, #B8A8D8, #98A8E0, #8ABCE8); }
+
+    header {
+      position: relative; z-index: 10;
+      padding: 24px 60px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+
+    .logo { font-family: 'Gilda Display', serif; font-size: 1.1rem; color: var(--text-dark); text-decoration: none; }
+    .logo span { color: var(--plum); }
+
+    nav { display: flex; align-items: center; gap: 28px; }
+    nav a { font-size: 1rem; font-weight: 400; color: var(--text-mid); text-decoration: none; transition: color 0.2s; }
+    nav a:hover { color: var(--text-dark); }
+    nav a.active { color: var(--text-dark); font-weight: 500; }
+    .btn-nav { padding: 10px 22px; background: var(--plum); color: #fff !important; border-radius: 100px; font-weight: 500 !important; transition: background 0.2s !important; }
+    .btn-nav:hover { background: var(--plum-hover) !important; }
+
+    /* ── Page ── */
+    .page {
+      position: relative; z-index: 2;
+      max-width: 1100px; margin: 0 auto;
+      padding: 40px 60px 100px;
+    }
+
+    /* ── Intro ── */
+    .intro { text-align: center; margin-bottom: 64px; }
+    .intro-eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(255,255,255,0.38); border: 1px solid var(--glass-border);
+      border-radius: 100px; padding: 7px 16px; margin-bottom: 20px;
+      backdrop-filter: blur(8px); font-size: 0.875rem; font-weight: 500; color: var(--text-dark);
+    }
+    .intro-eyebrow::before { content: ''; width: 6px; height: 6px; background: linear-gradient(135deg, #E8A0B4, #B8A8D8); border-radius: 50%; }
+    .intro h1 { font-family: 'Gilda Display', serif; font-size: clamp(1.8rem, 3.5vw, 2.6rem); font-weight: 400; color: var(--text-dark); margin-bottom: 14px; }
+    .intro h1 em { font-style: italic; color: var(--plum); }
+    .intro p { font-size: 0.95rem; font-weight: 300; line-height: 1.75; color: var(--text-mid); max-width: 520px; margin: 0 auto; }
+
+    /* ── Ecosystem Diagram ── */
+    .diagram { position: relative; display: flex; flex-direction: column; align-items: center; gap: 0; }
+
+    .hub-row { display: flex; justify-content: center; margin-bottom: 0; position: relative; z-index: 3; }
+    .hub-node {
+      background: var(--plum); border: 1.5px solid rgba(255,255,255,0.35); border-radius: 20px;
+      padding: 24px 40px; text-align: center; backdrop-filter: blur(16px);
+      box-shadow: 0 8px 32px rgba(80,40,100,0.25), inset 0 1px 0 rgba(255,255,255,0.2);
+    }
+    .hub-label { font-size: 0.875rem; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255,255,255,0.85); margin-bottom: 6px; }
+    .hub-name { font-family: 'Gilda Display', serif; font-size: 1.4rem; color: rgba(255,255,255,0.95); }
+    .hub-sub { font-size: 0.875rem; font-weight: 300; color: rgba(255,255,255,0.85); margin-top: 4px; }
+
+    .hub-to-pillars { width: 1px; height: 40px; background: linear-gradient(to bottom, rgba(80,40,100,0.5), rgba(180,140,210,0.35)); margin: 0 auto; }
+
+    .pillars-row {
+      display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px;
+      width: 100%; position: relative; z-index: 3;
+    }
+    .pillars-row::before {
+      content: ''; position: absolute; top: -1px;
+      left: calc(100% / 12); right: calc(100% / 12); height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(180,140,210,0.5) 15%, rgba(180,140,210,0.5) 85%, transparent);
+      pointer-events: none;
+    }
+    .pillar-node {
+      background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 16px;
+      padding: 18px 14px; text-align: center; backdrop-filter: blur(14px);
+      box-shadow: 0 4px 16px rgba(160,100,180,0.07), inset 0 1px 0 rgba(255,255,255,0.7);
+      display: flex; flex-direction: column; align-items: center; gap: 8px; position: relative;
+    }
+    .pillar-node::before {
+      content: ''; position: absolute; top: -40px; left: 50%; transform: translateX(-50%);
+      width: 1px; height: 40px; background: linear-gradient(to top, rgba(180,140,210,0.5), transparent);
+    }
+    .pillar-icon { width: 40px; height: 40px; border-radius: 11px; background: rgba(255,255,255,0.5); border: 1px solid rgba(255,255,255,0.7); display: flex; align-items: center; justify-content: center; font-size: 1.1rem; }
+    .pillar-name { font-size: 0.875rem; font-weight: 600; color: var(--text-dark); line-height: 1.3; text-align: center; }
+    .pillar-desc { font-size: 0.8rem; font-weight: 300; color: var(--text-light); line-height: 1.4; text-align: center; }
+
+    .pillars-to-family { width: 100%; height: 60px; position: relative; z-index: 2; }
+    .pillars-to-family svg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: visible; }
+
+    .family-row { display: flex; justify-content: center; position: relative; z-index: 3; margin-top: 0; }
+    .family-node {
+      background: rgba(255,255,255,0.48); border: 2px solid rgba(255,255,255,0.8); border-radius: 20px;
+      padding: 28px 52px; text-align: center; backdrop-filter: blur(16px);
+      box-shadow: 0 8px 32px rgba(160,100,180,0.10), inset 0 2px 0 rgba(255,255,255,0.9);
+    }
+    .family-icon { font-size: 2rem; margin-bottom: 10px; }
+    .family-label { font-size: 0.875rem; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-light); margin-bottom: 6px; }
+    .family-name { font-family: 'Gilda Display', serif; font-size: 1.3rem; color: var(--text-dark); }
+    .family-sub { font-size: 0.76rem; font-weight: 300; color: var(--text-mid); margin-top: 6px; max-width: 260px; line-height: 1.5; }
+
+    /* ── Section divider ── */
+    .section-divider { margin: 72px 0 56px; text-align: center; }
+    .section-divider h2 { font-family: 'Gilda Display', serif; font-size: clamp(1.5rem, 3vw, 2.2rem); color: var(--text-dark); margin-bottom: 12px; }
+    .section-divider p { font-size: 0.95rem; font-weight: 300; color: var(--text-mid); line-height: 1.7; max-width: 500px; margin: 0 auto; }
+
+    /* ── Role Tabs ── */
+    .role-tabs {
+      display: flex; gap: 8px; justify-content: center;
+      flex-wrap: wrap; margin-bottom: 40px;
+    }
+
+    .role-tab {
+      display: flex; align-items: center; gap: 8px;
+      padding: 10px 20px; border-radius: 100px;
+      border: 1px solid rgba(255,255,255,0.5);
+      background: rgba(255,255,255,0.25);
+      backdrop-filter: blur(10px);
+      font-family: 'Jost', sans-serif;
+      font-size: 0.9rem; font-weight: 500;
+      color: var(--text-mid); cursor: pointer;
+      transition: all 0.2s;
+    }
+    .role-tab:hover { background: rgba(255,255,255,0.45); color: var(--text-dark); }
+    .role-tab.active { background: var(--plum); color: #fff; border-color: var(--plum); }
+    .role-tab .tab-icon { font-size: 1rem; }
+
+    /* ── Role Panels ── */
+    .role-panel { display: none; }
+    .role-panel.active { display: block; }
+
+    .role-panel-inner {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(20px);
+      border-radius: 24px;
+      padding: 48px 56px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 56px;
+      align-items: start;
+    }
+
+    .role-intro h3 {
+      font-family: 'Gilda Display', serif;
+      font-size: 1.6rem; color: var(--text-dark);
+      margin-bottom: 12px; line-height: 1.3;
+    }
+    .role-intro .role-subtitle {
+      font-size: 0.95rem; font-weight: 300;
+      color: var(--text-mid); line-height: 1.7;
+      margin-bottom: 28px;
+    }
+    .role-cta {
+      display: inline-block; padding: 12px 28px;
+      background: var(--plum); color: #fff;
+      border-radius: 100px; text-decoration: none;
+      font-weight: 500; font-size: 0.95rem;
+      transition: background 0.2s;
+    }
+    .role-cta:hover { background: var(--plum-hover); }
+
+    /* Steps */
+    .steps { display: flex; flex-direction: column; gap: 24px; }
+    .step { display: flex; gap: 16px; align-items: flex-start; }
+    .step-num {
+      flex-shrink: 0;
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      background: rgba(80,20,100,0.12);
+      border: 1px solid rgba(80,20,100,0.2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.8rem; font-weight: 700; color: var(--plum);
+    }
+    .step-body { padding-top: 4px; }
+    .step-title { font-weight: 600; font-size: 0.95rem; color: var(--text-dark); margin-bottom: 4px; }
+    .step-desc { font-size: 0.875rem; font-weight: 300; color: var(--text-mid); line-height: 1.6; }
+
+    /* ── Bottom CTA ── */
+    .bottom-cta {
+      margin-top: 80px; text-align: center;
+      padding: 56px 40px;
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(20px);
+      border-radius: 24px;
+    }
+    .bottom-cta h2 { font-family: 'Gilda Display', serif; font-size: 2rem; color: var(--text-dark); margin-bottom: 12px; }
+    .bottom-cta p { font-size: 1rem; font-weight: 300; color: var(--text-mid); line-height: 1.7; margin-bottom: 32px; max-width: 480px; margin-left: auto; margin-right: auto; }
+    .cta-row { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+    .btn-primary { padding: 14px 32px; background: var(--plum); color: #fff; border-radius: 100px; text-decoration: none; font-weight: 500; font-size: 1rem; transition: background 0.2s; }
+    .btn-primary:hover { background: var(--plum-hover); }
+    .btn-secondary { padding: 14px 32px; background: rgba(255,255,255,0.5); color: var(--text-dark); border: 1px solid rgba(255,255,255,0.7); border-radius: 100px; text-decoration: none; font-weight: 400; font-size: 1rem; transition: background 0.2s; }
+    .btn-secondary:hover { background: rgba(255,255,255,0.7); }
+
+    footer { position: relative; z-index: 2; padding: 24px 60px; text-align: center; font-size: 0.875rem; font-weight: 300; color: var(--text-light); }
+
+    /* ── Responsive ── */
+    @media (max-width: 900px) {
+      header { padding: 24px 20px; }
+      .page { padding: 32px 20px 80px; }
+      .pillars-row { grid-template-columns: repeat(3, 1fr); }
+      .pillars-row::before { display: none; }
+      .pillar-node::before { display: none; }
+      .pillars-to-family { display: none; }
+      .role-panel-inner { grid-template-columns: 1fr; gap: 36px; padding: 32px 24px; }
+      footer { padding: 20px 24px; }
+    }
+
+    @media (max-width: 600px) {
+      .pillars-row { grid-template-columns: repeat(2, 1fr); }
+      .role-tab span:not(.tab-icon) { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+  <div class="top-bar"></div>
+
+  <header>
+    <a href="/" class="logo">Parental <span>Care</span> Guide</a>
+    <nav>
+      <a href="/how-it-works.html" class="active">How it works</a>
+      <a href="/signup.html">For Practitioners</a>
+      <a href="/contact.html">Contact</a>
+      <a href="/login.html">Sign In</a>
+      <a href="/#waitlist" class="btn-nav">Join the waitlist</a>
+    </nav>
+  </header>
+
+  <div class="page">
+
+    <!-- ── Intro ── -->
+    <div class="intro">
+      <div class="intro-eyebrow">How it all connects</div>
+      <h1>PCG is the <em>center</em> of<br>every family's care ecosystem.</h1>
+      <p>Six service pillars flow down to the one person at the heart of it all — the family member carrying the weight of care. Every professional, every tool, every resource exists to serve them.</p>
+    </div>
+
+    <!-- ── Ecosystem Diagram ── -->
+    <div class="diagram">
+
+      <div class="hub-row">
+        <div class="hub-node">
+          <div class="hub-label">Platform</div>
+          <div class="hub-name">Parental Care Guide</div>
+          <div class="hub-sub">The trusted center of your family's care plan</div>
+        </div>
+      </div>
+
+      <div class="hub-to-pillars"></div>
+
+      <div class="pillars-row">
+        <div class="pillar-node">
+          <div class="pillar-icon">🏥</div>
+          <div class="pillar-name">Care Coordination</div>
+          <div class="pillar-desc">Appointments, records &amp; providers</div>
+        </div>
+        <div class="pillar-node">
+          <div class="pillar-icon">📋</div>
+          <div class="pillar-name">Insurance Navigation</div>
+          <div class="pillar-desc">Coverage, claims &amp; appeals</div>
+        </div>
+        <div class="pillar-node">
+          <div class="pillar-icon">💊</div>
+          <div class="pillar-name">Medication Tracking</div>
+          <div class="pillar-desc">Schedules, interactions &amp; refills</div>
+        </div>
+        <div class="pillar-node">
+          <div class="pillar-icon">📄</div>
+          <div class="pillar-name">Legal Documents</div>
+          <div class="pillar-desc">POA, DNR &amp; advance directives</div>
+        </div>
+        <div class="pillar-node">
+          <div class="pillar-icon">💰</div>
+          <div class="pillar-name">Financial Planning</div>
+          <div class="pillar-desc">Care costs, budgets &amp; advisors</div>
+        </div>
+        <div class="pillar-node">
+          <div class="pillar-icon">👨‍👩‍👧</div>
+          <div class="pillar-name">Family Communication</div>
+          <div class="pillar-desc">Shared updates &amp; coordination</div>
+        </div>
+      </div>
+
+      <div class="pillars-to-family">
+        <svg viewBox="0 0 1000 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="lineGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="rgba(180,140,210,0.55)"/>
+              <stop offset="100%" stop-color="rgba(180,140,210,0.2)"/>
+            </linearGradient>
+          </defs>
+          <line x1="83"  y1="0" x2="500" y2="60" stroke="url(#lineGrad)" stroke-width="1.2"/>
+          <line x1="250" y1="0" x2="500" y2="60" stroke="url(#lineGrad)" stroke-width="1.2"/>
+          <line x1="417" y1="0" x2="500" y2="60" stroke="url(#lineGrad)" stroke-width="1.2"/>
+          <line x1="583" y1="0" x2="500" y2="60" stroke="url(#lineGrad)" stroke-width="1.2"/>
+          <line x1="750" y1="0" x2="500" y2="60" stroke="url(#lineGrad)" stroke-width="1.2"/>
+          <line x1="917" y1="0" x2="500" y2="60" stroke="url(#lineGrad)" stroke-width="1.2"/>
+        </svg>
+      </div>
+
+      <div class="family-row">
+        <div class="family-node">
+          <div class="family-icon">🧡</div>
+          <div class="family-label">At the center of everything</div>
+          <div class="family-name">The Family Member &amp; Caregiver</div>
+          <div class="family-sub">Every feature, every professional, and every resource in PCG exists to serve the person holding it all together.</div>
+        </div>
+      </div>
+
+    </div><!-- /diagram -->
+
+    <!-- ── Role Walkthroughs ── -->
+    <div class="section-divider">
+      <h2>How it works for you</h2>
+      <p>PCG is built for every person in the care circle. Select your role to see your experience.</p>
+    </div>
+
+    <div class="role-tabs">
+      <button class="role-tab active" onclick="switchRole('family')" id="tab-family">
+        <span class="tab-icon">🧡</span><span>Family Caregiver</span>
+      </button>
+      <button class="role-tab" onclick="switchRole('gcm')" id="tab-gcm">
+        <span class="tab-icon">🏥</span><span>Care Manager</span>
+      </button>
+      <button class="role-tab" onclick="switchRole('elderlaw')" id="tab-elderlaw">
+        <span class="tab-icon">⚖️</span><span>Elder Law Attorney</span>
+      </button>
+      <button class="role-tab" onclick="switchRole('social')" id="tab-social">
+        <span class="tab-icon">🤝</span><span>Social Worker</span>
+      </button>
+    </div>
+
+    <!-- Family Caregiver -->
+    <div class="role-panel active" id="panel-family">
+      <div class="role-panel-inner">
+        <div class="role-intro">
+          <h3>You're already doing everything.<br>We just make it possible to keep track.</h3>
+          <p class="role-subtitle">
+            You didn't sign up to be a care coordinator, insurance navigator, and medication manager all at once. PCG gives you one place to see everything — and a team of professionals supporting you through it.
+          </p>
+          <a href="/#waitlist" class="role-cta">Join the waitlist</a>
+        </div>
+        <div class="steps">
+          <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-body">
+              <div class="step-title">Get invited or sign up directly</div>
+              <div class="step-desc">Your care manager sends you an invite link, or you can join PCG directly. Either way, your account is tied to your family's care plan from day one.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-body">
+              <div class="step-title">See your loved one's full picture</div>
+              <div class="step-desc">Diagnoses, medications, care goals, urgent flags — all in one place. No more calling three different offices to find out what's going on.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">3</div>
+            <div class="step-body">
+              <div class="step-title">Access the crisis card instantly</div>
+              <div class="step-desc">In an emergency, every critical detail — allergies, DNR status, emergency contacts, insurance — is one tap away. No searching, no panic.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">4</div>
+            <div class="step-body">
+              <div class="step-title">Stay connected to your care team</div>
+              <div class="step-desc">Message your care coordinator directly. Get updates when the care plan changes. Know what's happening without having to chase anyone down.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">5</div>
+            <div class="step-body">
+              <div class="step-title">Feel less alone in it</div>
+              <div class="step-desc">Caregiving is isolating. PCG wraps your whole team — professionals and family — around a single shared plan, so you're never the only one who knows everything.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Care Manager / GCM -->
+    <div class="role-panel" id="panel-gcm">
+      <div class="role-panel-inner">
+        <div class="role-intro">
+          <h3>Your expertise deserves tools<br>that actually keep up.</h3>
+          <p class="role-subtitle">
+            You manage complex cases across dozens of families. PCG gives you an AI-assisted intake, a structured care plan, and a family portal — so your expertise reaches every person who needs it, not just the ones you have time to call.
+          </p>
+          <a href="/signup.html" class="role-cta">Create a practitioner account</a>
+        </div>
+        <div class="steps">
+          <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-body">
+              <div class="step-title">Sign up and set your profile</div>
+              <div class="step-desc">Create your practitioner account, set your care specialty, and configure your practice. Onboarding takes under ten minutes.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-body">
+              <div class="step-title">Add a client and run intake</div>
+              <div class="step-desc">Enter the client's basic information and run the AI-assisted intake assessment. PCG generates a structured care plan draft based on your clinical input — you review and refine it.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">3</div>
+            <div class="step-body">
+              <div class="step-title">Build out their care record</div>
+              <div class="step-desc">Add medications, complete the crisis card, set urgent flags, and document session notes — all organized by client and immediately accessible to the family.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">4</div>
+            <div class="step-body">
+              <div class="step-title">Invite the family</div>
+              <div class="step-desc">Send the family a one-click invite to their portal. They see exactly what you want them to see — no more, no less — and they can message you directly.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">5</div>
+            <div class="step-body">
+              <div class="step-title">Manage your full caseload</div>
+              <div class="step-desc">Your client roster shows every family, care level, and urgent flag at a glance. Prioritize, update, and stay on top of your caseload without the administrative overhead.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Elder Law Attorney -->
+    <div class="role-panel" id="panel-elderlaw">
+      <div class="role-panel-inner">
+        <div class="role-intro">
+          <h3>Legal planning that stays<br>connected to the care plan.</h3>
+          <p class="role-subtitle">
+            Estate planning doesn't end when the documents are signed. PCG keeps you connected to the family's care team so the legal plan and care plan stay in sync — and families know their affairs are in order.
+          </p>
+          <a href="/signup.html" class="role-cta">Create a practitioner account</a>
+        </div>
+        <div class="steps">
+          <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-body">
+              <div class="step-title">Sign up with your legal specialty</div>
+              <div class="step-desc">Create your account as an elder law attorney. Your client view is tailored to the documents and milestones that matter most in your practice.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-body">
+              <div class="step-title">Add clients and their legal documents</div>
+              <div class="step-desc">Track powers of attorney, advance directives, DNR status, wills, and trusts — all tied to the client's care record, so nothing gets lost when it matters most.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">3</div>
+            <div class="step-body">
+              <div class="step-title">Keep the family informed</div>
+              <div class="step-desc">Invite family members to view the legal document summary in their portal. They know what exists and where to find it — without needing to call you every time.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">4</div>
+            <div class="step-body">
+              <div class="step-title">Coordinate with the care team</div>
+              <div class="step-desc">When the care plan changes — a new diagnosis, a transition to memory care — you're in the loop. Legal decisions and care decisions stay aligned.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">5</div>
+            <div class="step-body">
+              <div class="step-title">Document legal milestones</div>
+              <div class="step-desc">Track when documents are executed, updated, or need review. Families always know the status of their affairs, and you have a clear record for your practice.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Social Worker -->
+    <div class="role-panel" id="panel-social">
+      <div class="role-panel-inner">
+        <div class="role-intro">
+          <h3>More time for the work that<br>only you can do.</h3>
+          <p class="role-subtitle">
+            The documentation burden in social work is relentless. PCG handles the structure so you can focus on the relationship — AI-assisted intake, auto-generated care plan drafts, and a family portal that keeps everyone aligned.
+          </p>
+          <a href="/signup.html" class="role-cta">Create a practitioner account</a>
+        </div>
+        <div class="steps">
+          <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-body">
+              <div class="step-title">Sign up and build your client roster</div>
+              <div class="step-desc">Create your practitioner account and start adding clients. Each client gets their own care record, family portal, and care team — fully separate and secure.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-body">
+              <div class="step-title">Run an AI-assisted intake</div>
+              <div class="step-desc">Walk through a structured five-part intake — client context, current situation, medical history, care needs, and goals. PCG generates a care plan draft you refine with your clinical judgment.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">3</div>
+            <div class="step-body">
+              <div class="step-title">Connect families to the right resources</div>
+              <div class="step-desc">Document community resources, referrals, and interventions directly in the care plan. Families can see what's been arranged and what's coming next.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">4</div>
+            <div class="step-body">
+              <div class="step-title">Track care transitions</div>
+              <div class="step-desc">When a client moves from home to assisted living, or from hospital to rehab, update their care level and plan in one place. Everyone on the team sees the change immediately.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">5</div>
+            <div class="step-body">
+              <div class="step-title">Document outcomes over time</div>
+              <div class="step-desc">Session notes, goal progress, and plan revisions are all logged and timestamped. Your work is visible, documented, and defensible — without the paperwork pile.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Bottom CTA ── -->
+    <div class="bottom-cta">
+      <h2>Ready to see it in action?</h2>
+      <p>We're building now and onboarding practitioners and families in our early access program.</p>
+      <div class="cta-row">
+        <a href="/signup.html" class="btn-primary">Create a practitioner account</a>
+        <a href="/#waitlist" class="btn-secondary">Join the family waitlist</a>
+      </div>
+    </div>
+
+  </div><!-- /page -->
+
+  <footer>&copy; 2026 Parental Care Guide &mdash; parentalcareguide.com</footer>
+
+  <script>
+    function switchRole(role) {
+      document.querySelectorAll('.role-panel').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.role-tab').forEach(t => t.classList.remove('active'));
+      document.getElementById('panel-' + role).classList.add('active');
+      document.getElementById('tab-' + role).classList.add('active');
+    }
+  </script>
+  <script src="/version.js"></script>
+</body>
+</html>
