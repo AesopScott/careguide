@@ -17,7 +17,7 @@ service cloud.firestore {
     }
 
     function groupData(groupId) {
-      return get(/databases/$(database)/documents/familyGroups/$(groupId)).data;
+      return get(/databases/$(database)/documents/family_groups/$(groupId)).data;
     }
 
     function isGroupPractitioner(groupId) {
@@ -59,7 +59,7 @@ service cloud.firestore {
     // Practitioners create groups. Both practitioners and members can read.
     // Write access on sub-collections is practitioner-only unless noted.
 
-    match /familyGroups/{groupId} {
+    match /family_groups/{groupId} {
       allow read:   if canAccessGroup(groupId);
       allow create: if isPractitioner();
       allow update: if isGroupPractitioner(groupId);
