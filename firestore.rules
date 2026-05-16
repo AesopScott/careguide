@@ -37,7 +37,7 @@ service cloud.firestore {
 
     match /users/{userId} {
       allow read:  if isAuth() && (request.auth.uid == userId || request.auth.token.admin == true);
-      allow write: if isAuth() && request.auth.uid == userId;
+      allow write: if isAuth() && (request.auth.uid == userId || request.auth.token.admin == true);
     }
 
     // ── Practitioners ─────────────────────────────────────────────────────────
