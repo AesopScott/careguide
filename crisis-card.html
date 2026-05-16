@@ -51,6 +51,12 @@
     .nav-brand { font-family: 'Gilda Display', Georgia, serif; font-size: 1rem; color: rgba(255,255,255,0.9); text-decoration: none; }
     .nav-center { font-size: 0.8rem; font-weight: 500; color: rgba(255,255,255,0.5); letter-spacing: 0.08em; text-transform: uppercase; }
     .nav-right { display: flex; align-items: center; gap: 12px; }
+    .nav-signout {
+      font-size: 0.78rem; color: rgba(255,255,255,0.5); background: none;
+      border: 1px solid rgba(255,255,255,0.18); border-radius: 6px; padding: 5px 12px;
+      cursor: pointer; font-family: 'Jost', sans-serif; transition: all 0.15s;
+    }
+    .nav-signout:hover { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.8); }
     .nav-back {
       font-size: 0.8rem; color: rgba(255,255,255,0.6); background: none;
       border: 1px solid rgba(255,255,255,0.2); border-radius: 6px; padding: 5px 12px;
@@ -239,6 +245,7 @@
   <div class="nav-right">
     <a id="backToClient" href="/dashboard.html" class="nav-back">← Client</a>
     <button class="btn-print" onclick="window.print()">🖨 Print</button>
+    <button class="nav-signout" id="signOutBtn">Sign out</button>
   </div>
 </nav>
 
@@ -358,7 +365,7 @@
 
 <script type="module">
 import { initializeApp }           from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-import { getAuth, onAuthStateChanged }
+import { getAuth, onAuthStateChanged, signOut }
                                    from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 import { getFirestore, collection, doc, getDoc, getDocs, setDoc, updateDoc,
          query, where, serverTimestamp }
@@ -392,6 +399,11 @@ onAuthStateChanged(auth, async (user) => {
   document.body.style.visibility = '';
   document.getElementById('backToClient').href = `/client.html?id=${familyId}`;
   await loadData();
+});
+
+document.getElementById('signOutBtn').addEventListener('click', async () => {
+  await signOut(auth);
+  window.location.href = '/login.html';
 });
 
 async function loadData() {

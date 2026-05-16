@@ -287,7 +287,10 @@
 
   <!-- ── Active medications ── -->
   <div class="section-card">
-    <div class="section-header"><span class="section-label">Active medications</span></div>
+    <div class="section-header">
+      <span class="section-label">Active medications</span>
+      <a id="medsLink" href="#" style="font-size:0.78rem;color:var(--plum);text-decoration:none;font-weight:500;">View all →</a>
+    </div>
     <div class="section-body" id="medicationsList">
       <div class="skeleton" style="height:14px;width:100%;margin-bottom:10px;"></div>
       <div class="skeleton" style="height:14px;width:85%;"></div>
@@ -296,7 +299,10 @@
 
   <!-- ── Care plan summary ── -->
   <div class="section-card">
-    <div class="section-header"><span class="section-label">Care plan snapshot</span></div>
+    <div class="section-header">
+      <span class="section-label">Care plan snapshot</span>
+      <a id="carePlanLink" href="#" style="font-size:0.78rem;color:var(--plum);text-decoration:none;font-weight:500;">Read full plan →</a>
+    </div>
     <div class="section-body" id="carePlanSummary">
       <div class="skeleton" style="height:14px;margin-bottom:8px;"></div>
       <div class="skeleton" style="height:14px;width:90%;margin-bottom:8px;"></div>
@@ -378,7 +384,9 @@ onAuthStateChanged(auth, async (user) => {
 
   if (!familyId) { showNoFamily(); return; }
 
-  document.getElementById('crisisLink').href = `/crisis-card.html?id=${familyId}`;
+  document.getElementById('crisisLink').href    = `/crisis-card.html?id=${familyId}`;
+  document.getElementById('medsLink').href      = `/medications.html?id=${familyId}`;
+  document.getElementById('carePlanLink').href  = `/care-plan.html?id=${familyId}`;
   await loadData();
 });
 
