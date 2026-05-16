@@ -345,8 +345,8 @@
         <div class="family-node">
           <div class="family-icon">🧡</div>
           <div class="family-label">At the center of everything</div>
-          <div class="family-name">The Family Member &amp; Caregiver</div>
-          <div class="family-sub">Every feature, every professional, and every resource in PCG exists to serve the person holding it all together.</div>
+          <div class="family-name">The Care Recipient &amp; Their Advocates</div>
+          <div class="family-sub">Every feature, every professional, and every resource in PCG exists to serve the person holding it all together — and the care recipient they're fighting for.</div>
         </div>
       </div>
 
@@ -359,8 +359,11 @@
     </div>
 
     <div class="role-tabs">
-      <button class="role-tab active" onclick="switchRole('family')" id="tab-family">
-        <span class="tab-icon">🧡</span><span>Family Caregiver</span>
+      <button class="role-tab active" onclick="switchRole('advocate')" id="tab-advocate">
+        <span class="tab-icon">🧡</span><span>Care Advocate</span>
+      </button>
+      <button class="role-tab" onclick="switchRole('recipient')" id="tab-recipient">
+        <span class="tab-icon">🌿</span><span>Care Recipient</span>
       </button>
       <button class="role-tab" onclick="switchRole('gcm')" id="tab-gcm">
         <span class="tab-icon">🏥</span><span>Care Manager</span>
@@ -373,13 +376,13 @@
       </button>
     </div>
 
-    <!-- Family Caregiver -->
-    <div class="role-panel active" id="panel-family">
+    <!-- Care Advocate -->
+    <div class="role-panel active" id="panel-advocate">
       <div class="role-panel-inner">
         <div class="role-intro">
-          <h3>You're already doing everything.<br>We just make it possible to keep track.</h3>
+          <h3>You're already doing everything.<br>We make it possible to keep track.</h3>
           <p class="role-subtitle">
-            You didn't sign up to be a care coordinator, insurance navigator, and medication manager all at once. PCG gives you one place to see everything — and a team of professionals supporting you through it.
+            You didn't sign up to be a care coordinator, insurance navigator, and medication manager all at once. You're a Care Advocate — and PCG gives you one place to see everything, with a professional team supporting you through it.
           </p>
           <a href="/#waitlist" class="role-cta">Join the waitlist</a>
         </div>
@@ -388,27 +391,27 @@
             <div class="step-num">1</div>
             <div class="step-body">
               <div class="step-title">Get invited or sign up directly</div>
-              <div class="step-desc">Your care manager sends you an invite link, or you can join PCG directly. Either way, your account is tied to your family's care plan from day one.</div>
+              <div class="step-desc">Your care manager sends you an invite link, or you can join PCG directly. Either way, your account is tied to your care recipient's plan from day one.</div>
             </div>
           </div>
           <div class="step">
             <div class="step-num">2</div>
             <div class="step-body">
-              <div class="step-title">See your loved one's full picture</div>
-              <div class="step-desc">Diagnoses, medications, care goals, urgent flags — all in one place. No more calling three different offices to find out what's going on.</div>
+              <div class="step-title">See the full picture in one place</div>
+              <div class="step-desc">Diagnoses, medications, care goals, urgent flags — all organized and current. No more calling three different offices to find out what's happening.</div>
             </div>
           </div>
           <div class="step">
             <div class="step-num">3</div>
             <div class="step-body">
               <div class="step-title">Access the crisis card instantly</div>
-              <div class="step-desc">In an emergency, every critical detail — allergies, DNR status, emergency contacts, insurance — is one tap away. No searching, no panic.</div>
+              <div class="step-desc">In an emergency, every critical detail — allergies, DNR status, emergency contacts, insurance — is one tap away. No searching, no panic, no delay.</div>
             </div>
           </div>
           <div class="step">
             <div class="step-num">4</div>
             <div class="step-body">
-              <div class="step-title">Stay connected to your care team</div>
+              <div class="step-title">Stay connected to the care team</div>
               <div class="step-desc">Message your care coordinator directly. Get updates when the care plan changes. Know what's happening without having to chase anyone down.</div>
             </div>
           </div>
@@ -416,7 +419,57 @@
             <div class="step-num">5</div>
             <div class="step-body">
               <div class="step-title">Feel less alone in it</div>
-              <div class="step-desc">Caregiving is isolating. PCG wraps your whole team — professionals and family — around a single shared plan, so you're never the only one who knows everything.</div>
+              <div class="step-desc">Advocacy is isolating. PCG wraps your whole team — professionals and family — around a single shared plan so you're never the only one who knows everything.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Care Recipient -->
+    <div class="role-panel" id="panel-recipient">
+      <div class="role-panel-inner">
+        <div class="role-intro">
+          <h3>Your care, organized.<br>Your wishes, protected.</h3>
+          <p class="role-subtitle">
+            You've spent a lifetime taking care of others. PCG makes sure that when you need care, everything important about you — your history, your preferences, your wishes — is known, respected, and ready.
+          </p>
+          <a href="/#waitlist" class="role-cta">Join the waitlist</a>
+        </div>
+        <div class="steps">
+          <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-body">
+              <div class="step-title">Your family sets up your care record</div>
+              <div class="step-desc">Your Care Advocate works with your care manager to build a complete picture of your health, medications, diagnoses, and preferences — so nothing gets missed or misremembered.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-body">
+              <div class="step-title">Your wishes are documented and honored</div>
+              <div class="step-desc">DNR status, advance directives, care preferences — all recorded clearly and stored where your family and care team can find them instantly, especially in a crisis.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">3</div>
+            <div class="step-body">
+              <div class="step-title">Your medications are always current</div>
+              <div class="step-desc">Every medication, dosage, and schedule is tracked and up to date. No more carrying a handwritten list. No more worrying that someone has the wrong information.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">4</div>
+            <div class="step-body">
+              <div class="step-title">Your whole team works together</div>
+              <div class="step-desc">Your care manager, your family, your doctors — all working from the same plan. No miscommunication, no gaps, no one making decisions without the full picture.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">5</div>
+            <div class="step-body">
+              <div class="step-title">Peace of mind for everyone</div>
+              <div class="step-desc">When your affairs are organized and your care team is coordinated, your family worries less — and you can focus on living, not managing paperwork.</div>
             </div>
           </div>
         </div>
@@ -429,7 +482,7 @@
         <div class="role-intro">
           <h3>Your expertise deserves tools<br>that actually keep up.</h3>
           <p class="role-subtitle">
-            You manage complex cases across dozens of families. PCG gives you an AI-assisted intake, a structured care plan, and a family portal — so your expertise reaches every person who needs it, not just the ones you have time to call.
+            You manage complex cases across dozens of families. PCG gives you an AI-assisted intake, a structured care plan, and a family portal — so your expertise reaches every Care Advocate and care recipient who needs it.
           </p>
           <a href="/signup.html" class="role-cta">Create a practitioner account</a>
         </div>
@@ -444,29 +497,29 @@
           <div class="step">
             <div class="step-num">2</div>
             <div class="step-body">
-              <div class="step-title">Add a client and run intake</div>
-              <div class="step-desc">Enter the client's basic information and run the AI-assisted intake assessment. PCG generates a structured care plan draft based on your clinical input — you review and refine it.</div>
+              <div class="step-title">Add a care recipient and run intake</div>
+              <div class="step-desc">Enter the care recipient's information and run the AI-assisted intake. PCG generates a structured care plan draft based on your clinical input — you review and refine it.</div>
             </div>
           </div>
           <div class="step">
             <div class="step-num">3</div>
             <div class="step-body">
-              <div class="step-title">Build out their care record</div>
-              <div class="step-desc">Add medications, complete the crisis card, set urgent flags, and document session notes — all organized by client and immediately accessible to the family.</div>
+              <div class="step-title">Build out the care record</div>
+              <div class="step-desc">Add medications, complete the crisis card, set urgent flags, and document session notes — all organized and immediately accessible to the Care Advocate.</div>
             </div>
           </div>
           <div class="step">
             <div class="step-num">4</div>
             <div class="step-body">
-              <div class="step-title">Invite the family</div>
-              <div class="step-desc">Send the family a one-click invite to their portal. They see exactly what you want them to see — no more, no less — and they can message you directly.</div>
+              <div class="step-title">Invite the Care Advocate</div>
+              <div class="step-desc">Send a one-click invite to the family's portal. They see exactly what you want them to see — and can message you directly without playing phone tag.</div>
             </div>
           </div>
           <div class="step">
             <div class="step-num">5</div>
             <div class="step-body">
               <div class="step-title">Manage your full caseload</div>
-              <div class="step-desc">Your client roster shows every family, care level, and urgent flag at a glance. Prioritize, update, and stay on top of your caseload without the administrative overhead.</div>
+              <div class="step-desc">Your client roster shows every family, care level, and urgent flag at a glance. Prioritize and update without the administrative overhead.</div>
             </div>
           </div>
         </div>
@@ -479,7 +532,7 @@
         <div class="role-intro">
           <h3>Legal planning that stays<br>connected to the care plan.</h3>
           <p class="role-subtitle">
-            Estate planning doesn't end when the documents are signed. PCG keeps you connected to the family's care team so the legal plan and care plan stay in sync — and families know their affairs are in order.
+            Estate planning doesn't end when the documents are signed. PCG keeps you connected to the care team so the legal plan and care plan stay in sync — and Care Advocates know their care recipient's affairs are in order.
           </p>
           <a href="/signup.html" class="role-cta">Create a practitioner account</a>
         </div>
@@ -494,15 +547,15 @@
           <div class="step">
             <div class="step-num">2</div>
             <div class="step-body">
-              <div class="step-title">Add clients and their legal documents</div>
-              <div class="step-desc">Track powers of attorney, advance directives, DNR status, wills, and trusts — all tied to the client's care record, so nothing gets lost when it matters most.</div>
+              <div class="step-title">Track legal documents for each care recipient</div>
+              <div class="step-desc">Powers of attorney, advance directives, DNR status, wills, and trusts — tied to the care record so nothing gets lost when it matters most.</div>
             </div>
           </div>
           <div class="step">
             <div class="step-num">3</div>
             <div class="step-body">
-              <div class="step-title">Keep the family informed</div>
-              <div class="step-desc">Invite family members to view the legal document summary in their portal. They know what exists and where to find it — without needing to call you every time.</div>
+              <div class="step-title">Keep Care Advocates informed</div>
+              <div class="step-desc">Invite the family to view the legal document summary in their portal. They know what exists and where to find it — without a call every time.</div>
             </div>
           </div>
           <div class="step">
@@ -516,7 +569,7 @@
             <div class="step-num">5</div>
             <div class="step-body">
               <div class="step-title">Document legal milestones</div>
-              <div class="step-desc">Track when documents are executed, updated, or need review. Families always know the status of their affairs, and you have a clear record for your practice.</div>
+              <div class="step-desc">Track when documents are executed, updated, or need review. Families always know the status, and you have a clear record for your practice.</div>
             </div>
           </div>
         </div>
@@ -529,7 +582,7 @@
         <div class="role-intro">
           <h3>More time for the work that<br>only you can do.</h3>
           <p class="role-subtitle">
-            The documentation burden in social work is relentless. PCG handles the structure so you can focus on the relationship — AI-assisted intake, auto-generated care plan drafts, and a family portal that keeps everyone aligned.
+            The documentation burden in social work is relentless. PCG handles the structure so you can focus on the relationship — AI-assisted intake, care plan drafts, and a portal that keeps Care Advocates aligned with the plan.
           </p>
           <a href="/signup.html" class="role-cta">Create a practitioner account</a>
         </div>
@@ -538,7 +591,7 @@
             <div class="step-num">1</div>
             <div class="step-body">
               <div class="step-title">Sign up and build your client roster</div>
-              <div class="step-desc">Create your practitioner account and start adding clients. Each client gets their own care record, family portal, and care team — fully separate and secure.</div>
+              <div class="step-desc">Create your practitioner account and start adding care recipients. Each one gets their own care record, family portal, and care team — fully separate and secure.</div>
             </div>
           </div>
           <div class="step">
@@ -552,14 +605,14 @@
             <div class="step-num">3</div>
             <div class="step-body">
               <div class="step-title">Connect families to the right resources</div>
-              <div class="step-desc">Document community resources, referrals, and interventions directly in the care plan. Families can see what's been arranged and what's coming next.</div>
+              <div class="step-desc">Document community resources, referrals, and interventions in the care plan. Care Advocates can see what's been arranged and what's coming next.</div>
             </div>
           </div>
           <div class="step">
             <div class="step-num">4</div>
             <div class="step-body">
               <div class="step-title">Track care transitions</div>
-              <div class="step-desc">When a client moves from home to assisted living, or from hospital to rehab, update their care level and plan in one place. Everyone on the team sees the change immediately.</div>
+              <div class="step-desc">When a care recipient moves from home to assisted living, or hospital to rehab, update their care level and plan in one place. Everyone on the team sees it immediately.</div>
             </div>
           </div>
           <div class="step">
@@ -575,11 +628,11 @@
 
     <!-- ── Bottom CTA ── -->
     <div class="bottom-cta">
-      <h2>Ready to see it in action?</h2>
-      <p>We're building now and onboarding practitioners and families in our early access program.</p>
+      <h2>Everyone in the care circle deserves support.</h2>
+      <p>Whether you're a Care Recipient, a Care Advocate, or a professional — PCG is built for you. We're onboarding early access members now.</p>
       <div class="cta-row">
-        <a href="/signup.html" class="btn-primary">Create a practitioner account</a>
-        <a href="/#waitlist" class="btn-secondary">Join the family waitlist</a>
+        <a href="/#waitlist" class="btn-primary">Join as a Care Advocate</a>
+        <a href="/signup.html" class="btn-secondary">Create a practitioner account</a>
       </div>
     </div>
 
@@ -593,6 +646,10 @@
       document.querySelectorAll('.role-tab').forEach(t => t.classList.remove('active'));
       document.getElementById('panel-' + role).classList.add('active');
       document.getElementById('tab-' + role).classList.add('active');
+      // Smooth scroll to tabs on mobile
+      if (window.innerWidth < 900) {
+        document.querySelector('.role-tabs').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
     }
   </script>
   <script src="/version.js"></script>
