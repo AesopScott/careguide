@@ -60,10 +60,14 @@ service cloud.firestore {
     // Write access on sub-collections is practitioner-only unless noted.
 
     match /family_groups/{groupId} {
-      allow read:   if canAccessGroup(groupId);
-      allow create: if isPractitioner();
-      allow update: if isGroupPractitioner(groupId);
-      allow delete: if isGroupPractitioner(groupId);
+      allow read:   if isAuth() && (
+                       resource.data.practitioner_id == request.auth.uid ||
+                       (resource.data.members != null && request.auth.uid in resource.data.members)
+                     );
+      allow create: if isPractitioner() &&
+                       request.resource.data.practitioner_id == request.auth.uid;
+      allow update: if isAuth() && resource.data.practitioner_id == request.auth.uid;
+      allow delete: if isAuth() && resource.data.practitioner_id == request.auth.uid;
 
       // Parents — practitioner writes, members read
       match /parents/{parentId} {
