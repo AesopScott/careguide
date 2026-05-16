@@ -52,7 +52,7 @@ jobs:
             --platform=managed \
             --allow-unauthenticated \
             --set-secrets="ANTHROPIC_API_KEY=ANTHROPIC_API_KEY:latest,BREVO_API_KEY=BREVO_API_KEY:latest,TWILIO_ACCOUNT_SID=TWILIO_ACCOUNT_SID:latest,TWILIO_AUTH_TOKEN=TWILIO_AUTH_TOKEN:latest,TWILIO_PHONE_NUMBER=TWILIO_PHONE_NUMBER:latest,/app/config/firebase-credentials.json=FIREBASE_CREDENTIALS_JSON:latest" \
-            --set-env-vars="FIREBASE_CREDENTIALS_PATH=/app/config/firebase-credentials.json" \
+            --set-env-vars="^|^FIREBASE_CREDENTIALS_PATH=/app/config/firebase-credentials.json|CORS_ORIGINS=https://parentalcareguide.com,https://www.parentalcareguide.com,https://careguide-def76.web.app,https://careguide-def76.firebaseapp.com" \
             --memory=512Mi \
             --min-instances=0 \
             --max-instances=10
