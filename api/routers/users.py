@@ -164,9 +164,9 @@ def _approval_email_html(full_name: str) -> str:
     Your Parental Care Guide practitioner account is now active. You can sign in and access your dashboard right away.
   </p>
   <p style="margin-bottom:24px;">
-    <a href="https://parentalcareguide.com/dashboard.html"
+    <a href="https://parentalcareguide.com/login.html"
        style="display:inline-block;padding:12px 28px;background:#501464;color:#fff;border-radius:100px;text-decoration:none;font-family:sans-serif;font-size:15px;font-weight:600;">
-      Go to Dashboard
+      Sign in to your dashboard
     </a>
   </p>
   <hr style="border:none;border-top:1px solid #e8d5f0;margin:24px 0;" />
@@ -184,7 +184,7 @@ def _approval_email_text(full_name: str) -> str:
     return (
         f"You've been approved, {full_name}.\n\n"
         "Your Parental Care Guide practitioner account is now active.\n"
-        "Sign in at: https://parentalcareguide.com/dashboard.html\n\n"
+        "Sign in at: https://parentalcareguide.com/login.html\n\n"
         "You're on Beta Access — no billing during the beta.\n"
         "— The Parental Care Guide team"
     )

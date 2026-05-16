@@ -44,8 +44,9 @@
       font-size: 14px;
       line-height: 1.5;
       min-height: 100vh;
-      visibility: hidden; /* set by auth guard */
     }
+
+    #page { visibility: hidden; }
 
     /* ── Top Nav ── */
     .top-nav {
@@ -429,6 +430,7 @@
 </head>
 <body>
 
+  <div id="page">
   <!-- Top Nav -->
   <nav class="top-nav">
     <a href="/dashboard.html" class="nav-brand">Parental Care Guide</a>
@@ -510,6 +512,7 @@
     </div>
 
   </div><!-- /page -->
+  </div><!-- /#page -->
 
   <script type="module">
     import { initializeApp }    from 'https://www.gstatic.com/firebasejs/11.8.0/firebase-app.js';
@@ -545,26 +548,33 @@
         const token = await user.getIdTokenResult();
         const hasClaim = token.claims.practitioner || token.claims.admin;
 
-        if (hasClaim) {
-          document.body.style.visibility = '';
+        if (!hasClaim) { redirect(); return; }
+
+        // Admins skip the status check
+        if (token.claims.admin) {
+          document.getElementById('page').style.visibility = '';
           initDashboard(user);
           return;
         }
 
-        // Beta fallback: custom claims not yet set by API — check Firestore users doc
+        // Check Firestore status — pending practitioners see a waiting screen
         const { doc, getDoc } = await import('https://www.gstatic.com/firebasejs/11.8.0/firebase-firestore.js');
         const snap = await getDoc(doc(db, 'users', user.uid));
-        if (snap.exists() && (snap.data().role === 'practitioner' || snap.data().role === 'admin')) {
-          document.body.style.visibility = '';
+        const status = snap.exists() ? snap.data().status : null;
+
+        if (status === 'active') {
+          document.getElementById('page').style.visibility = '';
           initDashboard(user);
+        } else if (status === 'rejected') {
+          showRejectedGate();
         } else {
-          redirect();
+          // pending_activation or unknown — show waiting screen
+          showPendingGate(user);
         }
       } catch { redirect(); }
     });
 
     function redirect() {
-      document.body.style.visibility = '';
       location.href = '/login.html?next=/dashboard.html';
     }
 
@@ -640,6 +650,59 @@
         await signOut(auth);
         location.href = '/login.html';
       };
+    }
+
+    function showPendingGate(user) {
+      document.body.innerHTML = `
+        <div style="
+          min-height:100vh;display:flex;align-items:center;justify-content:center;
+          background:linear-gradient(148deg,#FFF5F0 0%,#FFD6CC 12%,#F4B8C1 26%,#E8A0B4 40%,#D4A0C8 55%,#B8A8D8 70%,#98A8E0 84%,#8ABCE8 100%);
+          font-family:'Jost',sans-serif;padding:24px;
+        ">
+          <div style="
+            background:rgba(255,255,255,0.42);border:1px solid rgba(255,255,255,0.6);
+            backdrop-filter:blur(16px);border-radius:20px;
+            padding:48px 44px;max-width:480px;width:100%;text-align:center;
+          ">
+            <div style="font-size:2.5rem;margin-bottom:16px;">⏳</div>
+            <h1 style="font-family:'Gilda Display',Georgia,serif;font-size:1.6rem;color:#1e1230;margin-bottom:10px;font-weight:400;">
+              Application under review
+            </h1>
+            <p style="font-size:0.95rem;color:#4a2d65;font-weight:300;line-height:1.6;margin-bottom:24px;">
+              Your application is being reviewed by our team. You'll receive an email at <strong style="color:#1e1230;">${user.email}</strong> once you're approved.
+            </p>
+            <button onclick="(async()=>{const {getAuth,signOut}=await import('https://www.gstatic.com/firebasejs/11.8.0/firebase-auth.js');await signOut(getAuth());location.href='/login.html';})()" style="
+              display:block;width:100%;padding:11px;
+              background:rgba(255,255,255,0.45);color:#4a2d65;
+              border:1px solid rgba(80,20,100,0.25);border-radius:100px;
+              font-family:'Jost',sans-serif;font-size:0.9rem;cursor:pointer;
+            ">Sign out</button>
+          </div>
+        </div>`;
+    }
+
+    function showRejectedGate() {
+      document.body.innerHTML = `
+        <div style="
+          min-height:100vh;display:flex;align-items:center;justify-content:center;
+          background:linear-gradient(148deg,#FFF5F0 0%,#FFD6CC 12%,#F4B8C1 26%,#E8A0B4 40%,#D4A0C8 55%,#B8A8D8 70%,#98A8E0 84%,#8ABCE8 100%);
+          font-family:'Jost',sans-serif;padding:24px;
+        ">
+          <div style="
+            background:rgba(255,255,255,0.42);border:1px solid rgba(255,255,255,0.6);
+            backdrop-filter:blur(16px);border-radius:20px;
+            padding:48px 44px;max-width:480px;width:100%;text-align:center;
+          ">
+            <div style="font-size:2.5rem;margin-bottom:16px;">✉️</div>
+            <h1 style="font-family:'Gilda Display',Georgia,serif;font-size:1.6rem;color:#1e1230;margin-bottom:10px;font-weight:400;">
+              Application not approved
+            </h1>
+            <p style="font-size:0.95rem;color:#4a2d65;font-weight:300;line-height:1.6;margin-bottom:24px;">
+              We weren't able to approve your application at this time. If you have questions, contact us at
+              <a href="mailto:support@parentalcareguide.com" style="color:#501464;">support@parentalcareguide.com</a>.
+            </p>
+          </div>
+        </div>`;
     }
 
     // ── Sign out ──

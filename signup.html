@@ -685,6 +685,8 @@
                                      from 'https://www.gstatic.com/firebasejs/11.8.0/firebase-auth.js';
     import { getFirestore, doc, setDoc, serverTimestamp }
                                      from 'https://www.gstatic.com/firebasejs/11.8.0/firebase-firestore.js';
+    // NOTE: Firestore profile is written by the API (/users/register) — client write below
+    // is kept only as a fallback in case the API call fails.
 
     const FIREBASE_CONFIG = {
       apiKey:            "AIzaSyB0GaJXI_lbLhEXmctMJ0LoHiV3cHL5vQY",
@@ -842,7 +844,7 @@
         await updateProfile(cred.user, { displayName: fullName });
         const uid = cred.user.uid;
 
-        // 2. Write pending profile to Firestore immediately (always works)
+        // 2. Write pending profile to Firestore (API will overwrite with full data)
         await setDoc(doc(db, 'users', uid), {
           uid,
           email,
@@ -853,8 +855,8 @@
           plan:           profession === 'elder_law' ? 'premium' : 'standard',
           beta:           true,
           baa_accepted:   true,
-          status:         'pending_activation',  // updated to 'active' by API
-          created_at:     serverTimestamp(),
+          status:         'pending_activation',
+          created_at:     new Date().toISOString(),
         });
 
         // 3. Get ID token for API calls

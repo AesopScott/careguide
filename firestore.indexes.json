@@ -7,6 +7,14 @@
         { "fieldPath": "role",       "order": "ASCENDING" },
         { "fieldPath": "created_at", "order": "DESCENDING" }
       ]
+    },
+    {
+      "collectionGroup": "family_groups",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "practitioner_id", "order": "ASCENDING" },
+        { "fieldPath": "created_at",      "order": "DESCENDING" }
+      ]
     }
   ],
   "fieldOverrides": []
