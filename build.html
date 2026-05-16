@@ -414,9 +414,22 @@
     }
     .status-btn.done:before { content: '● '; }
 
-    /* Card done overlay effect */
-    .card[data-status="done"] { opacity: 0.75; }
-    .card[data-status="done"] .card-title { text-decoration: line-through; text-decoration-color: #3fb95060; }
+    /* Card status outlines */
+    .card[data-status="done"] { border: 2px solid #3fb950 !important; box-shadow: 0 0 12px rgba(63,185,80,0.15); }
+    .card[data-status="none"] { border: 2px solid #f85149 !important; box-shadow: 0 0 12px rgba(248,81,73,0.12); }
+    .card[data-status="wip"]  { border: 2px solid #58a6ff !important; box-shadow: 0 0 12px rgba(88,166,255,0.15); }
+
+    /* URL label shown on done cards */
+    .card-url {
+      display: none;
+      font-family: 'Courier New', monospace;
+      font-size: 11px;
+      color: #3fb950;
+      margin-right: auto;
+      opacity: 0.9;
+      letter-spacing: 0.02em;
+    }
+    .card[data-status="done"] .card-url { display: block; }
 
     /* Section-specific card styles */
     .card-public { background: var(--public-bg); border-color: var(--public-border); }
@@ -2178,6 +2191,40 @@
       updateDashboard();
     }
 
+    // URL for each card — shown at bottom when status is done
+    const CARD_URLS = {
+      'card-landing':               '/index.html',
+      'card-pricing':               '/pricing.html',
+      'card-how-it-works':          '/how-it-works.html',
+      'card-practitioner-signup':   '/signup.html',
+      'card-family-invite':         '/invite.html',
+      'card-family-signup':         '/family-signup.html',
+      'card-login':                 '/login.html',
+      'card-client-roster':         '/dashboard.html',
+      'card-new-client':            '/new-client.html',
+      'card-client-detail':         '/client.html',
+      'card-intake':                '/intake.html',
+      'card-care-plan':             '/care-plan.html',
+      'card-doc-vault':             '/documents.html',
+      'card-session-notes':         '/session-notes.html',
+      'card-billing':               '/billing.html',
+      'card-ai-research':           '/ai-research.html',
+      'card-task-manager':          '/tasks.html',
+      'card-provider-dir':          '/providers.html',
+      'card-practitioner-settings': '/settings.html',
+      'card-family-dashboard':      '/family.html',
+      'card-medications':           '/medications.html',
+      'card-crisis-card':           '/crisis-card.html',
+      'card-care-updates':          '/care-updates.html',
+      'card-documents':             '/family-documents.html',
+      'card-task-list':             '/tasks.html',
+      'card-appointments':          '/appointments.html',
+      'card-ai-assistant':          '/assistant.html',
+      'card-professional-dir':      '/professionals.html',
+      'card-family-settings':       '/family-settings.html',
+      'card-admin':                 '/admin.html',
+    };
+
     // Pages that have been built — seed as done on first load
     const BUILT_PAGES = {
       'card-landing':              'done',
@@ -2201,6 +2248,20 @@
         if (!(id in data)) { data[id] = status; seeded = true; }
       });
       if (seeded) saveStatus(data);
+
+      // Inject URL label into each card footer
+      document.querySelectorAll('.card[id]').forEach(card => {
+        const url = CARD_URLS[card.id];
+        if (url) {
+          const footer = card.querySelector('.card-footer');
+          if (footer && !footer.querySelector('.card-url')) {
+            const urlEl = document.createElement('span');
+            urlEl.className = 'card-url';
+            urlEl.textContent = url;
+            footer.insertBefore(urlEl, footer.firstChild);
+          }
+        }
+      });
 
       document.querySelectorAll('.card[id]').forEach(card => {
         const status = data[card.id] || 'none';
