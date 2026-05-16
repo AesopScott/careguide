@@ -1,6 +1,6 @@
 from datetime import datetime, timezone, timedelta
 from fastapi import APIRouter, Depends, HTTPException
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel
 from firebase_admin import auth as firebase_auth
 from middleware.auth import require_practitioner
 from services.firebase import get_db
@@ -18,7 +18,7 @@ class FamilyGroupCreate(BaseModel):
 
 
 class InviteRequest(BaseModel):
-    email: EmailStr
+    email: str
     relationship: str = ""
 
 
