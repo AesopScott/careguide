@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Parental Care Guide — AI Intake</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Gilda+Display&family=Jost:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --plum:        #501464;
+      --plum-light:  #6b1e85;
+      --plum-pale:   #f5eeff;
+      --plum-muted:  rgba(80,20,100,0.08);
+      --text-dark:   #1e1230;
+      --text-mid:    #4a3060;
+      --text-muted:  #8b7a9e;
+      --bg:          #faf9fc;
+      --surface:     #ffffff;
+      --border:      #ece6f4;
+      --border-mid:  #d8cce8;
+      --nav-h: 60px;
+    }
+
+    body {
+      font-family: 'Jost', 'Segoe UI', sans-serif;
+      background: var(--bg); color: var(--text-dark);
+      font-size: 14px; line-height: 1.5; min-height: 100vh; visibility: hidden;
+    }
+
+    .top-nav {
+      position: fixed; top: 0; left: 0; right: 0; height: var(--nav-h);
+      background: var(--plum); display: flex; align-items: center;
+      justify-content: space-between; padding: 0 24px; z-index: 100;
+    }
+    .nav-brand { font-family: 'Gilda Display', Georgia, serif; font-size: 1rem; color: rgba(255,255,255,0.9); text-decoration: none; }
+    .nav-center { font-size: 0.8rem; font-weight: 500; color: rgba(255,255,255,0.5); letter-spacing: 0.08em; text-transform: uppercase; }
+    .nav-right { display: flex; align-items: center; gap: 12px; }
+    .nav-back {
+      font-size: 0.8rem; color: rgba(255,255,255,0.6); background: none;
+      border: 1px solid rgba(255,255,255,0.2); border-radius: 6px; padding: 5px 12px;
+      cursor: pointer; font-family: 'Jost', sans-serif; text-decoration: none; transition: all 0.15s;
+    }
+    .nav-back:hover { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.85); }
+
+    .page {
+      padding-top: calc(var(--nav-h) + 32px); padding-bottom: 80px;
+      max-width: 760px; margin: 0 auto; padding-left: 24px; padding-right: 24px;
+    }
+
+    /* ── Page header ── */
+    .page-header { margin-bottom: 28px; }
+    .page-header h1 {
+      font-family: 'Gilda Display', Georgia, serif; font-size: 1.6rem;
+      font-weight: 400; color: var(--text-dark); letter-spacing: -0.02em; margin-bottom: 6px;
+    }
+    .page-header p { font-size: 0.875rem; color: var(--text-muted); }
+
+    /* ── Steps indicator ── */
+    .steps {
+      display: flex; gap: 0; margin-bottom: 28px;
+      background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
+      overflow: hidden;
+    }
+    .step {
+      flex: 1; padding: 10px 14px; text-align: center;
+      border-right: 1px solid var(--border); cursor: pointer;
+    }
+    .step:last-child { border-right: none; }
+    .step-num { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); }
+    .step-label { font-size: 0.78rem; color: var(--text-muted); margin-top: 1px; }
+    .step.active .step-num { color: var(--plum); }
+    .step.active .step-label { color: var(--text-dark); font-weight: 600; }
+    .step.done .step-num { color: var(--plum); }
+    .step.done .step-label { color: var(--text-muted); }
+    .step.active { background: var(--plum-pale); }
+
+    /* ── Form sections ── */
+    .form-step { display: none; }
+    .form-step.active { display: block; }
+
+    .section-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 14px; padding: 24px; margin-bottom: 16px;
+    }
+    .section-card h3 {
+      font-family: 'Gilda Display', serif; font-size: 1rem; font-weight: 400;
+      color: var(--text-dark); margin-bottom: 4px;
+    }
+    .section-desc { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 20px; }
+
+    .field { margin-bottom: 18px; }
+    .field:last-child { margin-bottom: 0; }
+    .field label {
+      display: block; font-size: 0.78rem; font-weight: 600;
+      letter-spacing: 0.05em; text-transform: uppercase;
+      color: var(--text-muted); margin-bottom: 6px;
+    }
+    .field label .opt { font-weight: 400; font-size: 0.72rem; margin-left: 4px; }
+    input[type="text"], input[type="date"], select, textarea {
+      width: 100%; padding: 10px 12px;
+      border: 1px solid var(--border-mid); border-radius: 8px;
+      font-family: 'Jost', sans-serif; font-size: 0.875rem; color: var(--text-dark); background: #fff;
+      transition: border-color 0.15s, box-shadow 0.15s; appearance: none;
+    }
+    input:focus, select:focus, textarea:focus {
+      outline: none; border-color: var(--plum); box-shadow: 0 0 0 3px var(--plum-muted);
+    }
+    input::placeholder, textarea::placeholder { color: var(--text-muted); }
+    textarea { resize: vertical; }
+    .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+    /* ── Nav buttons ── */
+    .step-nav {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-top: 24px;
+    }
+    .btn-back-step {
+      padding: 10px 20px; border: 1px solid var(--border-mid); border-radius: 8px;
+      background: none; color: var(--text-mid); font-family: 'Jost', sans-serif;
+      font-size: 0.875rem; cursor: pointer; transition: all 0.15s;
+    }
+    .btn-back-step:hover { background: var(--bg); }
+    .btn-next-step, .btn-submit {
+      padding: 10px 24px; background: var(--plum); color: #fff; border: none;
+      border-radius: 8px; font-family: 'Jost', sans-serif;
+      font-size: 0.875rem; font-weight: 600; cursor: pointer; transition: background 0.15s;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .btn-next-step:hover, .btn-submit:hover { background: var(--plum-light); }
+    .btn-submit:disabled { opacity: 0.55; cursor: not-allowed; }
+
+    .spinner {
+      width: 16px; height: 16px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: #fff; border-radius: 50%;
+      animation: spin 0.7s linear infinite; display: none;
+    }
+    .btn-submit.loading .spinner { display: block; }
+    .btn-submit.loading .btn-text { display: none; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── AI processing state ── */
+    .ai-processing {
+      display: none; text-align: center; padding: 60px 24px;
+      background: var(--surface); border: 1px solid var(--border); border-radius: 14px;
+    }
+    .ai-processing.visible { display: block; }
+    .ai-pulse {
+      width: 56px; height: 56px; background: var(--plum);
+      border-radius: 50%; margin: 0 auto 20px;
+      display: flex; align-items: center; justify-content: center;
+      animation: pulse 1.8s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(80,20,100,0.4); transform: scale(1); }
+      50%       { box-shadow: 0 0 0 16px rgba(80,20,100,0); transform: scale(1.05); }
+    }
+    .ai-processing h2 {
+      font-family: 'Gilda Display', serif; font-size: 1.2rem; font-weight: 400;
+      color: var(--text-dark); margin-bottom: 8px;
+    }
+    .ai-processing p { font-size: 0.875rem; color: var(--text-muted); }
+    .ai-status { font-size: 0.8rem; color: var(--plum); margin-top: 12px; font-weight: 500; }
+
+    /* ── Result state ── */
+    .ai-result { display: none; }
+    .ai-result.visible { display: block; }
+    .result-banner {
+      background: linear-gradient(135deg, var(--plum-pale), #ede8f5);
+      border: 1px solid var(--border-mid); border-radius: 12px;
+      padding: 18px 24px; margin-bottom: 20px;
+      display: flex; align-items: flex-start; gap: 14px;
+    }
+    .result-icon {
+      width: 36px; height: 36px; background: var(--plum);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; color: #fff; font-size: 1rem;
+    }
+    .result-banner h3 { font-size: 0.9rem; font-weight: 600; color: var(--text-dark); margin-bottom: 4px; }
+    .result-banner p  { font-size: 0.8rem; color: var(--text-muted); }
+    .result-actions { display: flex; gap: 10px; margin-top: 14px; flex-wrap: wrap; }
+    .btn-go-plan {
+      padding: 9px 20px; background: var(--plum); color: #fff; border: none;
+      border-radius: 8px; font-family: 'Jost', sans-serif; font-size: 0.875rem;
+      font-weight: 600; cursor: pointer; text-decoration: none; transition: background 0.15s;
+    }
+    .btn-go-plan:hover { background: var(--plum-light); }
+
+    /* ── Error ── */
+    .error-banner {
+      background: #fff5f5; border: 1px solid #fca5a5; border-radius: 10px;
+      padding: 14px 18px; color: #b91c1c; font-size: 0.875rem;
+      margin-bottom: 16px; display: none;
+    }
+    .error-banner.visible { display: block; }
+  </style>
+</head>
+<body>
+
+<nav class="top-nav">
+  <a href="/dashboard.html" class="nav-brand">Parental Care Guide</a>
+  <span class="nav-center">AI Intake</span>
+  <div class="nav-right">
+    <a id="backLink" href="/dashboard.html" class="nav-back">← Client</a>
+  </div>
+</nav>
+
+<main class="page">
+
+  <div class="page-header">
+    <h1 id="pageTitle">AI Intake Interview</h1>
+    <p id="pageSubtitle">Answer a few questions about your client. Claude will generate a care plan draft automatically.</p>
+  </div>
+
+  <!-- ── AI processing overlay ── -->
+  <div class="ai-processing" id="aiProcessing">
+    <div class="ai-pulse">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+        <path d="M12 3C7.03 3 3 7.03 3 12s4.03 9 9 9 9-4.03 9-9-4.03-9-9-9zm0 2c1.65 0 3.17.5 4.43 1.35L5.35 16.43A6.97 6.97 0 015 14c0-3.86 3.14-7 7-7zm0 14c-1.65 0-3.17-.5-4.43-1.35l11.08-11.08C19.5 10.83 20 12.35 20 14c0 3.86-3.14 7-7 7z" fill="white"/>
+      </svg>
+    </div>
+    <h2>Generating care plan…</h2>
+    <p>Claude is analyzing your intake responses.</p>
+    <div class="ai-status" id="aiStatus">Reading intake information…</div>
+  </div>
+
+  <!-- ── Success result ── -->
+  <div class="ai-result" id="aiResult">
+    <div class="result-banner">
+      <div class="result-icon">✓</div>
+      <div>
+        <h3>Care plan draft created</h3>
+        <p>Claude has generated a care plan based on your intake responses. Review and edit each section before finalizing.</p>
+        <div class="result-actions">
+          <a id="goToPlanBtn" href="#" class="btn-go-plan">Review Care Plan →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Error ── -->
+  <div class="error-banner" id="errorBanner"></div>
+
+  <!-- ── Steps ── -->
+  <div class="steps" id="stepsBar">
+    <div class="step active" data-step="0"><div class="step-num">01</div><div class="step-label">Client</div></div>
+    <div class="step" data-step="1"><div class="step-num">02</div><div class="step-label">Situation</div></div>
+    <div class="step" data-step="2"><div class="step-num">03</div><div class="step-label">History</div></div>
+    <div class="step" data-step="3"><div class="step-num">04</div><div class="step-label">Needs</div></div>
+    <div class="step" data-step="4"><div class="step-num">05</div><div class="step-label">Goals</div></div>
+  </div>
+
+  <!-- ── Step 0: Client context ── -->
+  <div class="form-step active" id="step-0">
+    <div class="section-card">
+      <h3>Client context</h3>
+      <div class="section-desc">Basic background so Claude can personalize the care plan.</div>
+      <div class="field field-row">
+        <div>
+          <label>Parent's age</label>
+          <input type="text" id="s0_age" placeholder="e.g. 78" />
+        </div>
+        <div>
+          <label>Primary diagnosis</label>
+          <input type="text" id="s0_diagnosis" placeholder="e.g. Alzheimer's (early stage)" />
+        </div>
+      </div>
+      <div class="field">
+        <label>Living situation</label>
+        <select id="s0_living">
+          <option value="">— Select —</option>
+          <option>Living independently at home</option>
+          <option>Living with family</option>
+          <option>Assisted living facility</option>
+          <option>Memory care facility</option>
+          <option>Skilled nursing facility</option>
+          <option>Recent hospital discharge</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Primary caregiver(s) <span class="opt">(optional)</span></label>
+        <input type="text" id="s0_caregivers" placeholder="e.g. Daughter (primary), spouse, hired aide 3x/week" />
+      </div>
+    </div>
+    <div class="step-nav">
+      <span></span>
+      <button class="btn-next-step" onclick="nextStep(0)">Next →</button>
+    </div>
+  </div>
+
+  <!-- ── Step 1: Current situation ── -->
+  <div class="form-step" id="step-1">
+    <div class="section-card">
+      <h3>Current situation</h3>
+      <div class="section-desc">What's happening now that brought you to this intake?</div>
+      <div class="field">
+        <label>What prompted this intake?</label>
+        <textarea id="s1_prompt" rows="3" placeholder="e.g. Recent fall at home, family concerned about increasing confusion, hospital discharge planning…"></textarea>
+      </div>
+      <div class="field">
+        <label>Current level of functioning</label>
+        <textarea id="s1_functioning" rows="3" placeholder="e.g. Needs help with bathing and dressing. Independent with meals. Drives short distances. Memory issues with recent events."></textarea>
+      </div>
+      <div class="field">
+        <label>Recent changes <span class="opt">(optional)</span></label>
+        <textarea id="s1_changes" rows="2" placeholder="e.g. Weight loss over last 3 months. Increased confusion at night."></textarea>
+      </div>
+    </div>
+    <div class="step-nav">
+      <button class="btn-back-step" onclick="prevStep(1)">← Back</button>
+      <button class="btn-next-step" onclick="nextStep(1)">Next →</button>
+    </div>
+  </div>
+
+  <!-- ── Step 2: Medical history ── -->
+  <div class="form-step" id="step-2">
+    <div class="section-card">
+      <h3>Medical & social history</h3>
+      <div class="section-desc">Relevant background that shapes the care approach.</div>
+      <div class="field">
+        <label>Key medical conditions</label>
+        <textarea id="s2_conditions" rows="2" placeholder="e.g. Alzheimer's, Type 2 diabetes, hypertension, osteoporosis, CHF"></textarea>
+      </div>
+      <div class="field">
+        <label>Current medications <span class="opt">(optional)</span></label>
+        <textarea id="s2_medications" rows="2" placeholder="e.g. Metformin 500mg daily, Lisinopril 10mg, Donepezil 10mg at bedtime"></textarea>
+      </div>
+      <div class="field">
+        <label>Known allergies <span class="opt">(optional)</span></label>
+        <input type="text" id="s2_allergies" placeholder="e.g. Penicillin, sulfa drugs — or 'No known allergies'" />
+      </div>
+      <div class="field">
+        <label>Relevant family or social history <span class="opt">(optional)</span></label>
+        <textarea id="s2_social" rows="2" placeholder="e.g. Retired teacher. Widowed 2 years ago. Strong faith community. Adult children live 2 hrs away."></textarea>
+      </div>
+    </div>
+    <div class="step-nav">
+      <button class="btn-back-step" onclick="prevStep(2)">← Back</button>
+      <button class="btn-next-step" onclick="nextStep(2)">Next →</button>
+    </div>
+  </div>
+
+  <!-- ── Step 3: Care needs & challenges ── -->
+  <div class="form-step" id="step-3">
+    <div class="section-card">
+      <h3>Care needs & challenges</h3>
+      <div class="section-desc">What's working, what isn't, and where the family needs support.</div>
+      <div class="field">
+        <label>Primary care challenges</label>
+        <textarea id="s3_challenges" rows="3" placeholder="e.g. Resistance to accepting help. Caregiver burnout — daughter works full-time. Difficulty managing medications independently."></textarea>
+      </div>
+      <div class="field">
+        <label>Current services / supports in place <span class="opt">(optional)</span></label>
+        <textarea id="s3_services" rows="2" placeholder="e.g. Home health aide 3x/week. Meals on Wheels. Adult day program on Tuesdays."></textarea>
+      </div>
+      <div class="field">
+        <label>Safety concerns <span class="opt">(optional)</span></label>
+        <textarea id="s3_safety" rows="2" placeholder="e.g. Fall risk (one fall in past 6 months). Leaving stove on. Getting lost when driving."></textarea>
+      </div>
+      <div class="field">
+        <label>Family dynamics <span class="opt">(optional)</span></label>
+        <textarea id="s3_family" rows="2" placeholder="e.g. Three adult children — two agree on care plan, one resists outside help. Primary family contact is daughter Maria."></textarea>
+      </div>
+    </div>
+    <div class="step-nav">
+      <button class="btn-back-step" onclick="prevStep(3)">← Back</button>
+      <button class="btn-next-step" onclick="nextStep(3)">Next →</button>
+    </div>
+  </div>
+
+  <!-- ── Step 4: Goals ── -->
+  <div class="form-step" id="step-4">
+    <div class="section-card">
+      <h3>Goals & preferences</h3>
+      <div class="section-desc">What does success look like for this family?</div>
+      <div class="field">
+        <label>Client's stated goals / preferences</label>
+        <textarea id="s4_client_goals" rows="2" placeholder="e.g. Wants to stay in her home as long as possible. Wants to maintain independence with daily activities. Doesn't want to be a burden."></textarea>
+      </div>
+      <div class="field">
+        <label>Family's goals</label>
+        <textarea id="s4_family_goals" rows="2" placeholder="e.g. Ensure safety while respecting mother's independence. Get a care plan in place before the next health crisis."></textarea>
+      </div>
+      <div class="field">
+        <label>Your practitioner goals for this client</label>
+        <textarea id="s4_practitioner_goals" rows="2" placeholder="e.g. Stabilize medication management, connect family to respite resources, assess for memory care transition readiness in 6 months."></textarea>
+      </div>
+      <div class="field">
+        <label>Anything else Claude should know? <span class="opt">(optional)</span></label>
+        <textarea id="s4_other" rows="2" placeholder="Additional context, cultural considerations, prior care experiences, etc."></textarea>
+      </div>
+    </div>
+    <div class="step-nav">
+      <button class="btn-back-step" onclick="prevStep(4)">← Back</button>
+      <button class="btn-submit" id="submitBtn" onclick="submitIntake()">
+        <div class="spinner"></div>
+        <span class="btn-text">Generate Care Plan →</span>
+      </button>
+    </div>
+  </div>
+
+</main>
+
+<script type="module">
+import { initializeApp }           from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { getAuth, onAuthStateChanged }
+                                   from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+import { getFirestore, doc, getDoc, setDoc, serverTimestamp }
+                                   from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+const firebaseConfig = {
+  apiKey:            "AIzaSyB0GaJXI_lbLhEXmctMJ0LoHiV3cHL5vQY",
+  authDomain:        "careguide-def76.firebaseapp.com",
+  projectId:         "careguide-def76",
+  storageBucket:     "careguide-def76.firebasestorage.app",
+  messagingSenderId: "658340465706",
+  appId:             "1:658340465706:web:0e412731947ff51474c753"
+};
+
+const app  = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db   = getFirestore(app);
+
+const API_BASE = 'https://careguide-api-658340465706.us-central1.run.app';
+const params   = new URLSearchParams(location.search);
+const familyId = params.get('id');
+if (!familyId) window.location.href = '/dashboard.html';
+
+let currentUser = null;
+let currentStep = 0;
+const TOTAL_STEPS = 5;
+
+onAuthStateChanged(auth, async (user) => {
+  if (!user) { window.location.href = `/login.html?next=/intake.html?id=${familyId}`; return; }
+  const token = await user.getIdTokenResult();
+  if (!token.claims.practitioner && !token.claims.admin) { window.location.href = '/login.html'; return; }
+  currentUser = user;
+  document.body.style.visibility = '';
+  document.getElementById('backLink').href = `/client.html?id=${familyId}`;
+  document.getElementById('goToPlanBtn').href = `/care-plan.html?id=${familyId}`;
+
+  // Load family name for title
+  const fam = await getDoc(doc(db, 'family_groups', familyId));
+  if (fam.exists()) {
+    document.getElementById('pageTitle').textContent    = `AI Intake — ${fam.data().name || 'Client'}`;
+    document.getElementById('pageSubtitle').textContent = `Generating a care plan for ${fam.data().name || 'this family'}`;
+  }
+});
+
+// ── Step navigation ──────────────────────────────────────────────────────────
+window.nextStep = function (from) {
+  goToStep(from + 1);
+};
+window.prevStep = function (from) {
+  goToStep(from - 1);
+};
+
+function goToStep(to) {
+  document.getElementById(`step-${currentStep}`).classList.remove('active');
+  document.querySelector(`.step[data-step="${currentStep}"]`).classList.remove('active');
+  document.querySelector(`.step[data-step="${currentStep}"]`).classList.add('done');
+
+  currentStep = to;
+  document.getElementById(`step-${currentStep}`).classList.add('active');
+  document.querySelector(`.step[data-step="${currentStep}"]`).classList.remove('done');
+  document.querySelector(`.step[data-step="${currentStep}"]`).classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ── Submit ───────────────────────────────────────────────────────────────────
+window.submitIntake = async function () {
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true;
+  btn.classList.add('loading');
+
+  const intakeData = {
+    client_context: {
+      age:        document.getElementById('s0_age').value.trim(),
+      diagnosis:  document.getElementById('s0_diagnosis').value.trim(),
+      living:     document.getElementById('s0_living').value,
+      caregivers: document.getElementById('s0_caregivers').value.trim(),
+    },
+    current_situation: {
+      prompt:       document.getElementById('s1_prompt').value.trim(),
+      functioning:  document.getElementById('s1_functioning').value.trim(),
+      changes:      document.getElementById('s1_changes').value.trim(),
+    },
+    medical_history: {
+      conditions:   document.getElementById('s2_conditions').value.trim(),
+      medications:  document.getElementById('s2_medications').value.trim(),
+      allergies:    document.getElementById('s2_allergies').value.trim(),
+      social:       document.getElementById('s2_social').value.trim(),
+    },
+    care_needs: {
+      challenges:   document.getElementById('s3_challenges').value.trim(),
+      services:     document.getElementById('s3_services').value.trim(),
+      safety:       document.getElementById('s3_safety').value.trim(),
+      family:       document.getElementById('s3_family').value.trim(),
+    },
+    goals: {
+      client:       document.getElementById('s4_client_goals').value.trim(),
+      family:       document.getElementById('s4_family_goals').value.trim(),
+      practitioner: document.getElementById('s4_practitioner_goals').value.trim(),
+      other:        document.getElementById('s4_other').value.trim(),
+    },
+  };
+
+  // Hide form, show processing
+  document.getElementById('stepsBar').style.display = 'none';
+  for (let i = 0; i < TOTAL_STEPS; i++) {
+    const el = document.getElementById(`step-${i}`);
+    if (el) el.style.display = 'none';
+  }
+  document.getElementById('aiProcessing').classList.add('visible');
+  document.getElementById('errorBanner').classList.remove('visible');
+
+  const statusEl = document.getElementById('aiStatus');
+  const statusMessages = [
+    'Reading intake information…',
+    'Analyzing care needs…',
+    'Drafting goals and interventions…',
+    'Structuring care plan…',
+  ];
+  let msgIdx = 0;
+  const statusInterval = setInterval(() => {
+    msgIdx = (msgIdx + 1) % statusMessages.length;
+    statusEl.textContent = statusMessages[msgIdx];
+  }, 2500);
+
+  try {
+    const idToken = await currentUser.getIdToken();
+    const res = await fetch(`${API_BASE}/ai/intake`, {
+      method:  'POST',
+      headers: {
+        'Content-Type':  'application/json',
+        'Authorization': `Bearer ${idToken}`,
+      },
+      body: JSON.stringify({ family_group_id: familyId, intake: intakeData }),
+    });
+
+    clearInterval(statusInterval);
+
+    if (!res.ok) throw new Error(`API error: ${res.status}`);
+    const result = await res.json();
+
+    // Save care plan to Firestore
+    await setDoc(doc(db, 'care_plans', familyId), {
+      family_group_id: familyId,
+      practitioner_id: currentUser.uid,
+      sections:        result.sections || result.care_plan || {},
+      ai_generated:    true,
+      reviewed:        false,
+      version:         1,
+      created_at:      serverTimestamp(),
+      updated_at:      serverTimestamp(),
+    }, { merge: true });
+
+    // Save raw intake
+    await setDoc(doc(db, 'intake_data', familyId), {
+      family_group_id: familyId,
+      practitioner_id: currentUser.uid,
+      intake:          intakeData,
+      created_at:      serverTimestamp(),
+    }, { merge: true });
+
+    document.getElementById('aiProcessing').classList.remove('visible');
+    document.getElementById('aiResult').classList.add('visible');
+
+  } catch (err) {
+    clearInterval(statusInterval);
+    console.error('Intake failed:', err);
+
+    // Fall back: save raw intake, create blank plan
+    try {
+      await setDoc(doc(db, 'intake_data', familyId), {
+        family_group_id: familyId,
+        practitioner_id: currentUser.uid,
+        intake:          intakeData,
+        created_at:      serverTimestamp(),
+      }, { merge: true });
+    } catch {}
+
+    document.getElementById('aiProcessing').classList.remove('visible');
+    document.getElementById('stepsBar').style.display = '';
+    document.getElementById(`step-${currentStep}`).style.display = '';
+    document.getElementById(`step-${currentStep}`).classList.add('active');
+
+    const eb = document.getElementById('errorBanner');
+    eb.textContent = 'The AI generation failed. Your responses have been saved — you can try again or build the care plan manually.';
+    eb.classList.add('visible');
+
+    btn.disabled = false;
+    btn.classList.remove('loading');
+  }
+};
+</script>
+</body>
+</html>

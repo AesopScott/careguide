@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Parental Care Guide — Family Portal</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Gilda+Display&family=Jost:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --plum:        #501464;
+      --plum-light:  #6b1e85;
+      --plum-pale:   #f5eeff;
+      --plum-muted:  rgba(80,20,100,0.08);
+      --text-dark:   #1e1230;
+      --text-mid:    #4a3060;
+      --text-muted:  #8b7a9e;
+      --bg:          #faf9fc;
+      --surface:     #ffffff;
+      --border:      #ece6f4;
+      --border-mid:  #d8cce8;
+      --level-low:    #2ea043;
+      --level-medium: #e3a008;
+      --level-high:   #d97706;
+      --level-crisis: #dc2626;
+      --nav-h: 64px;
+    }
+
+    body {
+      font-family: 'Jost', 'Segoe UI', sans-serif;
+      background: var(--bg); color: var(--text-dark);
+      font-size: 14px; line-height: 1.5; min-height: 100vh; visibility: hidden;
+    }
+
+    /* ── Nav ── */
+    .top-nav {
+      position: fixed; top: 0; left: 0; right: 0; height: var(--nav-h);
+      background: var(--plum); display: flex; align-items: center;
+      justify-content: space-between; padding: 0 24px; z-index: 100;
+    }
+    .nav-brand {
+      font-family: 'Gilda Display', Georgia, serif;
+      font-size: 1rem; color: rgba(255,255,255,0.95); letter-spacing: 0.01em; text-decoration: none;
+    }
+    .nav-tag {
+      font-size: 0.7rem; font-weight: 600; letter-spacing: 0.1em;
+      text-transform: uppercase; color: rgba(255,255,255,0.45);
+      background: rgba(255,255,255,0.1); border-radius: 4px; padding: 2px 8px;
+    }
+    .nav-right { display: flex; align-items: center; gap: 14px; }
+    .nav-user { font-size: 0.825rem; color: rgba(255,255,255,0.7); }
+    .nav-signout {
+      font-size: 0.78rem; color: rgba(255,255,255,0.5);
+      background: none; border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 6px; padding: 5px 12px; cursor: pointer;
+      font-family: 'Jost', sans-serif; transition: all 0.15s;
+    }
+    .nav-signout:hover { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.85); }
+
+    /* ── Page ── */
+    .page {
+      padding-top: calc(var(--nav-h) + 32px); padding-bottom: 80px;
+      max-width: 760px; margin: 0 auto; padding-left: 24px; padding-right: 24px;
+    }
+
+    /* ── Greeting ── */
+    .greeting {
+      margin-bottom: 28px;
+    }
+    .greeting h1 {
+      font-family: 'Gilda Display', Georgia, serif;
+      font-size: 1.75rem; font-weight: 400; color: var(--text-dark);
+      letter-spacing: -0.02em; margin-bottom: 4px;
+    }
+    .greeting p { font-size: 0.875rem; color: var(--text-muted); }
+
+    /* ── Care level hero ── */
+    .care-level-hero {
+      border-radius: 16px; padding: 24px 28px; margin-bottom: 20px;
+      border: 1px solid transparent;
+    }
+    .care-level-hero.level-low    { background: #f0faf3; border-color: #bbf0ca; }
+    .care-level-hero.level-medium { background: #fffbeb; border-color: #fde68a; }
+    .care-level-hero.level-high   { background: #fff7ed; border-color: #fed7aa; }
+    .care-level-hero.level-crisis { background: #fff5f5; border-color: #fca5a5; }
+
+    .care-level-label {
+      font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .level-low    .care-level-label { color: var(--level-low);    }
+    .level-medium .care-level-label { color: var(--level-medium);  }
+    .level-high   .care-level-label { color: var(--level-high);   }
+    .level-crisis .care-level-label { color: var(--level-crisis); }
+
+    .care-level-name {
+      font-family: 'Gilda Display', serif; font-size: 1.3rem; font-weight: 400;
+      color: var(--text-dark); margin-bottom: 4px;
+    }
+    .care-level-desc { font-size: 0.825rem; color: var(--text-mid); }
+
+    /* ── Section card ── */
+    .section-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 14px; overflow: hidden; margin-bottom: 16px;
+    }
+    .section-header {
+      padding: 14px 20px; border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .section-label {
+      font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--text-muted);
+    }
+    .section-body { padding: 20px; }
+
+    /* ── Urgent flags ── */
+    .urgent-section {
+      background: #fff5f5; border: 1px solid #fca5a5; border-radius: 14px;
+      padding: 18px 20px; margin-bottom: 16px; display: none;
+    }
+    .urgent-section.visible { display: block; }
+    .urgent-title {
+      font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em;
+      text-transform: uppercase; color: #b91c1c; margin-bottom: 10px;
+    }
+    .urgent-flag {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 0.875rem; color: #b91c1c; padding: 4px 0;
+    }
+
+    /* ── Info grid ── */
+    .info-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+    }
+    .info-field label {
+      display: block; font-size: 0.68rem; font-weight: 700;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--text-muted); margin-bottom: 4px;
+    }
+    .info-field .val { font-size: 0.875rem; color: var(--text-dark); }
+    .info-field .val.empty { color: var(--text-muted); font-style: italic; }
+
+    /* ── Med list ── */
+    .med-item {
+      display: flex; align-items: flex-start; justify-content: space-between;
+      padding: 10px 0; border-bottom: 1px solid var(--border); gap: 12px;
+    }
+    .med-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .med-name { font-weight: 600; font-size: 0.875rem; }
+    .med-detail { font-size: 0.78rem; color: var(--text-muted); margin-top: 2px; }
+    .med-pill {
+      font-size: 0.68rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase;
+      padding: 3px 8px; border-radius: 10px; flex-shrink: 0;
+      color: var(--level-low); background: #f0faf3;
+    }
+
+    /* ── Care team ── */
+    .care-team-item {
+      display: flex; align-items: flex-start; gap: 14px;
+      padding: 12px 0; border-bottom: 1px solid var(--border);
+    }
+    .care-team-item:last-child { border-bottom: none; }
+    .ct-avatar {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: var(--plum-muted); display: flex; align-items: center;
+      justify-content: center; flex-shrink: 0; font-size: 0.8rem;
+      font-weight: 600; color: var(--plum); text-transform: uppercase;
+    }
+    .ct-name { font-weight: 600; font-size: 0.875rem; color: var(--text-dark); }
+    .ct-role { font-size: 0.78rem; color: var(--text-muted); }
+    .ct-contact { font-size: 0.78rem; color: var(--plum); margin-top: 2px; }
+
+    /* ── Empty ── */
+    .empty { color: var(--text-muted); font-size: 0.875rem; font-style: italic; padding: 8px 0; }
+
+    /* ── Crisis quick access ── */
+    .crisis-quick {
+      background: #fff5f5; border: 1.5px solid #fca5a5;
+      border-radius: 14px; padding: 18px 20px; margin-bottom: 16px;
+      display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap;
+    }
+    .crisis-quick-text h3 {
+      font-size: 0.875rem; font-weight: 600; color: #b91c1c; margin-bottom: 3px;
+    }
+    .crisis-quick-text p { font-size: 0.78rem; color: var(--text-muted); }
+    .btn-crisis {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 9px 18px; background: #b91c1c; color: #fff;
+      border: none; border-radius: 8px; font-family: 'Jost', sans-serif;
+      font-size: 0.825rem; font-weight: 600; cursor: pointer;
+      text-decoration: none; transition: background 0.15s; flex-shrink: 0;
+    }
+    .btn-crisis:hover { background: #991b1b; }
+
+    /* ── Skeleton ── */
+    .skeleton {
+      background: linear-gradient(90deg, #ede8f5 25%, #f5f0ff 50%, #ede8f5 75%);
+      background-size: 200% 100%; animation: shimmer 1.4s infinite; border-radius: 6px;
+    }
+    @keyframes shimmer { to { background-position: -200% 0; } }
+
+    /* ── Message box ── */
+    .message-box {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 14px; padding: 20px; margin-bottom: 16px;
+    }
+    .message-box textarea {
+      width: 100%; padding: 10px 12px;
+      border: 1px solid var(--border-mid); border-radius: 8px;
+      font-family: 'Jost', sans-serif; font-size: 0.875rem; color: var(--text-dark);
+      resize: none; line-height: 1.6; margin-bottom: 10px;
+    }
+    .message-box textarea:focus { outline: none; border-color: var(--plum); box-shadow: 0 0 0 3px var(--plum-muted); }
+    .btn-send {
+      padding: 8px 18px; background: var(--plum); color: #fff; border: none;
+      border-radius: 8px; font-family: 'Jost', sans-serif;
+      font-size: 0.825rem; font-weight: 600; cursor: pointer; transition: background 0.15s;
+    }
+    .btn-send:hover { background: var(--plum-light); }
+
+    .sent-confirmation {
+      font-size: 0.825rem; color: var(--level-low); font-weight: 500; margin-top: 8px; display: none;
+    }
+    .sent-confirmation.visible { display: block; }
+  </style>
+</head>
+<body>
+
+<nav class="top-nav">
+  <div style="display:flex;align-items:center;gap:10px;">
+    <span class="nav-brand">Parental Care Guide</span>
+    <span class="nav-tag">Family Portal</span>
+  </div>
+  <div class="nav-right">
+    <span class="nav-user" id="navUser"></span>
+    <button class="nav-signout" id="signOutBtn">Sign out</button>
+  </div>
+</nav>
+
+<main class="page">
+
+  <div class="greeting">
+    <h1 id="greeting">Welcome back.</h1>
+    <p id="greetingSub">Here's the latest on your family's care.</p>
+  </div>
+
+  <!-- ── Urgent flags ── -->
+  <div class="urgent-section" id="urgentSection">
+    <div class="urgent-title">⚑ Urgent flags</div>
+    <div id="urgentFlags"></div>
+  </div>
+
+  <!-- ── Care level ── -->
+  <div class="care-level-hero level-low" id="careLevelHero">
+    <div class="care-level-label">Current care level</div>
+    <div class="care-level-name" id="careLevelName">
+      <span class="skeleton" style="width:120px;height:22px;display:inline-block;"></span>
+    </div>
+    <div class="care-level-desc" id="careLevelDesc"></div>
+  </div>
+
+  <!-- ── Quick crisis card access ── -->
+  <div class="crisis-quick" id="crisisQuick" style="display:none;">
+    <div class="crisis-quick-text">
+      <h3>Emergency Information</h3>
+      <p>View the crisis card with emergency contacts, medications, and directives.</p>
+    </div>
+    <a id="crisisLink" href="#" class="btn-crisis">View Crisis Card →</a>
+  </div>
+
+  <!-- ── Parent info ── -->
+  <div class="section-card">
+    <div class="section-header"><span class="section-label">Parent information</span></div>
+    <div class="section-body">
+      <div class="info-grid" id="parentInfo">
+        <div><div class="skeleton" style="height:12px;width:80px;margin-bottom:8px;"></div><div class="skeleton" style="height:16px;width:120px;"></div></div>
+        <div><div class="skeleton" style="height:12px;width:60px;margin-bottom:8px;"></div><div class="skeleton" style="height:16px;width:100px;"></div></div>
+        <div><div class="skeleton" style="height:12px;width:70px;margin-bottom:8px;"></div><div class="skeleton" style="height:16px;width:80px;"></div></div>
+        <div><div class="skeleton" style="height:12px;width:50px;margin-bottom:8px;"></div><div class="skeleton" style="height:16px;width:90px;"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Active medications ── -->
+  <div class="section-card">
+    <div class="section-header"><span class="section-label">Active medications</span></div>
+    <div class="section-body" id="medicationsList">
+      <div class="skeleton" style="height:14px;width:100%;margin-bottom:10px;"></div>
+      <div class="skeleton" style="height:14px;width:85%;"></div>
+    </div>
+  </div>
+
+  <!-- ── Care plan summary ── -->
+  <div class="section-card">
+    <div class="section-header"><span class="section-label">Care plan snapshot</span></div>
+    <div class="section-body" id="carePlanSummary">
+      <div class="skeleton" style="height:14px;margin-bottom:8px;"></div>
+      <div class="skeleton" style="height:14px;width:90%;margin-bottom:8px;"></div>
+      <div class="skeleton" style="height:14px;width:60%;"></div>
+    </div>
+  </div>
+
+  <!-- ── Care team ── -->
+  <div class="section-card">
+    <div class="section-header"><span class="section-label">Care team</span></div>
+    <div class="section-body" id="careTeam">
+      <div class="skeleton" style="height:14px;width:140px;margin-bottom:10px;"></div>
+      <div class="skeleton" style="height:14px;width:100px;"></div>
+    </div>
+  </div>
+
+  <!-- ── Message practitioner ── -->
+  <div class="message-box">
+    <div class="section-label" style="margin-bottom:12px;">Message your care coordinator</div>
+    <textarea id="messageText" rows="3" placeholder="Send a question or update to your care coordinator…"></textarea>
+    <div style="display:flex;align-items:center;gap:14px;">
+      <button class="btn-send" onclick="sendMessage()">Send Message</button>
+      <span class="sent-confirmation" id="sentConfirm">✓ Message sent</span>
+    </div>
+  </div>
+
+</main>
+
+<script type="module">
+import { initializeApp }           from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { getAuth, onAuthStateChanged, signOut }
+                                   from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+import { getFirestore, collection, doc, getDoc, getDocs, addDoc,
+         query, where, serverTimestamp }
+                                   from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+const firebaseConfig = {
+  apiKey:            "AIzaSyB0GaJXI_lbLhEXmctMJ0LoHiV3cHL5vQY",
+  authDomain:        "careguide-def76.firebaseapp.com",
+  projectId:         "careguide-def76",
+  storageBucket:     "careguide-def76.firebasestorage.app",
+  messagingSenderId: "658340465706",
+  appId:             "1:658340465706:web:0e412731947ff51474c753"
+};
+
+const app  = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db   = getFirestore(app);
+
+let currentUser = null;
+let familyId    = null;
+
+// ── Auth guard ───────────────────────────────────────────────────────────────
+onAuthStateChanged(auth, async (user) => {
+  if (!user) { window.location.href = '/login.html'; return; }
+
+  const token = await user.getIdTokenResult();
+
+  // Family users land here; practitioners/admin redirect away
+  if (token.claims.admin || token.claims.practitioner) {
+    window.location.href = '/dashboard.html'; return;
+  }
+  if (!token.claims.family) {
+    // Unactivated user — show waiting state
+    document.body.style.visibility = '';
+    showWaiting(); return;
+  }
+
+  currentUser = user;
+  familyId    = token.claims.family_group_id || null;
+  document.body.style.visibility = '';
+
+  // Greeting
+  document.getElementById('navUser').textContent = user.displayName || user.email;
+  const hour = new Date().getHours();
+  const tod  = hour < 12 ? 'morning' : hour < 17 ? 'afternoon' : 'evening';
+  const firstName = (user.displayName || '').split(' ')[0] || 'there';
+  document.getElementById('greeting').textContent = `Good ${tod}, ${firstName}.`;
+
+  if (!familyId) { showNoFamily(); return; }
+
+  document.getElementById('crisisLink').href = `/crisis-card.html?id=${familyId}`;
+  await loadData();
+});
+
+// ── Sign out ─────────────────────────────────────────────────────────────────
+document.getElementById('signOutBtn').addEventListener('click', async () => {
+  await signOut(auth);
+  window.location.href = '/login.html';
+});
+
+// ── Load data ─────────────────────────────────────────────────────────────────
+async function loadData() {
+  const [familySnap, parentsSnap, medsSnap, planSnap, practitionerSnap] = await Promise.all([
+    getDoc(doc(db, 'family_groups', familyId)),
+    getDocs(query(collection(db, 'parents'), where('family_group_id', '==', familyId))),
+    getDocs(query(collection(db, 'medications'), where('family_group_id', '==', familyId))),
+    getDoc(doc(db, 'care_plans',    familyId)),
+    // We'll get practitioner info from the family_groups doc
+    Promise.resolve(null),
+  ]);
+
+  const fam    = familySnap.exists()   ? familySnap.data()  : {};
+  const parent = parentsSnap.empty     ? null : parentsSnap.docs[0].data();
+  const meds   = medsSnap.docs.map(d => d.data());
+  const plan   = planSnap.exists()     ? planSnap.data()    : null;
+
+  document.getElementById('greetingSub').textContent =
+    `Here's the latest on ${fam.name || 'your family'}'s care.`;
+
+  renderCareLevel(fam);
+  renderUrgentFlags(fam.urgent_flags || []);
+  renderParentInfo(parent);
+  renderMedications(meds);
+  renderCarePlan(plan);
+  await renderCareTeam(fam.practitioner_id);
+
+  // show crisis quick access if crisis-level
+  if (fam.care_level === 'crisis' || fam.care_level === 'high') {
+    document.getElementById('crisisQuick').style.display = '';
+  }
+}
+
+function renderCareLevel(fam) {
+  const lvl  = fam.care_level || 'low';
+  const hero = document.getElementById('careLevelHero');
+  hero.className = `care-level-hero level-${lvl}`;
+
+  const names = { low: 'Low — Stable', medium: 'Medium — Active Support', high: 'High — Complex Needs', crisis: 'Crisis — Priority Response' };
+  const descs = {
+    low:    'Your parent is stable. Your care coordinator is monitoring and available.',
+    medium: 'Active support is in place. Check in regularly and reach out with any changes.',
+    high:   'Complex needs are being managed. Stay in close contact with your care team.',
+    crisis: 'Your parent is receiving priority care. Please contact your coordinator immediately.',
+  };
+  document.getElementById('careLevelName').textContent = names[lvl] || lvl;
+  document.getElementById('careLevelDesc').textContent = descs[lvl] || '';
+}
+
+function renderUrgentFlags(flags) {
+  if (!flags.length) return;
+  document.getElementById('urgentSection').classList.add('visible');
+  document.getElementById('urgentFlags').innerHTML = flags.map(f =>
+    `<div class="urgent-flag">⚑ ${f}</div>`
+  ).join('');
+}
+
+function renderParentInfo(p) {
+  const el = document.getElementById('parentInfo');
+  if (!p) { el.innerHTML = `<p class="empty">No parent record on file.</p>`; return; }
+  el.innerHTML = `
+    <div class="info-field">
+      <label>Name</label>
+      <span class="val">${p.first_name || ''} ${p.last_name || ''}</span>
+    </div>
+    <div class="info-field">
+      <label>Date of birth</label>
+      <span class="val ${p.dob ? '' : 'empty'}">${p.dob ? formatDob(p.dob) : '—'}</span>
+    </div>
+    <div class="info-field">
+      <label>State</label>
+      <span class="val ${p.state ? '' : 'empty'}">${p.state || '—'}</span>
+    </div>
+    <div class="info-field">
+      <label>Care coordinator email</label>
+      <span class="val ${p.invite_email ? '' : 'empty'}">${p.invite_email || '—'}</span>
+    </div>
+  `;
+}
+
+function renderMedications(meds) {
+  const el     = document.getElementById('medicationsList');
+  const active = meds.filter(m => m.status !== 'inactive');
+  if (!active.length) {
+    el.innerHTML = `<p class="empty">No medications on record.</p>`;
+    return;
+  }
+  el.innerHTML = active.map(m => `
+    <div class="med-item">
+      <div>
+        <div class="med-name">${m.name || '—'}</div>
+        <div class="med-detail">${[m.dosage, m.frequency].filter(Boolean).join(' · ')}</div>
+      </div>
+      <span class="med-pill">Active</span>
+    </div>
+  `).join('');
+}
+
+function renderCarePlan(plan) {
+  const el = document.getElementById('carePlanSummary');
+  if (!plan || !plan.sections) {
+    el.innerHTML = `<p class="empty">Care plan not yet created by your coordinator.</p>`;
+    return;
+  }
+  const s = plan.sections;
+  const snippet = s.goals || s.situation || s.next_steps || '';
+  if (!snippet) {
+    el.innerHTML = `<p class="empty">Care plan is in progress.</p>`;
+    return;
+  }
+  const preview = snippet.length > 320 ? snippet.slice(0, 320) + '…' : snippet;
+  const lastUpdated = plan.updated_at?.toDate?.() ? formatTs(plan.updated_at) : '';
+  el.innerHTML = `
+    <p style="font-size:0.875rem;color:var(--text-dark);line-height:1.7;margin-bottom:12px;">${preview}</p>
+    ${lastUpdated ? `<p style="font-size:0.75rem;color:var(--text-muted);">Last updated ${lastUpdated}</p>` : ''}
+  `;
+}
+
+async function renderCareTeam(practitionerId) {
+  const el = document.getElementById('careTeam');
+  if (!practitionerId) {
+    el.innerHTML = `<p class="empty">No care coordinator assigned yet.</p>`;
+    return;
+  }
+
+  try {
+    const practSnap = await getDoc(doc(db, 'users', practitionerId));
+    const p = practSnap.exists() ? practSnap.data() : null;
+    if (!p) { el.innerHTML = `<p class="empty">Care coordinator info unavailable.</p>`; return; }
+
+    const initials = [(p.first_name || '')[0], (p.last_name || '')[0]].filter(Boolean).join('').toUpperCase() || '?';
+    el.innerHTML = `
+      <div class="care-team-item">
+        <div class="ct-avatar">${initials}</div>
+        <div>
+          <div class="ct-name">${p.first_name || ''} ${p.last_name || ''}</div>
+          <div class="ct-role">${p.profession || 'Care Coordinator'}</div>
+          ${p.email ? `<div class="ct-contact">${p.email}</div>` : ''}
+        </div>
+      </div>
+    `;
+  } catch {
+    el.innerHTML = `<p class="empty">Care coordinator info unavailable.</p>`;
+  }
+}
+
+// ── Send message ─────────────────────────────────────────────────────────────
+window.sendMessage = async function () {
+  const text = document.getElementById('messageText').value.trim();
+  if (!text || !familyId) return;
+
+  await addDoc(collection(db, 'family_messages'), {
+    family_group_id: familyId,
+    from_uid:        currentUser.uid,
+    from_email:      currentUser.email,
+    from_name:       currentUser.displayName || currentUser.email,
+    text,
+    created_at:      serverTimestamp(),
+    read:            false,
+  });
+
+  document.getElementById('messageText').value = '';
+  document.getElementById('sentConfirm').classList.add('visible');
+  setTimeout(() => document.getElementById('sentConfirm').classList.remove('visible'), 3000);
+};
+
+// ── Edge states ──────────────────────────────────────────────────────────────
+function showWaiting() {
+  document.getElementById('greeting').textContent = 'Your account is pending.';
+  document.getElementById('greetingSub').textContent =
+    'Your care coordinator is setting up your family portal. You'll receive an email when it's ready.';
+  document.getElementById('careLevelHero').style.display = 'none';
+}
+
+function showNoFamily() {
+  document.getElementById('greetingSub').textContent =
+    'Your account isn't linked to a family group yet. Please contact your care coordinator.';
+  document.getElementById('careLevelHero').style.display = 'none';
+}
+
+function formatDob(dob) {
+  if (!dob) return '—';
+  const [y, m, d] = dob.split('-');
+  return `${m}/${d}/${y}`;
+}
+function formatTs(ts) {
+  const d = ts.toDate ? ts.toDate() : new Date(ts);
+  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+}
+</script>
+</body>
+</html>
