@@ -452,6 +452,14 @@
         cardEl.className = `p-card status-${cssStatus}`;
         actionsEl.innerHTML = `<span class="action-done">${label}</span>`;
 
+        const badgeEl = cardEl.querySelector('.badge');
+        if (badgeEl) {
+          const badgeClass = { active: 'badge-approved', rejected: 'badge-rejected' }[status] || 'badge-pending';
+          const badgeLabel = { active: 'Approved', rejected: 'Rejected' }[status] || 'Pending';
+          badgeEl.className = `badge ${badgeClass}`;
+          badgeEl.textContent = badgeLabel;
+        }
+
         // Update the in-memory record and re-count tabs
         const rec = allUsers.find(u => u.id === uid);
         if (rec) rec.status = status;
