@@ -31,16 +31,16 @@ PATCH https://careguide-api-658340465706.us-central1.run.app/tasks/{task-number}
 Body: { "status": "in-progress", "branch": "<branch-name>" }
 ```
 
-## Branch and Worktree Setup
+## Branch Setup
 
 Create a branch name from the task: `task/{number}-{slug}` where slug is the title lowercased, spaces replaced with hyphens, max 40 chars.
 
-Create an isolated git worktree:
+Create and switch to the branch:
 ```bash
-git worktree add ../careguide-task-{number} -b task/{number}-{slug}
+git checkout -b task/{number}-{slug}
 ```
 
-Tell the user the worktree path and branch name.
+Tell the user the branch name. This session is now isolated to this branch.
 
 ## Load Context
 
