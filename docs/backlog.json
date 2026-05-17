@@ -1,0 +1,124 @@
+{
+  "tasks": [
+    {
+      "number": 1,
+      "title": "Task Board — Admin UI + API",
+      "category": "meta",
+      "priority": 1,
+      "status": "ready",
+      "dependencies": [],
+      "description": "Build the project task board that all future build sessions read from. Includes: (1) Firestore `project_tasks` collection schema, (2) FastAPI router `/tasks` with GET list (filterable by status/priority), GET by number, PATCH status/plan/branch/pr_url, (3) Admin-only Firestore rules for the collection, (4) `/admin-tasks.html` page listing all tasks with status badges, priority, category, links to PRs, and a detail view showing the plan. The API is the source of truth — the UI reads from it. Auth: admin claim required for all task endpoints and the admin page.",
+      "plan": null,
+      "branch": null,
+      "pr_url": null
+    },
+    {
+      "number": 2,
+      "title": "Intake AI Endpoint + intake_data Consumer",
+      "category": "debt",
+      "priority": 2,
+      "status": "backlog",
+      "dependencies": [],
+      "description": "Two connected orphans: (1) intake.html:548 calls POST /ai/intake which does not exist — build the endpoint. It should read intake_data for the family_group_id, pass relevant fields to Claude, and return a structured care plan draft or summary. (2) intake_data is written by intake.html but never consumed anywhere — wire it as input to the AI endpoint and consider surfacing a summary in the care plan editor. Auth: require_practitioner.",
+      "plan": null,
+      "branch": null,
+      "pr_url": null
+    },
+    {
+      "number": 3,
+      "title": "Manage Family Members UI",
+      "category": "debt",
+      "priority": 3,
+      "status": "backlog",
+      "dependencies": [],
+      "description": "The POST /family-groups/{id}/revoke endpoint exists and is tested but has no UI. Build a 'Manage Family Members' section in client.html (or a dedicated page) that lists current family members for a group (name, email, invited_at, status) and allows the practitioner to revoke access with a confirmation step. Read family member list from family_invitations collection filtered by group_id and status=accepted. After revoke, update the list in real time.",
+      "plan": null,
+      "branch": null,
+      "pr_url": null
+    },
+    {
+      "number": 4,
+      "title": "Practitioner Messaging UI",
+      "category": "debt",
+      "priority": 4,
+      "status": "backlog",
+      "dependencies": [],
+      "description": "family_messages collection has rules for practitioner read/write but client.html has no messaging UI. Build a messaging thread in client.html that shows the full family_messages thread for a group (ordered by created_at) and allows the practitioner to post replies. Family members already send messages from family.html. This closes the two-way messaging loop. Real-time via onSnapshot.",
+      "plan": null,
+      "branch": null,
+      "pr_url": null
+    },
+    {
+      "number": 5,
+      "title": "Profession + Beta Claims Audit",
+      "category": "debt",
+      "priority": 5,
+      "status": "backlog",
+      "dependencies": [],
+      "description": "profession and beta claims are set during registration and approval but checked nowhere. Audit and decide: (a) wire profession claim into dashboard filtering or UI labeling (e.g. show discipline badge on practitioner profile), (b) wire beta claim into feature flagging for any beta-only features, or (c) if neither has a real use case yet, remove the claim setters to reduce orphan surface. Document the decision in claims registry regardless.",
+      "plan": null,
+      "branch": null,
+      "pr_url": null
+    },
+    {
+      "number": 6,
+      "title": "Orphan API Router Cleanup",
+      "category": "debt",
+      "priority": 6,
+      "status": "backlog",
+      "dependencies": [],
+      "description": "parents, medications, and session-notes routers exist in the API but all client pages use Firestore directly instead of calling them. Decide and execute: either (a) remove the routers (simpler, reduces surface) or (b) migrate the client pages to use the API routers (adds auth enforcement at API layer, enables server-side validation). Document the decision. If removing, update endpoints registry. If keeping, wire the clients and add integration tests.",
+      "plan": null,
+      "branch": null,
+      "pr_url": null
+    },
+    {
+      "number": 7,
+      "title": "Supabase Project Setup + Schema",
+      "category": "infrastructure",
+      "priority": 7,
+      "status": "backlog",
+      "dependencies": [],
+      "description": "Initialize the Postgres/Supabase reporting layer. Tasks: (1) Create Supabase project and store credentials in env/secrets, (2) Design the reporting schema — tables for practitioners, family_groups, parents, medications, session_notes, care_updates, family_members, care_plans — with proper foreign keys and timestamps, (3) Write and run the initial migration, (4) Add Supabase Python client to api/requirements.txt, (5) Create a supabase.py service in api/services/. No data sync yet — just the foundation.",
+      "plan": null,
+      "branch": null,
+      "pr_url": null
+    },
+    {
+      "number": 8,
+      "title": "Firestore → Supabase Sync Layer",
+      "category": "infrastructure",
+      "priority": 8,
+      "status": "backlog",
+      "dependencies": [7],
+      "description": "Mirror Firestore writes into Supabase for reporting. For each write endpoint in the API (register, accept-invite, family group creation, care plan updates, medications, session notes, care updates), add a fire-and-forget Supabase upsert after the Firestore write succeeds. Do not block the response on the Supabase write — log failures. Initially sync: users, family_groups, parents, medications, session_notes, care_updates, care_plans. Add a /admin/sync-status endpoint that shows last sync timestamps per collection.",
+      "plan": null,
+      "branch": null,
+      "pr_url": null
+    },
+    {
+      "number": 9,
+      "title": "Practitioner Analytics Dashboard",
+      "category": "feature",
+      "priority": 9,
+      "status": "backlog",
+      "dependencies": [7, 8],
+      "description": "Build a practitioner-facing analytics section showing: active client count, session note frequency (notes per week/month), care plan completion rate, family engagement (care updates posted, family logins), medication change history. Data sourced from Supabase. New API endpoints: GET /analytics/practitioner (requires practitioner claim). New UI section in dashboard.html or a dedicated analytics.html page. Charts via a lightweight charting library (e.g. Chart.js via CDN).",
+      "plan": null,
+      "branch": null,
+      "pr_url": null
+    },
+    {
+      "number": 10,
+      "title": "Admin Platform Analytics",
+      "category": "feature",
+      "priority": 10,
+      "status": "backlog",
+      "dependencies": [7, 8],
+      "description": "Build admin-facing platform analytics: total practitioners (active/pending/rejected), total family groups, total family members, care updates posted per week, new signups over time, practitioner activity (last active). Data sourced from Supabase. New API endpoints: GET /analytics/platform (requires admin claim). New section in admin-approvals.html or dedicated admin-analytics.html. Timeframe filter (7d, 30d, 90d, all-time).",
+      "plan": null,
+      "branch": null,
+      "pr_url": null
+    }
+  ]
+}
