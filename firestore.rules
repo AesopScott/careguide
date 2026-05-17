@@ -24,21 +24,6 @@ service cloud.firestore {
       allow write: if isAuth() && (request.auth.uid == userId || request.auth.token.admin == true);
     }
 
-    // ── Practitioners ─────────────────────────────────────────────────────────
-    // Practitioners own their profile, session notes, and billing records.
-
-    match /practitioners/{practitionerId} {
-      allow read, write: if isAuth() && request.auth.uid == practitionerId;
-
-      match /sessionNotes/{noteId} {
-        allow read, write: if isAuth() && request.auth.uid == practitionerId;
-      }
-
-      match /billingRecords/{recordId} {
-        allow read, write: if isAuth() && request.auth.uid == practitionerId;
-      }
-    }
-
     // ── Family Groups ─────────────────────────────────────────────────────────
     // Top-level family_groups doc. Practitioners own them; family members
     // belong via token.claims.family_group_ids (array; set by accept-invite).

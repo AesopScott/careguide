@@ -108,7 +108,7 @@ Practitioner clinical notes per family group. Top-level, keyed by `family_group_
 
 **Indexes:** `session_notes` (family_group_id ASC, created_at DESC). ✓
 
-⚠ **API mismatch:** `api/routers/session_notes.py:17,18,31,32` writes/reads `practitioners/{uid}/sessionNotes` (subcollection, never matches client). Dead endpoint — flagged for rewrite.
+**API:** `api/routers/session_notes.py` writes/reads top-level `session_notes` collection with `family_group_id` filtering and ownership checks. Orphan (no client caller — client uses direct Firestore) but schema-correct. ✓
 
 ---
 

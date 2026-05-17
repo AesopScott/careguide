@@ -148,14 +148,23 @@ Base URL (production): `https://careguide-api-658340465706.us-central1.run.app`
 ## Session Notes
 
 ### `POST /session-notes/`
-**Served by:** `api/routers/session_notes.py:13`
+**Served by:** `api/routers/session_notes.py` create_session_note
+**Auth:** `require_practitioner` (must own the target family_group)
 **Callers:** none (client uses direct Firestore write)
-**Status:** ⚠ orphan + wrong path (`practitioners/{uid}/sessionNotes` subcollection).
+**Request:** `{family_group_id, type?, text, billable_minutes?}`
+**Response:** `{id, ...note fields}`
+**Status:** ⚠ orphan — endpoint is correct, no client caller.
 
-### `GET /session-notes/`
-**Served by:** `api/routers/session_notes.py:28`
+### `GET /session-notes/?family_group_id=...`
+**Served by:** `api/routers/session_notes.py` list_session_notes
 **Callers:** none
-**Status:** ⚠ orphan + wrong path.
+**Status:** ⚠ orphan.
+
+### `GET /session-notes/{id}`, `PATCH /session-notes/{id}`, `DELETE /session-notes/{id}`
+**Served by:** `api/routers/session_notes.py`
+**Auth:** `require_practitioner` (must own the note's family group)
+**Callers:** none
+**Status:** ⚠ orphan.
 
 ---
 
@@ -238,6 +247,6 @@ Base URL (production): `https://careguide-api-658340465706.us-central1.run.app`
 | GET/POST/GET /family-groups/...         | ✓      | ✗      | orphan (correct schema)   |
 | /parents/ (CRUD)                        | ✓      | ✗      | orphan (client uses direct Firestore) |
 | /medications/ (CRUD)                    | ✓      | ✗      | orphan (client uses direct Firestore) |
-| POST/GET /session-notes/...             | ✓ (broken) | ✗ | ⚠ orphan + wrong collection |
+| POST/GET/PATCH/DELETE /session-notes/...| ✓      | ✗      | orphan (correct schema)   |
 | POST /ai/care-plan-draft, /session-note-draft, /ask | ✓ | ✗ | ⚠ orphan (planned) |
 | POST /notifications/email, /sms, /reminder | ✓   | ✗      | ⚠ orphan                  |
