@@ -55,11 +55,7 @@ async def register_practitioner(body: RegisterRequest, user: dict = Depends(requ
 
     # 1. Set custom claims on Firebase Auth token
     try:
-        firebase_auth.set_custom_user_claims(uid, {
-            "practitioner": True,
-            "profession":   body.profession,
-            "beta":         body.beta,
-        })
+        firebase_auth.set_custom_user_claims(uid, {"practitioner": True})
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to set user claims: {str(e)}")
 
@@ -246,17 +242,12 @@ async def set_user_status(
     user_data = snap.to_dict()
     full_name  = user_data.get("full_name", "")
     email      = user_data.get("email", "")
-    profession = user_data.get("profession", "")
     prior_status = user_data.get("status")
 
     # 1. Update custom claims
     try:
         if body.status == "active":
-            firebase_auth.set_custom_user_claims(uid, {
-                "practitioner": True,
-                "profession":   profession,
-                "beta":         user_data.get("beta", True),
-            })
+            firebase_auth.set_custom_user_claims(uid, {"practitioner": True})
         else:
             firebase_auth.set_custom_user_claims(uid, {})
     except Exception as e:
