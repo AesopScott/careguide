@@ -168,17 +168,22 @@ Crisis card data per family group. Document id = `family_group_id`.
 
 ## `family_messages`
 
-Family-side messaging (family.html flow).
+Two-way messaging between a family member and the owning practitioner for a family group.
+
+**Schema (key fields):** `family_group_id`, `from_uid`, `from_email`, `from_name`, `text`, `created_at`, `read` (bool).
 
 **Producers**
-- `family.html:549` — addDoc (family member side)
+- `family.html:646` — addDoc (family-member side)
+- `client.html` sendMessage — addDoc (practitioner-side reply)
 
 **Consumers**
-- None on practitioner side yet — practitioner inbox UI not yet built.
+- `client.html` Messages tab — `onSnapshot(query(family_messages, where family_group_id == X, orderBy created_at asc))`
 
 **Rule:** `firestore.rules` /family_messages — both practitioner and family member can read/write within their group; only the sender (or admin) can edit/delete. ✓
 
-⚠ **Note:** family flow now reachable (claim setter + accept page built). Practitioner-side reader UI still to come.
+**Indexes:** `family_messages` (family_group_id ASC, created_at ASC) for the practitioner-side thread query. ✓
+
+**Notes:** the `read` field is written but never updated — the current rule only lets the original sender (or admin) modify a message, so the recipient cannot flip `read` without a field-level rule change. Read-receipts and unread badges are deferred until that rule lands.
 
 ---
 
