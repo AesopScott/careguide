@@ -1,0 +1,1788 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <title>Parental Care Guide — Registries</title>
+  <style>
+    :root {
+      --bg:        #0d1117;
+      --surface:   #161b22;
+      --surface-2: #1c2128;
+      --border:    #30363d;
+      --text:      #e6edf3;
+      --text-muted:#8b949e;
+      --text-dim:  #6e7681;
+
+      --green:     #3fb950;
+      --green-bg:  #0d2a18;
+      --green-bd:  #1a3a20;
+
+      --amber:     #e3b341;
+      --amber-bg:  #1f1a0d;
+      --amber-bd:  #3a2e10;
+
+      --red:       #f85149;
+      --red-bg:    #2a0d0d;
+      --red-bd:    #4a1a1a;
+
+      --blue:      #58a6ff;
+      --blue-bg:   #0d1b2a;
+      --blue-bd:   #1f4068;
+
+      --purple:    #bc8cff;
+      --purple-bg: #1a1428;
+      --purple-bd: #3a2a5a;
+
+      --col-accent:#39d0d8;
+      --col-bg:    #0d1f1f;
+      --col-bd:    #1a3a3a;
+
+      --claim-accent:#d2a679;
+      --claim-bg:  #1f170d;
+      --claim-bd:  #3a2a10;
+
+      --ep-accent: #bc8cff;
+      --ep-bg:     #1a1428;
+      --ep-bd:     #3a2a5a;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      font-size: 14px;
+      line-height: 1.5;
+      padding: 32px 24px 80px;
+    }
+
+    /* ── Header ── */
+    .header {
+      max-width: 1400px;
+      margin: 0 auto 28px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border);
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .header-left { display: flex; flex-direction: column; gap: 4px; }
+    .header-eyebrow {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-dim);
+    }
+    .header-title { font-size: 22px; font-weight: 700; letter-spacing: -0.02em; }
+    .header-title span { color: #39d0d8; }
+    .header-meta { color: var(--text-muted); font-size: 13px; text-align: right; line-height: 1.6; }
+
+    /* ── Stats Bar ── */
+    .stats-bar {
+      max-width: 1400px;
+      margin: 0 auto 28px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px 24px;
+      display: flex;
+      gap: 32px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .stat-group { display: flex; gap: 20px; align-items: center; }
+    .stat-divider { width: 1px; height: 36px; background: var(--border); }
+    .stat { display: flex; flex-direction: column; align-items: center; gap: 1px; }
+    .stat-num { font-size: 20px; font-weight: 800; letter-spacing: -0.02em; line-height: 1; }
+    .stat-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); }
+    .stat-ok .stat-num   { color: var(--green); }
+    .stat-warn .stat-num { color: var(--amber); }
+    .stat-crit .stat-num { color: var(--red); }
+    .stat-total .stat-num{ color: var(--text-muted); }
+    .stats-group-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-dim);
+      white-space: nowrap;
+    }
+
+    /* ── Tabs ── */
+    .tabs-wrap {
+      max-width: 1400px;
+      margin: 0 auto 28px;
+      display: flex;
+      gap: 8px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0;
+    }
+    .tab {
+      font-size: 14px;
+      font-weight: 600;
+      padding: 8px 18px;
+      border-radius: 8px 8px 0 0;
+      border: 1px solid transparent;
+      border-bottom: none;
+      cursor: pointer;
+      color: var(--text-muted);
+      background: transparent;
+      transition: all 0.15s;
+      position: relative;
+      bottom: -1px;
+      letter-spacing: 0.01em;
+    }
+    .tab:hover { color: var(--text); background: var(--surface-2); }
+    .tab.active {
+      color: var(--text);
+      background: var(--surface);
+      border-color: var(--border);
+      border-bottom-color: var(--surface);
+    }
+    .tab-count {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 1px 6px;
+      border-radius: 20px;
+      margin-left: 6px;
+      background: var(--surface-2);
+      color: var(--text-muted);
+    }
+    .tab.active .tab-count { background: var(--border); color: var(--text); }
+
+    /* ── Registry Panels ── */
+    .registry-panel { display: none; max-width: 1400px; margin: 0 auto; }
+    .registry-panel.active { display: block; }
+
+    /* ── Section header ── */
+    .reg-section { margin-bottom: 40px; }
+    .reg-section-title {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-muted);
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .reg-section-title::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* ── Card Grid ── */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 12px;
+    }
+    .card-grid-wide {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+      gap: 12px;
+    }
+
+    /* ── Card ── */
+    .card {
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .card-ok   { background: var(--green-bg); border-color: var(--green-bd); }
+    .card-warn { background: var(--amber-bg); border-color: var(--amber-bd); }
+    .card-crit { background: var(--red-bg);   border-color: var(--red-bd); }
+    .card-info { background: var(--blue-bg);  border-color: var(--blue-bd); }
+
+    .card-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+    .card-name {
+      font-family: 'SFMono-Regular', 'Consolas', monospace;
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+    .card-name-plain {
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+
+    .card-ok   .card-name { color: var(--green); }
+    .card-warn .card-name { color: var(--amber); }
+    .card-crit .card-name { color: var(--red); }
+    .card-info .card-name { color: var(--blue); }
+
+    .card-ok   .card-name-plain { color: var(--green); }
+    .card-warn .card-name-plain { color: var(--amber); }
+    .card-crit .card-name-plain { color: var(--red); }
+    .card-info .card-name-plain { color: var(--blue); }
+
+    .status-badge {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 3px 8px;
+      border-radius: 20px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .badge-ok   { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-bd); }
+    .badge-warn { background: var(--amber-bg); color: var(--amber); border: 1px solid var(--amber-bd); }
+    .badge-crit { background: var(--red-bg);   color: var(--red);   border: 1px solid var(--red-bd); }
+    .badge-info { background: var(--blue-bg);  color: var(--blue);  border: 1px solid var(--blue-bd); }
+
+    .card-desc {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .card-block { display: flex; flex-direction: column; gap: 4px; }
+    .block-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-dim);
+    }
+    .entry-list { list-style: none; }
+    .entry-list li {
+      font-size: 12px;
+      color: var(--text-muted);
+      padding: 2px 0 2px 12px;
+      position: relative;
+      line-height: 1.5;
+    }
+    .entry-list li::before {
+      content: '·';
+      position: absolute;
+      left: 0;
+      color: var(--text-dim);
+    }
+    .entry-list li code {
+      font-family: 'SFMono-Regular', 'Consolas', monospace;
+      font-size: 11px;
+      color: var(--text);
+      background: rgba(255,255,255,0.06);
+      padding: 1px 4px;
+      border-radius: 3px;
+    }
+    .entry-list li em {
+      color: var(--text-dim);
+      font-style: italic;
+    }
+
+    .field-list {
+      font-family: 'SFMono-Regular', 'Consolas', monospace;
+      font-size: 11px;
+      color: var(--text-muted);
+      line-height: 1.8;
+    }
+
+    .tag-row { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 2px; }
+    .tag {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 7px;
+      border-radius: 4px;
+      white-space: nowrap;
+    }
+    .tag-method {
+      font-family: 'SFMono-Regular', 'Consolas', monospace;
+      font-size: 10px;
+      font-weight: 800;
+      padding: 2px 6px;
+      border-radius: 3px;
+    }
+    .method-get    { background: #0d2a18; color: #3fb950; }
+    .method-post   { background: #0d1b2a; color: #58a6ff; }
+    .method-patch  { background: #1f1a0d; color: #e3b341; }
+    .method-delete { background: #2a0d0d; color: #f85149; }
+
+    .tag-auth { background: rgba(188,140,255,0.12); color: var(--purple); }
+    .tag-caller { background: rgba(88,166,255,0.10); color: var(--blue); }
+    .tag-none { background: rgba(139,148,158,0.1); color: var(--text-muted); }
+
+    .warn-note {
+      font-size: 12px;
+      color: var(--amber);
+      background: rgba(227,179,65,0.08);
+      border: 1px solid rgba(227,179,65,0.2);
+      border-radius: 6px;
+      padding: 7px 10px;
+      line-height: 1.5;
+    }
+    .crit-note {
+      font-size: 12px;
+      color: var(--red);
+      background: rgba(248,81,73,0.08);
+      border: 1px solid rgba(248,81,73,0.2);
+      border-radius: 6px;
+      padding: 7px 10px;
+      line-height: 1.5;
+    }
+
+    .divider { height: 1px; background: var(--border); }
+
+    /* ── Endpoint path line ── */
+    .ep-path {
+      font-family: 'SFMono-Regular', 'Consolas', monospace;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+    }
+    .ep-param { color: var(--purple); }
+
+    /* ── Back link ── */
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      color: var(--text-muted);
+      text-decoration: none;
+      margin-bottom: 20px;
+    }
+    .back-link:hover { color: var(--text); }
+
+    @media (max-width: 640px) {
+      .card-grid, .card-grid-wide { grid-template-columns: 1fr; }
+      .header { flex-direction: column; align-items: flex-start; }
+      .stats-bar { gap: 16px; }
+      .stat-divider { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <div style="max-width:1400px;margin:0 auto 20px;">
+    <a class="back-link" href="/build.html">← System Map</a>
+  </div>
+
+  <!-- Header -->
+  <div class="header">
+    <div class="header-left">
+      <div class="header-eyebrow">Parental Care Guide · Internal</div>
+      <div class="header-title">System <span>Registries</span></div>
+    </div>
+    <div class="header-meta">
+      Collections · Claims · Endpoints<br>
+      <span style="color:var(--text-dim);font-size:12px;">Updated: May 2026</span>
+    </div>
+  </div>
+
+  <!-- Stats Bar -->
+  <div class="stats-bar">
+    <!-- Collections -->
+    <div class="stats-group-label">Collections</div>
+    <div class="stat-group">
+      <div class="stat stat-total"><div class="stat-num">14</div><div class="stat-label">Total</div></div>
+      <div class="stat stat-ok">  <div class="stat-num">11</div><div class="stat-label">OK</div></div>
+      <div class="stat stat-warn"><div class="stat-num">3</div> <div class="stat-label">Warnings</div></div>
+    </div>
+    <div class="stat-divider"></div>
+    <!-- Claims -->
+    <div class="stats-group-label">Claims</div>
+    <div class="stat-group">
+      <div class="stat stat-total"><div class="stat-num">6</div><div class="stat-label">Total</div></div>
+      <div class="stat stat-ok">  <div class="stat-num">4</div><div class="stat-label">OK</div></div>
+      <div class="stat stat-warn"><div class="stat-num">2</div><div class="stat-label">Orphaned</div></div>
+    </div>
+    <div class="stat-divider"></div>
+    <!-- Endpoints -->
+    <div class="stats-group-label">Endpoints</div>
+    <div class="stat-group">
+      <div class="stat stat-total"><div class="stat-num">25</div><div class="stat-label">Total</div></div>
+      <div class="stat stat-ok">  <div class="stat-num">7</div> <div class="stat-label">Wired</div></div>
+      <div class="stat stat-warn"><div class="stat-num">17</div><div class="stat-label">Orphaned</div></div>
+      <div class="stat stat-crit"><div class="stat-num">1</div> <div class="stat-label">Missing</div></div>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs-wrap">
+    <button class="tab active" onclick="showTab('collections')">
+      Firestore Collections <span class="tab-count">14</span>
+    </button>
+    <button class="tab" onclick="showTab('claims')">
+      Custom Claims <span class="tab-count">6</span>
+    </button>
+    <button class="tab" onclick="showTab('endpoints')">
+      API Endpoints <span class="tab-count">25</span>
+    </button>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════
+       COLLECTIONS
+  ══════════════════════════════════════════════════════════════ -->
+  <div id="panel-collections" class="registry-panel active">
+
+    <div class="reg-section">
+      <div class="reg-section-title">Core — User &amp; Family Data</div>
+      <div class="card-grid">
+
+        <!-- users -->
+        <div class="card card-ok">
+          <div class="card-header">
+            <div class="card-name">`users`</div>
+            <span class="status-badge badge-ok">✓ OK</span>
+          </div>
+          <div class="card-desc">Practitioner / admin / family user profiles.</div>
+          <div class="card-block">
+            <div class="block-label">Schema</div>
+            <div class="field-list">uid · email · full_name · role · profession<br>license_states[] · plan · monthly_rate · beta<br>status · baa_accepted · created_at · active_at</div>
+          </div>
+          <div class="divider"></div>
+          <div class="card-block">
+            <div class="block-label">Producers</div>
+            <ul class="entry-list">
+              <li><code>users.py:69</code> — register (full write)</li>
+              <li><code>users.py:271</code> — set_user_status (status + ts)</li>
+              <li><code>admin-approvals.html:433</code> — updateDoc status (legacy client-side)</li>
+            </ul>
+          </div>
+          <div class="card-block">
+            <div class="block-label">Consumers</div>
+            <ul class="entry-list">
+              <li><code>dashboard.html:562</code> — own profile, status gate</li>
+              <li><code>admin-approvals.html:335</code> — list practitioners (role+created_at)</li>
+              <li><code>family.html:524</code> — read practitioner profile by id</li>
+              <li><code>users.py:241</code> — read in set_user_status</li>
+              <li><code>auth_verification.py:86</code> — read for full_name</li>
+            </ul>
+          </div>
+          <div class="card-block">
+            <div class="block-label">Rule / Index</div>
+            <ul class="entry-list">
+              <li>Rule: self read/write + admin read/write</li>
+              <li>Index: role ASC, created_at DESC</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- family_groups -->
+        <div class="card card-ok">
+          <div class="card-header">
+            <div class="card-name">`family_groups`</div>
+            <span class="status-badge badge-ok">✓ OK</span>
+          </div>
+          <div class="card-desc">Top-level family group document. Owned by a practitioner; family members reference via <code>family_group_id</code> claim.</div>
+          <div class="card-block">
+            <div class="block-label">Schema</div>
+            <div class="field-list">name · practitioner_id · care_level · status<br>urgent_flags[] · overdue_task_count · updated_at</div>
+          </div>
+          <div class="divider"></div>
+          <div class="card-block">
+            <div class="block-label">Producers</div>
+            <ul class="entry-list">
+              <li><code>new-client.html:748</code> — addDoc on client create</li>
+              <li><code>client.html:882,913,922</code> — updateDoc (flags, etc.)</li>
+            </ul>
+          </div>
+          <div class="card-block">
+            <div class="block-label">Consumers</div>
+            <ul class="entry-list">
+              <li><code>dashboard.html:872</code> — list by practitioner_id</li>
+              <li><code>client.html:698</code>, <code>crisis-card.html:411</code>, <code>family.html:402</code>, <code>intake.html:454</code>, <code>care-plan.html:328</code>, <code>medications.html:353</code> — getDoc by id</li>
+            </ul>
+          </div>
+          <div class="card-block">
+            <div class="block-label">Rule / Index</div>
+            <ul class="entry-list">
+              <li>Rule: owner / family-claim / admin</li>
+              <li>Index: practitioner_id ASC, created_at DESC</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- parents -->
+        <div class="card card-ok">
+          <div class="card-header">
+            <div class="card-name">`parents`</div>
+            <span class="status-badge badge-ok">✓ OK</span>
+          </div>
+          <div class="card-desc">Parent records, one per parent within a family group. Top-level, keyed by <code>family_group_id</code>.</div>
+          <div class="card-block">
+            <div class="block-label">Schema</div>
+            <div class="field-list">family_group_id · practitioner_id · first_name<br>last_name · care_level · dob · state · invite_email</div>
+          </div>
+          <div class="divider"></div>
+          <div class="card-block">
+            <div class="block-label">Producers</div>
+            <ul class="entry-list">
+              <li><code>new-client.html:773</code> — addDoc on client create</li>
+              <li><code>client.html:865</code> — updateDoc parent details</li>
+            </ul>
+          </div>
+          <div class="card-block">
+            <div class="block-label">Consumers</div>
+            <ul class="entry-list">
+              <li><code>client.html:699</code>, <code>crisis-card.html:412</code>, <code>family.html:403</code> — list by family_group_id</li>
+            </ul>
+          </div>
+          <div class="card-block">
+            <div class="block-label">Rule / Index / API</div>
+            <ul class="entry-list">
+              <li>Rule: canAccessFamilyData / canWriteFamilyData</li>
+              <li>Indexes: none (no orderBy queries)</li>
+              <li>API: <code>routers/parents.py</code> CRUD — correct schema, no client caller</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- medications -->
+        <div class="card card-ok">
+          <div class="card-header">
+            <div class="card-name">`medications`</div>
+            <span class="status-badge badge-ok">✓ OK</span>
+          </div>
+          <div class="card-desc">Top-level medication records keyed by <code>family_group_id</code>.</div>
+          <div class="card-block">
+            <div class="block-label">Schema</div>
+            <div class="field-list">family_group_id · name · dose · frequency · created_at</div>
+          </div>
+          <div class="divider"></div>
+          <div class="card-block">
+            <div class="block-label">Producers</div>
+            <ul class="entry-list">
+              <li><code>medications.html:451</code> — addDoc</li>
+            </ul>
+          </div>
+          <div class="card-block">
+            <div class="block-label">Consumers</div>
+            <ul class="entry-list">
+              <li><code>client.html:700</code>, <code>crisis-card.html:413</code>, <code>family.html:404</code> — list by family_group_id</li>
+              <li><code>medications.html:354</code> — list by family_group_id orderBy created_at desc</li>
+            </ul>
+          </div>
+          <div class="card-block">
+            <div class="block-label">Rule / Index</div>
+            <ul class="entry-list">
+              <li>Rule: canAccessFamilyData / canWriteFamilyData</li>
+              <li>Index: family_group_id ASC, created_at DESC</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- session_notes -->
+        <div class="card card-ok">
+          <div class="card-header">
+            <div class="card-name">`session_notes`</div>
+            <span class="status-badge badge-ok">✓ OK</span>
+          </div>
+          <div class="card-desc">Practitioner clinical notes per family group. Top-level, keyed by <code>family_group_id</code>.</div>
+          <div class="card-block">
+            <div class="block-label">Schema</div>
+            <div class="field-list">family_group_id · practitioner_id · body · created_at</div>
+          </div>
+          <div class="divider"></div>
+          <div class="card-block">
+            <div class="block-label">Producers</div>
+            <ul class="entry-list">
+              <li><code>client.html:960</code> — addDoc (direct Firestore)</li>
+            </ul>
+          </div>
+          <div class="card-block">
+            <div class="block-label">Consumers</div>
+            <ul class="entry-list">
+              <li><code>client.html:701</code> — list by family_group_id orderBy created_at desc</li>
+            </ul>
+          </div>
+          <div class="card-block">
+            <div class="block-label">Rule / Index</div>
+            <ul class="entry-list">
+              <li>Rule: practitioner (owns group) + admin only. No family read.</li>
+              <li>Index: family_group_id ASC, created_at DESC</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- care_plans -->
+        <div class="card card-ok">
+          <div class="card-header">
+            <div class="card-name">`care_plans`</div>
+            <span class="status-badge badge-ok">✓ OK</span>
+          </div>
+          <div class="card-desc">One care plan per family group. Document id = <code>family_group_id</code>.</div>
+          <div class="card-block">
+            <div class="block-label">Schema</div>
+            <div class="field-list">family_group_id · goals · interventions · (TBD sections)<br>created_at · updated_at</div>
+          </div>
+          <div class="divider"></div>
+          <div class="card-block">
+            <div class="block-label">Producers</div>
+            <ul class="entry-list">
+              <li><code>care-plan.html:447,456</code> — setDoc (merge)</li>
+              <li><code>intake.html:563</code> — setDoc (merge from intake)</li>
+            </ul>
+          </div>
+          <div class="card-block">
+            <div class="block-label">Consumers</div>
+            <ul class="entry-list">
+              <li><code>care-plan.html:329</code> — getDoc by family id</li>
+              <li><code>family.html:405</code> — getDoc by family id</li>
+            </ul>
+          </div>
+          <div class="card-block">
+            <div class="block-label">Rule / Index</div>
+            <ul class="entry-list">
+              <li>Rule: practitioner full access, family read, admin full access</li>
+              <li>Indexes: none (doc-id reads only)</li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="reg-section">
+      <div class="reg-section-title">Clinical Supplementary</div>
+      <div class="card-grid">
+
+        <!-- intake_data -->
+        <div class="card card-warn">
+          <div class="card-header">
+            <div class="card-name">`intake_data`</div>
+            <span class="status-badge badge-warn">⚠ Orphan</span>
+          </div>
+          <div class="card-desc">Practitioner intake form data per family group. Document id = <code>family_group_id</code>.</div>
+          <div class="card-block">
+            <div class="block-label">Schema</div>
+            <div class="field-list">family_group_id · intake fields (TBD) · created_at · updated_at</div>
+          </div>
+          <div class="divider"></div>
+          <div class="card-block">
+            <div class="block-label">Producers</div>
+            <ul class="entry-list">
+              <li><code>intake.html:575,591</code> — setDoc (merge)</li>
+            </ul>
+          </div>
+          <div class="card-block">
+            <div class="block-label">Consumers</div>
+            <ul class="entry-list">
+              <li><em>None — written but never read</em></li>
+            </ul>
+          </div>
+          <div class="card-block">
+            <div class="block-label">Rule</div>
+            <ul class="entry-list">
+              <li>Practitioner-only (no family access)</li>
+            </ul>
+          </div>
+          <div class="warn-note">Producer with no consumer. Either add a reader or remove the producer.</div>
+        </div>
+
+        <!-- crisis_info -->
+        <div class="card card-ok">
+          <div class="card-header">
+            <div class="card-name">`crisis_info`</div>
+            <span class="status-badge badge-ok">✓ OK</span>
+          </div>
+          <div class="card-desc">Crisis card data per family group. Document id = <code>family_group_id</code>.</div>
+          <div class="card-block">
+            <div class="block-label">Schema</div>
+            <div class="field-list">family_group_id · contacts · escalation_steps (TBD)<br>created_at · updated_at</div>
+          </div>
+          <div class="divider"></div>
+          <div class="card-block">
+            <div class="block-label">Producers</div>
+            <ul class="entry-list">
+              <li><code>crisis-card.html:500</code> — setDoc (merge)</li>
+            </ul>
+          </div>
+          <div class="card-block">
+            <div class="block-label">Consumers</div>
+            <ul class="entry-list">
+              <li><code>crisis-card.html:414</code> — getDoc by family id</li>
+            </ul>
+          </div>
+          <div class="card-block">
+            <div class="block-label">Rule</div>
+            <ul class="entry-list">
+              <li>Practitioner full access, family read (emergency), admin full access</li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="reg-section">
+      <div class="reg-section-title">Messaging &amp; Invitations</div>
+      <div class="card-grid">
+
+        <!-- family_messages -->
+        <div class="card card-info">
+          <div class="card-header">
+            <div class="card-name">`family_messages`</div>
+            <span class="status-badge badge-info">Note</span>
+          </div>
+          <div class="card-desc">Family-side messaging channel (family.html flow).</div>
+          <div class="card-block">
+            <div class="block-label">Producers</div>
+            <ul class="entry-list">
+              <li><code>family.html:549</code> — addDoc (family member side)</li>
+            </ul>
+          </div>
+          <div class="card-block">
+            <div class="block-label">Consumers</div>
+            <ul class="entry-list">
+              <li><em>None on practitioner side — inbox UI not yet built</em></li>
+            </ul>
+          </div>
+          <div class="card-block">
+            <div class="block-label">Rule</div>
+            <ul class="entry-list">
+              <li>Both practitioner and family member can read/write within their group; only sender/admin can edit/delete</li>
+            </ul>
+          </div>
+          <div class="warn-note" style="color:var(--blue);border-color:rgba(88,166,255,0.2);background:rgba(88,166,255,0.06);">Family flow reachable (claim setter + accept page built). Practitioner-side reader UI still to come.</div>
+        </div>
+
+        <!-- family_invitations -->
+        <div class="card card-ok">
+          <div class="card-header">
+            <div class="card-name">`family_invitations`</div>
+            <span class="status-badge badge-ok">✓ OK</span>
+          </div>
+          <div class="card-desc">Pending invitations from practitioner to family-member email.</div>
+          <div class="card-block">
+            <div class="block-label">Schema</div>
+            <div class="field-list">family_group_id · invited_email (lc) · invited_relationship<br>expires_at · status · invited_by_uid · invited_at<br>accepted_at · accepted_by_uid · revoked_at</div>
+          </div>
+          <div class="divider"></div>
+          <div class="card-block">
+            <div class="block-label">Producers</div>
+            <ul class="entry-list">
+              <li><code>family_groups.py</code> invite — Admin SDK write</li>
+              <li><code>family_groups.py</code> revoke — Admin SDK update</li>
+              <li><code>auth_verification.py</code> accept_invite — Admin SDK status update</li>
+            </ul>
+          </div>
+          <div class="card-block">
+            <div class="block-label">Consumers</div>
+            <ul class="entry-list">
+              <li><code>auth_verification.py</code> accept_invite — lookup by invited_email + status</li>
+            </ul>
+          </div>
+          <div class="card-block">
+            <div class="block-label">Rule / Indexes</div>
+            <ul class="entry-list">
+              <li>Rule: practitioner (owns group) read/write; admin full; family never</li>
+              <li>Index: invited_email ASC, status ASC (accept lookup)</li>
+              <li>Index: family_group_id ASC, invited_at DESC (practitioner list)</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- care_updates -->
+        <div class="card card-ok">
+          <div class="card-header">
+            <div class="card-name">`care_updates`</div>
+            <span class="status-badge badge-ok">✓ OK</span>
+          </div>
+          <div class="card-desc">Practitioner-posted updates broadcast to the family portal.</div>
+          <div class="card-block">
+            <div class="block-label">Schema</div>
+            <div class="field-list">family_group_id · author_uid · body · posted_at · (attachment refs)</div>
+          </div>
+          <div class="divider"></div>
+          <div class="card-block">
+            <div class="block-label">Producers</div>
+            <ul class="entry-list">
+              <li><code>client.html</code> postCareUpdate — addDoc (direct Firestore)</li>
+            </ul>
+          </div>
+          <div class="card-block">
+            <div class="block-label">Consumers</div>
+            <ul class="entry-list">
+              <li><code>client.html</code> renderCareUpdates — list ordered by posted_at desc</li>
+              <li><code>family.html</code> renderCareUpdates — list ordered by posted_at desc</li>
+            </ul>
+          </div>
+          <div class="card-block">
+            <div class="block-label">Rule / Index</div>
+            <ul class="entry-list">
+              <li>Rule: practitioner full access (owned group), family read, admin full</li>
+              <li>Index: family_group_id ASC, posted_at DESC</li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="reg-section">
+      <div class="reg-section-title">System &amp; Internal</div>
+      <div class="card-grid">
+
+        <!-- email_verification_tokens -->
+        <div class="card card-ok">
+          <div class="card-header">
+            <div class="card-name">`email_verification_tokens`</div>
+            <span class="status-badge badge-ok">✓ OK</span>
+          </div>
+          <div class="card-desc">One-time email verification tokens. Server-only; bypasses Firestore rules via Admin SDK.</div>
+          <div class="card-block">
+            <div class="block-label">Producers / Consumers</div>
+            <ul class="entry-list">
+              <li><code>auth_verification.py:98,120,138</code> — set / delete / get (Admin SDK)</li>
+            </ul>
+          </div>
+          <div class="card-block">
+            <div class="block-label">Rule</div>
+            <ul class="entry-list">
+              <li>Not needed — Admin SDK bypasses rules (intentional)</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- waitlist -->
+        <div class="card card-ok">
+          <div class="card-header">
+            <div class="card-name">`waitlist`</div>
+            <span class="status-badge badge-ok">✓ OK</span>
+          </div>
+          <div class="card-desc">Pre-launch email waitlist. Public create, admin read.</div>
+          <div class="card-block">
+            <div class="block-label">Producers</div>
+            <ul class="entry-list">
+              <li><code>waitlist.html</code> — public create (field-shape constrained)</li>
+            </ul>
+          </div>
+          <div class="card-block">
+            <div class="block-label">Consumers</div>
+            <ul class="entry-list">
+              <li><code>waitlist.html:337</code> — admin-only list orderBy joinedAt desc</li>
+            </ul>
+          </div>
+          <div class="card-block">
+            <div class="block-label">Rule</div>
+            <ul class="entry-list">
+              <li>Public create with field shape constraint; admin read/update/delete</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- aiConversations -->
+        <div class="card card-warn">
+          <div class="card-header">
+            <div class="card-name">`aiConversations`</div>
+            <span class="status-badge badge-warn">⚠ Dead</span>
+          </div>
+          <div class="card-desc">AI chat history per user. Rule exists but no code path uses it.</div>
+          <div class="card-block">
+            <div class="block-label">Producers / Consumers</div>
+            <ul class="entry-list">
+              <li><em>None — no producer or consumer in codebase</em></li>
+            </ul>
+          </div>
+          <div class="card-block">
+            <div class="block-label">Rule</div>
+            <ul class="entry-list">
+              <li>Own-conversation only</li>
+            </ul>
+          </div>
+          <div class="warn-note">Dead code — no producer or consumer. Remove the rule or wire it up when AI chat ships.</div>
+        </div>
+
+      </div>
+    </div>
+
+  </div><!-- /collections panel -->
+
+
+  <!-- ══════════════════════════════════════════════════════════════
+       CLAIMS
+  ══════════════════════════════════════════════════════════════ -->
+  <div id="panel-claims" class="registry-panel">
+
+    <div class="reg-section">
+      <div class="reg-section-title">Role Claims</div>
+      <div class="card-grid">
+
+        <!-- admin -->
+        <div class="card card-ok">
+          <div class="card-header">
+            <div class="card-name-plain">admin</div>
+            <span class="status-badge badge-ok">✓ OK</span>
+          </div>
+          <div class="card-desc">Platform administrator. Granted manually — no UI for provisioning.</div>
+          <div class="card-block">
+            <div class="block-label">Setters</div>
+            <ul class="entry-list">
+              <li><code>scripts/set-claims.mjs</code> — manual CLI</li>
+              <li><code>scripts/set-admin.js</code> — alternate manual script</li>
+            </ul>
+          </div>
+          <div class="card-block">
+            <div class="block-label">Checkers — Client</div>
+            <ul class="entry-list">
+              <li><code>login.html:268</code> — redirect to /index.html (admin home)</li>
+              <li><code>dashboard.html:549,554</code> — gate access; admins skip status check</li>
+              <li><code>admin-approvals.html:309</code> — required to view page</li>
+              <li><code>care-plan.html:312</code>, <code>intake.html:447</code>, <code>crisis-card.html:396</code>, <code>medications.html:337</code>, <code>new-client.html:651</code>, <code>client.html:681</code> — allowed alongside practitioner</li>
+              <li><code>family.html:365</code> — redirected away to dashboard</li>
+            </ul>
+          </div>
+          <div class="card-block">
+            <div class="block-label">Checkers — Rules</div>
+            <ul class="entry-list">
+              <li>/users — admin read/write on any user doc</li>
+              <li>/family_groups — admin read/update/delete</li>
+              <li>/parents, /medications — via canAccessFamilyData / canWriteFamilyData</li>
+              <li>/waitlist — admin read/update/delete</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- practitioner -->
+        <div class="card card-ok">
+          <div class="card-header">
+            <div class="card-name-plain">practitioner</div>
+            <span class="status-badge badge-ok">✓ OK</span>
+          </div>
+          <div class="card-desc">Approved practitioner. Set at signup (<code>pending_activation</code>); re-set / cleared on approve / reject.</div>
+          <div class="card-block">
+            <div class="block-label">Setters</div>
+            <ul class="entry-list">
+              <li><code>users.py:58</code> — set on /users/register (immediately; status = pending)</li>
+              <li><code>users.py:254</code> — re-set on approve → active</li>
+              <li><code>users.py:260</code> — cleared (set to {}) on reject</li>
+            </ul>
+          </div>
+          <div class="card-block">
+            <div class="block-label">Checkers — Client</div>
+            <ul class="entry-list">
+              <li><code>login.html:271</code> — redirect to /dashboard.html</li>
+              <li><code>dashboard.html:549</code> — required to view page</li>
+              <li><code>care-plan.html:312</code>, <code>intake.html:447</code>, <code>crisis-card.html:396</code>, <code>medications.html:337</code>, <code>new-client.html:651</code>, <code>client.html:681</code></li>
+              <li><code>family.html:365</code> — redirected away to dashboard</li>
+            </ul>
+          </div>
+          <div class="card-block">
+            <div class="block-label">Checkers — Rules</div>
+            <ul class="entry-list">
+              <li><code>isPractitioner()</code> — /family_groups create rule</li>
+            </ul>
+          </div>
+          <div class="card-block">
+            <div class="block-label">Edge case (handled)</div>
+            <ul class="entry-list">
+              <li>Reject + re-approve: <code>users.py</code> calls <code>revoke_refresh_tokens(uid)</code> on rejection and on re-approval, forcing re-auth.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- family -->
+        <div class="card card-ok">
+          <div class="card-header">
+            <div class="card-name-plain">family</div>
+            <span class="status-badge badge-ok">✓ OK</span>
+          </div>
+          <div class="card-desc">Marks an approved family member with access to <code>family.html</code>.</div>
+          <div class="card-block">
+            <div class="block-label">Setters</div>
+            <ul class="entry-list">
+              <li><code>auth_verification.py</code> accept_invite — set on first invite acceptance; remains set even if all groups later revoked</li>
+            </ul>
+          </div>
+          <div class="card-block">
+            <div class="block-label">Checkers</div>
+            <ul class="entry-list">
+              <li><code>login.html:273</code> — redirect to /family.html</li>
+              <li><code>crisis-card.html:396</code>, <code>medications.html:337</code>, <code>care-plan.html:312</code> — allowed alongside practitioner/admin</li>
+              <li><code>family.html:368</code> — required (else show waiting state)</li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="reg-section">
+      <div class="reg-section-title">Data Claims</div>
+      <div class="card-grid">
+
+        <!-- family_group_ids -->
+        <div class="card card-ok">
+          <div class="card-header">
+            <div class="card-name-plain">family_group_ids</div>
+            <span class="status-badge badge-ok">✓ OK</span>
+          </div>
+          <div class="card-desc">Array of family group ids the family-member has accepted invitations into. Replaced the never-used singular <code>family_group_id</code>.</div>
+          <div class="card-block">
+            <div class="block-label">Setters</div>
+            <ul class="entry-list">
+              <li><code>auth_verification.py</code> accept_invite — appends new group id (dedup)</li>
+              <li><code>family_groups.py</code> revoke — removes a group id; revokes refresh tokens</li>
+            </ul>
+          </div>
+          <div class="card-block">
+            <div class="block-label">Checkers</div>
+            <ul class="entry-list">
+              <li><code>family.html</code> — populates group switcher (fallback to legacy singular for pre-migration accounts)</li>
+              <li>Rules: <code>inFamilyGroups(groupId)</code> helper — /family_groups read, canAccessFamilyData (parents, medications, care_plans, crisis_info), family_messages read</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- profession -->
+        <div class="card card-warn">
+          <div class="card-header">
+            <div class="card-name-plain">profession</div>
+            <span class="status-badge badge-warn">⚠ Orphan</span>
+          </div>
+          <div class="card-desc">The practitioner's discipline: <code>gcm</code> · <code>elder_law</code> · <code>social_work</code> · <code>financial</code>.</div>
+          <div class="card-block">
+            <div class="block-label">Setters</div>
+            <ul class="entry-list">
+              <li><code>users.py:60,256</code> — set alongside <code>practitioner</code> claim</li>
+            </ul>
+          </div>
+          <div class="card-block">
+            <div class="block-label">Checkers</div>
+            <ul class="entry-list">
+              <li><em>None — never read from the token. UI reads from Firestore user profile instead.</em></li>
+            </ul>
+          </div>
+          <div class="warn-note">Orphaned: producer with no consumer. Either remove the claim, or use it for client-side gating (would avoid an extra Firestore read).</div>
+        </div>
+
+        <!-- beta -->
+        <div class="card card-warn">
+          <div class="card-header">
+            <div class="card-name-plain">beta</div>
+            <span class="status-badge badge-warn">⚠ Orphan</span>
+          </div>
+          <div class="card-desc">Beta-tester flag. Defaults to <code>True</code> for all registrations.</div>
+          <div class="card-block">
+            <div class="block-label">Setters</div>
+            <ul class="entry-list">
+              <li><code>users.py:61,257</code> — defaults to True</li>
+            </ul>
+          </div>
+          <div class="card-block">
+            <div class="block-label">Checkers</div>
+            <ul class="entry-list">
+              <li><em>None currently.</em></li>
+            </ul>
+          </div>
+          <div class="warn-note">Orphaned: intended for future billing gating. Safe to leave, but document the plan before shipping paid tiers.</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Summary table -->
+    <div class="reg-section">
+      <div class="reg-section-title">Summary</div>
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden;">
+        <table style="width:100%;border-collapse:collapse;font-size:13px;">
+          <thead>
+            <tr style="border-bottom:1px solid var(--border);">
+              <th style="padding:10px 16px;text-align:left;color:var(--text-muted);font-size:11px;text-transform:uppercase;letter-spacing:0.08em;font-weight:700;">Claim</th>
+              <th style="padding:10px 16px;text-align:left;color:var(--text-muted);font-size:11px;text-transform:uppercase;letter-spacing:0.08em;font-weight:700;">Producers</th>
+              <th style="padding:10px 16px;text-align:left;color:var(--text-muted);font-size:11px;text-transform:uppercase;letter-spacing:0.08em;font-weight:700;">Consumers</th>
+              <th style="padding:10px 16px;text-align:left;color:var(--text-muted);font-size:11px;text-transform:uppercase;letter-spacing:0.08em;font-weight:700;">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom:1px solid var(--border);">
+              <td style="padding:9px 16px;font-family:monospace;color:var(--text);">admin</td>
+              <td style="padding:9px 16px;color:var(--text-muted);">Manual scripts</td>
+              <td style="padding:9px 16px;color:var(--text-muted);">Many — client + rules</td>
+              <td style="padding:9px 16px;"><span class="status-badge badge-ok">✓ OK</span></td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--border);">
+              <td style="padding:9px 16px;font-family:monospace;color:var(--text);">practitioner</td>
+              <td style="padding:9px 16px;color:var(--text-muted);">API</td>
+              <td style="padding:9px 16px;color:var(--text-muted);">Many — client + rules</td>
+              <td style="padding:9px 16px;"><span class="status-badge badge-ok">✓ OK</span></td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--border);">
+              <td style="padding:9px 16px;font-family:monospace;color:var(--text);">profession</td>
+              <td style="padding:9px 16px;color:var(--text-muted);">API</td>
+              <td style="padding:9px 16px;color:var(--text-muted);">None</td>
+              <td style="padding:9px 16px;"><span class="status-badge badge-warn">⚠ Orphan</span></td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--border);">
+              <td style="padding:9px 16px;font-family:monospace;color:var(--text);">beta</td>
+              <td style="padding:9px 16px;color:var(--text-muted);">API</td>
+              <td style="padding:9px 16px;color:var(--text-muted);">None</td>
+              <td style="padding:9px 16px;"><span class="status-badge badge-warn">⚠ Orphan (planned)</span></td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--border);">
+              <td style="padding:9px 16px;font-family:monospace;color:var(--text);">family</td>
+              <td style="padding:9px 16px;color:var(--text-muted);">API</td>
+              <td style="padding:9px 16px;color:var(--text-muted);">Many — client</td>
+              <td style="padding:9px 16px;"><span class="status-badge badge-ok">✓ OK</span></td>
+            </tr>
+            <tr>
+              <td style="padding:9px 16px;font-family:monospace;color:var(--text);">family_group_ids</td>
+              <td style="padding:9px 16px;color:var(--text-muted);">API</td>
+              <td style="padding:9px 16px;color:var(--text-muted);">Many — client + rules</td>
+              <td style="padding:9px 16px;"><span class="status-badge badge-ok">✓ OK</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div><!-- /claims panel -->
+
+
+  <!-- ══════════════════════════════════════════════════════════════
+       ENDPOINTS
+  ══════════════════════════════════════════════════════════════ -->
+  <div id="panel-endpoints" class="registry-panel">
+
+    <div style="margin-bottom:16px;">
+      <div style="font-size:12px;color:var(--text-dim);">Base URL (production): <code style="font-size:12px;color:var(--text-muted);">https://careguide-api-658340465706.us-central1.run.app</code></div>
+    </div>
+
+    <div class="reg-section">
+      <div class="reg-section-title">Users</div>
+      <div class="card-grid-wide">
+
+        <div class="card card-ok">
+          <div class="card-header">
+            <div>
+              <div class="tag-row" style="margin-bottom:6px;">
+                <span class="tag-method method-post">POST</span>
+                <span class="ep-path">/users/register</span>
+              </div>
+              <div style="font-size:12px;color:var(--text-dim);">users.py:42</div>
+            </div>
+            <span class="status-badge badge-ok">✓ Wired</span>
+          </div>
+          <div class="card-block">
+            <div class="block-label">Auth</div>
+            <div class="tag-row"><span class="tag tag-auth">require_auth</span></div>
+          </div>
+          <div class="card-block">
+            <div class="block-label">Callers</div>
+            <div class="tag-row"><span class="tag tag-caller">signup.html:847</span></div>
+          </div>
+          <div class="card-block">
+            <div class="block-label">Request → Response</div>
+            <div class="field-list">{full_name, profession, license_states[], beta?}<br>→ {success, uid, role, profession, beta}</div>
+          </div>
+          <div class="card-block">
+            <div class="block-label">Side effects</div>
+            <ul class="entry-list">
+              <li>Sets practitioner / profession / beta claims</li>
+              <li>Writes users/{uid} with status: pending_activation</li>
+              <li>Sends welcome email via Brevo</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card card-ok">
+          <div class="card-header">
+            <div>
+              <div class="tag-row" style="margin-bottom:6px;">
+                <span class="tag-method method-post">POST</span>
+                <span class="ep-path">/users/<span class="ep-param">{uid}</span>/status</span>
+              </div>
+              <div style="font-size:12px;color:var(--text-dim);">users.py:229</div>
+            </div>
+            <span class="status-badge badge-ok">✓ Wired</span>
+          </div>
+          <div class="card-block">
+            <div class="block-label">Auth</div>
+            <div class="tag-row"><span class="tag tag-auth">require_admin</span></div>
+          </div>
+          <div class="card-block">
+            <div class="block-label">Callers</div>
+            <div class="tag-row"><span class="tag tag-caller">admin-approvals.html:441</span></div>
+          </div>
+          <div class="card-block">
+            <div class="block-label">Request → Response</div>
+            <div class="field-list">{status: "active" | "rejected"}<br>→ {success, uid, status}</div>
+          </div>
+          <div class="card-block">
+            <div class="block-label">Side effects</div>
+            <ul class="entry-list">
+              <li>Updates users/{uid}.status + timestamp</li>
+              <li>Sets or clears claims; revokes refresh tokens on reject</li>
+              <li>Sends approval / rejection email via Brevo</li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="reg-section">
+      <div class="reg-section-title">Auth &amp; Verification</div>
+      <div class="card-grid-wide">
+
+        <div class="card card-ok">
+          <div class="card-header">
+            <div>
+              <div class="tag-row" style="margin-bottom:6px;">
+                <span class="tag-method method-post">POST</span>
+                <span class="ep-path">/auth/send-verification</span>
+              </div>
+              <div style="font-size:12px;color:var(--text-dim);">auth_verification.py:60</div>
+            </div>
+            <span class="status-badge badge-ok">✓ Wired</span>
+          </div>
+          <div class="card-block">
+            <div class="block-label">Auth / Callers</div>
+            <div class="tag-row">
+              <span class="tag tag-auth">require_auth</span>
+              <span class="tag tag-caller">signup.html:859</span>
+            </div>
+          </div>
+          <div class="card-block">
+            <div class="block-label">Request → Response</div>
+            <div class="field-list">(none) → {success, email} or {success, already_verified: true}</div>
+          </div>
+          <div class="card-block">
+            <div class="block-label">Side effects</div>
+            <ul class="entry-list">
+              <li>Creates token in email_verification_tokens</li>
+              <li>Sends verification email via Brevo</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card card-ok">
+          <div class="card-header">
+            <div>
+              <div class="tag-row" style="margin-bottom:6px;">
+                <span class="tag-method method-post">POST</span>
+                <span class="ep-path">/auth/verify-email?token=…</span>
+              </div>
+              <div style="font-size:12px;color:var(--text-dim);">auth_verification.py:128</div>
+            </div>
+            <span class="status-badge badge-ok">✓ Wired</span>
+          </div>
+          <div class="card-block">
+            <div class="block-label">Auth / Callers</div>
+            <div class="tag-row">
+              <span class="tag tag-none">token is the credential</span>
+              <span class="tag tag-caller">verify-email.html:186</span>
+            </div>
+          </div>
+          <div class="card-block">
+            <div class="block-label">Request → Response</div>
+            <div class="field-list">?token= query param → {success, uid}</div>
+          </div>
+          <div class="card-block">
+            <div class="block-label">Side effects</div>
+            <ul class="entry-list">
+              <li>Marks Firebase Auth email_verified = true</li>
+              <li>Deletes the token doc</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card card-ok">
+          <div class="card-header">
+            <div>
+              <div class="tag-row" style="margin-bottom:6px;">
+                <span class="tag-method method-post">POST</span>
+                <span class="ep-path">/auth/accept-invite</span>
+              </div>
+              <div style="font-size:12px;color:var(--text-dim);">auth_verification.py accept_invite</div>
+            </div>
+            <span class="status-badge badge-ok">✓ Wired</span>
+          </div>
+          <div class="card-block">
+            <div class="block-label">Auth / Callers</div>
+            <div class="tag-row">
+              <span class="tag tag-auth">require_auth</span>
+              <span class="tag tag-caller">accept-invite.html</span>
+            </div>
+          </div>
+          <div class="card-block">
+            <div class="block-label">Request → Response</div>
+            <div class="field-list">(uses signed-in user's email)<br>→ {success, accepted, family_group_ids}</div>
+          </div>
+          <div class="card-block">
+            <div class="block-label">Side effects</div>
+            <ul class="entry-list">
+              <li>Appends group id to family_group_ids claim</li>
+              <li>Sets family: true claim; writes users doc role: "family"</li>
+              <li>Marks invitations accepted</li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="reg-section">
+      <div class="reg-section-title">Family Groups</div>
+      <div class="card-grid-wide">
+
+        <div class="card card-ok">
+          <div class="card-header">
+            <div>
+              <div class="tag-row" style="margin-bottom:6px;">
+                <span class="tag-method method-post">POST</span>
+                <span class="ep-path">/family-groups/<span class="ep-param">{group_id}</span>/invite</span>
+              </div>
+              <div style="font-size:12px;color:var(--text-dim);">family_groups.py invite_family_member</div>
+            </div>
+            <span class="status-badge badge-ok">✓ Wired</span>
+          </div>
+          <div class="card-block">
+            <div class="block-label">Auth / Callers</div>
+            <div class="tag-row">
+              <span class="tag tag-auth">require_practitioner</span>
+              <span class="tag tag-caller">new-client.html:779</span>
+            </div>
+          </div>
+          <div class="card-block">
+            <div class="block-label">Request → Response</div>
+            <div class="field-list">{email, relationship}<br>→ {success, invitation_id, email_sent}</div>
+          </div>
+          <div class="card-block">
+            <div class="block-label">Side effects</div>
+            <ul class="entry-list">
+              <li>Creates / refreshes a family_invitations doc</li>
+              <li>Generates Firebase email-link sign-in URL via Admin SDK</li>
+              <li>Sends invite via Brevo. Requires Firebase email-link sign-in enabled.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card card-warn">
+          <div class="card-header">
+            <div>
+              <div class="tag-row" style="margin-bottom:6px;">
+                <span class="tag-method method-post">POST</span>
+                <span class="ep-path">/family-groups/<span class="ep-param">{group_id}</span>/revoke</span>
+              </div>
+              <div style="font-size:12px;color:var(--text-dim);">family_groups.py revoke_family_member</div>
+            </div>
+            <span class="status-badge badge-warn">⚠ Orphan</span>
+          </div>
+          <div class="card-block">
+            <div class="block-label">Auth / Callers</div>
+            <div class="tag-row">
+              <span class="tag tag-auth">require_practitioner</span>
+              <span class="tag tag-none">no caller yet</span>
+            </div>
+          </div>
+          <div class="card-block">
+            <div class="block-label">Request → Response</div>
+            <div class="field-list">{uid}<br>→ {success, uid, revoked, remaining_groups}</div>
+          </div>
+          <div class="card-block">
+            <div class="block-label">Side effects</div>
+            <ul class="entry-list">
+              <li>Removes group_id from family_group_ids claim; revokes refresh tokens</li>
+              <li>Updates user doc; marks family_invitations records as revoked</li>
+            </ul>
+          </div>
+          <div class="warn-note">No UI calls this yet. To be wired when manage-family-members page is built.</div>
+        </div>
+
+        <div class="card card-warn">
+          <div class="card-header">
+            <div>
+              <div class="tag-row" style="margin-bottom:6px;">
+                <span class="tag-method method-get">GET</span>
+                <span class="tag-method method-post">POST</span>
+                <span class="ep-path">/family-groups/</span>
+              </div>
+              <div style="font-size:12px;color:var(--text-dim);">family_groups.py:21,30</div>
+            </div>
+            <span class="status-badge badge-warn">⚠ Orphan</span>
+          </div>
+          <div class="card-block">
+            <div class="block-label">Auth</div>
+            <div class="tag-row"><span class="tag tag-auth">require_practitioner</span></div>
+          </div>
+          <div class="card-block">
+            <div class="block-label">Callers</div>
+            <div class="tag-row"><span class="tag tag-none">none</span></div>
+          </div>
+          <div class="warn-note">Correct schema; available when client switches to API-mediated reads (currently uses direct Firestore).</div>
+        </div>
+
+        <div class="card card-warn">
+          <div class="card-header">
+            <div>
+              <div class="tag-row" style="margin-bottom:6px;">
+                <span class="tag-method method-get">GET</span>
+                <span class="ep-path">/family-groups/<span class="ep-param">{group_id}</span></span>
+              </div>
+              <div style="font-size:12px;color:var(--text-dim);">family_groups.py:49</div>
+            </div>
+            <span class="status-badge badge-warn">⚠ Orphan</span>
+          </div>
+          <div class="card-block">
+            <div class="block-label">Auth / Callers</div>
+            <div class="tag-row">
+              <span class="tag tag-auth">require_practitioner</span>
+              <span class="tag tag-none">none</span>
+            </div>
+          </div>
+          <div class="warn-note">Reads top-level family_groups with ownership check. No client caller.</div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="reg-section">
+      <div class="reg-section-title">Parents · Medications · Session Notes — Orphaned CRUD</div>
+      <div class="card-grid-wide">
+
+        <div class="card card-warn">
+          <div class="card-header">
+            <div>
+              <div class="tag-row" style="margin-bottom:6px;">
+                <span class="tag-method method-post">POST</span>
+                <span class="tag-method method-get">GET</span>
+                <span class="tag-method method-get">GET</span>
+                <span class="tag-method method-patch">PATCH</span>
+                <span class="tag-method method-delete">DELETE</span>
+              </div>
+              <div class="ep-path">/parents/ &amp; /parents/<span class="ep-param">{parent_id}</span></div>
+            </div>
+            <span class="status-badge badge-warn">⚠ Orphan</span>
+          </div>
+          <div class="card-block">
+            <div class="block-label">Auth</div>
+            <div class="tag-row"><span class="tag tag-auth">require_practitioner</span></div>
+          </div>
+          <div class="card-block">
+            <div class="block-label">Callers</div>
+            <div class="tag-row"><span class="tag tag-none">none</span></div>
+          </div>
+          <div class="card-block">
+            <div class="block-label">Create request shape</div>
+            <div class="field-list">{family_group_id, first_name, last_name, care_level?, dob?, state?, invite_email?}</div>
+          </div>
+          <div class="warn-note">Endpoints are correct; live path is direct Firestore write from new-client.html:773.</div>
+        </div>
+
+        <div class="card card-warn">
+          <div class="card-header">
+            <div>
+              <div class="tag-row" style="margin-bottom:6px;">
+                <span class="tag-method method-post">POST</span>
+                <span class="tag-method method-get">GET</span>
+                <span class="tag-method method-get">GET</span>
+                <span class="tag-method method-patch">PATCH</span>
+                <span class="tag-method method-delete">DELETE</span>
+              </div>
+              <div class="ep-path">/medications/ &amp; /medications/<span class="ep-param">{med_id}</span></div>
+            </div>
+            <span class="status-badge badge-warn">⚠ Orphan</span>
+          </div>
+          <div class="card-block">
+            <div class="block-label">Auth</div>
+            <div class="tag-row"><span class="tag tag-auth">require_practitioner</span></div>
+          </div>
+          <div class="card-block">
+            <div class="block-label">Callers</div>
+            <div class="tag-row"><span class="tag tag-none">none</span></div>
+          </div>
+          <div class="card-block">
+            <div class="block-label">Create request shape</div>
+            <div class="field-list">{family_group_id, name, dosage?, frequency?, prescriber?, start_date?, status?, notes?}</div>
+          </div>
+          <div class="warn-note">Endpoints correct; live path is direct Firestore write from medications.html.</div>
+        </div>
+
+        <div class="card card-warn">
+          <div class="card-header">
+            <div>
+              <div class="tag-row" style="margin-bottom:6px;">
+                <span class="tag-method method-post">POST</span>
+                <span class="tag-method method-get">GET</span>
+                <span class="tag-method method-get">GET</span>
+                <span class="tag-method method-patch">PATCH</span>
+                <span class="tag-method method-delete">DELETE</span>
+              </div>
+              <div class="ep-path">/session-notes/ &amp; /session-notes/<span class="ep-param">{id}</span></div>
+            </div>
+            <span class="status-badge badge-warn">⚠ Orphan</span>
+          </div>
+          <div class="card-block">
+            <div class="block-label">Auth</div>
+            <div class="tag-row"><span class="tag tag-auth">require_practitioner</span></div>
+          </div>
+          <div class="card-block">
+            <div class="block-label">Callers</div>
+            <div class="tag-row"><span class="tag tag-none">none</span></div>
+          </div>
+          <div class="card-block">
+            <div class="block-label">Create request shape</div>
+            <div class="field-list">{family_group_id, type?, text, billable_minutes?}</div>
+          </div>
+          <div class="warn-note">Endpoint is correct; live path is direct Firestore write from client.html.</div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="reg-section">
+      <div class="reg-section-title">AI</div>
+      <div class="card-grid-wide">
+
+        <div class="card card-crit">
+          <div class="card-header">
+            <div>
+              <div class="tag-row" style="margin-bottom:6px;">
+                <span class="tag-method method-post">POST</span>
+                <span class="ep-path">/ai/intake</span>
+              </div>
+              <div style="font-size:12px;color:var(--red);">⚠ ENDPOINT NOT IMPLEMENTED</div>
+            </div>
+            <span class="status-badge badge-crit">⚠ Missing</span>
+          </div>
+          <div class="card-block">
+            <div class="block-label">Callers</div>
+            <div class="tag-row"><span class="tag tag-caller">intake.html:548</span></div>
+          </div>
+          <div class="card-block">
+            <div class="block-label">Expected request → response</div>
+            <div class="field-list">{family_group_id, intake}<br>→ {sections} or {care_plan}</div>
+          </div>
+          <div class="crit-note">CRITICAL — caller exists, endpoint not implemented. The intake → AI care plan flow on intake.html is broken.</div>
+        </div>
+
+        <div class="card card-warn">
+          <div class="card-header">
+            <div>
+              <div class="tag-row" style="margin-bottom:6px;">
+                <span class="tag-method method-post">POST</span>
+                <span class="ep-path">/ai/care-plan-draft</span>
+              </div>
+              <div style="font-size:12px;color:var(--text-dim);">ai.py:15</div>
+            </div>
+            <span class="status-badge badge-warn">⚠ Orphan</span>
+          </div>
+          <div class="card-block">
+            <div class="block-label">Auth / Callers</div>
+            <div class="tag-row">
+              <span class="tag tag-auth">require_practitioner</span>
+              <span class="tag tag-none">none</span>
+            </div>
+          </div>
+          <div class="card-block">
+            <div class="block-label">Request → Response</div>
+            <div class="field-list">{transcript} → {draft}</div>
+          </div>
+          <div class="warn-note">Wired for future use.</div>
+        </div>
+
+        <div class="card card-warn">
+          <div class="card-header">
+            <div>
+              <div class="tag-row" style="margin-bottom:6px;">
+                <span class="tag-method method-post">POST</span>
+                <span class="ep-path">/ai/session-note-draft</span>
+              </div>
+              <div style="font-size:12px;color:var(--text-dim);">ai.py:19</div>
+            </div>
+            <span class="status-badge badge-warn">⚠ Orphan</span>
+          </div>
+          <div class="card-block">
+            <div class="block-label">Auth / Callers</div>
+            <div class="tag-row">
+              <span class="tag tag-auth">require_practitioner</span>
+              <span class="tag tag-none">none</span>
+            </div>
+          </div>
+          <div class="warn-note">Wired for future use.</div>
+        </div>
+
+        <div class="card card-warn">
+          <div class="card-header">
+            <div>
+              <div class="tag-row" style="margin-bottom:6px;">
+                <span class="tag-method method-post">POST</span>
+                <span class="ep-path">/ai/ask</span>
+              </div>
+              <div style="font-size:12px;color:var(--text-dim);">ai.py:23</div>
+            </div>
+            <span class="status-badge badge-warn">⚠ Orphan</span>
+          </div>
+          <div class="card-block">
+            <div class="block-label">Auth / Callers</div>
+            <div class="tag-row">
+              <span class="tag tag-auth">require_auth</span>
+              <span class="tag tag-none">none</span>
+            </div>
+          </div>
+          <div class="warn-note">Wired for future use.</div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="reg-section">
+      <div class="reg-section-title">Notifications</div>
+      <div class="card-grid-wide">
+
+        <div class="card card-warn">
+          <div class="card-header">
+            <div>
+              <div class="tag-row" style="margin-bottom:6px;">
+                <span class="tag-method method-post">POST</span>
+                <span class="ep-path">/notifications/email</span>
+              </div>
+              <div style="font-size:12px;color:var(--text-dim);">notifications.py:36</div>
+            </div>
+            <span class="status-badge badge-warn">⚠ Orphan</span>
+          </div>
+          <div class="card-block">
+            <div class="block-label">Callers</div>
+            <div class="tag-row"><span class="tag tag-none">none (may be server-side only)</span></div>
+          </div>
+        </div>
+
+        <div class="card card-warn">
+          <div class="card-header">
+            <div>
+              <div class="tag-row" style="margin-bottom:6px;">
+                <span class="tag-method method-post">POST</span>
+                <span class="ep-path">/notifications/sms</span>
+              </div>
+              <div style="font-size:12px;color:var(--text-dim);">notifications.py:53</div>
+            </div>
+            <span class="status-badge badge-warn">⚠ Orphan</span>
+          </div>
+          <div class="card-block">
+            <div class="block-label">Callers</div>
+            <div class="tag-row"><span class="tag tag-none">none</span></div>
+          </div>
+        </div>
+
+        <div class="card card-warn">
+          <div class="card-header">
+            <div>
+              <div class="tag-row" style="margin-bottom:6px;">
+                <span class="tag-method method-post">POST</span>
+                <span class="ep-path">/notifications/reminder</span>
+              </div>
+              <div style="font-size:12px;color:var(--text-dim);">notifications.py:64</div>
+            </div>
+            <span class="status-badge badge-warn">⚠ Orphan</span>
+          </div>
+          <div class="card-block">
+            <div class="block-label">Callers</div>
+            <div class="tag-row"><span class="tag tag-none">none</span></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="reg-section">
+      <div class="reg-section-title">Other</div>
+      <div class="card-grid-wide">
+
+        <div class="card card-ok">
+          <div class="card-header">
+            <div>
+              <div class="tag-row" style="margin-bottom:6px;">
+                <span class="tag-method method-post">POST</span>
+                <span class="ep-path">/contact</span>
+              </div>
+              <div style="font-size:12px;color:var(--text-dim);">contact.py:28</div>
+            </div>
+            <span class="status-badge badge-ok">✓ Wired</span>
+          </div>
+          <div class="card-block">
+            <div class="block-label">Auth / Callers</div>
+            <div class="tag-row">
+              <span class="tag tag-none">public</span>
+              <span class="tag tag-caller">contact.html:433</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card card-ok">
+          <div class="card-header">
+            <div>
+              <div class="tag-row" style="margin-bottom:6px;">
+                <span class="tag-method method-get">GET</span>
+                <span class="ep-path">/health</span>
+              </div>
+              <div style="font-size:12px;color:var(--text-dim);">health.py:5</div>
+            </div>
+            <span class="status-badge badge-ok">✓ Wired</span>
+          </div>
+          <div class="card-block">
+            <div class="block-label">Callers</div>
+            <div class="tag-row"><span class="tag tag-none">uptime checks only</span></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Endpoint Summary Table -->
+    <div class="reg-section">
+      <div class="reg-section-title">Summary</div>
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden;">
+        <table style="width:100%;border-collapse:collapse;font-size:12px;">
+          <thead>
+            <tr style="border-bottom:1px solid var(--border);">
+              <th style="padding:9px 14px;text-align:left;color:var(--text-muted);font-size:11px;text-transform:uppercase;letter-spacing:0.08em;font-weight:700;">Endpoint</th>
+              <th style="padding:9px 14px;text-align:center;color:var(--text-muted);font-size:11px;text-transform:uppercase;letter-spacing:0.08em;font-weight:700;">Served</th>
+              <th style="padding:9px 14px;text-align:center;color:var(--text-muted);font-size:11px;text-transform:uppercase;letter-spacing:0.08em;font-weight:700;">Called</th>
+              <th style="padding:9px 14px;text-align:left;color:var(--text-muted);font-size:11px;text-transform:uppercase;letter-spacing:0.08em;font-weight:700;">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom:1px solid var(--border);"><td style="padding:7px 14px;font-family:monospace;color:var(--text);">POST /users/register</td><td style="padding:7px 14px;text-align:center;color:var(--green);">✓</td><td style="padding:7px 14px;text-align:center;color:var(--green);">✓</td><td style="padding:7px 14px;"><span class="status-badge badge-ok">OK</span></td></tr>
+            <tr style="border-bottom:1px solid var(--border);"><td style="padding:7px 14px;font-family:monospace;color:var(--text);">POST /users/{uid}/status</td><td style="padding:7px 14px;text-align:center;color:var(--green);">✓</td><td style="padding:7px 14px;text-align:center;color:var(--green);">✓</td><td style="padding:7px 14px;"><span class="status-badge badge-ok">OK</span></td></tr>
+            <tr style="border-bottom:1px solid var(--border);"><td style="padding:7px 14px;font-family:monospace;color:var(--text);">POST /auth/send-verification</td><td style="padding:7px 14px;text-align:center;color:var(--green);">✓</td><td style="padding:7px 14px;text-align:center;color:var(--green);">✓</td><td style="padding:7px 14px;"><span class="status-badge badge-ok">OK</span></td></tr>
+            <tr style="border-bottom:1px solid var(--border);"><td style="padding:7px 14px;font-family:monospace;color:var(--text);">POST /auth/verify-email</td><td style="padding:7px 14px;text-align:center;color:var(--green);">✓</td><td style="padding:7px 14px;text-align:center;color:var(--green);">✓</td><td style="padding:7px 14px;"><span class="status-badge badge-ok">OK</span></td></tr>
+            <tr style="border-bottom:1px solid var(--border);"><td style="padding:7px 14px;font-family:monospace;color:var(--text);">POST /auth/accept-invite</td><td style="padding:7px 14px;text-align:center;color:var(--green);">✓</td><td style="padding:7px 14px;text-align:center;color:var(--green);">✓</td><td style="padding:7px 14px;"><span class="status-badge badge-ok">OK</span></td></tr>
+            <tr style="border-bottom:1px solid var(--border);"><td style="padding:7px 14px;font-family:monospace;color:var(--text);">POST /family-groups/{id}/invite</td><td style="padding:7px 14px;text-align:center;color:var(--green);">✓</td><td style="padding:7px 14px;text-align:center;color:var(--green);">✓</td><td style="padding:7px 14px;"><span class="status-badge badge-ok">OK</span></td></tr>
+            <tr style="border-bottom:1px solid var(--border);"><td style="padding:7px 14px;font-family:monospace;color:var(--text);">POST /contact</td><td style="padding:7px 14px;text-align:center;color:var(--green);">✓</td><td style="padding:7px 14px;text-align:center;color:var(--green);">✓</td><td style="padding:7px 14px;"><span class="status-badge badge-ok">OK</span></td></tr>
+            <tr style="border-bottom:1px solid var(--border);"><td style="padding:7px 14px;font-family:monospace;color:var(--text);">GET /health</td><td style="padding:7px 14px;text-align:center;color:var(--green);">✓</td><td style="padding:7px 14px;text-align:center;color:var(--green);">✓</td><td style="padding:7px 14px;"><span class="status-badge badge-ok">OK</span></td></tr>
+            <tr style="border-bottom:1px solid var(--border);"><td style="padding:7px 14px;font-family:monospace;color:var(--text);">POST /family-groups/{id}/revoke</td><td style="padding:7px 14px;text-align:center;color:var(--green);">✓</td><td style="padding:7px 14px;text-align:center;color:var(--red);">✗</td><td style="padding:7px 14px;"><span class="status-badge badge-warn">orphan (no UI yet)</span></td></tr>
+            <tr style="border-bottom:1px solid var(--border);"><td style="padding:7px 14px;font-family:monospace;color:var(--text);">GET/POST /family-groups/</td><td style="padding:7px 14px;text-align:center;color:var(--green);">✓</td><td style="padding:7px 14px;text-align:center;color:var(--red);">✗</td><td style="padding:7px 14px;"><span class="status-badge badge-warn">orphan (correct schema)</span></td></tr>
+            <tr style="border-bottom:1px solid var(--border);"><td style="padding:7px 14px;font-family:monospace;color:var(--text);">GET /family-groups/{id}</td><td style="padding:7px 14px;text-align:center;color:var(--green);">✓</td><td style="padding:7px 14px;text-align:center;color:var(--red);">✗</td><td style="padding:7px 14px;"><span class="status-badge badge-warn">orphan</span></td></tr>
+            <tr style="border-bottom:1px solid var(--border);"><td style="padding:7px 14px;font-family:monospace;color:var(--text);">/parents/ (CRUD ×5)</td><td style="padding:7px 14px;text-align:center;color:var(--green);">✓</td><td style="padding:7px 14px;text-align:center;color:var(--red);">✗</td><td style="padding:7px 14px;"><span class="status-badge badge-warn">orphan (direct Firestore)</span></td></tr>
+            <tr style="border-bottom:1px solid var(--border);"><td style="padding:7px 14px;font-family:monospace;color:var(--text);">/medications/ (CRUD ×5)</td><td style="padding:7px 14px;text-align:center;color:var(--green);">✓</td><td style="padding:7px 14px;text-align:center;color:var(--red);">✗</td><td style="padding:7px 14px;"><span class="status-badge badge-warn">orphan (direct Firestore)</span></td></tr>
+            <tr style="border-bottom:1px solid var(--border);"><td style="padding:7px 14px;font-family:monospace;color:var(--text);">/session-notes/ (CRUD ×5)</td><td style="padding:7px 14px;text-align:center;color:var(--green);">✓</td><td style="padding:7px 14px;text-align:center;color:var(--red);">✗</td><td style="padding:7px 14px;"><span class="status-badge badge-warn">orphan (direct Firestore)</span></td></tr>
+            <tr style="border-bottom:1px solid var(--border);"><td style="padding:7px 14px;font-family:monospace;color:var(--text);">POST /ai/care-plan-draft</td><td style="padding:7px 14px;text-align:center;color:var(--green);">✓</td><td style="padding:7px 14px;text-align:center;color:var(--red);">✗</td><td style="padding:7px 14px;"><span class="status-badge badge-warn">orphan (planned)</span></td></tr>
+            <tr style="border-bottom:1px solid var(--border);"><td style="padding:7px 14px;font-family:monospace;color:var(--text);">POST /ai/session-note-draft</td><td style="padding:7px 14px;text-align:center;color:var(--green);">✓</td><td style="padding:7px 14px;text-align:center;color:var(--red);">✗</td><td style="padding:7px 14px;"><span class="status-badge badge-warn">orphan (planned)</span></td></tr>
+            <tr style="border-bottom:1px solid var(--border);"><td style="padding:7px 14px;font-family:monospace;color:var(--text);">POST /ai/ask</td><td style="padding:7px 14px;text-align:center;color:var(--green);">✓</td><td style="padding:7px 14px;text-align:center;color:var(--red);">✗</td><td style="padding:7px 14px;"><span class="status-badge badge-warn">orphan (planned)</span></td></tr>
+            <tr style="border-bottom:1px solid var(--border);"><td style="padding:7px 14px;font-family:monospace;color:var(--text);">POST /notifications/email,/sms,/reminder</td><td style="padding:7px 14px;text-align:center;color:var(--green);">✓</td><td style="padding:7px 14px;text-align:center;color:var(--red);">✗</td><td style="padding:7px 14px;"><span class="status-badge badge-warn">orphan</span></td></tr>
+            <tr><td style="padding:7px 14px;font-family:monospace;color:var(--red);">POST /ai/intake</td><td style="padding:7px 14px;text-align:center;color:var(--red);">✗</td><td style="padding:7px 14px;text-align:center;color:var(--green);">✓</td><td style="padding:7px 14px;"><span class="status-badge badge-crit">⚠ MISSING</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div><!-- /endpoints panel -->
+
+  <script>
+    function showTab(name) {
+      document.querySelectorAll('.registry-panel').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.getElementById('panel-' + name).classList.add('active');
+      event.currentTarget.classList.add('active');
+    }
+  </script>
+
+</body>
+</html>
