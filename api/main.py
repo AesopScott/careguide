@@ -9,7 +9,7 @@ load_dotenv()
 
 app = FastAPI(
     title="CareGuide API",
-    version="0.1.1",
+    version="0.1.2",
     docs_url="/docs" if os.getenv("ENVIRONMENT") == "development" else None,
     redoc_url=None,
 )
