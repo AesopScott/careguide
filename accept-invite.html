@@ -7,6 +7,7 @@
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Gilda+Display&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <script src="js/api-base.js"></script>
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -208,7 +209,7 @@
       appId:             "1:658340465706:web:0e412731947ff51474c753"
     };
 
-    const API = 'https://careguide-api-658340465706.us-central1.run.app';
+    const API_BASE = window.API_BASE;
     const STORAGE_EMAIL_KEY = 'pcg_invite_email';
 
     const app  = initializeApp(FIREBASE_CONFIG);
@@ -248,7 +249,7 @@
       show('state-accepting');
       try {
         const idToken = await user.getIdToken(true);
-        const res = await fetch(`${API}/auth/accept-invite`, {
+        const res = await fetch(`${API_BASE}/auth/accept-invite`, {
           method:  'POST',
           headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${idToken}` },
         });

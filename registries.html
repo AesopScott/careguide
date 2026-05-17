@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <title>Parental Care Guide — Registries</title>
+  <script src="js/api-base.js"></script>
   <style>
     :root {
       --bg:        #0d1117;
@@ -1151,7 +1152,10 @@
   <div id="panel-endpoints" class="registry-panel">
 
     <div style="margin-bottom:16px;">
-      <div style="font-size:12px;color:var(--text-dim);">Base URL (production): <code style="font-size:12px;color:var(--text-muted);">https://careguide-api-658340465706.us-central1.run.app</code></div>
+      <div style="font-size:12px;color:var(--text-dim);">
+        Base URL: <code id="api-base-display" style="font-size:12px;color:var(--text-muted);"></code>
+        <span id="api-env-display" style="margin-left:8px;font-size:11px;opacity:0.7;"></span>
+      </div>
     </div>
 
     <div class="reg-section">
@@ -1782,6 +1786,15 @@
       document.getElementById('panel-' + name).classList.add('active');
       event.currentTarget.classList.add('active');
     }
+
+    (function () {
+      var host = window.location.hostname || '';
+      var env  = host.indexOf('stage.') === 0 ? 'stage' : 'prod';
+      var el    = document.getElementById('api-base-display');
+      var envEl = document.getElementById('api-env-display');
+      if (el)    el.textContent    = window.API_BASE;
+      if (envEl) envEl.textContent = '[' + env + ']';
+    })();
   </script>
 
 </body>

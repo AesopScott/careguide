@@ -10,6 +10,7 @@
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Gilda+Display&family=Jost:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet">
+  <script src="js/api-base.js"></script>
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -530,6 +531,8 @@
       appId:             "1:658340465706:web:0e412731947ff51474c753"
     };
 
+    const API_BASE = window.API_BASE;
+
     const app  = initializeApp(FIREBASE_CONFIG);
     const auth = getAuth(app);
     const db   = getFirestore(app);
@@ -627,7 +630,7 @@
         btn.textContent = 'Sending…';
         try {
           const idToken = await user.getIdToken();
-          const res = await fetch('https://careguide-api-658340465706.us-central1.run.app/auth/send-verification', {
+          const res = await fetch(`${API_BASE}/auth/send-verification`, {
             method: 'POST',
             headers: { 'Authorization': `Bearer ${idToken}` },
           });
