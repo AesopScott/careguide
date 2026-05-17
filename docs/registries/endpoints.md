@@ -4,7 +4,10 @@ Every HTTP endpoint served by `api/` and every place in the client that calls on
 
 Update this file whenever an endpoint is added, removed, or its shape changes.
 
-Base URL (production): `https://careguide-api-658340465706.us-central1.run.app`
+Base URL (production): `https://careguide-api-658340465706.us-central1.run.app` (service: `careguide-api`)
+Base URL (stage):      `https://careguide-api-stage-658340465706.us-central1.run.app` (service: `careguide-api-stage`)
+
+Browser pages pick automatically via `js/api-base.js` based on `window.location.hostname` (`stage.` prefix → stage; else prod).
 
 ---
 
@@ -13,7 +16,7 @@ Base URL (production): `https://careguide-api-658340465706.us-central1.run.app`
 ### `POST /users/register`
 **Served by:** `api/routers/users.py:42`
 **Auth:** `require_auth` (Firebase ID token)
-**Callers:** `signup.html:847`
+**Callers:** `signup.html:848`
 **Request:** `{full_name, profession, license_states[], beta?}`
 **Response:** `{success, uid, role, profession, beta}`
 **Side effects:** sets `practitioner`/`profession`/`beta` claims; writes `users/{uid}` doc with `status: pending_activation`; sends welcome email via Brevo.
@@ -22,7 +25,7 @@ Base URL (production): `https://careguide-api-658340465706.us-central1.run.app`
 ### `POST /users/{uid}/status`
 **Served by:** `api/routers/users.py:229`
 **Auth:** `require_admin`
-**Callers:** `admin-approvals.html:441`
+**Callers:** `admin-approvals.html:442`
 **Request:** `{status: "active" | "rejected"}`
 **Response:** `{success, uid, status}`
 **Side effects:** updates `users/{uid}.status` + timestamp; sets or clears claims; sends approval/rejection email.
@@ -35,7 +38,7 @@ Base URL (production): `https://careguide-api-658340465706.us-central1.run.app`
 ### `POST /auth/send-verification`
 **Served by:** `api/routers/auth_verification.py:60`
 **Auth:** `require_auth`
-**Callers:** `signup.html:859`
+**Callers:** `signup.html:860` (post-register auto-send); `dashboard.html:633` (resend-verification button for unverified practitioners)
 **Request:** none
 **Response:** `{success, email}` or `{success, already_verified: true}`
 **Side effects:** creates token in `email_verification_tokens`; sends Brevo email.
@@ -44,7 +47,7 @@ Base URL (production): `https://careguide-api-658340465706.us-central1.run.app`
 ### `POST /auth/verify-email?token=...`
 **Served by:** `api/routers/auth_verification.py:128`
 **Auth:** none (token is the credential)
-**Callers:** `verify-email.html:186`
+**Callers:** `verify-email.html:187`
 **Request:** `?token=` query param
 **Response:** `{success, uid}`
 **Side effects:** marks Firebase Auth `email_verified=true`; deletes token.
@@ -73,7 +76,7 @@ Base URL (production): `https://careguide-api-658340465706.us-central1.run.app`
 ### `POST /family-groups/{group_id}/invite`
 **Served by:** `api/routers/family_groups.py` invite_family_member
 **Auth:** `require_practitioner` (must own the target family_group)
-**Callers:** `new-client.html:779`
+**Callers:** `new-client.html:783`
 **Request:** `{email, relationship}`
 **Response:** `{success, invitation_id, email_sent}`
 **Side effects:** creates / refreshes a `family_invitations` doc; generates a Firebase email-link sign-in URL via Admin SDK; sends via Brevo. Requires Firebase Console: Authentication → Sign-in method → Email/Password → Email link (passwordless sign-in) enabled.
@@ -190,7 +193,7 @@ Base URL (production): `https://careguide-api-658340465706.us-central1.run.app`
 
 ### `POST /ai/intake` ⚠ MISSING
 **Served by:** none
-**Callers:** `intake.html:548`
+**Callers:** `intake.html:549`
 **Request:** `{family_group_id, intake}` → **Response (expected):** `{sections}` or `{care_plan}`
 **Status:** ⚠ **CRITICAL** — caller exists, endpoint not implemented. The whole intake → AI care plan flow on `intake.html` is broken.
 
@@ -220,7 +223,7 @@ Base URL (production): `https://careguide-api-658340465706.us-central1.run.app`
 ### `POST /contact`
 **Served by:** `api/routers/contact.py:28`
 **Auth:** none
-**Callers:** `contact.html:433`
+**Callers:** `contact.html:434`
 **Status:** ✓
 
 ### `GET /health`

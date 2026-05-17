@@ -7,6 +7,7 @@
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Gilda+Display&family=Jost:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet">
+  <script src="js/api-base.js"></script>
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -282,7 +283,7 @@
       appId:             "1:658340465706:web:0e412731947ff51474c753"
     };
 
-    const API = 'https://careguide-api-658340465706.us-central1.run.app';
+    const API_BASE = window.API_BASE;
 
     const app  = initializeApp(FIREBASE_CONFIG);
     const auth = getAuth(app);
@@ -438,7 +439,7 @@
         // 2. Try API to set/clear custom claims (best-effort — API may not be live yet)
         try {
           const idToken = await auth.currentUser.getIdToken();
-          await fetch(`${API}/users/${uid}/status`, {
+          await fetch(`${API_BASE}/users/${uid}/status`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${idToken}` },
             body: JSON.stringify({ status }),
