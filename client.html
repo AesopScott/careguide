@@ -589,7 +589,7 @@
         <textarea id="replyText" rows="3" placeholder="Reply to the family…"
                   style="width:100%;padding:10px 12px;border:1px solid var(--border-mid);border-radius:8px;font-family:'Jost',sans-serif;font-size:0.875rem;resize:vertical;line-height:1.6;margin-bottom:10px;"></textarea>
         <div style="display:flex;justify-content:flex-end;">
-          <button onclick="sendMessage()" class="btn-primary btn-action" style="padding:8px 18px;font-size:0.825rem;">Send</button>
+          <button id="sendMessageBtn" onclick="sendMessage()" class="btn-primary btn-action" style="padding:8px 18px;font-size:0.825rem;">Send</button>
         </div>
       </div>
     </div>
@@ -714,6 +714,7 @@ let parentData       = null;
 let medsData         = [];
 let messagesUnsub    = null;
 let practitionerName = null;
+let isSendingMessage = false;
 
 // ── Auth guard ───────────────────────────────────────────────────────────────
 onAuthStateChanged(auth, async (user) => {
@@ -1070,23 +1071,30 @@ function renderMessages(messages) {
 }
 
 window.sendMessage = async function () {
+  if (isSendingMessage) return;
   const textarea = document.getElementById('replyText');
+  const sendBtn  = document.getElementById('sendMessageBtn');
   const text = textarea.value.trim();
   if (!text || !familyId) return;
 
-  if (!practitionerName) {
-    if (currentUser.displayName) {
-      practitionerName = currentUser.displayName;
-    } else {
-      try {
-        const snap = await getDoc(doc(db, 'users', currentUser.uid));
-        practitionerName = snap.exists() ? (snap.data().full_name || '') : '';
-      } catch { practitionerName = ''; }
-    }
-  }
-
+  // Lock the composer before any await so rapid clicks / double-submits
+  // can't queue a parallel addDoc with the same text.
+  isSendingMessage = true;
   textarea.disabled = true;
+  if (sendBtn) sendBtn.disabled = true;
+
   try {
+    if (!practitionerName) {
+      if (currentUser.displayName) {
+        practitionerName = currentUser.displayName;
+      } else {
+        try {
+          const snap = await getDoc(doc(db, 'users', currentUser.uid));
+          practitionerName = snap.exists() ? (snap.data().full_name || '') : '';
+        } catch { practitionerName = ''; }
+      }
+    }
+
     await addDoc(collection(db, 'family_messages'), {
       family_group_id: familyId,
       from_uid:        currentUser.uid,
@@ -1100,7 +1108,9 @@ window.sendMessage = async function () {
   } catch (err) {
     showToast('Failed to send: ' + (err.message || 'try again'));
   } finally {
+    isSendingMessage = false;
     textarea.disabled = false;
+    if (sendBtn) sendBtn.disabled = false;
     textarea.focus();
   }
 };
