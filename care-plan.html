@@ -183,6 +183,48 @@
     .ai-banner-text { font-size: 0.875rem; color: var(--text-mid); }
     .ai-banner-text strong { color: var(--plum); }
 
+    /* ── Intake summary + responses ── */
+    .intake-summary-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-left: 3px solid var(--plum);
+      border-radius: 14px; padding: 18px 22px; margin-bottom: 16px;
+    }
+    .intake-summary-card .label {
+      font-size: 0.7rem; font-weight: 700; letter-spacing: 0.08em;
+      text-transform: uppercase; color: var(--plum); margin-bottom: 8px;
+    }
+    .intake-summary-card .body {
+      font-size: 0.9rem; color: var(--text-dark); line-height: 1.7; white-space: pre-wrap;
+    }
+
+    .intake-responses {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 14px; margin-bottom: 16px;
+    }
+    .intake-responses > summary {
+      list-style: none; cursor: pointer;
+      padding: 14px 22px; font-size: 0.78rem; font-weight: 700;
+      letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted);
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    }
+    .intake-responses > summary::-webkit-details-marker { display: none; }
+    .intake-responses > summary::after {
+      content: '▸'; color: var(--text-muted); font-size: 0.85rem;
+      transition: transform 0.15s;
+    }
+    .intake-responses[open] > summary::after { transform: rotate(90deg); }
+    .intake-responses .intake-body { padding: 4px 22px 20px; }
+    .intake-block { margin-bottom: 14px; }
+    .intake-block:last-child { margin-bottom: 0; }
+    .intake-block h4 {
+      font-size: 0.78rem; font-weight: 700; color: var(--text-mid);
+      margin-bottom: 6px;
+    }
+    .intake-block dl { display: grid; grid-template-columns: minmax(140px, max-content) 1fr; gap: 6px 14px; }
+    .intake-block dt { font-size: 0.78rem; color: var(--text-muted); }
+    .intake-block dd { font-size: 0.85rem; color: var(--text-dark); white-space: pre-wrap; }
+    .intake-empty { font-size: 0.85rem; color: var(--text-muted); font-style: italic; }
+
     .save-toast {
       position: fixed; bottom: 24px; right: 24px;
       background: var(--plum); color: #fff; padding: 10px 20px;
@@ -292,6 +334,7 @@ if (!familyId) window.location.href = '/dashboard.html';
 
 let currentUser = null;
 let planData    = null;
+let isPractitionerOrAdmin = false;
 
 // Section definitions
 const SECTIONS = [
@@ -303,14 +346,45 @@ const SECTIONS = [
   { key: 'next_steps',    label: 'Next Steps',           placeholder: 'Specific action items and who is responsible for each…' },
 ];
 
-let editingSection = null;
-let sectionDrafts  = {};
+// Intake field labels (mirrors api/services/claude.py).
+const INTAKE_SECTION_LABELS = {
+  client_context:    'Client Context',
+  current_situation: 'Current Situation',
+  medical_history:   'Medical History',
+  care_needs:        'Care Needs',
+  goals:             'Goals',
+};
+const INTAKE_FIELD_LABELS = {
+  age:          'Age',
+  diagnosis:    'Diagnosis',
+  living:       'Living Situation',
+  caregivers:   'Caregivers',
+  prompt:       'Reason for Reaching Out',
+  functioning:  'Current Functioning',
+  changes:      'Recent Changes',
+  conditions:   'Conditions',
+  medications:  'Medications',
+  allergies:    'Allergies',
+  social:       'Social History',
+  challenges:   'Challenges',
+  services:     'Services in Place',
+  safety:       'Safety Concerns',
+  family:       'Family Dynamics',
+  client:       'Client Goals',
+  practitioner: 'Practitioner Goals',
+  other:        'Other Notes',
+};
+
+let editingSection      = null;
+let sectionDrafts       = {};
+let intakeResponsesLoaded = false;
 
 onAuthStateChanged(auth, async (user) => {
   if (!user) { window.location.href = `/login.html?next=/care-plan.html?id=${familyId}`; return; }
   const token = await user.getIdTokenResult();
   if (!token.claims.practitioner && !token.claims.admin && !token.claims.family) { window.location.href = '/login.html'; return; }
   currentUser = user;
+  isPractitionerOrAdmin = !!(token.claims.practitioner || token.claims.admin);
   document.body.style.visibility = 'visible';
   document.getElementById('backToClient').href    = `/client.html?id=${familyId}`;
   document.getElementById('intakeLink').href       = `/intake.html?id=${familyId}`;
@@ -356,6 +430,35 @@ function renderPlan() {
   // sections
   const container = document.getElementById('planSections');
   container.innerHTML = '';
+
+  // intake summary card (when AI-drafted)
+  const summaryText = (planData.intake_summary || '').trim();
+  if (summaryText) {
+    const summaryCard = document.createElement('div');
+    summaryCard.className = 'intake-summary-card';
+    summaryCard.innerHTML = `
+      <div class="label">From Intake — Summary</div>
+      <div class="body"></div>
+    `;
+    summaryCard.querySelector('.body').textContent = summaryText;
+    container.appendChild(summaryCard);
+  }
+
+  // intake responses collapsible (practitioner/admin only)
+  if (isPractitionerOrAdmin) {
+    const details = document.createElement('details');
+    details.className = 'intake-responses';
+    details.innerHTML = `
+      <summary>Intake Responses</summary>
+      <div class="intake-body" id="intakeResponsesBody">
+        <div class="intake-empty">Loading…</div>
+      </div>
+    `;
+    details.addEventListener('toggle', () => {
+      if (details.open) loadIntakeResponses();
+    }, { once: false });
+    container.appendChild(details);
+  }
 
   SECTIONS.forEach(sec => {
     const text = planData.sections?.[sec.key] || '';
@@ -450,6 +553,53 @@ window.savePlan = async function () {
   document.getElementById('saveBtn').style.display   = 'none';
   showToast('Care plan saved');
 };
+
+async function loadIntakeResponses() {
+  if (intakeResponsesLoaded) return;
+  const body = document.getElementById('intakeResponsesBody');
+  if (!body) return;
+  try {
+    const snap = await getDoc(doc(db, 'intake_data', familyId));
+    if (!snap.exists()) {
+      body.innerHTML = '<div class="intake-empty">No intake on file.</div>';
+      intakeResponsesLoaded = true;
+      return;
+    }
+    const intake = snap.data().intake || {};
+    body.innerHTML = '';
+    let rendered = 0;
+    Object.entries(INTAKE_SECTION_LABELS).forEach(([sectionKey, sectionLabel]) => {
+      const fields = intake[sectionKey];
+      if (!fields || typeof fields !== 'object') return;
+      const entries = Object.entries(fields).filter(([, v]) => v && String(v).trim());
+      if (!entries.length) return;
+      rendered += 1;
+      const block = document.createElement('div');
+      block.className = 'intake-block';
+      const dl = document.createElement('dl');
+      entries.forEach(([fieldKey, value]) => {
+        const dt = document.createElement('dt');
+        dt.textContent = INTAKE_FIELD_LABELS[fieldKey] || fieldKey.replace(/_/g, ' ');
+        const dd = document.createElement('dd');
+        dd.textContent = String(value);
+        dl.appendChild(dt);
+        dl.appendChild(dd);
+      });
+      const h4 = document.createElement('h4');
+      h4.textContent = sectionLabel;
+      block.appendChild(h4);
+      block.appendChild(dl);
+      body.appendChild(block);
+    });
+    if (!rendered) {
+      body.innerHTML = '<div class="intake-empty">Intake on file is empty.</div>';
+    }
+    intakeResponsesLoaded = true;
+  } catch (err) {
+    console.error('Failed to load intake responses:', err);
+    body.innerHTML = '<div class="intake-empty">Could not load intake responses.</div>';
+  }
+}
 
 window.createBlankPlan = async function () {
   planData = { sections: {}, version: 1, ai_generated: false };
