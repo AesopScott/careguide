@@ -1,21 +1,26 @@
 name: Deploy API to Cloud Run
 
+# Note: stage and prod share the same GCP project, Firestore, and secrets.
+# Stage writes WILL touch prod data and stage Brevo/Twilio calls send real
+# emails/SMS. If you want isolation, set up a separate GCP project for stage
+# and split the secrets — leave that as a follow-up.
+
 on:
   push:
     branches:
       - main
+      - stage
     paths:
       - 'api/**'
   workflow_dispatch:
 
 concurrency:
-  group: deploy-cloudrun-careguide
+  group: deploy-cloudrun-careguide-${{ github.ref_name }}
   cancel-in-progress: false
 
 env:
   PROJECT_ID: careguide-def76
   REGION: us-central1
-  SERVICE: careguide-api
   IMAGE: us-central1-docker.pkg.dev/careguide-def76/careguide-api/api
 
 jobs:
@@ -25,6 +30,19 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Determine target service and CORS
+        id: target
+        run: |
+          if [ "${GITHUB_REF_NAME}" = "stage" ]; then
+            echo "service=careguide-api-stage" >> "$GITHUB_OUTPUT"
+            echo "cors=https://stage.parentalcareguide.com,https://careguide-def76.web.app,https://careguide-def76.firebaseapp.com" >> "$GITHUB_OUTPUT"
+            echo "env=stage" >> "$GITHUB_OUTPUT"
+          else
+            echo "service=careguide-api" >> "$GITHUB_OUTPUT"
+            echo "cors=https://parentalcareguide.com,https://www.parentalcareguide.com,https://careguide-def76.web.app,https://careguide-def76.firebaseapp.com" >> "$GITHUB_OUTPUT"
+            echo "env=prod" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Authenticate to Google Cloud
         uses: google-github-actions/auth@v2
@@ -44,15 +62,15 @@ jobs:
           docker build -t ${{ env.IMAGE }}:${{ github.sha }} ./api
           docker push ${{ env.IMAGE }}:${{ github.sha }}
 
-      - name: Deploy to Cloud Run
+      - name: Deploy to Cloud Run (${{ steps.target.outputs.env }})
         run: |
-          gcloud run deploy ${{ env.SERVICE }} \
+          gcloud run deploy ${{ steps.target.outputs.service }} \
             --image=${{ env.IMAGE }}:${{ github.sha }} \
             --region=${{ env.REGION }} \
             --platform=managed \
             --allow-unauthenticated \
             --set-secrets="ANTHROPIC_API_KEY=ANTHROPIC_API_KEY:latest,BREVO_API_KEY=BREVO_API_KEY:latest,TWILIO_ACCOUNT_SID=TWILIO_ACCOUNT_SID:latest,TWILIO_AUTH_TOKEN=TWILIO_AUTH_TOKEN:latest,TWILIO_PHONE_NUMBER=TWILIO_PHONE_NUMBER:latest,/app/config/firebase-credentials.json=FIREBASE_CREDENTIALS_JSON:latest" \
-            --set-env-vars="^|^FIREBASE_CREDENTIALS_PATH=/app/config/firebase-credentials.json|CORS_ORIGINS=https://parentalcareguide.com,https://www.parentalcareguide.com,https://careguide-def76.web.app,https://careguide-def76.firebaseapp.com" \
+            --set-env-vars="^|^FIREBASE_CREDENTIALS_PATH=/app/config/firebase-credentials.json|CORS_ORIGINS=${{ steps.target.outputs.cors }}" \
             --memory=512Mi \
             --min-instances=0 \
             --max-instances=10
