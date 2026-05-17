@@ -22,7 +22,7 @@ jobs:
         id: target
         run: |
           if [ "${GITHUB_REF_NAME}" = "stage" ]; then
-            echo "dir=/public_html/parentalcareguide/stage.parentalcareguide/" >> "$GITHUB_OUTPUT"
+            echo "dir=/public_html/parentalcareguide/stage.parentalcareguide.com/" >> "$GITHUB_OUTPUT"
             echo "env=stage" >> "$GITHUB_OUTPUT"
           else
             echo "dir=/public_html/parentalcareguide/" >> "$GITHUB_OUTPUT"
@@ -60,4 +60,4 @@ jobs:
             firebase.json
             .firebaserc
             docs/**
-            stage.parentalcareguide/**
+            stage.parentalcareguide.com/**
