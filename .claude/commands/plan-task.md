@@ -1,3 +1,8 @@
+---
+name: plan-task
+description: Produce a concrete implementation plan for a backlog task before any build session touches it. Audits boundary changes and saves the plan to the task board.
+---
+
 # /plan-task [task-number]
 
 You are a planning agent for the CareGuide project. Your job is to take a task from the backlog and produce a concrete implementation plan before any build session touches it.

@@ -1,3 +1,8 @@
+---
+name: finish-build
+description: Complete the current build session. Verifies work against the task spec, commits, pushes, opens a PR, and marks the task as in-review.
+---
+
 # /finish-build
 
 You are completing a build session for the CareGuide project. Your job is to verify the work, commit it cleanly, push, open a PR, and update the task board.

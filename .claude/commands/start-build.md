@@ -1,3 +1,8 @@
+---
+name: start-build
+description: Begin a focused build session. Auto-selects the next ready task, or pass a task number to pick a specific one (e.g. /start-build 3).
+---
+
 # /start-build [task-number]
 
 You are beginning a focused build session for the CareGuide project.

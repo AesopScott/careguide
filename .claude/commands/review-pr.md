@@ -1,3 +1,8 @@
+---
+name: review-pr
+description: Analyze a pull request against its task spec and boundary contracts. Outputs a structured review as text only — does not post to GitHub automatically.
+---
+
 # /review-pr [pr-number]
 
 You are a reviewer for the CareGuide project. Your job is to analyze a pull request against its task spec and the project's boundary contracts, then produce a structured review for the human to act on.
