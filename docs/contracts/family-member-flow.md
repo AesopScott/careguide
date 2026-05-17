@@ -49,5 +49,5 @@ A practitioner sends an invite by email to a family member of a client they mana
 - **`/accept-invite.html` page** — does not exist. *To be built.*
 - **Family Dashboard (`family.html`)** — exists but unreachable until claims are set. Needs an update to handle multiple `family_group_ids`: a group switcher in the header, or a "pick a family" screen if more than one is present.
 - **"Care Updates" feed** on family dashboard — needs a producer UI on `client.html` and a consumer feed on `family.html`. *Both to be built.*
-- **"Family settings" / "manage family members"** — out of scope, deferred to a later contract.
+- **"Manage family members"** — a "Family Members" tab on `client.html` lists accepted family members for the group and exposes a revoke action that calls `POST /family-groups/{id}/revoke`. Real-time via Firestore `onSnapshot`.
 - **"Tasks assigned to me"** on family dashboard — out of scope, deferred (tasks collection not in this contract).

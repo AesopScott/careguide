@@ -85,11 +85,11 @@ Browser pages pick automatically via `js/api-base.js` based on `window.location.
 ### `POST /family-groups/{group_id}/revoke`
 **Served by:** `api/routers/family_groups.py` revoke_family_member
 **Auth:** `require_practitioner` (must own the target family_group)
-**Callers:** none currently (no practitioner UI yet)
+**Callers:** `client.html` revokeFamilyMember (Family Members tab)
 **Request:** `{uid}`
 **Response:** `{success, uid, revoked, remaining_groups}`
 **Side effects:** removes the group_id from the target user's `family_group_ids` claim; revokes refresh tokens; updates the user doc; marks any associated `family_invitations` records as revoked.
-**Status:** ⚠ orphan — endpoint exists but no UI calls it yet. To be wired when a manage-family-members page is built.
+**Status:** ✓
 
 ### `POST /auth/accept-invite`
 **Served by:** `api/routers/auth_verification.py` accept_invite
@@ -244,7 +244,7 @@ Browser pages pick automatically via `js/api-base.js` based on `window.location.
 | POST /contact                           | ✓      | ✓      | OK                        |
 | GET  /health                            | ✓      | ✓      | OK                        |
 | POST /family-groups/{id}/invite         | ✓      | ✓      | OK                        |
-| POST /family-groups/{id}/revoke         | ✓      | ✗      | orphan (no UI yet)        |
+| POST /family-groups/{id}/revoke         | ✓      | ✓      | OK                        |
 | POST /auth/accept-invite                | ✓      | ✓      | OK                        |
 | POST /ai/intake                         | ✗      | ✓      | ⚠ missing endpoint        |
 | GET/POST/GET /family-groups/...         | ✓      | ✗      | orphan (correct schema)   |
