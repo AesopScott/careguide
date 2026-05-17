@@ -10,3 +10,6 @@ screenshot-og.js
 tmp_auth_export.json
 tmp_*.json
 .claude/worktrees/
+
+# Local Claude settings with secrets — untracked only; settings.local.json is intentionally tracked
+.claude/settings.secret.json
