@@ -127,6 +127,18 @@
       "plan": null,
       "branch": null,
       "pr_url": null
+    },
+    {
+      "number": 11,
+      "title": "Medical Alerting Information + Services for Care Recipients",
+      "category": "feature",
+      "priority": 11,
+      "status": "backlog",
+      "dependencies": [],
+      "description": "Provide medical alerting information and potential services for care recipients. Surface educational content about medical alert options (fall-detection pendants, emergency response systems like Life Alert / Bay Alarm Medical / Medical Guardian, Apple Watch fall detection, in-home sensor systems) within the care plan flow so practitioners can recommend appropriate options for each parent. Explore whether the platform should go beyond content and facilitate enrollment via affiliate partnerships, or integrate directly with one or more providers (e.g. webhook receivers that surface real alert events in client.html and notify family via family.html). Scope decisions — pure educational content vs. comparison tool vs. enrollment workflow vs. live device integration — to be made during /plan-task. Likely touches care-plan.html (a Recommendations / Alerting section), potentially new content pages, and potentially a new collection like alert_subscriptions or alert_events if services are wired up.",
+      "plan": null,
+      "branch": null,
+      "pr_url": null
     }
   ]
 }
