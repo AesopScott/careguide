@@ -19,7 +19,7 @@ Browser pages pick automatically via `js/api-base.js` based on `window.location.
 **Callers:** `signup.html:848`
 **Request:** `{full_name, profession, license_states[], beta?}`
 **Response:** `{success, uid, role, profession, beta}`
-**Side effects:** sets `practitioner`/`profession`/`beta` claims; writes `users/{uid}` doc with `status: pending_activation`; sends welcome email via Brevo.
+**Side effects:** sets `practitioner` claim; writes `users/{uid}` doc with `status: pending_activation` (including `profession` and `beta` fields, which are data, not claims); sends welcome email via Brevo.
 **Status:** ✓
 
 ### `POST /users/{uid}/status`
