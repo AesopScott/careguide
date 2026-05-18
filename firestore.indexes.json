@@ -55,6 +55,14 @@
         { "fieldPath": "family_group_id", "order": "ASCENDING" },
         { "fieldPath": "posted_at",       "order": "DESCENDING" }
       ]
+    },
+    {
+      "collectionGroup": "family_messages",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "family_group_id", "order": "ASCENDING" },
+        { "fieldPath": "created_at",      "order": "ASCENDING" }
+      ]
     }
   ],
   "fieldOverrides": []
