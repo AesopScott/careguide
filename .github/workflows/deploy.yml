@@ -5,10 +5,14 @@ on:
     branches:
       - main
       - stage
+  pull_request:
+    branches:
+      - main
+      - stage
   workflow_dispatch:
 
 concurrency:
-  group: deploy-mocahost-careguide-${{ github.ref_name }}
+  group: deploy-mocahost-careguide-${{ github.event.pull_request.number || github.ref_name }}
   cancel-in-progress: false
 
 jobs:
@@ -21,7 +25,13 @@ jobs:
       - name: Determine server directory
         id: target
         run: |
-          if [ "${GITHUB_REF_NAME}" = "stage" ]; then
+          # On pull_request events, github.ref_name is the merge ref; use base_ref instead.
+          if [ "${GITHUB_EVENT_NAME}" = "pull_request" ]; then
+            BRANCH="${GITHUB_BASE_REF}"
+          else
+            BRANCH="${GITHUB_REF_NAME}"
+          fi
+          if [ "${BRANCH}" = "stage" ]; then
             echo "dir=/public_html/parentalcareguide/stage.parentalcareguide.com/" >> "$GITHUB_OUTPUT"
             echo "env=stage" >> "$GITHUB_OUTPUT"
           else
@@ -35,7 +45,37 @@ jobs:
           ENV="${{ steps.target.outputs.env }}"
           echo "(function(){var v='${SHA}';var env='${ENV}';var el=document.createElement('div');el.style.cssText='position:fixed;bottom:8px;left:12px;font-size:11px;opacity:0.35;font-family:monospace;z-index:9999;pointer-events:none;color:#000;';el.textContent=(env==='stage'?'[stage] ':'')+'v'+v;document.addEventListener('DOMContentLoaded',function(){document.body.appendChild(el);});})();" > version.js
 
+      - name: Validate (dry-run on PR)
+        if: github.event_name == 'pull_request'
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: 65.181.111.131
+          username: hivetec1
+          password: ${{ secrets.FTP_PASSWORD }}
+          port: 21
+          protocol: ftps
+          local-dir: ./
+          server-dir: ${{ steps.target.outputs.dir }}
+          dry-run: true
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/node_modules/**
+            **/.github/**
+            **/.claude/**
+            **/.DS_Store
+            **/README.md
+            cgi-bin/**
+            api/**
+            config/**
+            firestore.rules
+            firebase.json
+            .firebaserc
+            docs/**
+            stage.parentalcareguide.com/**
+
       - name: Deploy via FTP
+        if: github.event_name != 'pull_request'
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: 65.181.111.131
