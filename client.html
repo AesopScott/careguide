@@ -486,6 +486,7 @@
     <button class="tab active" data-tab="overview">Overview</button>
     <button class="tab" data-tab="notes">Session Notes</button>
     <button class="tab" data-tab="updates">Care Updates</button>
+    <button class="tab" data-tab="messages">Messages</button>
     <button class="tab" data-tab="medications">Medications</button>
     <button class="tab" data-tab="crisis">Crisis Card</button>
     <button class="tab" data-tab="family">Family Members</button>
@@ -571,6 +572,26 @@
         </div>
         <div id="updatesList" style="margin-top:18px;">
           <div class="empty-section"><p>No care updates posted yet.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Messages ── -->
+  <div class="tab-panel" id="panel-messages">
+    <div class="section-card">
+      <div class="section-card-header">
+        <span class="section-card-title">Family Messages</span>
+        <span style="font-size:0.75rem;color:var(--text-muted);">Real-time conversation with family members on this account.</span>
+      </div>
+      <div class="section-card-body">
+        <div id="messageThread" style="max-height:480px;overflow-y:auto;padding:8px 4px;margin-bottom:14px;">
+          <div class="empty-section"><p>No messages yet. Family members can send messages from their family portal.</p></div>
+        </div>
+        <textarea id="replyText" rows="3" placeholder="Reply to the family…"
+                  style="width:100%;padding:10px 12px;border:1px solid var(--border-mid);border-radius:8px;font-family:'Jost',sans-serif;font-size:0.875rem;resize:vertical;line-height:1.6;margin-bottom:10px;"></textarea>
+        <div style="display:flex;justify-content:flex-end;">
+          <button id="sendMessageBtn" onclick="sendMessage()" class="btn-primary btn-action" style="padding:8px 18px;font-size:0.825rem;">Send</button>
         </div>
       </div>
     </div>
@@ -709,6 +730,9 @@ let familyData          = null;
 let parentData          = null;
 let medsData            = [];
 let familyMembersUnsub  = null;
+let messagesUnsub       = null;
+let practitionerName    = null;
+let isSendingMessage    = false;
 
 // ── Auth guard ───────────────────────────────────────────────────────────────
 onAuthStateChanged(auth, async (user) => {
@@ -735,6 +759,7 @@ onAuthStateChanged(auth, async (user) => {
 });
 
 document.getElementById('signOutBtn').addEventListener('click', async () => {
+  if (messagesUnsub) { messagesUnsub(); messagesUnsub = null; }
   await signOut(auth);
   window.location.href = '/login.html';
 });
@@ -769,6 +794,7 @@ async function loadClient() {
   renderCareUpdates(updatesData);
   renderMeds();
   renderCrisisCard();
+  subscribeMessages();
 
   // wire dynamic links
   document.getElementById('manageMedsBtn').href   = `/medications.html?id=${familyId}`;
@@ -781,7 +807,22 @@ async function loadClient() {
 
 window.addEventListener('beforeunload', () => {
   if (familyMembersUnsub) familyMembersUnsub();
+  if (messagesUnsub)      messagesUnsub();
 });
+
+function subscribeMessages() {
+  if (messagesUnsub) messagesUnsub();
+  messagesUnsub = onSnapshot(
+    query(collection(db, 'family_messages'),
+          where('family_group_id', '==', familyId),
+          orderBy('created_at', 'asc')),
+    (snap) => renderMessages(snap.docs.map(d => ({ id: d.id, ...d.data() }))),
+    (err) => {
+      document.getElementById('messageThread').innerHTML =
+        `<div class="empty-section"><p>Couldn't load messages: ${escapeText(err.message || 'try again')}.</p></div>`;
+    }
+  );
+}
 
 // ── Render header ────────────────────────────────────────────────────────────
 function renderHeader() {
@@ -1017,6 +1058,87 @@ function renderCareUpdates(updates) {
     `;
   }).join('');
 }
+
+function escapeText(s) {
+  return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+function formatMsgTs(ts) {
+  const d = ts?.toDate ? ts.toDate() : (ts ? new Date(ts) : null);
+  if (!d) return '';
+  return d.toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' });
+}
+
+function renderMessages(messages) {
+  const el = document.getElementById('messageThread');
+  if (!messages.length) {
+    el.innerHTML = `<div class="empty-section"><p>No messages yet. Family members can send messages from their family portal.</p></div>`;
+    return;
+  }
+  el.innerHTML = messages.map(m => {
+    const isMine = m.from_uid === currentUser.uid;
+    const align  = isMine ? 'flex-end' : 'flex-start';
+    const bubble = isMine
+      ? 'background:var(--plum);color:#fff;'
+      : 'background:var(--plum-pale);color:var(--text-dark);';
+    const meta   = isMine ? 'color:rgba(255,255,255,0.75);' : 'color:var(--text-muted);';
+    return `
+      <div style="display:flex;justify-content:${align};margin:12px 0;">
+        <div style="max-width:78%;padding:10px 14px;border-radius:12px;${bubble}">
+          <div style="font-size:0.72rem;font-weight:600;letter-spacing:0.02em;margin-bottom:4px;${meta}">${escapeText(m.from_name || m.from_email || 'Unknown')}</div>
+          <div style="font-size:0.875rem;line-height:1.55;white-space:pre-wrap;">${escapeText(m.text)}</div>
+          <div style="font-size:0.7rem;margin-top:6px;${meta}">${formatMsgTs(m.created_at)}</div>
+        </div>
+      </div>
+    `;
+  }).join('');
+  el.scrollTop = el.scrollHeight;
+}
+
+window.sendMessage = async function () {
+  if (isSendingMessage) return;
+  const textarea = document.getElementById('replyText');
+  const sendBtn  = document.getElementById('sendMessageBtn');
+  const text = textarea.value.trim();
+  if (!text || !familyId) return;
+
+  // Lock the composer before any await so rapid clicks / double-submits
+  // can't queue a parallel addDoc with the same text.
+  isSendingMessage = true;
+  textarea.disabled = true;
+  if (sendBtn) sendBtn.disabled = true;
+
+  try {
+    if (!practitionerName) {
+      if (currentUser.displayName) {
+        practitionerName = currentUser.displayName;
+      } else {
+        try {
+          const snap = await getDoc(doc(db, 'users', currentUser.uid));
+          practitionerName = snap.exists() ? (snap.data().full_name || '') : '';
+        } catch { practitionerName = ''; }
+      }
+    }
+
+    await addDoc(collection(db, 'family_messages'), {
+      family_group_id: familyId,
+      from_uid:        currentUser.uid,
+      from_email:      currentUser.email,
+      from_name:       practitionerName || currentUser.email,
+      text,
+      created_at:      serverTimestamp(),
+      read:            false,
+    });
+    textarea.value = '';
+  } catch (err) {
+    showToast('Failed to send: ' + (err.message || 'try again'));
+  } finally {
+    isSendingMessage = false;
+    textarea.disabled = false;
+    if (sendBtn) sendBtn.disabled = false;
+    textarea.focus();
+  }
+};
 
 window.postCareUpdate = async function () {
   const textarea = document.getElementById('updateText');
