@@ -165,6 +165,18 @@
       "plan": null,
       "branch": null,
       "pr_url": null
+    },
+    {
+      "number": 18,
+      "title": "Reconcile task #16 description with shipped scope (HTML linting deferral)",
+      "category": "debt",
+      "priority": 12,
+      "status": "backlog",
+      "dependencies": [],
+      "description": "Codex review of task #16 (PR #14) flagged a conflict between the task description (which lists 'HTML basic syntax errors' as a required failure mode for the new CI workflow) and the plan that the build session executed (which marked HTML linting out of scope for v1 due to false-positive rates on hand-rolled HTML). The implementation followed the plan and ci.yml does not run an HTML syntax check today. To keep the spec self-describing for future reviewers and avoid re-litigating this conflict, do two things: (a) edit task #16's description in docs/backlog.json to explicitly state 'HTML linting deferred — see plan for rationale,' and (b) add a one-line comment at scripts/validate-backlog.mjs:12 explaining that 'in-progress' is included in the valid-status set because /start-build sets it as a transient state. Both are documentation-only changes; no behavioral impact.",
+      "plan": null,
+      "branch": null,
+      "pr_url": null
     }
   ]
 }
