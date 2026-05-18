@@ -336,6 +336,13 @@ let currentUser = null;
 let planData    = null;
 let isPractitionerOrAdmin = false;
 
+// Care plan sections may contain arbitrary text (manual edits or AI output influenced by
+// intake responses). Escape before any innerHTML interpolation. Markdown rendering is
+// a separate followup; for now we render plain text.
+function escapeHtml(s) {
+  return String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
 // Section definitions
 const SECTIONS = [
   { key: 'situation',     label: 'Current Situation',    placeholder: 'Describe the current care situation, living arrangement, and key context…' },
@@ -471,7 +478,7 @@ function renderPlan() {
         <button class="btn-edit-section" onclick="startEdit('${sec.key}')">Edit</button>
       </div>
       <div class="plan-section-body" id="body-${sec.key}">
-        <div class="plan-text ${text ? '' : 'empty'}" id="view-${sec.key}">${text || 'Not yet filled in.'}</div>
+        <div class="plan-text ${text ? '' : 'empty'}" id="view-${sec.key}">${text ? escapeHtml(text) : 'Not yet filled in.'}</div>
       </div>
     `;
     container.appendChild(div);
@@ -501,7 +508,7 @@ window.startEdit = function (key) {
 
   const body = document.getElementById(`body-${key}`);
   body.innerHTML = `
-    <textarea class="plan-textarea" id="edit-${key}" placeholder="${sec.placeholder}">${text}</textarea>
+    <textarea class="plan-textarea" id="edit-${key}" placeholder="${sec.placeholder}">${escapeHtml(text)}</textarea>
     <div style="display:flex;gap:8px;margin-top:12px;">
       <button class="btn-primary" style="padding:7px 16px;font-size:0.8rem;" onclick="finishEdit('${key}', true)">Done</button>
       <button class="btn-outline" style="padding:7px 16px;font-size:0.8rem;" onclick="finishEdit('${key}', false)">Cancel</button>
@@ -522,7 +529,7 @@ window.finishEdit = function (key, keep) {
 
   const text = planData.sections?.[key] || '';
   const body = document.getElementById(`body-${key}`);
-  body.innerHTML = `<div class="plan-text ${text ? '' : 'empty'}" id="view-${key}">${text || 'Not yet filled in.'}</div>`;
+  body.innerHTML = `<div class="plan-text ${text ? '' : 'empty'}" id="view-${key}">${text ? escapeHtml(text) : 'Not yet filled in.'}</div>`;
   editingSection = null;
 };
 
