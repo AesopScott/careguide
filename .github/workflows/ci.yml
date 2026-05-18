@@ -1,0 +1,54 @@
+name: CI
+
+on:
+  pull_request:
+    branches:
+      - main
+      - stage
+  push:
+    branches:
+      - main
+      - stage
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.event.pull_request.number || github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Parse all JSON files
+        run: |
+          set -e
+          for f in docs/backlog.json firebase.json .firebaserc firestore.indexes.json; do
+            if [ -f "$f" ]; then
+              node -e "JSON.parse(require('fs').readFileSync('$f','utf8'))" \
+                || { echo "::error file=$f::Invalid JSON"; exit 1; }
+              echo "OK $f"
+            fi
+          done
+
+      - name: JS syntax check (js/)
+        run: |
+          set -e
+          shopt -s nullglob
+          for f in js/*.js; do
+            node --check "$f" || { echo "::error file=$f::Syntax error"; exit 1; }
+            echo "OK $f"
+          done
+
+      - name: No hardcoded prod Cloud Run URL in HTML
+        run: |
+          if git grep -lE 'careguide-api-658340465706' -- '*.html'; then
+            echo "::error::Hardcoded prod Cloud Run URL found in HTML above. Use window.API_BASE (via js/api-base.js) instead."
+            exit 1
+          fi
+          echo "OK: no hardcoded prod URLs in HTML"
+
+      - name: Backlog schema check
+        run: node scripts/validate-backlog.mjs
