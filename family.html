@@ -582,7 +582,8 @@ function renderCarePlan(plan) {
     el.innerHTML = `<p class="empty">Care plan is in progress.</p>`;
     return;
   }
-  const preview = snippet.length > 320 ? snippet.slice(0, 320) + '…' : snippet;
+  const truncated = snippet.length > 320 ? snippet.slice(0, 320) + '…' : snippet;
+  const preview = truncated.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
   const lastUpdated = plan.updated_at?.toDate?.() ? formatTs(plan.updated_at) : '';
   el.innerHTML = `
     <p style="font-size:0.875rem;color:var(--text-dark);line-height:1.7;margin-bottom:12px;">${preview}</p>

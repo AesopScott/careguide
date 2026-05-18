@@ -560,24 +560,18 @@ window.submitIntake = async function () {
     if (!res.ok) throw new Error(`API error: ${res.status}`);
     const result = await res.json();
 
-    // Save care plan to Firestore
+    // Save care plan to Firestore. The server already persisted intake_data
+    // as a side effect of POST /ai/intake — do not duplicate that write here.
     await setDoc(doc(db, 'care_plans', familyId), {
       family_group_id: familyId,
       practitioner_id: currentUser.uid,
       sections:        result.sections || result.care_plan || {},
+      intake_summary:  result.intake_summary || '',
       ai_generated:    true,
       reviewed:        false,
       version:         1,
       created_at:      serverTimestamp(),
       updated_at:      serverTimestamp(),
-    }, { merge: true });
-
-    // Save raw intake
-    await setDoc(doc(db, 'intake_data', familyId), {
-      family_group_id: familyId,
-      practitioner_id: currentUser.uid,
-      intake:          intakeData,
-      created_at:      serverTimestamp(),
     }, { merge: true });
 
     document.getElementById('aiProcessing').classList.remove('visible');
@@ -587,23 +581,13 @@ window.submitIntake = async function () {
     clearInterval(statusInterval);
     console.error('Intake failed:', err);
 
-    // Fall back: save raw intake, create blank plan
-    try {
-      await setDoc(doc(db, 'intake_data', familyId), {
-        family_group_id: familyId,
-        practitioner_id: currentUser.uid,
-        intake:          intakeData,
-        created_at:      serverTimestamp(),
-      }, { merge: true });
-    } catch {}
-
     document.getElementById('aiProcessing').classList.remove('visible');
     document.getElementById('stepsBar').style.display = '';
     document.getElementById(`step-${currentStep}`).style.display = '';
     document.getElementById(`step-${currentStep}`).classList.add('active');
 
     const eb = document.getElementById('errorBanner');
-    eb.textContent = 'The AI generation failed. Your responses have been saved — you can try again or build the care plan manually.';
+    eb.textContent = 'The AI generation failed. You can submit again or build the care plan manually.';
     eb.classList.add('visible');
 
     btn.disabled = false;

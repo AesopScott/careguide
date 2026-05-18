@@ -116,7 +116,7 @@ Practitioner clinical notes per family group. Top-level, keyed by `family_group_
 
 One care plan per family group. Document id = `family_group_id`.
 
-**Schema (key fields):** `family_group_id`, sections (goals, interventions, etc. — TBD), `created_at`, `updated_at`.
+**Schema (key fields):** `family_group_id`, `practitioner_id`, `sections` (keys: `situation`, `goals`, `interventions`, `family_role`, `barriers`, `next_steps`), `intake_summary?` (short paragraph synthesized from the intake when the plan was AI-drafted), `ai_generated`, `reviewed`, `version`, `review_date?`, `created_at`, `updated_at`.
 
 **Producers**
 - `care-plan.html:447, 456` — setDoc (merge)
@@ -134,19 +134,18 @@ One care plan per family group. Document id = `family_group_id`.
 
 ## `intake_data`
 
-Practitioner intake form data per family group. Document id = `family_group_id`.
+Practitioner intake form data per family group. Document id = `family_group_id`. Server-owned write path — the API writes this as a side effect of `POST /ai/intake`.
 
-**Schema (key fields):** `family_group_id`, intake fields (TBD), `created_at`, `updated_at`.
+**Schema (key fields):** `family_group_id`, `practitioner_id`, `intake` (nested dict: `client_context`, `current_situation`, `medical_history`, `care_needs`, `goals`), `created_at`, `updated_at`.
 
 **Producers**
-- `intake.html:575, 591` — setDoc (merge)
+- `api/routers/ai.py` `POST /ai/intake` — Admin SDK setDoc (merge) after verifying the caller owns the family_group.
 
 **Consumers**
-- None currently — written but not read anywhere.
+- `api/routers/ai.py` `POST /ai/intake` — feeds the raw intake into Claude to produce care-plan sections + an intake_summary.
+- `care-plan.html` — practitioner/admin only "Intake Responses" collapsible reads the raw nested intake.
 
 **Rule:** `firestore.rules` /intake_data — practitioner-only (no family access). ✓
-
-⚠ **Orphaned:** producer with no consumer. Either add a consumer or remove the producer.
 
 ---
 
@@ -168,17 +167,22 @@ Crisis card data per family group. Document id = `family_group_id`.
 
 ## `family_messages`
 
-Family-side messaging (family.html flow).
+Two-way messaging between a family member and the owning practitioner for a family group.
+
+**Schema (key fields):** `family_group_id`, `from_uid`, `from_email`, `from_name`, `text`, `created_at`, `read` (bool).
 
 **Producers**
-- `family.html:549` — addDoc (family member side)
+- `family.html:646` — addDoc (family-member side)
+- `client.html` sendMessage — addDoc (practitioner-side reply)
 
 **Consumers**
-- None on practitioner side yet — practitioner inbox UI not yet built.
+- `client.html` Messages tab — `onSnapshot(query(family_messages, where family_group_id == X, orderBy created_at asc))`
 
 **Rule:** `firestore.rules` /family_messages — both practitioner and family member can read/write within their group; only the sender (or admin) can edit/delete. ✓
 
-⚠ **Note:** family flow now reachable (claim setter + accept page built). Practitioner-side reader UI still to come.
+**Indexes:** `family_messages` (family_group_id ASC, created_at ASC) for the practitioner-side thread query. ✓
+
+**Notes:** the `read` field is written but never updated — the current rule only lets the original sender (or admin) modify a message, so the recipient cannot flip `read` without a field-level rule change. Read-receipts and unread badges are deferred until that rule lands.
 
 ---
 
@@ -195,6 +199,7 @@ Pending invitations from practitioner to family-member email.
 
 **Consumers**
 - `api/routers/auth_verification.py` accept_invite — Admin SDK lookup by `invited_email` + `status` (bypasses rules)
+- `client.html` subscribeFamilyMembers — practitioner-side `onSnapshot` filtered by `family_group_id` (orderBy `invited_at` desc), renders rows with `status == 'accepted'` for the Family Members tab.
 
 **Rule:** `firestore.rules` /family_invitations — practitioner who owns the family_group can read/write; admin full access; family members never touch directly. ✓
 

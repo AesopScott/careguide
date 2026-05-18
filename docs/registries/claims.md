@@ -41,9 +41,9 @@ Marks a user as a platform administrator. Granted manually — there is no UI fo
 Marks an approved practitioner.
 
 **Setters**
-- `api/routers/users.py:58` — set on `/users/register` (immediately at signup; status is `pending_activation`)
-- `api/routers/users.py:254` — re-set on approve `/users/{uid}/status` with `status='active'`
-- `api/routers/users.py:260` — **cleared** (set to `{}`) on reject
+- `api/routers/users.py:58` — set on `/users/register` as `{"practitioner": True}` (immediately at signup; status is `pending_activation`)
+- `api/routers/users.py:250` — re-set on approve `/users/{uid}/status` with `status='active'` as `{"practitioner": True}`
+- `api/routers/users.py:252` — **cleared** (set to `{}`) on reject
 
 **Checkers (client)**
 - `login.html:271` — redirect to `/dashboard.html`
@@ -62,13 +62,7 @@ Marks an approved practitioner.
 
 The practitioner's discipline (`gcm`, `elder_law`, `social_work`, `financial`).
 
-**Setters**
-- `api/routers/users.py:60, 256` — set alongside `practitioner` claim.
-
-**Checkers**
-- None — never read from the token. Practitioner UI reads from the Firestore user profile instead.
-
-⚠ **Orphaned:** producer with no consumer. Either remove the claim or use it for client-side gating (would avoid an extra Firestore read).
+**Removed (audit 2026-05-17).** Profession is data, not access control. The single source of truth is `users/{uid}.profession` + `profession_label`, consumed by `family.html` (care-team role) and `admin-approvals.html` (label). No token claim is set.
 
 ---
 
@@ -76,13 +70,7 @@ The practitioner's discipline (`gcm`, `elder_law`, `social_work`, `financial`).
 
 Beta-tester flag.
 
-**Setters**
-- `api/routers/users.py:61, 257` — defaults to `True`.
-
-**Checkers**
-- None currently.
-
-⚠ **Orphaned:** producer with no consumer. Intended for future billing gating; safe to leave but document the plan.
+**Removed (audit 2026-05-17).** No consumers. Future billing gating should read live state (Stripe subscription, or `users/{uid}.beta`) rather than a cached token claim that goes stale until re-auth. No token claim is set.
 
 ---
 
@@ -124,7 +112,5 @@ Array of family group ids the family-member user has accepted invitations into. 
 |-------------------|-----------|-----------|-----------------------|
 | admin             | manual    | many      | ✓                     |
 | practitioner      | API       | many      | ✓                     |
-| profession        | API       | none      | ⚠ orphan              |
-| beta              | API       | none      | ⚠ orphan (planned)    |
 | family            | API       | many      | ✓                     |
 | family_group_ids  | API       | many + rules | ✓                  |
