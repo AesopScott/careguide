@@ -191,11 +191,14 @@ Browser pages pick automatically via `js/api-base.js` based on `window.location.
 **Callers:** none currently
 **Status:** ⚠ orphan.
 
-### `POST /ai/intake` ⚠ MISSING
-**Served by:** none
+### `POST /ai/intake`
+**Served by:** `api/routers/ai.py`
+**Auth:** `require_practitioner` (must own the target `family_group`)
 **Callers:** `intake.html:549`
-**Request:** `{family_group_id, intake}` → **Response (expected):** `{sections}` or `{care_plan}`
-**Status:** ⚠ **CRITICAL** — caller exists, endpoint not implemented. The whole intake → AI care plan flow on `intake.html` is broken.
+**Request:** `{family_group_id: str, intake: dict}`
+**Response:** `{sections: {situation, goals, interventions, family_role, barriers, next_steps}, intake_summary: str}`
+**Side effects:** verifies ownership of `family_groups/{family_group_id}`; writes `intake_data/{family_group_id}` via Admin SDK (merge) with the caller's `practitioner_id` and the raw intake; calls Claude to map the intake into the six care-plan sections plus a short synthesis paragraph.
+**Status:** ✓
 
 ---
 
@@ -246,7 +249,7 @@ Browser pages pick automatically via `js/api-base.js` based on `window.location.
 | POST /family-groups/{id}/invite         | ✓      | ✓      | OK                        |
 | POST /family-groups/{id}/revoke         | ✓      | ✗      | orphan (no UI yet)        |
 | POST /auth/accept-invite                | ✓      | ✓      | OK                        |
-| POST /ai/intake                         | ✗      | ✓      | ⚠ missing endpoint        |
+| POST /ai/intake                         | ✓      | ✓      | OK                        |
 | GET/POST/GET /family-groups/...         | ✓      | ✗      | orphan (correct schema)   |
 | /parents/ (CRUD)                        | ✓      | ✗      | orphan (client uses direct Firestore) |
 | /medications/ (CRUD)                    | ✓      | ✗      | orphan (client uses direct Firestore) |

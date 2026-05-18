@@ -116,7 +116,7 @@ Practitioner clinical notes per family group. Top-level, keyed by `family_group_
 
 One care plan per family group. Document id = `family_group_id`.
 
-**Schema (key fields):** `family_group_id`, sections (goals, interventions, etc. — TBD), `created_at`, `updated_at`.
+**Schema (key fields):** `family_group_id`, `practitioner_id`, `sections` (keys: `situation`, `goals`, `interventions`, `family_role`, `barriers`, `next_steps`), `intake_summary?` (short paragraph synthesized from the intake when the plan was AI-drafted), `ai_generated`, `reviewed`, `version`, `review_date?`, `created_at`, `updated_at`.
 
 **Producers**
 - `care-plan.html:447, 456` — setDoc (merge)
@@ -134,19 +134,18 @@ One care plan per family group. Document id = `family_group_id`.
 
 ## `intake_data`
 
-Practitioner intake form data per family group. Document id = `family_group_id`.
+Practitioner intake form data per family group. Document id = `family_group_id`. Server-owned write path — the API writes this as a side effect of `POST /ai/intake`.
 
-**Schema (key fields):** `family_group_id`, intake fields (TBD), `created_at`, `updated_at`.
+**Schema (key fields):** `family_group_id`, `practitioner_id`, `intake` (nested dict: `client_context`, `current_situation`, `medical_history`, `care_needs`, `goals`), `created_at`, `updated_at`.
 
 **Producers**
-- `intake.html:575, 591` — setDoc (merge)
+- `api/routers/ai.py` `POST /ai/intake` — Admin SDK setDoc (merge) after verifying the caller owns the family_group.
 
 **Consumers**
-- None currently — written but not read anywhere.
+- `api/routers/ai.py` `POST /ai/intake` — feeds the raw intake into Claude to produce care-plan sections + an intake_summary.
+- `care-plan.html` — practitioner/admin only "Intake Responses" collapsible reads the raw nested intake.
 
 **Rule:** `firestore.rules` /intake_data — practitioner-only (no family access). ✓
-
-⚠ **Orphaned:** producer with no consumer. Either add a consumer or remove the producer.
 
 ---
 
