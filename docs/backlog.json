@@ -127,6 +127,32 @@
       "plan": null,
       "branch": null,
       "pr_url": null
+    },
+    {
+      "number": 15,
+      "title": "Unblock PR queue — drop required `deploy` status check from main ruleset",
+      "category": "emergency-fix",
+      "priority": 15,
+      "status": "complete",
+      "dependencies": [],
+      "description": "Branch protection on main (ruleset 16509020) required a status check named `deploy` (integration_id 15368 = GitHub Actions). The job that produces that check name lives in `.github/workflows/deploy.yml` and only ran on push to main/stage, not on pull_request. Result: every PR to main sat in mergeStateStatus=BLOCKED forever, waiting for a check that by design never reported on PR head commits. Caught during /review-pr of task #2 when PRs #1, #8, and #9 all showed BLOCKED despite being MERGEABLE. Fix applied via `gh api -X PUT repos/AesopScott/careguide/rulesets/16509020` — dropped the `required_status_checks` rule, kept `deletion`, `pull_request`, `non_fast_forward`. Also opened PR #10 as an expedient attempt to make `deploy.yml` run on PRs in dry-run mode; that approach is the wrong architecture (deploy workflow shouldn't moonlight as a PR validator) and is being closed in favor of task #16. The lasting fix from this task is the ruleset change only. Emergency-fix executed mid-session from a /review-pr task #2 session.",
+      "plan": null,
+      "branch": null,
+      "pr_url": "https://github.com/AesopScott/careguide/pull/10"
+    },
+    {
+      "number": 16,
+      "title": "Add `ci.yml` for PR-time validation; keep `deploy.yml` push-only",
+      "category": "emergency-fix",
+      "priority": 16,
+      "status": "backlog",
+      "dependencies": [
+        15
+      ],
+      "description": "Follow-up to task #15. The right place for PR-time validation is a dedicated CI workflow, not the deploy workflow. Build `.github/workflows/ci.yml` with a `validate` job that catches the failure modes that actually matter on a PR — JSON parse errors in `docs/backlog.json`, `firebase.json`, `.firebaserc`; HTML basic syntax errors; JS `node --check` on `js/*.js`; and a guard `grep` for hardcoded prod Cloud Run URLs in HTML (the exact regression that snuck into PR #1 and was only caught by manual review). Close PR #10 without merging — its `deploy.yml` change should never land; main keeps the original push-only `deploy.yml`. After ci.yml is live, optionally re-add the required-status-check rule to ruleset 16509020 pointing at the new `validate` job name. Emergency-fix executed mid-session from a /review-pr task #2 session.",
+      "plan": null,
+      "branch": null,
+      "pr_url": null
     }
   ]
 }
