@@ -155,10 +155,10 @@
       "pr_url": "https://github.com/AesopScott/careguide/pull/14"
     },
     {
-      "number": 17,
+      "number": 32,
       "title": "Backfill human verification of tasks promoted without testing",
       "category": "debt",
-      "priority": 11,
+      "priority": 32,
       "status": "backlog",
       "dependencies": [],
       "description": "On 2026-05-17 the stage→prod promotion was executed without running the per-task human test plans on the stage environment. Tasks rolled up: #1 (Intake AI Endpoint), #2 (Manage Family Members UI), #3 (Practitioner Messaging UI), #4 (Profession + Beta Claims Audit), plus the security hardening commit 1bcff5c (XSS escape in care-plan.html and family.html). Backfill the verification: for each task, run the test plan from its PR body against the production environment and record results. File new backlog items for any failures found. Specifically: (a) task #1 — five tests covering POST /ai/intake happy path, 404 unknown group, 403 not-owner, care-plan.html summary card + intake-responses collapsible (practitioner sees, family does not), and an XSS injection test against a care-plan section edit; (b) tasks #2/#3/#4/#16 — run the test plans from their respective PR bodies. Replaces the human-review gate that was skipped.",
@@ -167,10 +167,10 @@
       "pr_url": null
     },
     {
-      "number": 18,
+      "number": 33,
       "title": "Reconcile task #16 description with shipped scope (HTML linting deferral)",
       "category": "debt",
-      "priority": 12,
+      "priority": 33,
       "status": "backlog",
       "dependencies": [],
       "description": "Codex review of task #16 (PR #14) flagged a conflict between the task description (which lists 'HTML basic syntax errors' as a required failure mode for the new CI workflow) and the plan that the build session executed (which marked HTML linting out of scope for v1 due to false-positive rates on hand-rolled HTML). The implementation followed the plan and ci.yml does not run an HTML syntax check today. To keep the spec self-describing for future reviewers and avoid re-litigating this conflict, do two things: (a) edit task #16's description in docs/backlog.json to explicitly state 'HTML linting deferred — see plan for rationale,' and (b) add a one-line comment at scripts/validate-backlog.mjs:12 explaining that 'in-progress' is included in the valid-status set because /start-build sets it as a transient state. Both are documentation-only changes; no behavioral impact.",
