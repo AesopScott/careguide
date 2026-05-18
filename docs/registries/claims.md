@@ -42,8 +42,8 @@ Marks an approved practitioner.
 
 **Setters**
 - `api/routers/users.py:58` — set on `/users/register` as `{"practitioner": True}` (immediately at signup; status is `pending_activation`)
-- `api/routers/users.py:254` — re-set on approve `/users/{uid}/status` with `status='active'` as `{"practitioner": True}`
-- `api/routers/users.py:260` — **cleared** (set to `{}`) on reject
+- `api/routers/users.py:250` — re-set on approve `/users/{uid}/status` with `status='active'` as `{"practitioner": True}`
+- `api/routers/users.py:252` — **cleared** (set to `{}`) on reject
 
 **Checkers (client)**
 - `login.html:271` — redirect to `/dashboard.html`
