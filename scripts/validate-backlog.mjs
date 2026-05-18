@@ -6,6 +6,7 @@ const data = JSON.parse(readFileSync(path, 'utf8'));
 const tasks = data.tasks ?? [];
 
 const required = ['number', 'title', 'category', 'priority', 'status', 'dependencies', 'description'];
+// `in-progress` is the state /start-build sets when a build session begins.
 const validStatus = new Set(['backlog', 'ready', 'in-progress', 'in-review', 'complete']);
 
 const errors = [];
