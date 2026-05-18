@@ -129,6 +129,30 @@
       "pr_url": null
     },
     {
+      "number": 11,
+      "title": "Document Backend family_groups Readers in Collections Registry",
+      "category": "debt",
+      "priority": 11,
+      "status": "backlog",
+      "dependencies": [],
+      "description": "The `family_groups` consumer list in docs/registries/collections.md only enumerates frontend `getDoc` callers (dashboard.html, client.html, crisis-card.html, family.html, intake.html, care-plan.html, medications.html). It omits the existing backend API readers in api/routers/family_groups.py, parents.py, medications.py, session_notes.py, and ai.py — each of which loads the family_groups doc to enforce ownership. Surface these so a future maintainer can see all consumers in one place. Spotted during /codex-review of task #1 (PR #3).",
+      "plan": null,
+      "branch": null,
+      "pr_url": null
+    },
+    {
+      "number": 12,
+      "title": "Signal AI Parse Failure on Intake to the Client",
+      "category": "debt",
+      "priority": 12,
+      "status": "backlog",
+      "dependencies": [],
+      "description": "When `draft_intake_care_plan` in api/services/claude.py cannot parse Claude's JSON response, the route returns `sections: {key: ''}` (six empty strings) and stuffs the raw Claude text into `intake_summary`. intake.html then unconditionally writes `ai_generated: true` to care_plans, and the user sees the success view with no signal that AI parsing failed. Practitioners only discover this later when they open care-plan.html and find every section blank. Decide and implement: (a) set `ai_generated: false` on parse failure (server returns a flag like `parse_ok: false`; client uses it to skip the success view or show a 'Try again or build manually' state), or (b) surface a structured error from the API so the client's existing catch branch fires. Either fix unblocks practitioners from silently shipping an empty care plan. Spotted during /codex-review of task #1 (PR #3).",
+      "plan": null,
+      "branch": null,
+      "pr_url": null
+    },
+    {
       "number": 15,
       "title": "Unblock PR queue — drop required `deploy` status check from main ruleset",
       "category": "emergency-fix",
