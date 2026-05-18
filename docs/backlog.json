@@ -129,25 +129,25 @@
       "pr_url": null
     },
     {
-      "number": 11,
+      "number": 13,
       "title": "client.html — Tear Down Family Members Snapshot on Sign Out",
       "category": "debt",
-      "priority": 11,
+      "priority": 13,
       "status": "backlog",
       "dependencies": [],
-      "description": "client.html `signOutBtn` click handler calls `signOut(auth)` without first invoking `familyMembersUnsub?.()` (the onSnapshot subscription opened by the Family Members tab, task #2). After sign-out the listener stays attached and emits `permission-denied` errors into the console until the page navigates away. Pure console noise — no behavior bug — but the right pattern. Fix: in client.html:736-ish, call `familyMembersUnsub?.()` before `await signOut(auth)`. Also apply the same teardown convention to any future onSnapshot subscriptions added to the page (e.g., the Messages tab planned for task #3).",
+      "description": "client.html `signOutBtn` click handler calls `signOut(auth)` without first invoking `familyMembersUnsub?.()` (the onSnapshot subscription opened by the Family Members tab, task #2). After sign-out the listener stays attached and emits `permission-denied` errors into the console until the page navigates away. Pure console noise — no behavior bug — but the right pattern. Fix: in client.html:736-ish, call `familyMembersUnsub?.()` before `await signOut(auth)`. Also apply the same teardown convention to any future onSnapshot subscriptions added to the page (e.g., the Messages tab planned for task #3). Spotted during /review-pr of task #2 (PR #1).",
       "plan": null,
       "branch": null,
       "pr_url": null
     },
     {
-      "number": 12,
+      "number": 14,
       "title": "client.html — Prevent Double-Click Race on Revoke Family Member",
       "category": "debt",
-      "priority": 12,
+      "priority": 14,
       "status": "backlog",
       "dependencies": [],
-      "description": "client.html `revokeFamilyMember` (task #2) does not disable the Revoke button during the in-flight POST /family-groups/{id}/revoke fetch. A double-click fires the request twice. The backend is idempotent (returns `revoked: false` on the second hit) and the onSnapshot listener eventually drops the row, so user experience is unaffected — but the duplicate request is wasted work and easily prevented. Fix: at the top of `revokeFamilyMember(uid, email)`, grab the button via `document.querySelector(\\`[data-uid=\"${uid}\"]\\`)` (or pass it in from the click handler) and toggle `btn.disabled = true` for the duration of the try/catch, restoring on failure paths.",
+      "description": "client.html `revokeFamilyMember` (task #2) does not disable the Revoke button during the in-flight POST /family-groups/{id}/revoke fetch. A double-click fires the request twice. The backend is idempotent (returns `revoked: false` on the second hit) and the onSnapshot listener eventually drops the row, so user experience is unaffected — but the duplicate request is wasted work and easily prevented. Fix: at the top of `revokeFamilyMember(uid, email)`, grab the button via `document.querySelector(\\`[data-uid=\"${uid}\"]\\`)` (or pass it in from the click handler) and toggle `btn.disabled = true` for the duration of the try/catch, restoring on failure paths. Spotted during /review-pr of task #2 (PR #1).",
       "plan": null,
       "branch": null,
       "pr_url": null
