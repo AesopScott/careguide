@@ -10,6 +10,7 @@
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Gilda+Display&family=Jost:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet">
+  <script src="js/api-base.js"></script>
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -488,6 +489,7 @@
     <button class="tab" data-tab="messages">Messages</button>
     <button class="tab" data-tab="medications">Medications</button>
     <button class="tab" data-tab="crisis">Crisis Card</button>
+    <button class="tab" data-tab="family">Family Members</button>
   </div>
 
   <!-- ── Overview ── -->
@@ -655,6 +657,19 @@
     </div>
   </div>
 
+  <!-- ── Family Members ── -->
+  <div class="tab-panel" id="panel-family">
+    <div class="section-card">
+      <div class="section-card-header">
+        <span class="section-card-title">Family Members</span>
+        <span style="font-size:0.75rem;color:var(--text-muted);">People who have accepted an invitation to this family's portal.</span>
+      </div>
+      <div class="section-card-body" id="familyMembersList">
+        <div class="empty-section"><p>No family members have accepted invitations yet.</p></div>
+      </div>
+    </div>
+  </div>
+
 </main>
 
 <!-- ── Add Note Modal ── -->
@@ -703,18 +718,21 @@ const app  = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db   = getFirestore(app);
 
+const API_BASE = window.API_BASE;
+
 const params   = new URLSearchParams(location.search);
 const familyId = params.get('id');
 
 if (!familyId) window.location.href = '/dashboard.html';
 
-let currentUser      = null;
-let familyData       = null;
-let parentData       = null;
-let medsData         = [];
-let messagesUnsub    = null;
-let practitionerName = null;
-let isSendingMessage = false;
+let currentUser         = null;
+let familyData          = null;
+let parentData          = null;
+let medsData            = [];
+let familyMembersUnsub  = null;
+let messagesUnsub       = null;
+let practitionerName    = null;
+let isSendingMessage    = false;
 
 // ── Auth guard ───────────────────────────────────────────────────────────────
 onAuthStateChanged(auth, async (user) => {
@@ -782,8 +800,15 @@ async function loadClient() {
   document.getElementById('manageMedsBtn').href   = `/medications.html?id=${familyId}`;
   document.getElementById('crisisCardBtn').href    = `/crisis-card.html?id=${familyId}`;
 
+  subscribeFamilyMembers();
+
   document.getElementById('tabs').style.display = '';
 }
+
+window.addEventListener('beforeunload', () => {
+  if (familyMembersUnsub) familyMembersUnsub();
+  if (messagesUnsub)      messagesUnsub();
+});
 
 function subscribeMessages() {
   if (messagesUnsub) messagesUnsub();
@@ -1246,6 +1271,96 @@ function formatDob(dob) {
   if (!dob) return '<span class="empty">—</span>';
   const [y, m, d] = dob.split('-');
   return `${m}/${d}/${y}`;
+}
+
+// ── Family Members ──────────────────────────────────────────────────────────
+function subscribeFamilyMembers() {
+  if (familyMembersUnsub) familyMembersUnsub();
+  const q = query(
+    collection(db, 'family_invitations'),
+    where('family_group_id', '==', familyId),
+    orderBy('invited_at', 'desc'),
+  );
+  familyMembersUnsub = onSnapshot(q, snap => {
+    const members = snap.docs
+      .map(d => ({ id: d.id, ...d.data() }))
+      .filter(m => m.status === 'accepted');
+    renderFamilyMembers(members);
+  }, err => {
+    console.error('Failed to subscribe to family members:', err);
+    document.getElementById('familyMembersList').innerHTML =
+      `<div class="empty-section"><p>Couldn't load family members. Refresh to retry.</p></div>`;
+  });
+}
+
+function renderFamilyMembers(members) {
+  const list = document.getElementById('familyMembersList');
+  if (!members.length) {
+    list.innerHTML = `<div class="empty-section"><p>No family members have accepted invitations yet.</p></div>`;
+    return;
+  }
+  list.innerHTML = members.map(m => {
+    const email        = escapeHtml(m.invited_email || '');
+    const relationship = m.invited_relationship ? escapeHtml(m.invited_relationship) : '';
+    const when         = formatTs(m.accepted_at || m.invited_at);
+    const hasUid       = !!m.accepted_by_uid;
+    if (!hasUid) {
+      console.warn('Family invitation accepted but missing accepted_by_uid:', m.id);
+    }
+    const btn = hasUid
+      ? `<button class="btn-danger-outline btn-action" style="padding:6px 14px;font-size:0.78rem;" data-uid="${escapeAttr(m.accepted_by_uid)}" data-email="${escapeAttr(m.invited_email || '')}" data-action="revoke-family">Revoke access</button>`
+      : `<button class="btn-danger-outline btn-action" style="padding:6px 14px;font-size:0.78rem;opacity:0.5;cursor:not-allowed;" disabled title="Legacy record — missing user id; cannot revoke from UI.">Revoke access</button>`;
+    return `
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:14px;padding:14px 0;border-bottom:1px solid var(--border-mid);">
+        <div style="min-width:0;flex:1;">
+          <div style="font-size:0.875rem;color:var(--text-dark);word-break:break-all;">${email}</div>
+          <div style="font-size:0.75rem;color:var(--text-muted);margin-top:4px;">
+            ${relationship ? `${relationship} · ` : ''}Accepted ${when}
+          </div>
+        </div>
+        ${btn}
+      </div>
+    `;
+  }).join('');
+}
+
+document.getElementById('familyMembersList').addEventListener('click', e => {
+  const btn = e.target.closest('[data-action="revoke-family"]');
+  if (!btn) return;
+  revokeFamilyMember(btn.dataset.uid, btn.dataset.email);
+});
+
+async function revokeFamilyMember(uid, email) {
+  if (!uid) return;
+  if (!confirm(`Revoke access for ${email}? They will lose access immediately.`)) return;
+  try {
+    const idToken = await currentUser.getIdToken();
+    const res = await fetch(`${API_BASE}/family-groups/${familyId}/revoke`, {
+      method:  'POST',
+      headers: {
+        'Content-Type':  'application/json',
+        'Authorization': `Bearer ${idToken}`,
+      },
+      body: JSON.stringify({ uid }),
+    });
+    if (!res.ok) {
+      const detail = await res.text().catch(() => '');
+      showToast(`Could not revoke access${detail ? ': ' + detail.slice(0, 120) : ''}`);
+      return;
+    }
+    showToast(`Access revoked for ${email}.`);
+    // onSnapshot will drop the row once status flips to 'revoked'.
+  } catch (err) {
+    showToast('Could not reach the server. Try again.');
+    console.error('Revoke failed:', err);
+  }
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+function escapeAttr(s) {
+  return String(s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 
 function formatTs(ts) {

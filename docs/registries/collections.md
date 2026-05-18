@@ -199,6 +199,7 @@ Pending invitations from practitioner to family-member email.
 
 **Consumers**
 - `api/routers/auth_verification.py` accept_invite — Admin SDK lookup by `invited_email` + `status` (bypasses rules)
+- `client.html` subscribeFamilyMembers — practitioner-side `onSnapshot` filtered by `family_group_id` (orderBy `invited_at` desc), renders rows with `status == 'accepted'` for the Family Members tab.
 
 **Rule:** `firestore.rules` /family_invitations — practitioner who owns the family_group can read/write; admin full access; family members never touch directly. ✓
 
